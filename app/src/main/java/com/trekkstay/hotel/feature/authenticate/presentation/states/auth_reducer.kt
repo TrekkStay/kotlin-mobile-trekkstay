@@ -1,3 +1,3 @@
-package com.example.hotel.feature.authenticate.presentation.states
+package com.trekkstay.hotel.feature.authenticate.presentation.states
 
 

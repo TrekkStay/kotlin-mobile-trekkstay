@@ -1,8 +1,8 @@
 package com.example.hotel.feature.authenticate.data.models
 
-import com.example.hotel.core.typedef.DataMapContainer
-import com.example.hotel.core.typedef.DataMap
-import com.example.hotel.feature.authenticate.domain.entities.VerifyKey
+import com.trekkstay.hotel.core.typedef.DataMapContainer
+import com.trekkstay.hotel.core.typedef.DataMap
+import com.trekkstay.hotel.feature.authenticate.domain.entities.VerifyKey
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 

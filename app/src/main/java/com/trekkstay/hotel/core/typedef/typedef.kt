@@ -1,6 +1,6 @@
-package com.example.hotel.core.typedef
+package com.trekkstay.hotel.core.typedef
 
-import com.example.hotel.core.errors.Invalid
+import com.trekkstay.hotel.core.errors.Invalid
 import arrow.core.Either
 import java.util.concurrent.CompletableFuture
 

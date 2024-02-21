@@ -1,4 +1,4 @@
-package com.example.hotel.core.errors
+package com.trekkstay.hotel.core.errors
 
 
 import java.lang.Exception

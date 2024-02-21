@@ -1,15 +1,15 @@
-package com.example.hotel.feature.authenticate.data.datasources
+package com.trekkstay.hotel.feature.authenticate.data.datasources
 
-import com.example.hotel.core.network.client.Client
-import com.example.hotel.core.network.method.RequestMethod
-import com.example.hotel.core.network.request.RequestQuery
-import com.example.hotel.core.network.response.Response
-import com.example.hotel.env.Env
+import com.trekkstay.hotel.core.network.client.Client
+import com.trekkstay.hotel.core.network.method.RequestMethod
+import com.trekkstay.hotel.core.network.request.RequestQuery
+import com.trekkstay.hotel.core.network.response.Response
+import com.trekkstay.hotel.env.Env
 import com.example.hotel.feature.authenticate.data.models.JWTKeyModel
 import com.example.hotel.feature.authenticate.data.models.VerifyKeyModel
 import com.example.hotel.feature.authenticate.data.models.toJWTKey
 import com.example.hotel.feature.authenticate.data.models.toVerifyKey
-import com.example.hotel.feature.authenticate.domain.entities.VerifyKey
+import com.trekkstay.hotel.feature.authenticate.domain.entities.VerifyKey
 import com.example.hotel.feature.authenticate.domain.entities.JWTKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

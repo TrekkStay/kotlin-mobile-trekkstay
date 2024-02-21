@@ -1,4 +1,4 @@
-package com.example.hotel.core.errors
+package com.trekkstay.hotel.core.errors
 
 sealed class Failure(val message: String, val statusCode: String) {
     abstract val errorMessage: String

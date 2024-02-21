@@ -1,17 +1,17 @@
-package com.example.hotel.feature.authenticate.data.repositories
+package com.trekkstay.hotel.feature.authenticate.data.repositories
 
-import com.example.hotel.core.errors.ApiException
-import com.example.hotel.core.errors.ApiInvalid
-import com.example.hotel.core.network.response.Response
+import com.trekkstay.hotel.core.errors.ApiException
+import com.trekkstay.hotel.core.errors.ApiInvalid
+import com.trekkstay.hotel.core.network.response.Response
 import arrow.core.Either
 import arrow.core.right
 import arrow.core.left
-import com.example.hotel.core.errors.Invalid
-import com.example.hotel.core.typedef.ResultFuture
-import com.example.hotel.core.typedef.ResultVoid
-import com.example.hotel.core.typedef.mapResult
-import com.example.hotel.feature.authenticate.data.datasources.AuthRemoteDataSource
-import com.example.hotel.feature.authenticate.domain.entities.VerifyKey
+import com.trekkstay.hotel.core.errors.Invalid
+import com.trekkstay.hotel.core.typedef.ResultFuture
+import com.trekkstay.hotel.core.typedef.ResultVoid
+import com.trekkstay.hotel.core.typedef.mapResult
+import com.trekkstay.hotel.feature.authenticate.data.datasources.AuthRemoteDataSource
+import com.trekkstay.hotel.feature.authenticate.domain.entities.VerifyKey
 import com.example.hotel.feature.authenticate.domain.entities.JWTKey
 import com.example.hotel.feature.authenticate.domain.repositories.AuthRepo
 import kotlinx.coroutines.CoroutineScope

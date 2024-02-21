@@ -1,8 +1,8 @@
-package com.example.hotel.core.network.client
-import com.example.hotel.core.network.method.RequestMethod
-import com.example.hotel.core.network.request.RequestQuery
-import com.example.hotel.core.network.request.PreparedRequest
-import com.example.hotel.core.network.response.Response
+package com.trekkstay.hotel.core.network.client
+import com.trekkstay.hotel.core.network.method.RequestMethod
+import com.trekkstay.hotel.core.network.request.RequestQuery
+import com.trekkstay.hotel.core.network.request.PreparedRequest
+import com.trekkstay.hotel.core.network.response.Response
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull

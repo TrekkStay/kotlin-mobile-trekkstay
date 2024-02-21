@@ -1,6 +1,6 @@
-package com.example.hotel.core.network.request
+package com.trekkstay.hotel.core.network.request
 
-import com.example.hotel.core.network.method.RequestMethod
+import com.trekkstay.hotel.core.network.method.RequestMethod
 
 data class RequestQuery(
     val method: RequestMethod,

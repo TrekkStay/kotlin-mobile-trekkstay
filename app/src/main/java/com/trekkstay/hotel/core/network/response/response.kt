@@ -1,4 +1,4 @@
-package com.example.hotel.core.network.response
+package com.trekkstay.hotel.core.network.response
 sealed class Response<T>(val status: String?, val message: String?, val data: T?) {
 
     class Success<T>(status: String, message: String, data: T?) : Response<T>(status, message, data)

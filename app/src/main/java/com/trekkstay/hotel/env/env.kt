@@ -1,4 +1,4 @@
-package com.example.hotel.env
+package com.trekkstay.hotel.env
 
 import java.io.FileInputStream
 import java.util.Properties

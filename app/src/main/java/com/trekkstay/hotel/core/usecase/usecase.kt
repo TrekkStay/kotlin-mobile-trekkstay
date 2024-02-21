@@ -1,6 +1,6 @@
-package com.example.hotel.core.usecase
+package com.trekkstay.hotel.core.usecase
 
-import com.example.hotel.core.typedef.ResultFuture
+import com.trekkstay.hotel.core.typedef.ResultFuture
 
 interface UseCaseWithoutParams<Type> {
     fun call(): ResultFuture<Type>

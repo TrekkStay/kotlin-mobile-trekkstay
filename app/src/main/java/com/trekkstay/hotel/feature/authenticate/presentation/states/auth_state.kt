@@ -1,6 +1,6 @@
-package com.example.hotel.feature.authenticate.presentation.states
+package com.trekkstay.hotel.feature.authenticate.presentation.states
 
-import com.example.hotel.feature.authenticate.domain.entities.VerifyKey
+import com.trekkstay.hotel.feature.authenticate.domain.entities.VerifyKey
 import com.example.hotel.feature.authenticate.domain.entities.JWTKey
 
 sealed class AuthState {

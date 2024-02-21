@@ -1,10 +1,10 @@
-package com.example.hotel.feature.authenticate.domain.usecases
+package com.trekkstay.hotel.feature.authenticate.domain.usecases
 
-import com.example.hotel.core.typedef.ResultFuture
+import com.trekkstay.hotel.core.typedef.ResultFuture
 import com.example.hotel.feature.authenticate.domain.entities.JWTKey
 import com.example.hotel.feature.authenticate.domain.repositories.AuthRepo
 import android.os.Parcelable
-import com.example.hotel.core.usecase.UseCaseWithParams
+import com.trekkstay.hotel.core.usecase.UseCaseWithParams
 import kotlinx.parcelize.Parcelize
 
 class LoginUseCase(private val repository: AuthRepo) :

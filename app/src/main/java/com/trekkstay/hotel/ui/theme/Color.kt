@@ -1,4 +1,4 @@
-package com.example.hotel.ui.theme
+package com.trekkstay.hotel.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

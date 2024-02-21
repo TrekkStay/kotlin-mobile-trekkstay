@@ -1,5 +1,5 @@
-package com.example.hotel.feature.authenticate.presentation.states
-import com.example.hotel.feature.authenticate.domain.entities.VerifyKey
+package com.trekkstay.hotel.feature.authenticate.presentation.states
+import com.trekkstay.hotel.feature.authenticate.domain.entities.VerifyKey
 import com.example.hotel.feature.authenticate.domain.entities.JWTKey
 
 

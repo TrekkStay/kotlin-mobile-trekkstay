@@ -1,7 +1,7 @@
 package com.example.hotel.feature.authenticate.domain.repositories
 
-import com.example.hotel.core.typedef.ResultFuture
-import com.example.hotel.feature.authenticate.domain.entities.VerifyKey
+import com.trekkstay.hotel.core.typedef.ResultFuture
+import com.trekkstay.hotel.feature.authenticate.domain.entities.VerifyKey
 import com.example.hotel.feature.authenticate.domain.entities.JWTKey
 
 
