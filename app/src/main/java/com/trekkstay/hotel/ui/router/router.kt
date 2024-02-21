@@ -14,6 +14,6 @@ fun AppRouter() {
         composable("login") {
             LoginScreen()
         }
-        // Define other screens and their routes here
+
     }
 }
