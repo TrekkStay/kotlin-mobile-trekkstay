@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/hotel.iml" filepath="$PROJECT_DIR$/.idea/modules/hotel.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/hotel.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/hotel.app.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/hotel.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/hotel.app.androidTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/hotel.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/hotel.app.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/hotel.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/hotel.app.unitTest.iml" />
     </modules>
   </component>
