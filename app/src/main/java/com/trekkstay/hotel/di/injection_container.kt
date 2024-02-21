@@ -1,5 +1,5 @@
 package com.example.hotel.di
-import android.app.Application
+import com.trekkstay.hotel.MainActivity
 import com.trekkstay.hotel.feature.authenticate.domain.usecases.LoginUseCase
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -11,7 +11,7 @@ val appModule = module {
 
 }
 
-fun startKoinDependencyInjection(applicationContext: Application) {
+fun startKoinDependencyInjection(applicationContext: MainActivity) {
     startKoin {
         androidContext(applicationContext)
         modules(appModule)
