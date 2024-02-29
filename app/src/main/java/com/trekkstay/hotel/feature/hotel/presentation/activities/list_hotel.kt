@@ -36,6 +36,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.trekkstay.hotel.feature.main.presentation.fragments.BotNavBar
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
@@ -45,7 +46,7 @@ import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 fun ListOfHotel() {
     Scaffold(
         bottomBar = {
-//            BotNavBar()
+            BotNavBar()
         }
     ) { _ ->
         Column(
@@ -134,8 +135,124 @@ fun ListOfHotel() {
                             }
                         }
                     }
+
+
                 }
             }
+
+            Spacer(modifier = Modifier.height(0.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth()
+                    .padding(start = 20.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .padding(start = 10.dp)
+                        .height(30.dp)
+                        .width(100.dp)
+                        .background(
+                            color = TrekkStayCyan,
+                            shape = RoundedCornerShape(15.dp)
+                        )
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(90.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Filter",
+                            textAlign = TextAlign.Center,
+                            fontSize = 14.sp,
+                            fontFamily = PoppinsFontFamily,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.White,
+                            modifier = Modifier.padding(end = 5.dp)
+                        )
+                        Box(
+                            modifier = Modifier
+                                .size(20.dp)
+                                .background(Color.White, shape = CircleShape)
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(90.dp),
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = "1",
+                                    textAlign = TextAlign.Center,
+                                    fontSize = 12.sp,
+                                    fontFamily = PoppinsFontFamily,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = Color.Black,
+                                )
+                            }
+                        }
+                    }
+                }
+
+                Box(
+                    modifier = Modifier
+                        .padding(start = 10.dp)
+                        .height(30.dp)
+                        .width(100.dp)
+                        .background(
+                            color = Color.White,
+                            shape = RoundedCornerShape(15.dp)
+
+                        )
+                        .border(
+                            width = 2.dp,
+                            color = TrekkStayCyan,
+                            shape = RoundedCornerShape(15.dp)
+                        )
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(90.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Sort",
+                            textAlign = TextAlign.Center,
+                            fontSize = 14.sp,
+                            fontFamily = PoppinsFontFamily,
+                            fontWeight = FontWeight.SemiBold,
+                            color = TrekkStayCyan,
+                            modifier = Modifier.padding(end = 5.dp)
+                        )
+                        Icon(
+                            imageVector = Icons.Default.ArrowDropDown,
+                            contentDescription = null,
+                            tint = TrekkStayCyan
+                        )
+                    }
+                }
+            }
+//
+//            LazyColumn {
+//                // Add a single item
+//                item {
+//                    Text(text = "First item")
+//                }
+//
+//                // Add 5 items
+//                items(5) { index ->
+//                    Text(text = "Item: $index")
+//                }
+//
+//                // Add another single item
+//                item {
+//                    Text(text = "Last item")
+//                }
+//            }
         }
     }
 }
