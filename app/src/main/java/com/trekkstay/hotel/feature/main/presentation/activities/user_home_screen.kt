@@ -46,10 +46,11 @@ fun UserHomeScreen() {
     ) { _ ->
         Column(
             modifier = Modifier
-                .padding(top = 15.dp, bottom = 70.dp)
+                .padding(bottom = 70.dp)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
+            Spacer(modifier = Modifier.height(15.dp))
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Bottom,
