@@ -179,17 +179,17 @@ fun HotelDetail(
             ) {
                 Row {
                     Text(
-                        price.toString(),
+                        text = "đ $price",
                         fontSize = 14.sp,
                         fontFamily = PoppinsFontFamily,
                         fontWeight = FontWeight.Medium,
                         textDecoration = TextDecoration.LineThrough,
                         modifier = Modifier.padding(end=10.dp),
-                        color = Color("#000000".toColorInt())
+                        color = Color.Red
                     )
                 }
                 Text(
-                    text = "đ$salePrice",
+                    text = "đ $salePrice",
                     fontSize = 24.sp,
                     fontFamily = PoppinsFontFamily,
                     fontWeight = FontWeight.Medium,
