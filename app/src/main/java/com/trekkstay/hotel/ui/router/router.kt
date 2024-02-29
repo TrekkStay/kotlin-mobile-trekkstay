@@ -15,7 +15,7 @@ import com.trekkstay.hotel.feature.search.presentation.activities.SearchEngineSc
 fun AppRouter() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "search_engine") {
+    NavHost(navController = navController, startDestination = "user_home") {
         composable("login") {
             LoginScreen()
         }

@@ -32,7 +32,7 @@ import androidx.compose.ui.layout.ContentScale
 import coil.compose.AsyncImage
 import com.trekkstay.hotel.feature.main.presentation.fragments.BotNavBar
 import com.trekkstay.hotel.feature.main.presentation.fragments.DestinationCard
-import com.trekkstay.hotel.feature.main.presentation.fragments.HotelCard
+import com.trekkstay.hotel.feature.main.presentation.fragments.HotelTabsRow
 import com.trekkstay.hotel.ui.theme.NunitoFontFamily
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
@@ -159,28 +159,7 @@ fun UserHomeScreen() {
                 }
             }
             Spacer(modifier = Modifier.height(10.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceAround
-            ) {
-                Text("Near me")
-                Text("Recommended")
-                Text("Popular")
-            }
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                contentPadding = PaddingValues(10.dp)
-            ) {
-                items(5) {
-                    HotelCard(
-                        name = "Muong Thanh",
-                        destination = "Ho Chi Minh",
-                        rating = 5.0,
-                        price = 250.0,
-                        imgUrl = "https://www.usatoday.com/gcdn/-mm-/05b227ad5b8ad4e9dcb53af4f31d7fbdb7fa901b/c=0-64-2119-1259/local/-/media/USATODAY/USATODAY/2014/08/13/1407953244000-177513283.jpg?width=1320&height=746&fit=crop&format=pjpg&auto=webp"
-                    )
-                }
-            }
+            HotelTabsRow()
             Text(
                 text = "See all",
                 textAlign = TextAlign.End,
@@ -230,8 +209,11 @@ fun UserHomeScreen() {
     }
 }
 
+
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun MyAppPreview() {
     UserHomeScreen()
 }
+
