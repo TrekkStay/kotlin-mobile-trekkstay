@@ -5,7 +5,7 @@ import com.trekkstay.hotel.core.network.method.RequestMethod
 data class RequestQuery(
     val method: RequestMethod,
     val path: String,
-    val requestBody: Map<String, Any>? = null,
+    val requestBody: String? = null,
     val queryParams: Map<String, Any>? = null,
     val headers: Map<String, String>? = null
 )

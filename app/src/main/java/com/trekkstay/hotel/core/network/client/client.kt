@@ -5,6 +5,7 @@ import com.trekkstay.hotel.core.network.request.PreparedRequest
 import com.trekkstay.hotel.core.network.response.Response
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -33,11 +34,12 @@ class Client(private val engine: OkHttpClient) {
             try {
                 val response = engine.newCall(buildOkHttpRequest(request)).execute()
                 val responseBody = response.body?.string()
-
                 Response.whenResponse {
                     if (response.isSuccessful) {
-                        val parsedData = request.parser?.let { it(responseBody?.toByteArray()) }
-                        success(response.header("status_code") ?: "200", response.message, parsedData)
+                        val parsedData = request.parser?.let {
+                            responseBody?.let { body -> it(body.toByteArray()) }
+                        }
+                        success(response.header("status_code") ?: "201", response.message, parsedData)
                     } else {
                         val statusCode = response.header("status_code")
                         val errorMessage = response.message
@@ -49,44 +51,50 @@ class Client(private val engine: OkHttpClient) {
                     }
                 }
             } catch (e: Exception) {
-                Response.whenResponse { failure("-1", "Error: $e") }
+                Response.whenResponse { failure("-1", "Error: ${e.message}") }
             }
         }
     }
-
-
-
-
 
     private fun buildOkHttpRequest(request: PreparedRequest<*>): Request {
-        val requestBuilder = Request.Builder()
-            .url(request.request.path)
+        val urlBuilder = request.request.path.toHttpUrlOrNull()?.newBuilder()
+            ?: throw IllegalArgumentException("Invalid URL")
 
+        request.request.queryParams?.forEach { (key, value) ->
+            urlBuilder.addQueryParameter(key, value.toString())
+        }
+
+        val requestBuilder = Request.Builder()
+
+        val requestBody = buildRequestBody(request)
         when (request.request.method) {
             RequestMethod.GET -> requestBuilder.get()
-            RequestMethod.POST -> buildRequestBody(request)?.let { requestBuilder.post(it) }
-            RequestMethod.PUT -> buildRequestBody(request)?.let { requestBuilder.put(it) }
-            RequestMethod.PATCH -> buildRequestBody(request)?.let { requestBuilder.patch(it) }
-            RequestMethod.DELETE -> requestBuilder.delete(buildRequestBody(request))
+            RequestMethod.POST -> requestBody?.let { requestBuilder.post(it) }
+            RequestMethod.PUT -> requestBody?.let { requestBuilder.put(it) }
+            RequestMethod.PATCH -> requestBody?.let { requestBuilder.patch(it) }
+            RequestMethod.DELETE -> requestBuilder.delete()
         }
 
-        request.request.queryParams?.let { queryParams ->
-            for ((key, value) in queryParams) {
-                requestBuilder.addHeader(key, value.toString())
-            }
+        request.headers?.forEach { (key, value) ->
+            requestBuilder.addHeader(key, value)
         }
 
-        request.headers?.let { headers ->
-            for ((key, value) in headers) {
-                requestBuilder.addHeader(key, value)
-            }
-        }
-
-        return requestBuilder.build()
+        return requestBuilder.url(urlBuilder.build()).build()
     }
+
+
+
+
 
     private fun buildRequestBody(request: PreparedRequest<*>): okhttp3.RequestBody? {
         val mediaType = "application/json".toMediaTypeOrNull()
-        return request.request.requestBody?.toString()?.toRequestBody(mediaType)
+        val requestBodyString = request.request.requestBody?.toString()
+        return if (mediaType != null && requestBodyString != null) {
+            requestBodyString.toRequestBody(mediaType)
+        } else {
+            null
+        }
     }
+
+
 }

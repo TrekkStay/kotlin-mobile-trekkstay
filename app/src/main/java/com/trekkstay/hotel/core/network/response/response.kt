@@ -45,7 +45,10 @@ class ResponseBuilder<T> {
         return if (data != null) {
             success(status ?: "", message ?: "", data)
         } else if (status != null && status!!.toIntOrNull() != null) {
-            if (status!!.toInt() >= 400) {
+            val statusCode = status!!.toInt()
+            if (statusCode in 200..299) {
+                success(status!!, message ?: "", null)
+            } else if (statusCode >= 300) {
                 invalid(status!!, message ?: "")
             } else {
                 failure(status!!, message ?: "")
