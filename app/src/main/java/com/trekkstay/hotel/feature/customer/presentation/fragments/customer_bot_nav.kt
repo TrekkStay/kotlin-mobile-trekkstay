@@ -1,4 +1,4 @@
-package com.trekkstay.hotel.feature.main.presentation.fragments
+package com.trekkstay.hotel.feature.customer.presentation.fragments
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,11 +26,19 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @Composable
 fun BotNavBar(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
+    val bottomBarIndicatorColor = NavigationBarItemDefaults.colors(
+        unselectedIconColor = Color(0xFFB8B8B9),
+        unselectedTextColor = Color(0xFFB8B8B9),
+        selectedIconColor = Color.White,
+        selectedTextColor = TrekkStayCyan,
+        indicatorColor = TrekkStayCyan
+    )
     NavigationBar(
         containerColor = Color.White
     ) {
@@ -50,10 +59,11 @@ fun BotNavBar(navController: NavHostController) {
                     contentDescription = "Home",
                     modifier = Modifier.size(30.dp)
                 )
-            }
+            },
+            colors = bottomBarIndicatorColor
         )
         NavigationBarItem(
-            label = { Text("Booking") },
+            label = { Text("Reservations") },
             selected = currentDestination?.hierarchy?.any {
                 it.route == "customer_reservations"
             } == true,
@@ -69,7 +79,8 @@ fun BotNavBar(navController: NavHostController) {
                     contentDescription = "List",
                     modifier = Modifier.size(30.dp)
                 )
-            }
+            },
+            colors = bottomBarIndicatorColor
         )
         NavigationBarItem(
             label = { Text("Notification") },
@@ -99,7 +110,8 @@ fun BotNavBar(navController: NavHostController) {
                             .padding(3.dp)
                     )
                 }
-            }
+            },
+            colors = bottomBarIndicatorColor
         )
         NavigationBarItem(
             label = { Text("Profile") },
@@ -118,7 +130,8 @@ fun BotNavBar(navController: NavHostController) {
                     contentDescription = "Bottom Bar Profile Icon",
                     modifier = Modifier.size(30.dp)
                 )
-            }
+            },
+            colors = bottomBarIndicatorColor
         )
     }
 }

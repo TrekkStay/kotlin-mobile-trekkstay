@@ -1,4 +1,4 @@
-package com.trekkstay.hotel.feature.search.presentation.activities
+package com.trekkstay.hotel.feature.hotel.presentation.activities
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -29,14 +29,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.trekkstay.hotel.feature.search.presentation.fragments.DateRangeSelector
-import com.trekkstay.hotel.feature.search.presentation.fragments.DestinationSearchBar
-import com.trekkstay.hotel.feature.search.presentation.fragments.RoomOptionSelectorModal
+import androidx.navigation.NavHostController
+import com.trekkstay.hotel.feature.hotel.presentation.fragments.DateRangeSelector
+import com.trekkstay.hotel.feature.hotel.presentation.fragments.DestinationSearchBar
+import com.trekkstay.hotel.feature.hotel.presentation.fragments.RoomOptionSelectorModal
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun SearchEngineScreen() {
+fun SearchEngineScreen(navController: NavHostController) {
     Scaffold(
     ) { innerPadding ->
         Column(
@@ -48,7 +49,9 @@ fun SearchEngineScreen() {
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = {
+                    navController.navigate("customer_home")
+                }) {
                     Icon(Icons.Default.KeyboardArrowLeft, contentDescription = "backFromSearch")
                 }
                 Text(text = "Search Hotel",fontFamily = PoppinsFontFamily, fontWeight = FontWeight.Bold, fontSize = 20.sp)
@@ -86,10 +89,10 @@ fun SearchEngineScreen() {
         }
     }
 }
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun MyAppPreview() {
-    SearchEngineScreen()
-}
+//
+//@RequiresApi(Build.VERSION_CODES.O)
+//@Preview(showBackground = true, showSystemUi = true)
+//@Composable
+//fun MyAppPreview() {
+//    SearchEngineScreen()
+//}
