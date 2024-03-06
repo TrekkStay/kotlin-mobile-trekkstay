@@ -1,4 +1,4 @@
-package com.trekkstay.hotel.feature.search.presentation.fragments
+package com.trekkstay.hotel.feature.hotel.presentation.fragments
 
 import android.os.Build
 import androidx.annotation.RequiresApi

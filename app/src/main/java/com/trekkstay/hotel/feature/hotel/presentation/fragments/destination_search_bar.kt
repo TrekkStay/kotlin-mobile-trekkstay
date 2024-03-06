@@ -1,4 +1,4 @@
-package com.trekkstay.hotel.feature.search.presentation.fragments
+package com.trekkstay.hotel.feature.hotel.presentation.fragments
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape

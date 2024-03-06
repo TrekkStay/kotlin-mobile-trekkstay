@@ -1,4 +1,4 @@
-package com.trekkstay.hotel.feature.search.presentation.activities
+package com.trekkstay.hotel.feature.hotel.presentation.activities
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -30,9 +30,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.trekkstay.hotel.feature.search.presentation.fragments.DateRangeSelector
-import com.trekkstay.hotel.feature.search.presentation.fragments.DestinationSearchBar
-import com.trekkstay.hotel.feature.search.presentation.fragments.RoomOptionSelectorModal
+import com.trekkstay.hotel.feature.hotel.presentation.fragments.DateRangeSelector
+import com.trekkstay.hotel.feature.hotel.presentation.fragments.DestinationSearchBar
+import com.trekkstay.hotel.feature.hotel.presentation.fragments.RoomOptionSelectorModal
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 
 @RequiresApi(Build.VERSION_CODES.O)

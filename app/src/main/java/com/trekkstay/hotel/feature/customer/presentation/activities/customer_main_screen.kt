@@ -8,7 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.trekkstay.hotel.feature.customer.presentation.fragments.BotNavBar
 import com.trekkstay.hotel.feature.reservation.presentation.activities.CustomerReservationScreen
-import com.trekkstay.hotel.feature.search.presentation.activities.SearchEngineScreen
+import com.trekkstay.hotel.feature.hotel.presentation.activities.SearchEngineScreen
 
 @Composable
 fun CustomerMainScreen() {
