@@ -30,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.layout.ContentScale
 import coil.compose.AsyncImage
-import com.trekkstay.hotel.feature.main.presentation.fragments.BotNavBar
 import com.trekkstay.hotel.feature.main.presentation.fragments.DestinationCard
 import com.trekkstay.hotel.feature.main.presentation.fragments.HotelTabsRow
 import com.trekkstay.hotel.ui.theme.NunitoFontFamily
@@ -38,11 +37,8 @@ import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @Composable
-fun UserHomeScreen() {
+fun CustomerHomeScreen() {
     Scaffold(
-        bottomBar = {
-            BotNavBar()
-        }
     ) { _ ->
         Column(
             modifier = Modifier
@@ -215,6 +211,6 @@ fun UserHomeScreen() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun MyAppPreview() {
-    UserHomeScreen()
+    CustomerHomeScreen()
 }
 

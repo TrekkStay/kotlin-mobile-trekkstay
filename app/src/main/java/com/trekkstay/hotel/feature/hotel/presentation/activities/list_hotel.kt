@@ -45,9 +45,6 @@ import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 @Composable
 fun ListOfHotel() {
     Scaffold(
-        bottomBar = {
-            BotNavBar()
-        }
     ) { _ ->
         Column(
             modifier = Modifier

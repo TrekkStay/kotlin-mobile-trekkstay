@@ -6,9 +6,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -16,26 +16,34 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 
 @Composable
-fun BotNavBar() {
-    var selectedItem by remember { mutableIntStateOf(0) }
-
+fun BotNavBar(navController: NavHostController) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
     NavigationBar(
         containerColor = Color.White
     ) {
         NavigationBarItem(
             label = { Text("Home") },
-            selected = selectedItem == 0,
-            onClick = { selectedItem = 0 },
+            selected = currentDestination?.hierarchy?.any {
+                it.route == "customer_home"
+            } == true,
+            onClick = {
+                navController.navigate("customer_home") {
+                    popUpTo(navController.graph.findStartDestination().id)
+                    launchSingleTop = true
+                }
+            },
             icon = {
                 Icon(
                     Icons.Default.Home,
@@ -46,11 +54,18 @@ fun BotNavBar() {
         )
         NavigationBarItem(
             label = { Text("Booking") },
-            selected = selectedItem == 1,
-            onClick = { selectedItem = 1 },
+            selected = currentDestination?.hierarchy?.any {
+                it.route == "customer_reservations"
+            } == true,
+            onClick = {
+                navController.navigate("customer_reservations") {
+                    popUpTo(navController.graph.findStartDestination().id)
+                    launchSingleTop = true
+                }
+            },
             icon = {
                 Icon(
-                    Icons.Default.List,
+                    Icons.AutoMirrored.Filled.List,
                     contentDescription = "List",
                     modifier = Modifier.size(30.dp)
                 )
@@ -58,13 +73,20 @@ fun BotNavBar() {
         )
         NavigationBarItem(
             label = { Text("Notification") },
-            selected = selectedItem == 2,
-            onClick = { selectedItem = 2 },
+            selected = currentDestination?.hierarchy?.any {
+                it.route == "customer_notifications"
+            } == true,
+            onClick = {
+                navController.navigate("customer_notifications") {
+                    popUpTo(navController.graph.findStartDestination().id)
+                    launchSingleTop = true
+                }
+            },
             icon = {
                 Box() {
                     Icon(
                         Icons.Default.Notifications,
-                        contentDescription = "Botbar Notification",
+                        contentDescription = "Bottom Bar Notification Icon",
                         modifier = Modifier.size(30.dp)
                     )
                     Text(
@@ -81,12 +103,19 @@ fun BotNavBar() {
         )
         NavigationBarItem(
             label = { Text("Profile") },
-            selected = selectedItem == 3,
-            onClick = { selectedItem = 3 },
+            selected = currentDestination?.hierarchy?.any {
+                it.route == "customer_profile"
+            } == true,
+            onClick = {
+                navController.navigate("customer_profile") {
+                    popUpTo(navController.graph.findStartDestination().id)
+                    launchSingleTop = true
+                }
+            },
             icon = {
                 Icon(
                     Icons.Default.AccountCircle,
-                    contentDescription = "List",
+                    contentDescription = "Bottom Bar Profile Icon",
                     modifier = Modifier.size(30.dp)
                 )
             }

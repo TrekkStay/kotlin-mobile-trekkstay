@@ -9,7 +9,10 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0e28aad0-fb93-4b2a-8e7f-6cb21cc02950" name="Changes" comment="update: add hotel tabs row in home screen for customer">
+    <list default="true" id="0e28aad0-fb93-4b2a-8e7f-6cb21cc02950" name="Changes" comment="feat: reservation screen for customer">
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/reservation/presentation/fragments/reservation_card.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/reservation/presentation/activities/customer_reservation_screen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/reservation/presentation/activities/customer_reservation_screen.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/local.properties" beforeDir="false" afterPath="$PROJECT_DIR$/local.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -440,7 +443,15 @@
       <option name="project" value="LOCAL" />
       <updated>1709191001641</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="feat: reservation screen for customer">
+      <option name="closed" value="true" />
+      <created>1709690471666</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1709690471666</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -473,6 +484,7 @@
     <MESSAGE value="chore: test" />
     <MESSAGE value="feat: search engine screen" />
     <MESSAGE value="update: add hotel tabs row in home screen for customer" />
-    <option name="LAST_COMMIT_MESSAGE" value="update: add hotel tabs row in home screen for customer" />
+    <MESSAGE value="feat: reservation screen for customer" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: reservation screen for customer" />
   </component>
 </project>

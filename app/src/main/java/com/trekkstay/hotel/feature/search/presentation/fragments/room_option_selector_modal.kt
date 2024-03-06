@@ -28,9 +28,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.hotel.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -106,7 +108,7 @@ fun CounterRow(
         Text(text = label, modifier = Modifier.padding(8.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = onDecrease) {
-                Icon(Icons.Default.Close, contentDescription = null)
+                Icon(painter = painterResource(id = R.drawable.baseline_remove_24), contentDescription = null)
             }
             Text("$count", modifier = Modifier.padding(8.dp))
             IconButton(onClick = onIncrease) {
