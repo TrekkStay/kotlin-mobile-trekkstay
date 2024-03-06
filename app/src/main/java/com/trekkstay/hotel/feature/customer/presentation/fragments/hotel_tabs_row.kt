@@ -1,4 +1,4 @@
-package com.trekkstay.hotel.feature.main.presentation.fragments
+package com.trekkstay.hotel.feature.customer.presentation.fragments
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

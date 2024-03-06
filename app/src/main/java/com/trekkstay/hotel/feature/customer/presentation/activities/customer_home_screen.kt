@@ -1,8 +1,7 @@
-package com.trekkstay.hotel.feature.main.presentation.activities
+package com.trekkstay.hotel.feature.customer.presentation.activities
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -31,8 +30,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.trekkstay.hotel.feature.main.presentation.fragments.DestinationCard
-import com.trekkstay.hotel.feature.main.presentation.fragments.HotelTabsRow
+import com.trekkstay.hotel.feature.customer.presentation.fragments.DestinationCard
+import com.trekkstay.hotel.feature.customer.presentation.fragments.HotelTabsRow
 import com.trekkstay.hotel.ui.theme.NunitoFontFamily
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
