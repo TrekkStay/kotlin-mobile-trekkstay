@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.trekkstay.hotel.feature.main.presentation.fragments.BotNavBar
 import com.trekkstay.hotel.feature.reservation.presentation.activities.CustomerReservationScreen
+import com.trekkstay.hotel.feature.search.presentation.activities.SearchEngineScreen
 
 @Composable
 fun CustomerMainScreen() {
@@ -20,7 +21,7 @@ fun CustomerMainScreen() {
             startDestination = "customer_home"
         ) {
             composable(route = "customer_home") {
-                CustomerHomeScreen()
+                CustomerHomeScreen(navController)
             }
             composable(route = "customer_reservations") {
                 CustomerReservationScreen()
@@ -30,6 +31,9 @@ fun CustomerMainScreen() {
             }
             composable(route = "customer_profile") {
                 Text("Settings")
+            }
+            composable(route = "customer_search_engine") {
+                SearchEngineScreen(navController)
             }
         }
     }

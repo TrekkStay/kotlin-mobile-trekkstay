@@ -53,33 +53,31 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun CustomerReservationScreen() {
-    Scaffold { _ ->
-        Column {
-            Spacer(modifier = Modifier.height(25.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 20.dp, end = 20.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = "Reservation",
-                    fontFamily = PoppinsFontFamily,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 20.sp
+    Column {
+        Spacer(modifier = Modifier.height(25.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 20.dp, end = 20.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "Reservation",
+                fontFamily = PoppinsFontFamily,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 20.sp
+            )
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(
+                    Icons.Default.Search,
+                    contentDescription = null,
+                    tint = Color.Black.copy(0.5f)
                 )
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(
-                        Icons.Default.Search,
-                        contentDescription = null,
-                        tint = Color.Black.copy(0.5f)
-                    )
-                }
             }
-            Spacer(modifier = Modifier.height(20.dp))
-            ReservationTabsRow()
         }
+        Spacer(modifier = Modifier.height(20.dp))
+        ReservationTabsRow()
     }
 }
 
@@ -109,7 +107,8 @@ fun ReservationTabsRow() {
                 Tab(
                     selectedContentColor = Color.White,
                     unselectedContentColor = TrekkStayCyan,
-                    modifier = Modifier.padding(horizontal = 5.dp)
+                    modifier = Modifier
+                        .padding(horizontal = 5.dp)
                         .border(BorderStroke(2.dp, TrekkStayCyan), RoundedCornerShape(50)),
                     selected = selectedTabIndex.value == index,
                     onClick = {
