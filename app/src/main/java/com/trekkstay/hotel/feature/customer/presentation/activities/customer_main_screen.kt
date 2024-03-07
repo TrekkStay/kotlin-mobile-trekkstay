@@ -1,14 +1,11 @@
 package com.trekkstay.hotel.feature.customer.presentation.activities
 
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.trekkstay.hotel.config.router.CustomerRouter
+
 import com.trekkstay.hotel.feature.customer.presentation.fragments.CustomerBotNav
-import com.trekkstay.hotel.feature.reservation.presentation.activities.CustomerReservationScreen
-import com.trekkstay.hotel.feature.hotel.presentation.activities.SearchEngineScreen
 
 @Composable
 fun CustomerMainScreen() {
@@ -16,25 +13,6 @@ fun CustomerMainScreen() {
     Scaffold(
         bottomBar = { CustomerBotNav(navController = navController) }
     ) { _ ->
-        NavHost(
-            navController = navController,
-            startDestination = "customer_home"
-        ) {
-            composable(route = "customer_home") {
-                CustomerHomeScreen(navController)
-            }
-            composable(route = "customer_reservations") {
-                CustomerReservationScreen()
-            }
-            composable(route = "customer_notifications") {
-                Text("Notifications")
-            }
-            composable(route = "customer_profile") {
-                Text("Settings")
-            }
-            composable(route = "customer_search_engine") {
-                SearchEngineScreen(navController)
-            }
-        }
+        CustomerRouter(navController)
     }
 }
