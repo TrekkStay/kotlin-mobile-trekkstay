@@ -4,7 +4,7 @@ import com.trekkstay.hotel.core.errors.Invalid
 import arrow.core.Either
 import java.util.concurrent.CompletableFuture
 
-typealias ResultFuture<T> = CompletableFuture<Either<Invalid, T>>
+typealias ResultFuture<T> = Either<Invalid, T>
 
 typealias ResultVoid = ResultFuture<Unit>
 

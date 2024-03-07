@@ -1,15 +1,12 @@
-package com.example.hotel.feature.authenticate.domain.repositories
+package com.trekkstay.hotel.feature.authenticate.domain.repositories
 
 import com.trekkstay.hotel.core.typedef.ResultFuture
-import com.trekkstay.hotel.feature.authenticate.domain.entities.VerifyKey
-import com.example.hotel.feature.authenticate.domain.entities.JWTKey
+import com.trekkstay.hotel.feature.authenticate.domain.entities.JWTKey
+import com.trekkstay.hotel.core.typedef.ResultVoid
 
 
 interface AuthRepo {
-    suspend fun verifyEmail(email: String): ResultFuture<VerifyKey>
-    suspend fun verifyOTP(key: VerifyKey, otp: String): ResultFuture<Unit>
-    suspend fun resendOTP(key: VerifyKey): ResultFuture<Unit>
     suspend fun login(email: String, pass: String): ResultFuture<JWTKey>
-    suspend fun register(email: String, name: String, pass: String, role: String): ResultFuture<VerifyKey>
-    suspend fun logout(): ResultFuture<Unit>
+    suspend fun register(email: String, name: String, pass: String): ResultVoid
+    suspend fun logout(): ResultVoid
 }

@@ -1,4 +1,4 @@
-package com.example.hotel.feature.authenticate.data.models
+package com.trekkstay.hotel.feature.authenticate.data.models
 
 import com.trekkstay.hotel.core.typedef.DataMapContainer
 import com.trekkstay.hotel.core.typedef.DataMap

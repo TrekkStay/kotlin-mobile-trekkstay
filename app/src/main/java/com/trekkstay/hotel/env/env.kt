@@ -11,7 +11,7 @@ object Env {
 
     private fun loadProperties(): Properties {
         val properties = Properties()
-        val file = FileInputStream("local.properties")
+        val file = FileInputStream("env/.env")
         properties.load(file)
         return properties
     }

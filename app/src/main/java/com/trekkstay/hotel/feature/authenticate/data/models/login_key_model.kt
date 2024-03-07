@@ -1,13 +1,13 @@
-package com.example.hotel.feature.authenticate.data.models
+package com.trekkstay.hotel.feature.authenticate.data.models
 
 import com.trekkstay.hotel.core.typedef.DataMap
 import com.trekkstay.hotel.core.typedef.DataMapContainer
-import com.example.hotel.feature.authenticate.domain.entities.JWTKey
+import com.trekkstay.hotel.feature.authenticate.domain.entities.JWTKey
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 
 data class JWTKeyModel(
-    @SerializedName("jwtToken") val jwtToken: String,
+    @SerializedName("token") val jwtToken: String,
     @SerializedName("role") val role: String
 ) {
     companion object {
