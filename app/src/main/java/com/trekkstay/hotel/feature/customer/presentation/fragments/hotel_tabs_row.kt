@@ -91,7 +91,7 @@ fun HotelTabsRow() {
         HorizontalPager(
             modifier = Modifier.fillMaxSize(),
             state = pagerState,
-        ) { page ->
+        ) { _ ->
             Box(Modifier.fillMaxSize()) {
                 LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(10.dp),

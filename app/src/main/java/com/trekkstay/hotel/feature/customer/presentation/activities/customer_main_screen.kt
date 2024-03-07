@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.trekkstay.hotel.feature.customer.presentation.fragments.BotNavBar
+import com.trekkstay.hotel.feature.customer.presentation.fragments.CustomerBotNav
 import com.trekkstay.hotel.feature.reservation.presentation.activities.CustomerReservationScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.SearchEngineScreen
 
@@ -14,7 +14,7 @@ import com.trekkstay.hotel.feature.hotel.presentation.activities.SearchEngineScr
 fun CustomerMainScreen() {
     val navController = rememberNavController()
     Scaffold(
-        bottomBar = { BotNavBar(navController = navController) }
+        bottomBar = { CustomerBotNav(navController = navController) }
     ) { _ ->
         NavHost(
             navController = navController,

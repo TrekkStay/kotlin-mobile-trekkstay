@@ -1,4 +1,4 @@
-package com.trekkstay.hotel.feature.customer.presentation.fragments
+package com.trekkstay.hotel.feature.hotel.presentation.fragments
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -26,29 +26,32 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @Composable
-fun CustomerBotNav(navController: NavHostController) {
+fun HotelBotNav(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     val bottomBarIndicatorColor = NavigationBarItemDefaults.colors(
         unselectedIconColor = Color(0xFFB8B8B9),
         unselectedTextColor = Color(0xFFB8B8B9),
         selectedIconColor = Color.White,
-        selectedTextColor = TrekkStayCyan,
-        indicatorColor = TrekkStayCyan
+        selectedTextColor = TrekkStayBlue,
+        indicatorColor = TrekkStayBlue
     )
+    val indicatorTxtSize = 10.sp
+    val indicatorIconSize = 28.dp
     NavigationBar(
         containerColor = Color.White
     ) {
         NavigationBarItem(
-            label = { Text("Home") },
+            label = { Text("Home", fontSize = indicatorTxtSize) },
             selected = currentDestination?.hierarchy?.any {
-                it.route == "customer_home"
+                it.route == "hotel_home"
             } == true,
             onClick = {
-                navController.navigate("customer_home") {
+                navController.navigate("hotel_home") {
                     popUpTo(navController.graph.findStartDestination().id)
                     launchSingleTop = true
                 }
@@ -57,18 +60,18 @@ fun CustomerBotNav(navController: NavHostController) {
                 Icon(
                     Icons.Default.Home,
                     contentDescription = "Home",
-                    modifier = Modifier.size(30.dp)
+                    modifier = Modifier.size(indicatorIconSize)
                 )
             },
             colors = bottomBarIndicatorColor
         )
         NavigationBarItem(
-            label = { Text("Reservations") },
+            label = { Text("Reservations", fontSize = indicatorTxtSize) },
             selected = currentDestination?.hierarchy?.any {
-                it.route == "customer_reservations"
+                it.route == "hotel_reservations"
             } == true,
             onClick = {
-                navController.navigate("customer_reservations") {
+                navController.navigate("hotel_reservations") {
                     popUpTo(navController.graph.findStartDestination().id)
                     launchSingleTop = true
                 }
@@ -77,18 +80,38 @@ fun CustomerBotNav(navController: NavHostController) {
                 Icon(
                     Icons.AutoMirrored.Filled.List,
                     contentDescription = "List",
-                    modifier = Modifier.size(30.dp)
+                    modifier = Modifier.size(indicatorIconSize)
                 )
             },
             colors = bottomBarIndicatorColor
         )
         NavigationBarItem(
-            label = { Text("Notification") },
+            label = { Text("Scan QR", fontSize = indicatorTxtSize) },
             selected = currentDestination?.hierarchy?.any {
-                it.route == "customer_notifications"
+                it.route == "hotel_QR"
             } == true,
             onClick = {
-                navController.navigate("customer_notifications") {
+                navController.navigate("hotel_QR") {
+                    popUpTo(navController.graph.findStartDestination().id)
+                    launchSingleTop = true
+                }
+            },
+            icon = {
+                Icon(
+                    Icons.AutoMirrored.Filled.List,
+                    contentDescription = "List",
+                    modifier = Modifier.size(indicatorIconSize)
+                )
+            },
+            colors = bottomBarIndicatorColor
+        )
+        NavigationBarItem(
+            label = { Text("Notification", fontSize = indicatorTxtSize) },
+            selected = currentDestination?.hierarchy?.any {
+                it.route == "hotel_notifications"
+            } == true,
+            onClick = {
+                navController.navigate("hotel_notifications") {
                     popUpTo(navController.graph.findStartDestination().id)
                     launchSingleTop = true
                 }
@@ -98,7 +121,7 @@ fun CustomerBotNav(navController: NavHostController) {
                     Icon(
                         Icons.Default.Notifications,
                         contentDescription = "Bottom Bar Notification Icon",
-                        modifier = Modifier.size(30.dp)
+                        modifier = Modifier.size(indicatorIconSize)
                     )
                     Text(
                         text = "18",
@@ -114,12 +137,12 @@ fun CustomerBotNav(navController: NavHostController) {
             colors = bottomBarIndicatorColor
         )
         NavigationBarItem(
-            label = { Text("Profile") },
+            label = { Text("Profile", fontSize = indicatorTxtSize) },
             selected = currentDestination?.hierarchy?.any {
-                it.route == "customer_profile"
+                it.route == "hotel_profile"
             } == true,
             onClick = {
-                navController.navigate("customer_profile") {
+                navController.navigate("hotel_profile") {
                     popUpTo(navController.graph.findStartDestination().id)
                     launchSingleTop = true
                 }
@@ -128,7 +151,7 @@ fun CustomerBotNav(navController: NavHostController) {
                 Icon(
                     Icons.Default.AccountCircle,
                     contentDescription = "Bottom Bar Profile Icon",
-                    modifier = Modifier.size(30.dp)
+                    modifier = Modifier.size(indicatorIconSize)
                 )
             },
             colors = bottomBarIndicatorColor
