@@ -1,7 +1,5 @@
 package com.trekkstay.hotel.feature.hotel.presentation.activities
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,6 +12,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Icon
@@ -35,7 +34,6 @@ import com.trekkstay.hotel.feature.hotel.presentation.fragments.DestinationSearc
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.RoomOptionSelectorModal
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SearchEngineScreen(navController: NavHostController) {
     Scaffold(
@@ -52,7 +50,7 @@ fun SearchEngineScreen(navController: NavHostController) {
                 IconButton(onClick = {
                     navController.navigate("customer_home")
                 }) {
-                    Icon(Icons.Default.KeyboardArrowLeft, contentDescription = "backFromSearch")
+                    Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = "backFromSearch")
                 }
                 Text(text = "Search Hotel",fontFamily = PoppinsFontFamily, fontWeight = FontWeight.Bold, fontSize = 20.sp)
             }
