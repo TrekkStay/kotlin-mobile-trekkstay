@@ -13,6 +13,7 @@ import com.trekkstay.hotel.feature.authenticate.presentation.activities.Register
 import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthViewModel
 import com.trekkstay.hotel.feature.customer.presentation.activities.CustomerHomeScreen
 import com.trekkstay.hotel.feature.customer.presentation.activities.CustomerMainScreen
+import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelProfileScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.SearchEngineScreen
 import com.trekkstay.hotel.feature.reservation.presentation.activities.CustomerReservationScreen
@@ -83,7 +84,7 @@ fun HotelRouter(navController: NavHostController) {
             Text("Notifications")
         }
         composable(route = "hotel_profile") {
-            Text("Settings")
+            HotelProfileScreen()
         }
     }
 }

@@ -1,7 +1,5 @@
 package com.trekkstay.hotel.feature.hotel.presentation.activities
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
