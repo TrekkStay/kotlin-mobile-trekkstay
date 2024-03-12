@@ -17,14 +17,15 @@ import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.SearchEngineScreen
 import com.trekkstay.hotel.feature.reservation.presentation.activities.CustomerReservationScreen
 
+
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppRouter(authStateManager: AuthViewModel) {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "customer_main") {
+    NavHost(navController = navController, startDestination = "login") {
         composable("login") {
-            LoginScreen()
+            LoginScreen(authStateManager)
         }
         composable("register") {
             RegisterScreen(authStateManager)
@@ -38,6 +39,7 @@ fun AppRouter(authStateManager: AuthViewModel) {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CustomerRouter(navController: NavHostController) {
     NavHost(

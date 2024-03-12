@@ -8,14 +8,14 @@ import arrow.core.left
 import com.trekkstay.hotel.core.typedef.ResultFuture
 import com.trekkstay.hotel.core.typedef.ResultVoid
 import com.trekkstay.hotel.feature.authenticate.data.datasources.AuthRemoteDataSource
-import com.trekkstay.hotel.feature.authenticate.domain.entities.JWTKey
+import com.trekkstay.hotel.feature.authenticate.domain.entities.LoginRes
 import com.trekkstay.hotel.feature.authenticate.domain.repositories.AuthRepo
 
 
 class AuthRepoImpl(private val remoteDataSource: AuthRemoteDataSource) : AuthRepo {
 
-    override suspend fun login(email: String, pass: String): ResultFuture<JWTKey> {
-        return when (val response = remoteDataSource.login(email, pass)) {
+    override suspend fun login(email: String, pass: String): ResultFuture<LoginRes> {
+        return when (val response= remoteDataSource.login(email, pass)) {
             is Response.Success -> response.data!!.right()
             is Response.Invalid -> ApiInvalid(response.message ?: "Unknown error", response.status ?: "-1").left()
             is Response.Failure -> throw ApiException(response.message ?: "Unknown error", response.status ?: "-1")

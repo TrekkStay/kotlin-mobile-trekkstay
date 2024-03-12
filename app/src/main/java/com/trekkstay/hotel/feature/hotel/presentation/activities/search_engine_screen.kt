@@ -14,8 +14,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -26,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -34,6 +32,7 @@ import com.trekkstay.hotel.feature.hotel.presentation.fragments.DateRangeSelecto
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.DestinationSearchBar
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.RoomOptionSelectorModal
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -52,7 +51,7 @@ fun SearchEngineScreen(navController: NavHostController) {
                 IconButton(onClick = {
                     navController.navigate("customer_home")
                 }) {
-                    Icon(Icons.Default.KeyboardArrowLeft, contentDescription = "backFromSearch")
+                    Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = "backFromSearch")
                 }
                 Text(text = "Search Hotel",fontFamily = PoppinsFontFamily, fontWeight = FontWeight.Bold, fontSize = 20.sp)
             }

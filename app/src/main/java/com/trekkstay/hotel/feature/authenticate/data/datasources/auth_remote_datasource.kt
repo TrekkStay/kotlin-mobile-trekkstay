@@ -5,17 +5,15 @@ import com.trekkstay.hotel.core.network.method.RequestMethod
 import com.trekkstay.hotel.core.network.request.RequestQuery
 import com.trekkstay.hotel.core.network.response.Response
 import com.trekkstay.hotel.env.Env
-import com.trekkstay.hotel.feature.authenticate.data.models.JWTKeyModel
-import com.trekkstay.hotel.feature.authenticate.data.models.VerifyKeyModel
-import com.trekkstay.hotel.feature.authenticate.data.models.toJWTKey
-import com.trekkstay.hotel.feature.authenticate.data.models.toVerifyKey
-import com.trekkstay.hotel.feature.authenticate.domain.entities.JWTKey
+import com.trekkstay.hotel.feature.authenticate.data.models.LoginResModel
+import com.trekkstay.hotel.feature.authenticate.data.models.toLoginRes
+import com.trekkstay.hotel.feature.authenticate.domain.entities.LoginRes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 
 interface AuthRemoteDataSource {
-    suspend fun login(email: String, pass: String): Response<JWTKey>
+    suspend fun login(email: String, pass: String): Response<LoginRes>
     suspend fun register(email: String, name: String, pass: String): Response<Unit>
 }
 
@@ -24,7 +22,7 @@ const val registerEndpoint = "user/signup"
 
 class AuthRemoteDataSourceImpl(private val client: Client) : AuthRemoteDataSource {
 
-    override suspend fun login(email: String, pass: String): Response<JWTKey> {
+    override suspend fun login(email: String, pass: String): Response<LoginRes> {
         return withContext(Dispatchers.IO) {
             val requestBodyJson = JSONObject().apply {
                 put("email", email)
@@ -33,15 +31,23 @@ class AuthRemoteDataSourceImpl(private val client: Client) : AuthRemoteDataSourc
 
             val request = RequestQuery(
                 method = RequestMethod.POST,
-                path = "${Env.apiKey}$loginEndpoint",
+                path = "http://52.163.61.213:8888/api/v1/$loginEndpoint",
                 requestBody = requestBodyJson.toString()
             )
 
-            val response = client.execute<JWTKey>(
+            val response = client.execute<LoginRes>(
                 request = request,
-                parser = { responseData -> parseResponse(responseData) }
-            )
+                parser = { responseData ->
+                    if (responseData is String) {
+                        parseResponse(LoginResModel.fromJson(responseData))
+                    } else {
+                        null // Handle the case where responseData is not a String
+                    }
+                }
 
+
+            )
+            println("${response.data} tried doing")
             response
         }
     }
@@ -62,8 +68,7 @@ class AuthRemoteDataSourceImpl(private val client: Client) : AuthRemoteDataSourc
             )
 
             val response = client.execute<Unit>(
-                request = request,
-                parser = { responseData -> parseResponse(responseData) }
+                request = request
             )
 
             response
@@ -72,13 +77,11 @@ class AuthRemoteDataSourceImpl(private val client: Client) : AuthRemoteDataSourc
 
 
     private inline fun <reified T : Any> parseResponse(responseData: Any?): T? {
+        println("check for function call")
         return when (responseData) {
-            is JWTKeyModel -> responseData.toJWTKey() as? T
-            is VerifyKeyModel -> responseData.toVerifyKey() as? T
+            is LoginResModel -> responseData.toLoginRes() as? T
             else -> null
         }
     }
-
-
 
 }
