@@ -48,12 +48,16 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
@@ -63,6 +67,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.toSize
+import com.google.android.gms.wallet.button.ButtonConstants
 
 @Composable
 fun MyScreen() {
@@ -129,9 +134,52 @@ fun Demo_ExposedDropdownMenuBox() {
         }
     }
 }
+
+
+@Composable
+fun ToggleButtonWithText() {
+    var isChecked by remember { mutableStateOf(false) }
+
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Switch(
+            checked = isChecked,
+            onCheckedChange = { isChecked = it }
+        )
+        Text(
+            text = if (isChecked) "ON" else "OFF",
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(start = 8.dp)
+        )
+    }
+}
+
+@Composable
+fun ToggleButton(title: String) {
+    var isFilled by remember { mutableStateOf(true) }
+
+    if (isFilled) {
+        Button(
+            onClick = { isFilled = !isFilled },
+            modifier = Modifier.padding(8.dp),
+
+        ) {
+            Text(text = title)
+        }
+    } else {
+        OutlinedButton(
+            onClick = { isFilled = !isFilled },
+            colors = ButtonDefaults.outlinedButtonColors(contentColor = TrekkStayBlue),
+            modifier = Modifier.padding(8.dp)
+
+        ) {
+            Text(text = title)
+        }
+    }
+}
+
 @Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
 @Composable
 fun DownMenuScreenPreview() {
 //    CreateHotelScreen()
-    Demo_ExposedDropdownMenuBox()
+    ToggleButton("Air Conditioner")
 }
