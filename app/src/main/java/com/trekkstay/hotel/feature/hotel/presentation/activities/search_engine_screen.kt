@@ -32,7 +32,7 @@ import com.trekkstay.hotel.feature.hotel.presentation.fragments.RoomOptionSelect
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 
 
-@RequiresApi(Build.VERSION_CODES.O)
+//@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SearchEngineScreen(navController: NavHostController) {
     Scaffold(
