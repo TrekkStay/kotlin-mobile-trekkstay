@@ -1,7 +1,9 @@
 package com.trekkstay.hotel.feature.hotel.presentation.activities
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,13 +41,26 @@ import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.toSize
 
 @Composable
 fun CreateHotelScreen() {
@@ -54,6 +69,7 @@ fun CreateHotelScreen() {
     var phone by remember { mutableStateOf("") }
     var address by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
+    val dropdownItems = listOf("Item 1", "Item 2", "Item 3")
 
 
     Column {
@@ -105,6 +121,15 @@ fun CreateHotelScreen() {
                 icon = Icons.Filled.Create
             )
             Spacer(modifier = Modifier.height(20.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                DropDownMenu(160, "Check-in")
+                DropDownMenu(160, " Check-out")
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+
             CreateHotelButton(
                 title = "Hotel Location",
                 icon = Icons.Filled.LocationOn,
@@ -112,6 +137,15 @@ fun CreateHotelScreen() {
 
                 }
             )
+            Spacer(modifier = Modifier.height(20.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                DropDownMenu(125, "Province")
+                DropDownMenu(120, "District")
+                DropDownMenu(100, "Ward")
+            }
             Spacer(modifier = Modifier.height(20.dp))
             InputOutlineTextView(
                 title = "Address Detail",
@@ -139,6 +173,7 @@ fun CreateHotelScreen() {
                 icon = Icons.Filled.Menu
             )
             Spacer(modifier = Modifier.height(20.dp))
+
         }
     }
 }
@@ -231,10 +266,71 @@ fun CreateHotelButton(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DropDownMenu(widthSize: Int, title: String) {
+    val context = LocalContext.current
+    val timeList = arrayOf("12:00", "12:30", "13:00", "13:30", "14:00")
+    var expanded by remember { mutableStateOf(false) }
+    var selectedText by remember { mutableStateOf(title) }
+
+    Box(
+        modifier = Modifier
+            .width(widthSize.dp)
+            .border(1.dp, TrekkStayBlue, shape = RoundedCornerShape(20.dp))
+    ) {
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = {
+                expanded = !expanded
+            }
+        ) {
+            OutlinedTextField(
+                value = selectedText,
+                onValueChange = {  }, // Call the onValueChange function to update the value
+                readOnly = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .menuAnchor(),
+//                leadingIcon = {
+//                    Icon(
+//                        imageVector = Icons.Filled.DateRange,
+//                        contentDescription = null,
+//                        tint = TrekkStayBlue
+//                    )
+//                },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                shape = RoundedCornerShape(20.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = TrekkStayBlue,
+                    unfocusedBorderColor = TrekkStayBlue,
+                    cursorColor = TrekkStayBlue,
+                )
+            )
+
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                timeList.forEach { item ->
+                    DropdownMenuItem(
+                        text = { Text(text = item) },
+                        onClick = {
+                            selectedText = item
+                            expanded = false
+                            Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
+                        }
+                    )
+                }
+            }
+        }
+    }
+}
 
 
 @Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
 @Composable
 fun CreateHotelScreenPreview() {
     CreateHotelScreen()
+
 }
