@@ -26,7 +26,7 @@ import com.trekkstay.hotel.feature.reservation.presentation.activities.CustomerR
 fun AppRouter(authStateManager: AuthViewModel) {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "test") {
+    NavHost(navController = navController, startDestination = "create_hotel") {
         composable("login") {
             LoginScreen(authStateManager)
         }

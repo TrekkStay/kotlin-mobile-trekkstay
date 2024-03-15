@@ -68,6 +68,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.toSize
 import com.google.android.gms.wallet.button.ButtonConstants
+import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @Composable
 fun MyScreen() {
@@ -161,15 +162,20 @@ fun ToggleButton(title: String) {
         Button(
             onClick = { isFilled = !isFilled },
             modifier = Modifier.padding(8.dp),
-
+            colors = ButtonDefaults.outlinedButtonColors(
+                containerColor = TrekkStayCyan,
+                contentColor = Color.White),
         ) {
             Text(text = title)
         }
     } else {
-        OutlinedButton(
+        Button(
             onClick = { isFilled = !isFilled },
-            colors = ButtonDefaults.outlinedButtonColors(contentColor = TrekkStayBlue),
+            colors = ButtonDefaults.outlinedButtonColors(
+                containerColor = Color.White,
+                contentColor = TrekkStayCyan),
             modifier = Modifier.padding(8.dp)
+                .border(1.dp, TrekkStayCyan, shape = RoundedCornerShape(36.dp))
 
         ) {
             Text(text = title)
