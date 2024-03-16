@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -19,28 +20,63 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
-import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.trekkstay.hotel.feature.authenticate.presentation.states.*
 
 
 
 
 @Composable
-fun LoginScreen(
+fun LoginScreen(viewModel: AuthViewModel) {
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    val authState by viewModel.authState.observeAsState()
 
-) {
-    var email by remember { mutableStateOf("") } // Remember email value
-    var password by remember { mutableStateOf("") } // Remember password value
+    when (authState) {
+        is AuthState.SuccessLogin -> {
+            AlertDialog(
+                onDismissRequest = {},
+                title = { Text("Login Successful") },
+                text = { Text("token: ${(authState as AuthState.SuccessLogin).res.jwtToken}") },
+                confirmButton = {
+
+                },
+                dismissButton = {
+                    Button(onClick = {}) {
+                        Text("OK")
+                    }
+                }
+            )
+
+        }
+        is AuthState.InvalidLogin -> {
+
+            AlertDialog(
+                onDismissRequest = {},
+                title = { Text("Login Failed") },
+                text = { Text((authState as AuthState.InvalidLogin).message) },
+                confirmButton = {
+
+                },
+                dismissButton = {
+                    Button(onClick = {}) {
+                        Text("OK")
+                    }
+                }
+            )
+
+        }
+        is AuthState.LoginCalling -> {
+            // You can show a progress dialog or a loading indicator here
+        }
+        else -> {
+            // Handle other states
+        }
+    }
 
     Surface(color = Color.White) {
         Column(
@@ -132,7 +168,10 @@ fun LoginScreen(
             }
             Spacer(modifier = Modifier.height(32.dp))
             Button(
-                onClick = { },
+                onClick = {
+                    val action = LoginAction( email, password)
+                    viewModel.processAction(action)
+                          },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF238C98)),
                 modifier = Modifier
                     .fillMaxWidth()

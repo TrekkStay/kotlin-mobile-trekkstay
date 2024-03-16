@@ -13,10 +13,11 @@ import com.trekkstay.hotel.feature.authenticate.presentation.activities.Register
 import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthViewModel
 import com.trekkstay.hotel.feature.customer.presentation.activities.CustomerHomeScreen
 import com.trekkstay.hotel.feature.customer.presentation.activities.CustomerMainScreen
-import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateRoomScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelProfileScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelScreen
+import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateHotelScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.SearchEngineScreen
+import com.trekkstay.hotel.feature.hotel.presentation.activities.ToggleButton
 import com.trekkstay.hotel.feature.reservation.presentation.activities.CustomerReservationScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -26,7 +27,7 @@ fun AppRouter(authStateManager: AuthViewModel) {
 
     NavHost(navController = navController, startDestination = "hotel_create_room") {
         composable("login") {
-            LoginScreen()
+            LoginScreen(authStateManager)
         }
         composable("register") {
             RegisterScreen(authStateManager)
@@ -36,6 +37,12 @@ fun AppRouter(authStateManager: AuthViewModel) {
         }
         composable("hotel_main") {
             HotelScreen()
+        }
+        composable("create_hotel"){
+            CreateHotelScreen()
+        }
+        composable("test"){
+            ToggleButton("Air Conditioner")
         }
         composable("hotel_create_room") {
             CreateRoomScreen()

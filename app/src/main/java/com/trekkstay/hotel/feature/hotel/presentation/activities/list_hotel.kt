@@ -39,7 +39,6 @@ import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ListOfHotel() {
     Scaffold(
@@ -136,116 +135,99 @@ fun ListOfHotel() {
             }
 
             Spacer(modifier = Modifier.height(0.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth()
-                    .padding(start = 20.dp)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .padding(start = 10.dp)
-                        .height(30.dp)
-                        .width(100.dp)
-                        .background(
-                            color = TrekkStayCyan,
-                            shape = RoundedCornerShape(15.dp)
-                        )
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(90.dp),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "Filter",
-                            textAlign = TextAlign.Center,
-                            fontSize = 14.sp,
-                            fontFamily = PoppinsFontFamily,
-                            fontWeight = FontWeight.SemiBold,
-                            color = Color.White,
-                            modifier = Modifier.padding(end = 5.dp)
-                        )
-                        Box(
-                            modifier = Modifier
-                                .size(20.dp)
-                                .background(Color.White, shape = CircleShape)
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(90.dp),
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(
-                                    text = "1",
-                                    textAlign = TextAlign.Center,
-                                    fontSize = 12.sp,
-                                    fontFamily = PoppinsFontFamily,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = Color.Black,
-                                )
-                            }
-                        }
-                    }
-                }
-
-                Box(
-                    modifier = Modifier
-                        .padding(start = 10.dp)
-                        .height(30.dp)
-                        .width(100.dp)
-                        .background(
-                            color = Color.White,
-                            shape = RoundedCornerShape(15.dp)
-
-                        )
-                        .border(
-                            width = 2.dp,
-                            color = TrekkStayCyan,
-                            shape = RoundedCornerShape(15.dp)
-                        )
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(90.dp),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "Sort",
-                            textAlign = TextAlign.Center,
-                            fontSize = 14.sp,
-                            fontFamily = PoppinsFontFamily,
-                            fontWeight = FontWeight.SemiBold,
-                            color = TrekkStayCyan,
-                            modifier = Modifier.padding(end = 5.dp)
-                        )
-                        Icon(
-                            imageVector = Icons.Default.ArrowDropDown,
-                            contentDescription = null,
-                            tint = TrekkStayCyan
-                        )
-                    }
-                }
-            }
-//
-//            LazyColumn {
-//                // Add a single item
-//                item {
-//                    Text(text = "First item")
+//            Row(
+//                modifier = Modifier.fillMaxWidth()
+//                    .padding(start = 20.dp)
+//            ) {
+//                Box(
+//                    modifier = Modifier
+//                        .padding(start = 10.dp)
+//                        .height(30.dp)
+//                        .width(100.dp)
+//                        .background(
+//                            color = TrekkStayCyan,
+//                            shape = RoundedCornerShape(15.dp)
+//                        )
+//                ) {
+//                    Row(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .height(90.dp),
+//                        horizontalArrangement = Arrangement.Center,
+//                        verticalAlignment = Alignment.CenterVertically
+//                    ) {
+//                        Text(
+//                            text = "Filter",
+//                            textAlign = TextAlign.Center,
+//                            fontSize = 14.sp,
+//                            fontFamily = PoppinsFontFamily,
+//                            fontWeight = FontWeight.SemiBold,
+//                            color = Color.White,
+//                            modifier = Modifier.padding(end = 5.dp)
+//                        )
+//                        Box(
+//                            modifier = Modifier
+//                                .size(20.dp)
+//                                .background(Color.White, shape = CircleShape)
+//                        ) {
+//                            Row(
+//                                modifier = Modifier
+//                                    .fillMaxWidth()
+//                                    .height(90.dp),
+//                                horizontalArrangement = Arrangement.Center,
+//                                verticalAlignment = Alignment.CenterVertically
+//                            ) {
+//                                Text(
+//                                    text = "1",
+//                                    textAlign = TextAlign.Center,
+//                                    fontSize = 12.sp,
+//                                    fontFamily = PoppinsFontFamily,
+//                                    fontWeight = FontWeight.SemiBold,
+//                                    color = Color.Black,
+//                                )
+//                            }
+//                        }
+//                    }
 //                }
 //
-//                // Add 5 items
-//                items(5) { index ->
-//                    Text(text = "Item: $index")
-//                }
+//                Box(
+//                    modifier = Modifier
+//                        .padding(start = 10.dp)
+//                        .height(30.dp)
+//                        .width(100.dp)
+//                        .background(
+//                            color = Color.White,
+//                            shape = RoundedCornerShape(15.dp)
 //
-//                // Add another single item
-//                item {
-//                    Text(text = "Last item")
+//                        )
+//                        .border(
+//                            width = 2.dp,
+//                            color = TrekkStayCyan,
+//                            shape = RoundedCornerShape(15.dp)
+//                        )
+//                ) {
+//                    Row(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .height(90.dp),
+//                        horizontalArrangement = Arrangement.Center,
+//                        verticalAlignment = Alignment.CenterVertically
+//                    ) {
+//                        Text(
+//                            text = "Sort",
+//                            textAlign = TextAlign.Center,
+//                            fontSize = 14.sp,
+//                            fontFamily = PoppinsFontFamily,
+//                            fontWeight = FontWeight.SemiBold,
+//                            color = TrekkStayCyan,
+//                            modifier = Modifier.padding(end = 5.dp)
+//                        )
+//                        Icon(
+//                            imageVector = Icons.Default.ArrowDropDown,
+//                            contentDescription = null,
+//                            tint = TrekkStayCyan
+//                        )
+//                    }
 //                }
 //            }
         }
@@ -254,6 +236,6 @@ fun ListOfHotel() {
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun MyAppPreview() {
+fun MyListHotelPreview() {
     ListOfHotel()
 }

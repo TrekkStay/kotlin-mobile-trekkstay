@@ -10,6 +10,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
 
 class Client(private val engine: OkHttpClient) {
 
@@ -34,26 +35,30 @@ class Client(private val engine: OkHttpClient) {
             try {
                 val response = engine.newCall(buildOkHttpRequest(request)).execute()
                 val responseBody = response.body?.string()
-                Response.whenResponse {
-                    if (response.isSuccessful) {
-                        val parsedData = request.parser?.let {
-                            responseBody?.let { body -> it(body.toByteArray()) }
-                        }
-                        success(response.header("status_code") ?: "201", response.message, parsedData)
-                    } else {
-                        val statusCode = response.header("status_code")
-                        val errorMessage = response.message
-                        if ((statusCode != null) && (statusCode.toIntOrNull() != null) && (statusCode.toInt() >= 400)) {
-                            invalid(statusCode, errorMessage)
+                val jsonResponse = responseBody?.let { JSONObject(it) }
+                jsonResponse?.let { json ->
+                    val data = json.optJSONObject("data")
+                    Response.whenResponse {
+                        if (response.isSuccessful && data != null) {
+                            success(response.header("status_code") ?: "201", response.message,  request.parser?.invoke(data.toString()))
                         } else {
-                            failure(statusCode ?: "500", errorMessage)
+                            val statusCode = response.header("status_code")
+                            val errorMessage = response.message
+                            if ((statusCode != null) && (statusCode.toIntOrNull() != null) && (statusCode.toInt() >= 400)) {
+                                invalid(statusCode, errorMessage)
+                            } else {
+                                failure(statusCode ?: "500", errorMessage)
+                            }
                         }
                     }
+                } ?: Response.whenResponse {
+                    failure("-1", "Error: Response body is null")
                 }
             } catch (e: Exception) {
                 Response.whenResponse { failure("-1", "Error: ${e.message}") }
             }
         }
+
     }
 
     private fun buildOkHttpRequest(request: PreparedRequest<*>): Request {
