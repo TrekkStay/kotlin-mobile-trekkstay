@@ -16,6 +16,7 @@ import com.trekkstay.hotel.feature.customer.presentation.activities.CustomerMain
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelProfileScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateHotelScreen
+import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateRoomScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.SearchEngineScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.ToggleButton
 import com.trekkstay.hotel.feature.reservation.presentation.activities.CustomerReservationScreen
