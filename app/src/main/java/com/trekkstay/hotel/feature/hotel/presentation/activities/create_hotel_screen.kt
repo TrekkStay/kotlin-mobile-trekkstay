@@ -5,7 +5,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -45,16 +44,15 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.ui.platform.LocalContext
-import com.trekkstay.hotel.ui.theme.TrekkStayCyan
+import com.trekkstay.hotel.feature.hotel.presentation.fragments.FacilityChip
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CreateHotelScreen() {
     var name by remember { mutableStateOf("") }
@@ -93,7 +91,6 @@ fun CreateHotelScreen() {
         Column(
             modifier = Modifier.padding(horizontal = 25.dp,vertical = 20.dp)
         ) {
-
             InputOutlineTextView(
                 title = "Hotel Name",
                 value = name,
@@ -223,20 +220,22 @@ fun CreateHotelScreen() {
                             fontWeight = FontWeight.SemiBold,
                         )
                     }
-                    Row {
-                        OnOffButton1("Air Condition")
-                        OnOffButton1("Bath Tub")
-                        OnOffButton1("Shower")
-                    }
-                    Row {
-                        OnOffButton1("Balcony")
-                        OnOffButton1("Hair Drier")
-                        OnOffButton1("Kitchen")
-                    }
-                    Row {
-                        OnOffButton1("Televison")
-                        OnOffButton1("Slippers")
-                        OnOffButton1("Smoking")
+                    FlowRow(
+                        verticalArrangement = Arrangement.spacedBy(10.dp),
+                        horizontalArrangement = Arrangement.spacedBy(18.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp)
+                    ) {
+                        FacilityChip("Air Condition")
+                        FacilityChip("Bath Tub")
+                        FacilityChip("Shower")
+                        FacilityChip("Balcony")
+                        FacilityChip("Hair Dryer")
+                        FacilityChip("Kitchen")
+                        FacilityChip("Television")
+                        FacilityChip("Slippers")
+                        FacilityChip("Smoking")
                     }
                     Row (Modifier.padding(horizontal = 10.dp, vertical = 5.dp))
                     {
@@ -370,38 +369,6 @@ fun CreateHotelButton(
         }
     }
 }
-
-@Composable
-fun OnOffButton(title: String) {
-    var isFilled by remember { mutableStateOf(true) }
-
-    if (isFilled) {
-        Button(
-            onClick = { isFilled = !isFilled },
-            modifier = Modifier.padding(8.dp),
-            colors = ButtonDefaults.outlinedButtonColors(
-                containerColor = TrekkStayCyan,
-                contentColor = Color.White),
-        ) {
-            Text(text = title)
-        }
-    } else {
-        Button(
-            onClick = { isFilled = !isFilled },
-            colors = ButtonDefaults.outlinedButtonColors(
-                containerColor = Color.White,
-                contentColor = TrekkStayCyan
-            ),
-            modifier = Modifier
-                .padding(8.dp)
-                .border(1.dp, TrekkStayCyan, shape = RoundedCornerShape(36.dp))
-
-        ) {
-            Text(text = title)
-        }
-    }
-}
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
