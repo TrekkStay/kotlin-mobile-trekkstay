@@ -1,5 +1,9 @@
 package com.trekkstay.hotel.feature.hotel.presentation.activities
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -12,6 +16,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -32,14 +37,19 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -47,7 +57,11 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.graphics.toColorInt
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import coil.compose.AsyncImage
 import com.example.hotel.R
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.FacilityChip
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.HotelRoomOptSelector
@@ -64,6 +78,11 @@ fun CreateRoomScreen() {
     var price by remember { mutableStateOf(TextFieldValue()) }
     var view by remember { mutableStateOf(TextFieldValue()) }
     var roomSize by remember { mutableStateOf(TextFieldValue()) }
+    var selectedImageUris by remember { mutableStateOf<List<Uri?>>(emptyList()) }
+    val photosPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickMultipleVisualMedia(), onResult = { selectedImageUris = it}
+    )
+
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
@@ -126,9 +145,32 @@ fun CreateRoomScreen() {
                     label = "Image",
                     icon = ImageVector.vectorResource(R.drawable.photo_ico),
                     clickHandler = {
-                        //TODO
+                        photosPickerLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                     }
                 )
+                if (selectedImageUris.isNotEmpty()) {
+                    FlowRow(
+                        verticalArrangement = Arrangement.spacedBy(10.dp),
+                        horizontalArrangement = Arrangement.SpaceAround,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(5.dp))
+                            .background(Color(0xFFD9D9D9))
+                            .padding(vertical = 5.dp)
+
+                    ) {
+                        for (uri in selectedImageUris) {
+                            AsyncImage(
+                                model = uri,
+                                contentDescription = null,
+                                contentScale = ContentScale.FillBounds,
+                                modifier = Modifier
+                                    .size(160.dp, 100.dp)
+                                    .clip(RoundedCornerShape(10.dp))
+                            )
+                        }
+                    }
+                }
                 Column(
                     verticalArrangement = Arrangement.spacedBy(5.dp),
                     modifier = Modifier
@@ -171,8 +213,16 @@ fun CreateRoomScreen() {
                         FacilityChip("Slippers")
                         FacilityChip("Smoking")
                     }
-                    RoomInfoTextField(label = "View", text = view, icon = ImageVector.vectorResource(R.drawable.eye_ico))
-                    RoomInfoTextField(label = "Room Size", text = roomSize, icon = ImageVector.vectorResource(R.drawable.size_ico))
+                    RoomInfoTextField(
+                        label = "View",
+                        text = view,
+                        icon = ImageVector.vectorResource(R.drawable.eye_ico)
+                    )
+                    RoomInfoTextField(
+                        label = "Room Size",
+                        text = roomSize,
+                        icon = ImageVector.vectorResource(R.drawable.size_ico)
+                    )
                     Spacer(modifier = Modifier.height(5.dp))
                     HotelRoomOptSelector()
                 }
