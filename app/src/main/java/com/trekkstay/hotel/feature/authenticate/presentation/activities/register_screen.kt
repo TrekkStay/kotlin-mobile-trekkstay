@@ -22,26 +22,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthState
 import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthViewModel
 import com.trekkstay.hotel.feature.authenticate.presentation.states.RegisterAction
 
 
 @Composable
-fun RegisterScreen(viewModel: AuthViewModel) {
+fun RegisterScreen(viewModel: AuthViewModel,navController: NavHostController) {
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val authState by viewModel.authState.observeAsState()
-
+    var showDialog by remember { mutableStateOf(true) }
+    if (showDialog) {
     when (authState) {
         is AuthState.SuccessRegister -> {
+            showDialog = true
                 AlertDialog(
                     onDismissRequest = {},
                     title = { Text("Registration Successful") },
                     text = { Text("You have successfully registered.") },
                     confirmButton = {
-                        Button(onClick = {}) {
+                        Button(onClick = { showDialog = false }) {
                             Text("OK")
                         }
                     }
@@ -49,13 +52,13 @@ fun RegisterScreen(viewModel: AuthViewModel) {
 
         }
         is AuthState.InvalidRegister -> {
-
+            showDialog = true
                 AlertDialog(
                     onDismissRequest = {},
                     title = { Text("Registration Failed") },
                     text = { Text((authState as AuthState.InvalidRegister).message) },
                     confirmButton = {
-                        Button(onClick = {}) {
+                        Button(onClick = { showDialog = false }) {
                             Text("OK")
                         }
                     }
@@ -69,6 +72,7 @@ fun RegisterScreen(viewModel: AuthViewModel) {
             // Handle other states
         }
     }
+    }
 
     Surface(color = Color.White) {
         Column(
@@ -79,7 +83,7 @@ fun RegisterScreen(viewModel: AuthViewModel) {
             verticalArrangement = Arrangement.Top
         ) {
             IconButton(
-                onClick = { /* handle back click */ },
+                onClick = { navController.navigate("login") },
                 modifier = Modifier.align(Alignment.Start)
             ) {
                 Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -237,6 +241,7 @@ fun RegisterScreen(viewModel: AuthViewModel) {
         }
     }
 }
+
 
 
 

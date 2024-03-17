@@ -19,7 +19,7 @@ class AuthViewModel(private val authRepo: AuthRepo) : ViewModel() {
                     val result = authRepo.login(action.email, action.pass)
                     result.fold(
                         { failure -> _authState.postValue(AuthState.InvalidLogin(failure.message)) },
-                        { jwtKey -> _authState.postValue(AuthState.SuccessLogin(jwtKey)) }
+                        { jwtKey->  _authState.postValue(AuthState.SuccessLogin(jwtKey)) }
                     )
                 }
                 is RegisterAction -> {

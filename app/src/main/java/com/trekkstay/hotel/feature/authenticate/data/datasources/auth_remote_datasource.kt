@@ -41,7 +41,7 @@ class AuthRemoteDataSourceImpl(private val client: Client) : AuthRemoteDataSourc
                     if (responseData is String) {
                         parseResponse(LoginResModel.fromJson(responseData))
                     } else {
-                        null // Handle the case where responseData is not a String
+                        null
                     }
                 }
 

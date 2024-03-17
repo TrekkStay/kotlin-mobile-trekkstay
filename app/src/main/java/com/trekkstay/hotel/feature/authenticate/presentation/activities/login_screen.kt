@@ -21,60 +21,67 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import com.trekkstay.hotel.core.storage.LocalStore
 import com.trekkstay.hotel.feature.authenticate.presentation.states.*
 
 
 
 
 @Composable
-fun LoginScreen(viewModel: AuthViewModel) {
+fun LoginScreen(viewModel: AuthViewModel,navController: NavHostController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val authState by viewModel.authState.observeAsState()
+    val context = LocalContext.current
+    var showDialog by remember { mutableStateOf(true) }
 
-    when (authState) {
-        is AuthState.SuccessLogin -> {
-            AlertDialog(
-                onDismissRequest = {},
-                title = { Text("Login Successful") },
-                text = { Text("token: ${(authState as AuthState.SuccessLogin).res.jwtToken}") },
-                confirmButton = {
+    if (showDialog) {
+        when (authState) {
+            is AuthState.SuccessLogin -> {
+                showDialog = true
+                LocalStore.saveKey(context, "jwtKey",
+                    (authState as AuthState.SuccessLogin).res.jwtToken
+                )
+                AlertDialog(
+                    onDismissRequest = { showDialog = false },
+                    title = { Text("Login Successful") },
+                    confirmButton = {},
+                    dismissButton = {
+                        Button(onClick = { showDialog = false
+                            navController.navigate("customer_main")
+                        }) {
+                            Text("OK")
+                        }
 
-                },
-                dismissButton = {
-                    Button(onClick = {}) {
-                        Text("OK")
                     }
-                }
-            )
-
-        }
-        is AuthState.InvalidLogin -> {
-
-            AlertDialog(
-                onDismissRequest = {},
-                title = { Text("Login Failed") },
-                text = { Text((authState as AuthState.InvalidLogin).message) },
-                confirmButton = {
-
-                },
-                dismissButton = {
-                    Button(onClick = {}) {
-                        Text("OK")
+                )
+            }
+            is AuthState.InvalidLogin -> {
+                showDialog = true
+                AlertDialog(
+                    onDismissRequest = { showDialog = false },
+                    title = { Text("Login Failed") },
+                    text = { Text((authState as AuthState.InvalidLogin).message) },
+                    confirmButton = {},
+                    dismissButton = {
+                        Button(onClick = { showDialog = false }) {
+                            Text("OK")
+                        }
                     }
-                }
-            )
-
-        }
-        is AuthState.LoginCalling -> {
-            // You can show a progress dialog or a loading indicator here
-        }
-        else -> {
-            // Handle other states
+                )
+            }
+            is AuthState.LoginCalling -> {
+                // You can show a progress dialog or a loading indicator here
+            }
+            else -> {
+                // Handle other states
+            }
         }
     }
 
@@ -225,14 +232,19 @@ fun LoginScreen(viewModel: AuthViewModel) {
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Normal
                 )
-                Text(
-                    text = "Sign up",
-                    color = Color(0xFF238C98),
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Normal,
-                    modifier = Modifier.clickable { /*TODO*/ },
-                    textDecoration = TextDecoration.Underline
-                )
+                Box(
+                    modifier = Modifier.clickable {
+                        navController.navigate("register")
+                    }
+                ) {
+                    Text(
+                        text = "Sign up",
+                        color = Color(0xFF238C98),
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Normal,
+                        textDecoration = TextDecoration.Underline
+                    )
+                }
             }
 
 

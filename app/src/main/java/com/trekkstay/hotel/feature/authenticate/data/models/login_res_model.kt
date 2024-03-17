@@ -5,6 +5,7 @@ import com.trekkstay.hotel.core.typedef.DataMapContainer
 import com.trekkstay.hotel.feature.authenticate.domain.entities.LoginRes
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
+import com.google.gson.reflect.TypeToken
 
 data class LoginResModel(
     @SerializedName("full_name") val name: String,
@@ -25,9 +26,9 @@ data class LoginResModel(
         }
 
         fun fromJson(source: String): LoginResModel {
-            println("$source fromJson")
-            val map = Gson().fromJson(source, DataMapContainer::class.java)
-            return fromMap(map.data)
+            val type = object : TypeToken<Map<String, Any>>() {}.type
+            val map: Map<String, Any> = Gson().fromJson(source, type)
+            return fromMap(map)
         }
 
         private fun fromMap(map: DataMap): LoginResModel {

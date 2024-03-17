@@ -26,12 +26,12 @@ import com.trekkstay.hotel.feature.reservation.presentation.activities.CustomerR
 fun AppRouter(authStateManager: AuthViewModel) {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "hotel_create_room") {
+    NavHost(navController = navController, startDestination = "customer_main") {
         composable("login") {
-            LoginScreen(authStateManager)
+            LoginScreen(authStateManager,navController)
         }
         composable("register") {
-            RegisterScreen(authStateManager)
+            RegisterScreen(authStateManager,navController)
         }
         composable("customer_main") {
             CustomerMainScreen()
