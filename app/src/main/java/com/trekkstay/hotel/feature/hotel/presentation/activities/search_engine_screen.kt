@@ -28,11 +28,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.DateRangeSelector
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.DestinationSearchBar
-import com.trekkstay.hotel.feature.hotel.presentation.fragments.RoomOptionSelectorModal
+import com.trekkstay.hotel.feature.hotel.presentation.fragments.CustomerRoomOptSelector
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 
-
-//@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SearchEngineScreen(navController: NavHostController) {
     Scaffold(
@@ -64,7 +62,7 @@ fun SearchEngineScreen(navController: NavHostController) {
             ) {
                 DestinationSearchBar()
                 DateRangeSelector()
-                RoomOptionSelectorModal()
+                CustomerRoomOptSelector()
                 Row {
                     Box(
                         modifier = Modifier

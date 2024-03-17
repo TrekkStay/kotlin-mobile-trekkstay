@@ -1,10 +1,13 @@
 package com.trekkstay.hotel.feature.hotel.presentation.activities
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,11 +16,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -38,16 +43,18 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
 import com.example.hotel.R
+import com.trekkstay.hotel.feature.hotel.presentation.fragments.FacilityChip
+import com.trekkstay.hotel.feature.hotel.presentation.fragments.HotelRoomOptSelector
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CreateRoomScreen() {
     var room_type by remember { mutableStateOf(TextFieldValue()) }
@@ -55,11 +62,18 @@ fun CreateRoomScreen() {
     var quantity by remember { mutableStateOf(TextFieldValue()) }
     var discount_rate by remember { mutableStateOf(TextFieldValue()) }
     var price by remember { mutableStateOf(TextFieldValue()) }
-    Column (
+    var view by remember { mutableStateOf(TextFieldValue()) }
+    var roomSize by remember { mutableStateOf(TextFieldValue()) }
+    Column(
         verticalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.fillMaxHeight()
-    ){
-        Column {
+        modifier = Modifier
+            .fillMaxHeight()
+    ) {
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .verticalScroll(rememberScrollState())
+        ) {
             Spacer(modifier = Modifier.height(25.dp))
             Text(
                 text = "Create hotel room",
@@ -81,7 +95,11 @@ fun CreateRoomScreen() {
                     text = room_type,
                     icon = ImageVector.vectorResource(R.drawable.bed_ico)
                 )
-                RoomInfoTextField(label = "Description", text = description, icon = Icons.Default.Info)
+                RoomInfoTextField(
+                    label = "Description",
+                    text = description,
+                    icon = Icons.Default.Info
+                )
                 RoomInfoTextField(
                     label = "Quantity",
                     text = quantity,
@@ -111,9 +129,55 @@ fun CreateRoomScreen() {
                         //TODO
                     }
                 )
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(5.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color(0xFFE4E4E4).copy(0.3f))
+                        .border(1.dp, TrekkStayBlue, shape = RoundedCornerShape(16.dp))
+                        .padding(20.dp)
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Menu,
+                            contentDescription = null,
+                            tint = TrekkStayBlue,
+                            modifier = Modifier.padding(horizontal = 10.dp)
+                        )
+                        Text(
+                            text = "Facility",
+                            fontSize = 13.sp,
+                            fontFamily = PoppinsFontFamily,
+                            fontWeight = FontWeight.Medium,
+                            color = Color.Black.copy(0.6f)
+                        )
+                    }
+                    FlowRow(
+                        verticalArrangement = Arrangement.spacedBy(10.dp),
+                        horizontalArrangement = Arrangement.spacedBy(18.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 10.dp)
+                    ) {
+                        FacilityChip("Air Condition")
+                        FacilityChip("Bath Tub")
+                        FacilityChip("Shower")
+                        FacilityChip("Balcony")
+                        FacilityChip("Hair Dryer")
+                        FacilityChip("Kitchen")
+                        FacilityChip("Television")
+                        FacilityChip("Slippers")
+                        FacilityChip("Smoking")
+                    }
+                    RoomInfoTextField(label = "View", text = view, icon = ImageVector.vectorResource(R.drawable.eye_ico))
+                    RoomInfoTextField(label = "Room Size", text = roomSize, icon = ImageVector.vectorResource(R.drawable.size_ico))
+                    Spacer(modifier = Modifier.height(5.dp))
+                    HotelRoomOptSelector()
+                }
             }
         }
-
         Button(
             onClick = { /*TODO*/ },
             colors = ButtonDefaults.buttonColors(
