@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -17,10 +18,18 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,6 +43,7 @@ import coil.compose.AsyncImage
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReservationCard(
     hotelName: String,
@@ -46,6 +56,10 @@ fun ReservationCard(
     } else {
         price.toString()
     }
+
+    var isBotSheetVisible by remember { mutableStateOf(false) }
+    val botSheetState = rememberModalBottomSheetState()
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween,
@@ -122,12 +136,21 @@ fun ReservationCard(
             }
             Spacer(modifier = Modifier.weight(1f))
             when (type) {
-                "Upcoming" -> { }
+                "Upcoming" -> {}
                 "Completed" -> {
-                    Icon(Icons.Default.CheckCircle, contentDescription = "type icon", tint = Color(0xFF0FA958))
+                    Icon(
+                        Icons.Default.CheckCircle,
+                        contentDescription = "type icon",
+                        tint = Color(0xFF0FA958)
+                    )
                 }
+
                 "Cancelled" -> {
-                    Icon(Icons.Default.Warning, contentDescription = "type icon", tint = Color(0xFFE83F28).copy(0.9f))
+                    Icon(
+                        Icons.Default.Warning,
+                        contentDescription = "type icon",
+                        tint = Color(0xFFE83F28).copy(0.9f)
+                    )
                 }
             }
             Spacer(modifier = Modifier.width(5.dp))
@@ -148,7 +171,9 @@ fun ReservationCard(
                             containerColor = Color.White,
                             contentColor = TrekkStayCyan
                         ),
-                        onClick = { }
+                        onClick = {
+                            isBotSheetVisible = true
+                        }
                     ) {
                         Text(
                             "Cancel",
@@ -170,6 +195,70 @@ fun ReservationCard(
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 13.sp
                         )
+                    }
+
+                    if (isBotSheetVisible) {
+                        ModalBottomSheet(
+                            onDismissRequest = {
+                                isBotSheetVisible = false
+                            },
+                            sheetState = botSheetState
+                        ) {
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(20.dp),
+                                modifier = Modifier.fillMaxWidth().padding(top = 5.dp, bottom = 70.dp)
+                            ) {
+                                Text(
+                                    "Cancel Booking",
+                                    fontFamily = PoppinsFontFamily,
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = Color(0xFFDA3D3D).copy((0.7f)),
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                                HorizontalDivider(thickness = 2.dp, color = Color(0xFFC4C4C4).copy(0.2f), modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 20.dp))
+                                Text(
+                                    "Are you sure you want to cancel this hotel booking?",
+                                    fontFamily = PoppinsFontFamily,
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                                Text(
+                                    "Only 80% would be refunded according to our cancellation policy.",
+                                    fontFamily = PoppinsFontFamily,
+                                    fontSize = 16.sp,
+                                    color = Color.Black.copy(0.7f),
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                                Row(
+                                    horizontalArrangement = Arrangement.Center,
+                                    modifier = Modifier.fillMaxWidth(),
+                                ) {
+                                    Button(
+                                        onClick = { /*TODO*/ },
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = TrekkStayCyan,
+                                            contentColor = Color.White
+                                        ),
+                                        contentPadding = PaddingValues(horizontal = 30.dp, vertical = 15.dp),
+                                        shape = RoundedCornerShape(10.dp)
+                                    ) {
+                                        Text(
+                                            text = "Yes, Continue",
+                                            fontSize = 15.sp,
+                                            fontFamily = PoppinsFontFamily,
+                                            fontWeight = FontWeight.SemiBold
+                                        )
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
 

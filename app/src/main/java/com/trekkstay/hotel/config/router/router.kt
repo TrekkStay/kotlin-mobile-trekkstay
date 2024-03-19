@@ -35,7 +35,7 @@ fun AppRouter(
     val navController = rememberNavController()
 
 
-    NavHost(navController = navController, startDestination = "qr_scanner") {
+    NavHost(navController = navController, startDestination = "customer_main") {
         composable("login") {
             LoginScreen(authStateManager,navController)
         }
