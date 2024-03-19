@@ -1,13 +1,17 @@
 package com.trekkstay.hotel.config.router
 
 import android.os.Build
+import androidx.activity.ComponentActivity
+import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.RequiresApi
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.journeyapps.barcodescanner.ScanOptions
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.LoginScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.RegisterScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthViewModel
@@ -19,14 +23,19 @@ import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateHotelScre
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateRoomScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.SearchEngineScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.ToggleButton
+import com.trekkstay.hotel.feature.qr_scanner.QRScannerScreen
 import com.trekkstay.hotel.feature.reservation.presentation.activities.CustomerReservationScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun AppRouter(authStateManager: AuthViewModel) {
+fun AppRouter(
+    authStateManager: AuthViewModel,
+    activity: ComponentActivity,
+) {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "customer_main") {
+
+    NavHost(navController = navController, startDestination = "qr_scanner") {
         composable("login") {
             LoginScreen(authStateManager,navController)
         }
@@ -47,6 +56,11 @@ fun AppRouter(authStateManager: AuthViewModel) {
         }
         composable("hotel_create_room") {
             CreateRoomScreen()
+        }
+        composable("qr_scanner") {
+            QRScannerScreen(
+                activity
+            )
         }
     }
 }
