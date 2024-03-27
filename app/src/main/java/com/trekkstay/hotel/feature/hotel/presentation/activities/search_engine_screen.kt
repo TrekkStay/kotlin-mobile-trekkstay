@@ -73,6 +73,7 @@ fun SearchEngineScreen(navController: NavHostController) {
                         Text(
                             text = "Search",
                             fontWeight = FontWeight.Bold,
+                            fontFamily = PoppinsFontFamily,
                             color = Color(0xFF238C98).copy(0.9f),
                             fontSize = 16.sp,
                             modifier = Modifier.align(Alignment.Center)

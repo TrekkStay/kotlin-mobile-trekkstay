@@ -24,6 +24,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Menu
@@ -31,6 +32,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -54,6 +56,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.hotel.R
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.FacilityChip
@@ -63,7 +67,7 @@ import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun CreateRoomScreen() {
+fun CreateRoomScreen(navController: NavHostController) {
     var room_type by remember { mutableStateOf(TextFieldValue()) }
     var description by remember { mutableStateOf(TextFieldValue()) }
     var quantity by remember { mutableStateOf(TextFieldValue()) }
@@ -79,7 +83,7 @@ fun CreateRoomScreen() {
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
-            .fillMaxHeight()
+            .fillMaxHeight().padding(bottom = 75.dp)
     ) {
         Column(
             modifier = Modifier
@@ -87,15 +91,22 @@ fun CreateRoomScreen() {
                 .verticalScroll(rememberScrollState())
         ) {
             Spacer(modifier = Modifier.height(25.dp))
-            Text(
-                text = "Create hotel room",
-                fontSize = 20.sp,
-                fontFamily = PoppinsFontFamily,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 25.dp)
-            )
+            Row (
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(onClick = {
+                    navController.navigate("hotel_room_manage")
+                }) {
+                    Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = null)
+                }
+                Text(
+                    text = "Create hotel room",
+                    fontSize = 20.sp,
+                    fontFamily = PoppinsFontFamily,
+                    fontWeight = FontWeight.SemiBold,
+                )
+            }
             Spacer(modifier = Modifier.height(10.dp))
             HorizontalDivider(color = Color(0xFFE4E4E4), thickness = 3.dp)
             Column(
@@ -220,25 +231,25 @@ fun CreateRoomScreen() {
                     HotelRoomOptSelector()
                 }
             }
-        }
-        Button(
-            onClick = { /*TODO*/ },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = TrekkStayBlue,
-                contentColor = Color.White
-            ),
-            contentPadding = PaddingValues(horizontal = 100.dp, vertical = 15.dp),
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(25.dp),
-            shape = RoundedCornerShape(10.dp)
-        ) {
-            Text(
-                text = "Save Hotel Room",
-                fontSize = 18.sp,
-                fontFamily = PoppinsFontFamily,
-                fontWeight = FontWeight.SemiBold
-            )
+            Button(
+                onClick = { /*TODO*/ },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = TrekkStayBlue,
+                    contentColor = Color.White
+                ),
+                contentPadding = PaddingValues(horizontal = 100.dp, vertical = 15.dp),
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(5.dp),
+                shape = RoundedCornerShape(10.dp)
+            ) {
+                Text(
+                    text = "Save Hotel Room",
+                    fontSize = 18.sp,
+                    fontFamily = PoppinsFontFamily,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
         }
     }
 }
@@ -347,5 +358,5 @@ fun MediaSelectorRow(
 @Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
 @Composable
 fun CreateRoomPreview() {
-    CreateRoomScreen()
+    CreateRoomScreen(navController = rememberNavController())
 }

@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -100,7 +101,8 @@ fun DateInputBox(label: String, state: DateRangePickerState, onClick: () -> Unit
                 label,
                 color = Color(0xFF303030).copy(0.5f),
                 fontSize = 16.sp,
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Medium,
+                fontFamily = PoppinsFontFamily
             )
             val selectedDateMillis =
                 if (label == "Check-in") state.selectedStartDateMillis else state.selectedEndDateMillis
@@ -109,14 +111,16 @@ fun DateInputBox(label: String, state: DateRangePickerState, onClick: () -> Unit
                     formatDateFromMillis(selectedDateMillis),
                     color = Color(0xFF238C98).copy(0.9f),
                     fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = PoppinsFontFamily
                 )
             } else {
                 Text(
                     "Choose a date",
                     color = Color(0xFF238C98).copy(0.9f),
                     fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = PoppinsFontFamily
                 )
             }
         }

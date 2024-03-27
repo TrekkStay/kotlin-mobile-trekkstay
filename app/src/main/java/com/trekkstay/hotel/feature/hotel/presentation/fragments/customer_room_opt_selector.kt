@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -56,6 +57,7 @@ fun CustomerRoomOptSelector() {
         Text(
             text = "${roomNumber} Room, ${adultNumber} Adults, ${childNumber} Children",
             fontWeight = FontWeight.Medium,
+            fontFamily = PoppinsFontFamily,
             fontSize = 16.sp
         )
         if (isBotSheetVisible) {

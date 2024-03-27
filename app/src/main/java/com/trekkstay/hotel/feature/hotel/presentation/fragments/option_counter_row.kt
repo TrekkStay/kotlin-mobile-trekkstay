@@ -16,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.hotel.R
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
+import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @Composable
 fun OptionCounterRow(
@@ -37,7 +38,12 @@ fun OptionCounterRow(
                     contentDescription = null
                 )
             }
-            Text("$count", fontFamily = PoppinsFontFamily, modifier = Modifier.padding(8.dp))
+            Text(
+                "$count",
+                fontFamily = PoppinsFontFamily,
+                color = TrekkStayCyan,
+                modifier = Modifier.padding(8.dp)
+            )
             IconButton(onClick = onIncrease) {
                 Icon(Icons.Default.Add, contentDescription = null)
             }

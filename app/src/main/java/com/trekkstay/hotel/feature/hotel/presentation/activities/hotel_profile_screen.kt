@@ -27,13 +27,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 
 import com.example.hotel.R
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 @Composable
-fun HotelProfileScreen() {
+fun HotelProfileScreen(navController: NavHostController) {
     Column {
         Spacer(modifier = Modifier.height(25.dp))
         Text(
@@ -57,7 +59,12 @@ fun HotelProfileScreen() {
         ) {
             HotelProfileButton("Edit My Hotel Information", Icons.Default.Info)
             Spacer(modifier = Modifier.height(20.dp))
-            HotelProfileButton("Room Management", ImageVector.vectorResource(R.drawable.bed_ico))
+            HotelProfileButton("Room Management", ImageVector.vectorResource(R.drawable.bed_ico), onClick = {
+                navController.navigate("hotel_room_manage") {
+                    popUpTo(navController.graph.findStartDestination().id)
+                    launchSingleTop = true
+                }
+            })
             Spacer(modifier = Modifier.height(20.dp))
             HotelProfileButton("Staff Management", Icons.Default.AccountBox)
             Spacer(modifier = Modifier.height(20.dp))
@@ -76,7 +83,8 @@ fun HotelProfileScreen() {
 @Composable
 fun HotelProfileButton(
     title: String,
-    icon: ImageVector
+    icon: ImageVector,
+    onClick: () -> Unit = {}
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -88,7 +96,7 @@ fun HotelProfileButton(
             .background(Color(0xFFE4E4E4).copy(0.3f))
             .padding(15.dp)
             .clickable {
-
+                onClick()
             }
     ) {
         Icon(icon, contentDescription = null, tint = TrekkStayBlue)
@@ -103,8 +111,8 @@ fun HotelProfileButton(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
-@Composable
-fun HotelProfileScreenPreview() {
-    HotelProfileScreen()
-}
+//@Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
+//@Composable
+//fun HotelProfileScreenPreview() {
+//    HotelProfileScreen()
+//}
