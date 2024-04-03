@@ -98,7 +98,7 @@ class AuthRemoteDataSourceImpl(private val client: Client) : AuthRemoteDataSourc
                 request = request,
                 parser = { responseData ->
                     if (responseData is String) {
-                        parseResponse(LoginResModel.fromJson(responseData))
+                        parseResponse(EmployeeModel.fromJson(responseData))
                     } else {
                         null
                     }

@@ -46,28 +46,16 @@ fun EmpLoginScreen(viewModel: EmpAuthViewModel,navController: NavHostController)
             is EmpAuthState.SuccessEmpLogin -> {
                 showDialog = true
                 LocalStore.saveKey(context, "jwtKey",
-                    (authState as AuthState.SuccessLogin).res.jwtToken
+                    (authState as EmpAuthState.SuccessEmpLogin).res.jwtToken
                 )
-                AlertDialog(
-                    onDismissRequest = { showDialog = false },
-                    title = { Text("Login Successful") },
-                    confirmButton = {},
-                    dismissButton = {
-                        Button(onClick = { showDialog = false
-                            navController.navigate("customer_main")
-                        }) {
-                            Text("OK")
-                        }
-
-                    }
-                )
+                navController.navigate("hotel_main")
             }
             is EmpAuthState.InvalidEmpLogin -> {
                 showDialog = true
                 AlertDialog(
                     onDismissRequest = { showDialog = false },
                     title = { Text("Login Failed") },
-                    text = { Text((authState as AuthState.InvalidLogin).message) },
+                    text = { Text((authState as EmpAuthState.InvalidEmpLogin).message) },
                     confirmButton = {},
                     dismissButton = {
                         Button(onClick = { showDialog = false }) {
