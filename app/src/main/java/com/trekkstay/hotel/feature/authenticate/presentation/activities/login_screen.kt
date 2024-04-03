@@ -29,8 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.trekkstay.hotel.core.storage.LocalStore
 import com.trekkstay.hotel.feature.authenticate.presentation.states.*
-
-
+import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 
 @Composable
@@ -109,7 +108,7 @@ fun LoginScreen(viewModel: AuthViewModel,navController: NavHostController) {
                 )
                 Text(
                     text = "Back",
-                    color = Color(0xFF238C98),
+                    color = TrekkStayCyan,
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -167,7 +166,7 @@ fun LoginScreen(viewModel: AuthViewModel,navController: NavHostController) {
             ) {
                 Text(
                     text = "Forgot password?",
-                    color = Color(0xFF238C98),
+                    color = TrekkStayCyan,
                     fontSize = 14.sp,
                     modifier = Modifier.clickable { /*TODO*/ },
                             textDecoration = TextDecoration.Underline
@@ -239,7 +238,7 @@ fun LoginScreen(viewModel: AuthViewModel,navController: NavHostController) {
                 ) {
                     Text(
                         text = "Sign up",
-                        color = Color(0xFF238C98),
+                        color = TrekkStayCyan,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Normal,
                         textDecoration = TextDecoration.Underline
