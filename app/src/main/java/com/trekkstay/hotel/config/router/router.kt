@@ -51,18 +51,13 @@ fun AppRouter(
             CustomerMainScreen()
         }
         composable("hotel_main") {
-            HotelScreen()
+            HotelScreen(activity)
         }
         composable("create_hotel"){
             CreateHotelScreen()
         }
         composable("test"){
             ToggleButton("Air Conditioner")
-        }
-        composable("qr_scanner") {
-            QRScannerScreen(
-                activity
-            )
         }
     }
 }
@@ -91,8 +86,9 @@ fun CustomerRouter(navController: NavHostController) {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HotelRouter(navController: NavHostController) {
+fun HotelRouter(navController: NavHostController,activity: ComponentActivity,) {
     NavHost(
         navController = navController,
         startDestination = "hotel_home"
@@ -103,11 +99,13 @@ fun HotelRouter(navController: NavHostController) {
         composable(route = "hotel_reservations") {
             Text("Hotel Reservations")
         }
-        composable(route = "hotel_QR") {
-            Text("Hotel Scan")
-        }
         composable(route = "hotel_notifications") {
             Text("Notifications")
+        }
+        composable("hotel_QR") {
+            QRScannerScreen(
+                activity
+            )
         }
 //      Hotel Profile Screens
         composable(route = "hotel_profile") {
