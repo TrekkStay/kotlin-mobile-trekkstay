@@ -5,7 +5,9 @@ import com.trekkstay.hotel.core.network.method.RequestMethod
 import com.trekkstay.hotel.core.network.request.RequestQuery
 import com.trekkstay.hotel.core.network.response.Response
 import com.trekkstay.hotel.env.Env
+import com.trekkstay.hotel.feature.authenticate.data.models.EmployeeModel
 import com.trekkstay.hotel.feature.authenticate.data.models.LoginResModel
+import com.trekkstay.hotel.feature.authenticate.data.models.toEmployee
 import com.trekkstay.hotel.feature.authenticate.data.models.toLoginRes
 import com.trekkstay.hotel.feature.authenticate.domain.entities.Employee
 import com.trekkstay.hotel.feature.authenticate.domain.entities.LoginRes
@@ -74,6 +76,7 @@ class AuthRemoteDataSourceImpl(private val client: Client) : AuthRemoteDataSourc
                 request = request
             )
 
+            println("${response.data} tried doing")
             response
         }
     }
@@ -111,6 +114,7 @@ class AuthRemoteDataSourceImpl(private val client: Client) : AuthRemoteDataSourc
         println("check for function call")
         return when (responseData) {
             is LoginResModel -> responseData.toLoginRes() as? T
+            is EmployeeModel -> responseData.toEmployee() as T
             else -> null
         }
     }
