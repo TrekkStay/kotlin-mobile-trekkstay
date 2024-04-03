@@ -20,12 +20,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.hotel.R
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
@@ -98,7 +101,7 @@ fun HotelBotNav(navController: NavHostController) {
             },
             icon = {
                 Icon(
-                    Icons.AutoMirrored.Filled.List,
+                    ImageVector.vectorResource(R.drawable.ico_qr_scan),
                     contentDescription = "List",
                     modifier = Modifier.size(indicatorIconSize)
                 )
@@ -139,7 +142,9 @@ fun HotelBotNav(navController: NavHostController) {
         NavigationBarItem(
             label = { Text("Profile", fontSize = indicatorTxtSize) },
             selected = currentDestination?.hierarchy?.any {
-                it.route == "hotel_profile"
+                it.route == "hotel_profile" ||
+                it.route == "hotel_room_manage" ||
+                it.route == "hotel_room_create"
             } == true,
             onClick = {
                 navController.navigate("hotel_profile") {
