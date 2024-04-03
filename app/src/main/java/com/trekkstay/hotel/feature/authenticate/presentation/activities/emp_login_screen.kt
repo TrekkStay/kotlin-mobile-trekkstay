@@ -29,8 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.trekkstay.hotel.core.storage.LocalStore
 import com.trekkstay.hotel.feature.authenticate.presentation.states.*
-
-
+import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 
 @Composable
@@ -109,7 +108,7 @@ fun EmpLoginScreen(viewModel: EmpAuthViewModel,navController: NavHostController)
                 )
                 Text(
                     text = "Back",
-                    color = Color(0xFF238C98),
+                    color = Color(0xFF007EF2),
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -117,7 +116,7 @@ fun EmpLoginScreen(viewModel: EmpAuthViewModel,navController: NavHostController)
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = "We missed you! Login to continue your journey with us.",
-                color = Color(0xFF333333),
+                color = TrekkStayBlue,
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Normal,
                 modifier = Modifier.padding(vertical = 8.dp),
@@ -167,7 +166,7 @@ fun EmpLoginScreen(viewModel: EmpAuthViewModel,navController: NavHostController)
             ) {
                 Text(
                     text = "Forgot password?",
-                    color = Color(0xFF238C98),
+                    color = TrekkStayBlue,
                     fontSize = 14.sp,
                     modifier = Modifier.clickable { /*TODO*/ },
                     textDecoration = TextDecoration.Underline
@@ -179,7 +178,7 @@ fun EmpLoginScreen(viewModel: EmpAuthViewModel,navController: NavHostController)
                     val action = EmpLoginAction( email, password)
                     viewModel.processAction(action)
                 },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF238C98)),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF007EF2)),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(48.dp),
@@ -239,7 +238,7 @@ fun EmpLoginScreen(viewModel: EmpAuthViewModel,navController: NavHostController)
                 ) {
                     Text(
                         text = "Sign up",
-                        color = Color(0xFF238C98),
+                        color = TrekkStayBlue,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Normal,
                         textDecoration = TextDecoration.Underline
