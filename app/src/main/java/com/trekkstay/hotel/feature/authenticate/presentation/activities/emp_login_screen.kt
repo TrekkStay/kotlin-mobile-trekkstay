@@ -1,7 +1,5 @@
 package com.trekkstay.hotel.feature.authenticate.presentation.activities
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,9 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -30,7 +26,6 @@ import androidx.navigation.NavHostController
 import com.trekkstay.hotel.core.storage.LocalStore
 import com.trekkstay.hotel.feature.authenticate.presentation.states.*
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
-
 
 @Composable
 fun EmpLoginScreen(viewModel: EmpAuthViewModel,navController: NavHostController) {
@@ -45,7 +40,7 @@ fun EmpLoginScreen(viewModel: EmpAuthViewModel,navController: NavHostController)
             is EmpAuthState.SuccessEmpLogin -> {
                 showDialog = true
                 LocalStore.saveKey(context, "jwtKey",
-                    (authState as AuthState.SuccessLogin).res.jwtToken
+                    (authState as EmpAuthState.SuccessEmpLogin).res.jwtToken
                 )
                 AlertDialog(
                     onDismissRequest = { showDialog = false },
@@ -66,7 +61,7 @@ fun EmpLoginScreen(viewModel: EmpAuthViewModel,navController: NavHostController)
                 AlertDialog(
                     onDismissRequest = { showDialog = false },
                     title = { Text("Login Failed") },
-                    text = { Text((authState as AuthState.InvalidLogin).message) },
+                    text = { Text((authState as EmpAuthState.InvalidEmpLogin).message) },
                     confirmButton = {},
                     dismissButton = {
                         Button(onClick = { showDialog = false }) {
