@@ -26,6 +26,7 @@ import androidx.navigation.NavHostController
 import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthState
 import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthViewModel
 import com.trekkstay.hotel.feature.authenticate.presentation.states.RegisterAction
+import com.trekkstay.hotel.ui.theme.black
 
 
 @Composable
@@ -92,7 +93,7 @@ fun RegisterScreen(viewModel: AuthViewModel,navController: NavHostController) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = "Welcome ",
-                    color = Color(0xFF333333),
+                    color = black,
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -106,7 +107,7 @@ fun RegisterScreen(viewModel: AuthViewModel,navController: NavHostController) {
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = "We missed you! Login to continue your journey with us.",
-                color = Color(0xFF333333),
+                color = black,
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Normal,
                 modifier = Modifier.padding(vertical = 8.dp),
@@ -125,9 +126,9 @@ fun RegisterScreen(viewModel: AuthViewModel,navController: NavHostController) {
                 },
                 shape = RoundedCornerShape(20.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color(0xFF333333),
-                    unfocusedBorderColor = Color(0xFF333333),
-                    cursorColor = Color(0xFF333333),
+                    focusedBorderColor = black,
+                    unfocusedBorderColor = black,
+                    cursorColor = black,
                 )
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -144,9 +145,9 @@ fun RegisterScreen(viewModel: AuthViewModel,navController: NavHostController) {
                 },
                 shape = RoundedCornerShape(20.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color(0xFF333333),
-                    unfocusedBorderColor = Color(0xFF333333),
-                    cursorColor = Color(0xFF333333),
+                    focusedBorderColor = black,
+                    unfocusedBorderColor = black,
+                    cursorColor = black,
                 )
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -163,9 +164,9 @@ fun RegisterScreen(viewModel: AuthViewModel,navController: NavHostController) {
                 },
                 shape = RoundedCornerShape(20.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Color(0xFF333333),
-                    unfocusedBorderColor = Color(0xFF333333),
-                    cursorColor = Color(0xFF333333),
+                    focusedBorderColor = black,
+                    unfocusedBorderColor = black,
+                    cursorColor = black,
                 )
             )
             Spacer(modifier = Modifier.height(32.dp))
@@ -192,12 +193,12 @@ fun RegisterScreen(viewModel: AuthViewModel,navController: NavHostController) {
                 HorizontalDivider(
                     modifier = Modifier.weight(0.25f,fill = false),
                     thickness = 1.dp,
-                    color = Color(0xFF333333),
+                    color = black,
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = "Or continue with",
-                    color = Color(0xFF333333),
+                    color = black,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Normal
                 )
@@ -224,7 +225,7 @@ fun RegisterScreen(viewModel: AuthViewModel,navController: NavHostController) {
             ) {
                 Text(
                     text = "Already have an account? ",
-                    color = Color(0xFF333333),
+                    color = black,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Normal
                 )
