@@ -12,9 +12,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.journeyapps.barcodescanner.ScanOptions
+import com.trekkstay.hotel.feature.authenticate.presentation.activities.EmpLoginScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.LoginScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.RegisterScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthViewModel
+import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthViewModel
 import com.trekkstay.hotel.feature.customer.presentation.activities.CustomerHomeScreen
 import com.trekkstay.hotel.feature.customer.presentation.activities.CustomerMainScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelProfileScreen
@@ -30,14 +32,18 @@ import com.trekkstay.hotel.feature.reservation.presentation.activities.CustomerR
 @Composable
 fun AppRouter(
     authStateManager: AuthViewModel,
+    empAuthStateManager: EmpAuthViewModel,
     activity: ComponentActivity,
 ) {
     val navController = rememberNavController()
 
 
-    NavHost(navController = navController, startDestination = "customer_main") {
+    NavHost(navController = navController, startDestination = "emp_login") {
         composable("login") {
             LoginScreen(authStateManager,navController)
+        }
+        composable("emp_login") {
+            EmpLoginScreen(empAuthStateManager,navController)
         }
         composable("register") {
             RegisterScreen(authStateManager,navController)

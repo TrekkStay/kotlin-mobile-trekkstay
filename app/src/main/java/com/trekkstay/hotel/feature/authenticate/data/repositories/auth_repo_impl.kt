@@ -8,6 +8,7 @@ import arrow.core.left
 import com.trekkstay.hotel.core.typedef.ResultFuture
 import com.trekkstay.hotel.core.typedef.ResultVoid
 import com.trekkstay.hotel.feature.authenticate.data.datasources.AuthRemoteDataSource
+import com.trekkstay.hotel.feature.authenticate.domain.entities.Employee
 import com.trekkstay.hotel.feature.authenticate.domain.entities.LoginRes
 import com.trekkstay.hotel.feature.authenticate.domain.repositories.AuthRepo
 
@@ -29,6 +30,15 @@ class AuthRepoImpl(private val remoteDataSource: AuthRemoteDataSource) : AuthRep
             is Response.Failure -> throw ApiException(response.message ?: "Unknown error", response.status ?: "-1")
         }
     }
+
+    override suspend fun empLogin(email: String, pass: String): ResultFuture<Employee> {
+        return when (val response= remoteDataSource.empLogin(email, pass)) {
+            is Response.Success -> response.data!!.right()
+            is Response.Invalid -> ApiInvalid(response.message ?: "Unknown error", response.status ?: "-1").left()
+            is Response.Failure -> throw ApiException(response.message ?: "Unknown error", response.status ?: "-1")
+        }
+    }
+
 
     override suspend fun logout(): ResultVoid {
         TODO("Not yet implemented")
