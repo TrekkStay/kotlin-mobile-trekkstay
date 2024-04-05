@@ -173,6 +173,7 @@ fun RegisterScreen(viewModel: AuthViewModel,navController: NavHostController) {
 
             Button(
                 onClick = {
+                    showDialog = true
                     val action = RegisterAction(name, email, password)
                     viewModel.processAction(action)
                 },
