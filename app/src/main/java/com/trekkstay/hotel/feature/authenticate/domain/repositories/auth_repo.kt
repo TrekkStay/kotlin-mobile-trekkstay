@@ -10,5 +10,6 @@ interface AuthRepo {
     suspend fun login(email: String, pass: String): ResultFuture<LoginRes>
     suspend fun register(email: String, name: String, pass: String): ResultVoid
     suspend fun empLogin(email: String, pass: String): ResultFuture<Employee>
+    suspend fun empRegister(email: String, name: String, pass: String): ResultVoid
     suspend fun logout(): ResultVoid
 }

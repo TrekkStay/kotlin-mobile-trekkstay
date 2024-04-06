@@ -19,11 +19,13 @@ interface AuthRemoteDataSource {
     suspend fun login(email: String, pass: String): Response<LoginRes>
     suspend fun register(email: String, name: String, pass: String): Response<Unit>
     suspend fun empLogin(email: String, pass: String): Response<Employee>
+    suspend fun empRegister(email: String, name: String, pass: String): Response<Unit>
 }
 
 const val loginEndpoint = "user/login"
 const val registerEndpoint = "user/signup"
 const val empLoginEndpoint = "hotel-emp/login"
+const val empRegisterEndpoint = "hotel-emp/register"
 
 class AuthRemoteDataSourceImpl(private val client: Client) : AuthRemoteDataSource {
 
@@ -110,6 +112,31 @@ class AuthRemoteDataSourceImpl(private val client: Client) : AuthRemoteDataSourc
             response
         }
     }
+
+    override suspend fun empRegister(email: String, name: String, pass: String): Response<Unit> {
+        return withContext(Dispatchers.IO) {
+            val requestBodyJson = JSONObject().apply {
+                put("full_name", name)
+                put("email", email)
+                put("phone", "")
+                put("password", pass)
+            }
+
+            val request = RequestQuery(
+                method = RequestMethod.POST,
+                path = "http://52.163.61.213:8888/api/v1/$empRegisterEndpoint",
+                requestBody = requestBodyJson.toString()
+            )
+
+            val response = client.execute<Unit>(
+                request = request
+            )
+
+            println("${response.data} tried doing")
+            response
+        }
+    }
+
     private inline fun <reified T : Any> parseResponse(responseData: Any?): T? {
         println("check for function call")
         return when (responseData) {

@@ -24,12 +24,12 @@ class EmpAuthViewModel(private val authRepo: AuthRepo) : ViewModel() {
                     )
                 }
                 is EmpRegisterAction -> {
-                    /*_authState.postValue(EmpAuthState.EmpRegisterCalling)
+                    _authState.postValue(EmpAuthState.EmpRegisterCalling)
                     val result = authRepo.empRegister(action.email, action.name, action.pass)
                     result.fold(
                         { failure -> _authState.postValue(EmpAuthState.InvalidEmpRegister(failure.message)) },
                         { _authState.postValue(EmpAuthState.SuccessEmpRegister) }
-                    )*/
+                    )
                 }
             }
         }

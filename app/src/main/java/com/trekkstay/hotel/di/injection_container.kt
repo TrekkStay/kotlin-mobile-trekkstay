@@ -6,6 +6,7 @@ import com.trekkstay.hotel.feature.authenticate.data.datasources.AuthRemoteDataS
 import com.trekkstay.hotel.feature.authenticate.data.repositories.AuthRepoImpl
 import com.trekkstay.hotel.feature.authenticate.domain.repositories.AuthRepo
 import com.trekkstay.hotel.feature.authenticate.domain.usecases.EmpLoginUseCase
+import com.trekkstay.hotel.feature.authenticate.domain.usecases.EmpRegisterUseCase
 import com.trekkstay.hotel.feature.authenticate.domain.usecases.LoginUseCase
 import com.trekkstay.hotel.feature.authenticate.domain.usecases.RegisterUseCase
 import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthViewModel
@@ -21,9 +22,10 @@ val appModule = module {
     single { LoginUseCase(get()) }
     single { RegisterUseCase(get()) }
     single { EmpLoginUseCase(get()) }
+    single { EmpRegisterUseCase(get()) }
 
     single <AuthRemoteDataSource>{ AuthRemoteDataSourceImpl(get()) }
-    single<AuthRepo> { AuthRepoImpl(get()) }
+    single <AuthRepo>{ AuthRepoImpl(get()) }
 
 
     single { Client(get()) }

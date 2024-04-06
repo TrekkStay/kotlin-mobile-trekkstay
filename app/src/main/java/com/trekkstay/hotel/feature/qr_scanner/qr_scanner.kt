@@ -49,7 +49,7 @@ fun QRScannerScreen(activity: ComponentActivity) {
 
     val requestPermissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
         if (isGranted) {
-            showCamera(activity, barCodeLauncher)
+            showCamera( barCodeLauncher)
         } else {
             Toast.makeText(activity, "Camera permission is required", Toast.LENGTH_SHORT).show()
         }
@@ -61,7 +61,7 @@ fun QRScannerScreen(activity: ComponentActivity) {
                 android.Manifest.permission.CAMERA
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            showCamera(activity, barCodeLauncher)
+            showCamera(barCodeLauncher)
         } else {
             requestPermissionLauncher.launch(android.Manifest.permission.CAMERA)
         }
@@ -104,7 +104,7 @@ fun QRScannerScreen(activity: ComponentActivity) {
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-private fun showCamera(activity: ComponentActivity, barCodeLauncher: ManagedActivityResultLauncher<ScanOptions, ScanIntentResult>) {
+private fun showCamera( barCodeLauncher: ManagedActivityResultLauncher<ScanOptions, ScanIntentResult>) {
     val options = ScanOptions()
     options.setDesiredBarcodeFormats(ScanOptions.QR_CODE)
     options.setPrompt("Scan a QR code")

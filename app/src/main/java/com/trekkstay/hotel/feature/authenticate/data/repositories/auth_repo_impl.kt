@@ -39,6 +39,13 @@ class AuthRepoImpl(private val remoteDataSource: AuthRemoteDataSource) : AuthRep
         }
     }
 
+    override suspend fun empRegister(email: String, name: String, pass: String): ResultVoid {
+        return when (val response = remoteDataSource.empRegister(email, name, pass)) {
+            is Response.Success -> Unit.right()
+            is Response.Invalid -> ApiInvalid(response.message ?: "Unknown error", response.status ?: "-1").left()
+            is Response.Failure -> throw ApiException(response.message ?: "Unknown error", response.status ?: "-1")
+        }
+    }
 
     override suspend fun logout(): ResultVoid {
         TODO("Not yet implemented")
