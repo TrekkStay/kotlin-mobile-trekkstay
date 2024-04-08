@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
+
+
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -19,6 +23,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Hotel"
 
+
         tools:targetApi="31">
         <activity
             android:name="com.trekkstay.hotel.MainActivity"
@@ -34,6 +39,9 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBQCFSnMRFwkLtMj7G8w3pat7qKaoOw7yo" />
     </application>
 
 </manifest>

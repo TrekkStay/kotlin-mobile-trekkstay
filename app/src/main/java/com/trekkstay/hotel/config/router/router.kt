@@ -16,6 +16,7 @@ import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthViewMode
 import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthViewModel
 import com.trekkstay.hotel.feature.customer.presentation.activities.CustomerHomeScreen
 import com.trekkstay.hotel.feature.customer.presentation.activities.CustomerMainScreen
+import com.trekkstay.hotel.feature.gg_map.GGMap
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelProfileScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateHotelScreen
@@ -36,7 +37,7 @@ fun AppRouter(
     val navController = rememberNavController()
 
 
-    NavHost(navController = navController, startDestination = "hotel_main") {
+    NavHost(navController = navController, startDestination = "gg_map") {
         composable("login") {
             LoginScreen(authStateManager,navController)
         }
@@ -57,6 +58,10 @@ fun AppRouter(
         }
         composable("test"){
             ToggleButton("Air Conditioner")
+        }
+        composable("gg_map"){
+            GGMap(onMapClicked = { latLng ->
+                println("Clicked LatLng: $latLng") })
         }
     }
 }
@@ -87,7 +92,7 @@ fun CustomerRouter(navController: NavHostController) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HotelRouter(navController: NavHostController,activity: ComponentActivity,) {
+fun HotelRouter(navController: NavHostController,activity: ComponentActivity) {
     NavHost(
         navController = navController,
         startDestination = "hotel_home"

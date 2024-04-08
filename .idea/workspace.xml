@@ -10,20 +10,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0e28aad0-fb93-4b2a-8e7f-6cb21cc02950" name="Changes" comment="update: add route to QR scan in hotel screen">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/domain/usecases/emp_register_usecase.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/activities/emp_register_screen.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/gg_map/gg_map.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/gg_map/gg_map_viewmodel.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/di/injection_container.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/di/injection_container.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/data/datasources/auth_remote_datasource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/data/datasources/auth_remote_datasource.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/data/repositories/auth_repo_impl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/data/repositories/auth_repo_impl.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/domain/repositories/auth_repo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/domain/repositories/auth_repo.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/states/emp_auth_viewmodel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/states/emp_auth_viewmodel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/qr_scanner/QRScanner.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/qr_scanner/qr_scanner.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/MainApplication.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/MainApplication.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/config/router/router.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/config/router/router.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/gg_map/gg_map.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/gg_map/gg_map.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/gg_map/gg_map_viewmodel.kt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,24 +98,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "main",
-    "last_directory_selection": "E:/YEAR3_HK2/MOBILE/trekkstay/app/src/main/res/drawable",
-    "last_opened_file_path": "E:/kotlin-mobile-trekkstay",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "show.migrate.to.gradle.popup": "false"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_directory_selection&quot;: &quot;E:/YEAR3_HK2/MOBILE/trekkstay/app/src/main/res/drawable&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/kotlin-mobile-trekkstay&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\YEAR3_HK2\MOBILE\kotlin-mobile-trekkstay\app\src\main\java\com\trekkstay\hotel\feature\hotel\presentation\activities" />
