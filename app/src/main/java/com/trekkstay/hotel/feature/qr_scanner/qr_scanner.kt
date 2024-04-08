@@ -9,6 +9,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -68,19 +69,7 @@ fun QRScannerScreen(activity: ComponentActivity) {
     }
 
     Scaffold(
-        bottomBar = {
-            BottomAppBar(
-                actions = {},
-                floatingActionButton = {
-                    FloatingActionButton(onClick = { checkCameraPermission() }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.qr_scanner),
-                            contentDescription = "QR Scan"
-                        )
-                    }
-                }
-            )
-        }
+
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -91,7 +80,9 @@ fun QRScannerScreen(activity: ComponentActivity) {
         ) {
             Image(
                 painter = painterResource(id = R.drawable.qr_scanner),
-                modifier = Modifier.size(100.dp),
+                modifier = Modifier
+                    .size(100.dp)
+                    .clickable { checkCameraPermission() },
                 contentDescription = "QR"
             )
             Text(
@@ -110,7 +101,8 @@ private fun showCamera( barCodeLauncher: ManagedActivityResultLauncher<ScanOptio
     options.setPrompt("Scan a QR code")
     options.setCameraId(0)
     options.setBeepEnabled(false)
-    options.setOrientationLocked(false)
+    options.setOrientationLocked(true)
+
 
     barCodeLauncher.launch(options)
 }

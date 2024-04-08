@@ -1,7 +1,7 @@
 package com.trekkstay.hotel.feature.authenticate.presentation.states
 
 
-sealed class AuthAction {}
+sealed class AuthAction
 
 data class LoginAction(val email: String, val pass: String) : AuthAction()
 

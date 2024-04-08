@@ -37,7 +37,7 @@ fun AppRouter(
     val navController = rememberNavController()
 
 
-    NavHost(navController = navController, startDestination = "gg_map") {
+    NavHost(navController = navController, startDestination = "emp_login") {
         composable("login") {
             LoginScreen(authStateManager,navController)
         }
