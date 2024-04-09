@@ -45,7 +45,7 @@ fun SearchEngineScreen(navController: NavHostController) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(onClick = {
-                    navController.navigate("customer_home")
+                    navController.popBackStack()
                 }) {
                     Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = "backFromSearch")
                 }

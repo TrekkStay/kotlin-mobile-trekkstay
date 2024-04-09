@@ -9,6 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.trekkstay.hotel.feature.authenticate.presentation.activities.CustomerProfileScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.EmpLoginScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.LoginScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.RegisterScreen
@@ -17,7 +18,7 @@ import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthViewM
 import com.trekkstay.hotel.feature.customer.presentation.activities.CustomerHomeScreen
 import com.trekkstay.hotel.feature.customer.presentation.activities.CustomerMainScreen
 import com.trekkstay.hotel.feature.gg_map.GGMap
-import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelProfileScreen
+import com.trekkstay.hotel.feature.authenticate.presentation.activities.HotelProfileScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateHotelScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateRoomScreen
@@ -36,8 +37,7 @@ fun AppRouter(
 ) {
     val navController = rememberNavController()
 
-
-    NavHost(navController = navController, startDestination = "emp_login") {
+    NavHost(navController = navController, startDestination = "customer_main") {
         composable("login") {
             LoginScreen(authStateManager,navController)
         }
@@ -69,21 +69,26 @@ fun CustomerRouter(navController: NavHostController) {
         navController = navController,
         startDestination = "customer_home"
     ) {
+        // Home Screen
         composable(route = "customer_home") {
             CustomerHomeScreen(navController)
-        }
-        composable(route = "customer_reservations") {
-            CustomerReservationScreen()
-        }
-        composable(route = "customer_notifications") {
-            Text("Notifications")
-        }
-        composable(route = "customer_profile") {
-            Text("Settings")
         }
         composable(route = "customer_search_engine") {
             SearchEngineScreen(navController)
         }
+        // Reservation
+        composable(route = "customer_reservations") {
+            CustomerReservationScreen()
+        }
+        // Notifications
+        composable(route = "customer_notifications") {
+            Text("Notifications")
+        }
+        // Profile
+        composable(route = "customer_profile") {
+            CustomerProfileScreen(navController = navController)
+        }
+        
     }
 }
 
