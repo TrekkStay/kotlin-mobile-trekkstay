@@ -1,11 +1,18 @@
-package com.trekkstay.hotel.feature.customer.presentation.activities
+package com.trekkstay.hotel.feature.hotel.presentation.activities
 
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -17,27 +24,31 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.layout.ContentScale
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.trekkstay.hotel.feature.customer.presentation.fragments.DestinationCard
 import com.trekkstay.hotel.feature.customer.presentation.fragments.HotelTabsRow
 import com.trekkstay.hotel.ui.theme.NunitoFontFamily
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
-import com.trekkstay.hotel.ui.theme.TrekkStayCyan
+import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 @Composable
-fun CustomerHomeScreen(navController: NavHostController) {
+fun HotelHomeScreen(navController: NavHostController) {
     Column(
         modifier = Modifier
             .padding(bottom = 70.dp)
@@ -56,7 +67,7 @@ fun CustomerHomeScreen(navController: NavHostController) {
                 text = "TrekkStay",
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
-                color = TrekkStayCyan,
+                color = TrekkStayBlue,
                 fontFamily = NunitoFontFamily
             )
             Column(
@@ -76,7 +87,7 @@ fun CustomerHomeScreen(navController: NavHostController) {
                 ) {
                     Icon(
                         Icons.Outlined.LocationOn,
-                        tint = TrekkStayCyan,
+                        tint = TrekkStayBlue,
                         contentDescription = null
                     )
                     Text(
@@ -153,7 +164,7 @@ fun CustomerHomeScreen(navController: NavHostController) {
                     Icon(
                         Icons.Default.Menu,
                         contentDescription = null,
-                        tint = TrekkStayCyan
+                        tint = TrekkStayBlue
                     )
                 }
             }
@@ -163,7 +174,7 @@ fun CustomerHomeScreen(navController: NavHostController) {
         Text(
             text = "See all",
             textAlign = TextAlign.End,
-            color = TrekkStayCyan,
+            color = TrekkStayBlue,
             fontSize = 18.sp,
             fontFamily = PoppinsFontFamily,
             fontWeight = FontWeight.Medium,
@@ -196,7 +207,7 @@ fun CustomerHomeScreen(navController: NavHostController) {
         Text(
             text = "See all",
             textAlign = TextAlign.End,
-            color = TrekkStayCyan,
+            color = TrekkStayBlue,
             fontSize = 18.sp,
             fontFamily = PoppinsFontFamily,
             fontWeight = FontWeight.Medium,
@@ -208,8 +219,9 @@ fun CustomerHomeScreen(navController: NavHostController) {
     }
 }
 
-//@Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
-//@Composable
-//fun MyAppPreview() {
-//    CustomerHomeScreen()
-//}
+@Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
+@Composable
+fun MyAppPreview() {
+    val navController = rememberNavController()
+    HotelHomeScreen(navController = navController)
+}

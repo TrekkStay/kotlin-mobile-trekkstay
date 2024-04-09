@@ -22,9 +22,9 @@ import com.trekkstay.hotel.feature.authenticate.presentation.activities.HotelPro
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateHotelScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateRoomScreen
+import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelHomeScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelRoomManageScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.SearchEngineScreen
-import com.trekkstay.hotel.feature.hotel.presentation.activities.ToggleButton
 import com.trekkstay.hotel.feature.qr_scanner.QRScannerScreen
 import com.trekkstay.hotel.feature.reservation.presentation.activities.CustomerReservationScreen
 
@@ -37,7 +37,7 @@ fun AppRouter(
 ) {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "customer_main") {
+    NavHost(navController = navController, startDestination = "hotel_main") {
         composable("login") {
             LoginScreen(authStateManager,navController)
         }
@@ -52,9 +52,6 @@ fun AppRouter(
         }
         composable("hotel_main") {
             HotelScreen(activity)
-        }
-        composable("test"){
-            ToggleButton("Air Conditioner")
         }
         composable("gg_map"){
             GGMap(onMapClicked = { latLng ->
@@ -88,7 +85,6 @@ fun CustomerRouter(navController: NavHostController) {
         composable(route = "customer_profile") {
             CustomerProfileScreen(navController = navController)
         }
-        
     }
 }
 
@@ -100,7 +96,7 @@ fun HotelRouter(navController: NavHostController,activity: ComponentActivity) {
         startDestination = "hotel_home"
     ) {
         composable(route = "hotel_home") {
-            Text("Hotel Home")
+            HotelHomeScreen(navController = navController)
         }
         composable(route = "hotel_reservations") {
             Text("Hotel Reservations")
