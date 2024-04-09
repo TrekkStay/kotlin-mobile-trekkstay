@@ -24,7 +24,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -57,7 +56,12 @@ fun HotelProfileScreen(navController: NavHostController) {
         Column(
             modifier = Modifier.padding(horizontal = 25.dp,vertical = 20.dp)
         ) {
-            HotelProfileButton("Edit My Hotel Information", Icons.Default.Info)
+            HotelProfileButton("Edit My Hotel Information", Icons.Default.Info, onClick = {
+                navController.navigate("hotel_create") {
+                    popUpTo(navController.graph.findStartDestination().id)
+                    launchSingleTop = true
+                }
+            })
             Spacer(modifier = Modifier.height(20.dp))
             HotelProfileButton("Room Management", ImageVector.vectorResource(R.drawable.bed_ico), onClick = {
                 navController.navigate("hotel_room_manage") {

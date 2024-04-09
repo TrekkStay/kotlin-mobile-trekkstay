@@ -1,11 +1,11 @@
 package com.trekkstay.hotel.feature.hotel.presentation.activities
 
-import android.widget.Toast
-import androidx.compose.foundation.BorderStroke
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,8 +16,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -38,186 +36,202 @@ import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.filled.Create
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Place
-import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.Surface
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.IconButton
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
+import com.example.hotel.R
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.FacilityChip
+import com.trekkstay.hotel.feature.hotel.presentation.fragments.HotelActionRow
+import com.trekkstay.hotel.feature.hotel.presentation.fragments.InfoTextField
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun CreateHotelScreen() {
-    var name by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var phone by remember { mutableStateOf("") }
-    var address by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var view by remember { mutableStateOf("") }
-    val dropdownItems = listOf("Item 1", "Item 2", "Item 3")
-    val scrollState = rememberScrollState()
-
+fun CreateHotelScreen(navController: NavHostController) {
+    var hotel_name by remember { mutableStateOf(TextFieldValue()) }
+    var hotel_email by remember { mutableStateOf(TextFieldValue()) }
+    var hotel_phone by remember { mutableStateOf(TextFieldValue()) }
+    var address_detail by remember { mutableStateOf(TextFieldValue()) }
+    var hotel_description by remember { mutableStateOf(TextFieldValue()) }
+    val timeList = arrayOf("12:00", "12:30", "13:00", "13:30", "14:00")
+//    Get from api
+    val provinceList = arrayOf("Ha Noi", "Da Nang", "Da Lat", "Hue", "Hai Phong")
+    val districtList = arrayOf("Quan 1", "Quan 2", "Quan 3", "Quan 4", "Quan 5")
+    val wardList = arrayOf("Phuoc My", "Phuoc My", "Phuoc My", "Phuoc My", "Phuoc My")
+    var selectedImageUris by remember { mutableStateOf<List<Uri?>>(emptyList()) }
+    val photosPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickMultipleVisualMedia(),
+        onResult = { selectedImageUris = it }
+    )
 
     Column(
+        verticalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(scrollState)
+            .fillMaxHeight()
+            .padding(bottom = 75.dp)
     ) {
-        Spacer(modifier = Modifier.height(25.dp))
-
-        Text(
-            text = "Create Your Hotel" ,
-            fontSize = 20.sp,
-            fontFamily = PoppinsFontFamily,
-            fontWeight = FontWeight.SemiBold,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 25.dp)
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(2.dp)
-                .background(Color(0xFFE4E4E4))
-        )
         Column(
-            modifier = Modifier.padding(horizontal = 25.dp,vertical = 20.dp)
+            modifier = Modifier
+                .weight(1f)
+                .verticalScroll(rememberScrollState())
         ) {
-            InputOutlineTextView(
-                title = "Hotel Name",
-                value = name,
-                onValueChange = { newName ->
-                    name = newName // Update the value of 'name'
-                },
-                icon = Icons.Filled.Create
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            InputOutlineTextView(
-                title = "Email Address",
-                value = email,
-                onValueChange = { newEmail ->
-                    email = newEmail // Update the value of 'name'
-                },
-                icon = Icons.Filled.Email
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            InputOutlineTextView(
-                title = "Phone Number",
-                value = phone,
-                onValueChange = { newPhone ->
-                    phone = newPhone // Update the value of 'name'
-                },
-                icon = Icons.Filled.Create
-            )
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(25.dp))
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                DropDownMenu(160, "Check-in")
-                DropDownMenu(160, " Check-out")
-            }
-            Spacer(modifier = Modifier.height(20.dp))
-
-            CreateHotelButton(
-                title = "Hotel Location",
-                icon = Icons.Filled.LocationOn,
-                onClick = {
-
+                IconButton(onClick = {
+                    navController.navigate("hotel_room_manage")
+                }) {
+                    Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = null)
                 }
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                DropDownMenu(125, "Province")
-                DropDownMenu(120, "District")
-                DropDownMenu(100, "Ward")
-            }
-            Spacer(modifier = Modifier.height(20.dp))
-            InputOutlineTextView(
-                title = "Address Detail",
-                value = address,
-                onValueChange = { newAddress ->
-                    address = newAddress // Update the value of 'name'
-                },
-                icon = Icons.Filled.Place
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            CreateHotelButton(
-                title = "Image/Video",
-                icon = Icons.Filled.PlayArrow,
-                onClick = {
-
-                }
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            InputOutlineTextView(
-                title = "Description",
-                value = description,
-                onValueChange = { newDescription ->
-                    description = newDescription // Update the value of 'name'
-                },
-                icon = Icons.Filled.Menu
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(
-                        RoundedCornerShape(12.dp)
-                    )
-                    .background(TrekkStayBlue)
-                    .padding(15.dp)
-                    .clickable {
-                        // Your click action here
-                    }
-            ) {
                 Text(
-                    "Next Step",
+                    text = "Create Your Hotel",
+                    fontSize = 20.sp,
                     fontFamily = PoppinsFontFamily,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 18.sp,
-                    color = Color.White,
+                    fontWeight = FontWeight.SemiBold,
                 )
             }
+            Spacer(modifier = Modifier.height(10.dp))
+            HorizontalDivider(color = Color(0xFFE4E4E4), thickness = 3.dp)
+            Column(
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                modifier = Modifier.padding(horizontal = 25.dp, vertical = 20.dp)
+            ) {
+                InfoTextField(
+                    label = "Hotel Name",
+                    text = hotel_name,
+                    icon = ImageVector.vectorResource(R.drawable.add_home_ico),
+                )
+                InfoTextField(
+                    label = "Hotel Email",
+                    text = hotel_email,
+                    icon = Icons.Default.Email,
+                )
+                InfoTextField(
+                    label = "Hotel Phone",
+                    text = hotel_phone,
+                    icon = Icons.Default.Phone,
+                )
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    DropDownMenu(
+                        widthSize = 170,
+                        title = "Check In",
+                        itemList = timeList,
+                        leadingIcon = ImageVector.vectorResource(R.drawable.time_ico)
+                    )
+                    DropDownMenu(
+                        widthSize = 180,
+                        title = "Check Out",
+                        itemList = timeList,
+                        leadingIcon = ImageVector.vectorResource(R.drawable.time_ico)
+                    )
+                }
+                HotelActionRow(
+                    label = "Hotel Location",
+                    leadingIcon = Icons.Default.Place,
+                    trailingIcon = ImageVector.vectorResource(R.drawable.map_ico),
+                    clickHandler = {
+                        //Open Google Maps
+                    }
+                )
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    DropDownMenu(widthSize = 115, title = "Province", itemList = provinceList)
+                    DropDownMenu(widthSize = 115, title = "District", itemList = districtList)
+                    DropDownMenu(widthSize = 115, title = "Ward", itemList = wardList)
+                }
+                InfoTextField(
+                    label = "Address Detail",
+                    text = address_detail,
+                    icon = Icons.Default.Place,
+                )
+                HotelActionRow(
+                    label = "Video",
+                    leadingIcon = ImageVector.vectorResource(R.drawable.camera_ico),
+                    clickHandler = {
+                        //Upload Video
+                    }
+                )
+                HotelActionRow(
+                    label = "Image",
+                    leadingIcon = ImageVector.vectorResource(R.drawable.photo_ico),
+                    clickHandler = {
+                        photosPickerLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                    }
+                )
+                if (selectedImageUris.isNotEmpty()) {
+                    FlowRow(
+                        verticalArrangement = Arrangement.spacedBy(10.dp),
+                        horizontalArrangement = Arrangement.SpaceAround,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(5.dp))
+                            .background(Color(0xFFD9D9D9))
+                            .padding(vertical = 5.dp)
 
-            Box (
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp)
-
-            ){
+                    ) {
+                        for (uri in selectedImageUris) {
+                            AsyncImage(
+                                model = uri,
+                                contentDescription = null,
+                                contentScale = ContentScale.FillBounds,
+                                modifier = Modifier
+                                    .size(160.dp, 100.dp)
+                                    .clip(RoundedCornerShape(10.dp))
+                            )
+                        }
+                    }
+                }
+                InfoTextField(
+                    label = "Description",
+                    text = hotel_description,
+                    icon = Icons.Default.Info,
+                    maxLine = 6
+                )
                 Column(
+                    verticalArrangement = Arrangement.spacedBy(5.dp),
                     modifier = Modifier
                         .fillMaxWidth()
+                        .background(Color(0xFFE4E4E4).copy(0.3f))
                         .border(1.dp, TrekkStayBlue, shape = RoundedCornerShape(16.dp))
+                        .padding(20.dp)
                 ) {
                     Row(
-                        modifier = Modifier.padding(10.dp)
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        androidx.compose.material3.Icon(
+                        Icon(
                             imageVector = Icons.Filled.Menu,
                             contentDescription = null,
                             tint = TrekkStayBlue,
                             modifier = Modifier.padding(horizontal = 10.dp)
                         )
                         Text(
-                            text = "Facility",
-                            fontSize = 18.sp,
+                            text = "Facilities",
+                            fontSize = 13.sp,
                             fontFamily = PoppinsFontFamily,
-                            fontWeight = FontWeight.SemiBold,
+                            fontWeight = FontWeight.Medium,
+                            color = Color.Black.copy(0.6f)
                         )
                     }
                     FlowRow(
@@ -225,215 +239,110 @@ fun CreateHotelScreen() {
                         horizontalArrangement = Arrangement.spacedBy(18.dp),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(10.dp)
+                            .padding(vertical = 10.dp)
                     ) {
-                        FacilityChip("Air Condition")
-                        FacilityChip("Bath Tub")
-                        FacilityChip("Shower")
-                        FacilityChip("Balcony")
-                        FacilityChip("Hair Dryer")
-                        FacilityChip("Kitchen")
-                        FacilityChip("Television")
-                        FacilityChip("Slippers")
-                        FacilityChip("Smoking")
+                        FacilityChip("Airport Transfer")
+                        FacilityChip("Conference Room")
+                        FacilityChip("Fitness Center")
+                        FacilityChip("Food")
+                        FacilityChip("Free Wifi")
+                        FacilityChip("Laundry")
+                        FacilityChip("Motorbike Rental")
+                        FacilityChip("Parking Area")
+                        FacilityChip("Spa")
+                        FacilityChip("Pool")
                     }
-                    Row (Modifier.padding(horizontal = 10.dp, vertical = 5.dp))
-                    {
-                        InputOutlineTextView(
-                            title = "View",
-                            value = view,
-                            onValueChange = { newDescription ->
-                                view = newDescription // Update the value of 'name'
-                            },
-                            icon = Icons.Filled.Home
-                        )
-                    }
-                    Row (Modifier.padding(horizontal = 10.dp, vertical = 5.dp)){
-                        InputOutlineTextView(
-                            title = "Number of Bedrooms",
-                            value = view,
-                            onValueChange = { newDescription ->
-                                view = newDescription // Update the value of 'name'
-                            },
-                            icon = Icons.Filled.Home
-                        )
-                    }
-
-                    Row (Modifier.padding(horizontal = 10.dp, vertical = 5.dp)){
-                        InputOutlineTextView(
-                            title = "Room Size",
-                            value = view,
-                            onValueChange = { newDescription ->
-                                view = newDescription // Update the value of 'name'
-                            },
-                            icon = Icons.Filled.Home
-                        )
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth()
-                            .padding(horizontal = 10.dp, vertical = 5.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        DropDownMenu(160, "Check-in")
-                        DropDownMenu(160, " Check-out")
-                    }
+                    Spacer(modifier = Modifier.height(5.dp))
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun InputOutlineTextView(
-    title: String,
-    value: String,
-    onValueChange: (String) -> Unit, // Function to update the value
-    icon: ImageVector
-) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = { onValueChange(it) }, // Call the onValueChange function to update the value
-        label = { Text(title) },
-        modifier = Modifier.fillMaxWidth(),
-        leadingIcon = {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = TrekkStayBlue
-            )
-        },
-        shape = RoundedCornerShape(20.dp),
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = TrekkStayBlue,
-            unfocusedBorderColor = TrekkStayBlue,
-            cursorColor = TrekkStayBlue,
-        )
-    )
-}
-
-@Composable
-fun SmallInputOutlineTextView(
-    title: String,
-    value: String,
-    onValueChange: (String) -> Unit, // Function to update the value
-    icon: ImageVector,
-
-) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = { onValueChange(it) }, // Call the onValueChange function to update the value
-        label = { Text(title) },
-        modifier = Modifier.fillMaxWidth(),
-        leadingIcon = {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = TrekkStayBlue
-            )
-        },
-        shape = RoundedCornerShape(20.dp),
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = TrekkStayBlue,
-            unfocusedBorderColor = TrekkStayBlue,
-            cursorColor = TrekkStayBlue,
-        )
-    )
-}
-
-@Composable
-fun CreateHotelButton(
-    title: String,
-    icon: ImageVector,
-    onClick: () -> Unit // Function to handle click
-) {
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(40.dp),
-        border = BorderStroke(1.dp, TrekkStayBlue),
-        onClick = onClick // Pass the onClick function to handle the click event
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = TrekkStayBlue
-            )
-            Text(
-                text = title,
-                color = Color.Black,
-                modifier = Modifier.padding(start = 12.dp)
-            )
+            Button(
+                onClick = { /*TODO*/ },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = TrekkStayBlue,
+                    contentColor = Color.White
+                ),
+                contentPadding = PaddingValues(horizontal = 100.dp, vertical = 15.dp),
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(5.dp),
+                shape = RoundedCornerShape(10.dp)
+            ) {
+                Text(
+                    text = "Save Hotel",
+                    fontSize = 18.sp,
+                    fontFamily = PoppinsFontFamily,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DropDownMenu(widthSize: Int, title: String) {
-    val context = LocalContext.current
-    val timeList = arrayOf("12:00", "12:30", "13:00", "13:30", "14:00")
+fun DropDownMenu(
+    widthSize: Int,
+    title: String,
+    itemList: Array<String>,
+    leadingIcon: ImageVector? = null
+) {
     var expanded by remember { mutableStateOf(false) }
     var selectedText by remember { mutableStateOf(title) }
 
-    Box(
-        modifier = Modifier
-            .width(widthSize.dp)
-            .border(1.dp, TrekkStayBlue, shape = RoundedCornerShape(20.dp))
+    ExposedDropdownMenuBox(
+        modifier = Modifier.size(widthSize.dp, 50.dp),
+        expanded = expanded,
+        onExpandedChange = {
+            expanded = !expanded
+        }
     ) {
-        ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = {
-                expanded = !expanded
-            }
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .size(widthSize.dp, 50.dp)
+                .background(Color.Transparent, shape = RoundedCornerShape(12.dp))
+                .border(1.dp, TrekkStayBlue, shape = RoundedCornerShape(12.dp))
+                .padding(horizontal = 15.dp)
+                .menuAnchor()
         ) {
-            OutlinedTextField(
-                value = selectedText,
-                onValueChange = {  }, // Call the onValueChange function to update the value
-                readOnly = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .menuAnchor(),
-//                leadingIcon = {
-//                    Icon(
-//                        imageVector = Icons.Filled.DateRange,
-//                        contentDescription = null,
-//                        tint = TrekkStayBlue
-//                    )
-//                },
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                shape = RoundedCornerShape(20.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = TrekkStayBlue,
-                    unfocusedBorderColor = TrekkStayBlue,
-                    cursorColor = TrekkStayBlue,
-                )
+            if (leadingIcon != null) {
+                Icon(leadingIcon, contentDescription = null, tint = TrekkStayBlue)
+            }
+            Text(
+                selectedText,
+                fontFamily = PoppinsFontFamily,
+                fontWeight = FontWeight.Medium,
+                fontSize = 14.sp,
+                color = Color.Black.copy(0.6f)
             )
-
-            ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                timeList.forEach { item ->
-                    DropdownMenuItem(
-                        text = { Text(text = item) },
-                        onClick = {
-                            selectedText = item
-                            expanded = false
-                            Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
-                        }
-                    )
-                }
+            Icon(
+                Icons.Default.KeyboardArrowDown,
+                contentDescription = null,
+                tint = TrekkStayBlue,
+                modifier = Modifier.size(30.dp)
+            )
+        }
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            itemList.forEach { item ->
+                DropdownMenuItem(
+                    text = { Text(text = item, fontFamily = PoppinsFontFamily) },
+                    onClick = {
+                        selectedText = item
+                        expanded = false
+                    }
+                )
             }
         }
     }
 }
 
-
-@Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
+@Preview(showBackground = true, device = "spec:width=411dp,height=1000dp")
 @Composable
 fun CreateHotelScreenPreview() {
-    CreateHotelScreen()
+    CreateHotelScreen(navController = rememberNavController())
 }

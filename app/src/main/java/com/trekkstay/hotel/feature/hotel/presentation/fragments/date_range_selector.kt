@@ -38,11 +38,12 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DateRangeSelector() {
+fun DateRangeSelector(
+    type: String
+) {
     var isBotSheetVisible by remember { mutableStateOf(false) }
     val state = rememberDateRangePickerState()
     val botSheetState = rememberModalBottomSheetState()
@@ -50,11 +51,13 @@ fun DateRangeSelector() {
     Column(
         verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
-        DateInputBox("Check-in", state) {
-            isBotSheetVisible = true
-        }
-        DateInputBox("Check-out", state) {
-            isBotSheetVisible = true
+        if (type == "search") {
+            SearchDateInput("Check-in", state) {
+                isBotSheetVisible = true
+            }
+            SearchDateInput("Check-out", state) {
+                isBotSheetVisible = true
+            }
         }
         if (isBotSheetVisible) {
             ModalBottomSheet(
@@ -80,7 +83,7 @@ fun formatDateFromMillis(millis: Long): String {
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DateInputBox(label: String, state: DateRangePickerState, onClick: () -> Unit) {
+fun SearchDateInput(label: String, state: DateRangePickerState, onClick: () -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier

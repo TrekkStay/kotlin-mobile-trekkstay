@@ -6,9 +6,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -26,17 +24,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -49,19 +43,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.toColorInt
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.hotel.R
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.FacilityChip
+import com.trekkstay.hotel.feature.hotel.presentation.fragments.HotelActionRow
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.HotelRoomOptSelector
+import com.trekkstay.hotel.feature.hotel.presentation.fragments.InfoTextField
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
@@ -113,41 +107,44 @@ fun CreateRoomScreen(navController: NavHostController) {
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 modifier = Modifier.padding(horizontal = 25.dp, vertical = 20.dp)
             ) {
-                RoomInfoTextField(
+                InfoTextField(
                     label = "Room type",
                     text = room_type,
-                    icon = ImageVector.vectorResource(R.drawable.bed_ico)
+                    icon = ImageVector.vectorResource(R.drawable.bed_ico),
                 )
-                RoomInfoTextField(
+                InfoTextField(
                     label = "Description",
                     text = description,
-                    icon = Icons.Default.Info
+                    icon = Icons.Default.Info,
                 )
-                RoomInfoTextField(
+                InfoTextField(
                     label = "Quantity",
                     text = quantity,
-                    icon = ImageVector.vectorResource(R.drawable.box_ico)
+                    icon = ImageVector.vectorResource(R.drawable.box_ico),
+                    type = "number"
                 )
-                RoomInfoTextField(
+                InfoTextField(
                     label = "Discount Rate",
                     text = discount_rate,
-                    icon = ImageVector.vectorResource(R.drawable.discount_ico)
+                    icon = ImageVector.vectorResource(R.drawable.discount_ico),
+                    type = "number"
                 )
-                RoomInfoTextField(
+                InfoTextField(
                     label = "Original Price",
                     text = price,
-                    icon = ImageVector.vectorResource(R.drawable.money_circle_ico)
+                    icon = ImageVector.vectorResource(R.drawable.money_circle_ico),
+                    type = "number"
                 )
-                MediaSelectorRow(
+                HotelActionRow(
                     label = "Video",
-                    icon = ImageVector.vectorResource(R.drawable.camera_ico),
+                    leadingIcon = ImageVector.vectorResource(R.drawable.camera_ico),
                     clickHandler = {
                         //TODO
                     }
                 )
-                MediaSelectorRow(
+                HotelActionRow(
                     label = "Image",
-                    icon = ImageVector.vectorResource(R.drawable.photo_ico),
+                    leadingIcon = ImageVector.vectorResource(R.drawable.photo_ico),
                     clickHandler = {
                         photosPickerLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                     }
@@ -217,15 +214,16 @@ fun CreateRoomScreen(navController: NavHostController) {
                         FacilityChip("Slippers")
                         FacilityChip("Smoking")
                     }
-                    RoomInfoTextField(
+                    InfoTextField(
                         label = "View",
                         text = view,
-                        icon = ImageVector.vectorResource(R.drawable.eye_ico)
+                        icon = ImageVector.vectorResource(R.drawable.eye_ico),
                     )
-                    RoomInfoTextField(
+                    InfoTextField(
                         label = "Room Size",
                         text = roomSize,
-                        icon = ImageVector.vectorResource(R.drawable.size_ico)
+                        icon = ImageVector.vectorResource(R.drawable.size_ico),
+                        type = "number"
                     )
                     Spacer(modifier = Modifier.height(5.dp))
                     HotelRoomOptSelector()
@@ -250,107 +248,6 @@ fun CreateRoomScreen(navController: NavHostController) {
                     fontWeight = FontWeight.SemiBold
                 )
             }
-        }
-    }
-}
-
-@Composable
-fun RoomInfoTextField(
-    label: String,
-    text: TextFieldValue,
-    icon: ImageVector
-) {
-    var text by remember { mutableStateOf(text) }
-    OutlinedTextField(
-        value = text,
-        onValueChange = { text = it },
-        label = {
-            Text(
-                label,
-                fontFamily = PoppinsFontFamily,
-                fontWeight = FontWeight.Medium,
-                color = Color.Black.copy(0.6f)
-            )
-        },
-        modifier = Modifier.fillMaxWidth(),
-        leadingIcon = {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = TrekkStayBlue
-            )
-        },
-        textStyle = TextStyle(
-            fontFamily = PoppinsFontFamily,
-            fontSize = 14.sp
-        ),
-        shape = RoundedCornerShape(12.dp),
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = Color("#007EF2".toColorInt()),
-            unfocusedBorderColor = Color("#007EF2".toColorInt()),
-            cursorColor = Color("#007EF2".toColorInt()),
-        ),
-//        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
-    )
-}
-
-@Composable
-fun MediaSelectorRow(
-    label: String,
-    icon: ImageVector,
-    clickHandler: () -> Unit = {}
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.End,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(55.dp)
-            .border(1.dp, TrekkStayBlue, RoundedCornerShape(12.dp))
-            .clickable {
-                clickHandler()
-            }
-    )
-    {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-            modifier = Modifier
-                .padding(15.dp)
-                .weight(1f)
-        ) {
-            Icon(
-                icon,
-                contentDescription = null,
-                tint = TrekkStayBlue
-            )
-            Text(
-                label,
-                fontFamily = PoppinsFontFamily,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium,
-                color = Color.Black.copy(0.6f)
-            )
-        }
-
-        VerticalDivider(
-            color = TrekkStayBlue,
-            thickness = 2.dp,
-            modifier = Modifier
-                .fillMaxHeight()
-        )
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .size(55.dp)
-
-        ) {
-            Icon(
-                Icons.Default.KeyboardArrowDown,
-                contentDescription = null,
-                tint = TrekkStayBlue,
-                modifier = Modifier.size(30.dp)
-            )
         }
     }
 }

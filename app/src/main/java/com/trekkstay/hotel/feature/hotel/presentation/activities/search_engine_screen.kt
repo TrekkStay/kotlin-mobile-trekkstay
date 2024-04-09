@@ -61,7 +61,7 @@ fun SearchEngineScreen(navController: NavHostController) {
                     .padding(20.dp)
             ) {
                 DestinationSearchBar()
-                DateRangeSelector()
+                DateRangeSelector(type = "search")
                 CustomerRoomOptSelector()
                 Row {
                     Box(

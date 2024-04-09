@@ -2,6 +2,12 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="CreateHotelScreenPreview">
+        <State />
+      </entry>
+      <entry key="CreateRoomPreview">
+        <State />
+      </entry>
       <entry key="SortHotelPreview">
         <State />
       </entry>

@@ -53,9 +53,6 @@ fun AppRouter(
         composable("hotel_main") {
             HotelScreen(activity)
         }
-        composable("create_hotel"){
-            CreateHotelScreen()
-        }
         composable("test"){
             ToggleButton("Air Conditioner")
         }
@@ -114,6 +111,9 @@ fun HotelRouter(navController: NavHostController,activity: ComponentActivity) {
 //      Hotel Profile Screens
         composable(route = "hotel_profile") {
             HotelProfileScreen(navController)
+        }
+        composable("hotel_create"){
+            CreateHotelScreen(navController)
         }
         composable(route = "hotel_room_manage") {
             HotelRoomManageScreen(navController)
