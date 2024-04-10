@@ -27,6 +27,7 @@ import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelRoomManage
 import com.trekkstay.hotel.feature.hotel.presentation.activities.SearchEngineScreen
 import com.trekkstay.hotel.feature.qr_scanner.QRScannerScreen
 import com.trekkstay.hotel.feature.reservation.presentation.activities.CustomerReservationScreen
+import com.trekkstay.hotel.feature.reservation.presentation.activities.HotelReservationScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -37,7 +38,7 @@ fun AppRouter(
 ) {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "hotel_main") {
+    NavHost(navController = navController, startDestination = "emp_login") {
         composable("login") {
             LoginScreen(authStateManager,navController)
         }
@@ -99,7 +100,7 @@ fun HotelRouter(navController: NavHostController,activity: ComponentActivity) {
             HotelHomeScreen(navController = navController)
         }
         composable(route = "hotel_reservations") {
-            Text("Hotel Reservations")
+            HotelReservationScreen()
         }
         composable(route = "hotel_notifications") {
             Text("Notifications")

@@ -45,7 +45,8 @@ import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ReservationCard(
+fun CustomerReservationCard(
+    hotelImg: String,
     hotelName: String,
     destination: String,
     type: String,
@@ -78,7 +79,7 @@ fun ReservationCard(
                 .size(80.dp)
         ) {
             AsyncImage(
-                model = "https://www.usatoday.com/gcdn/-mm-/05b227ad5b8ad4e9dcb53af4f31d7fbdb7fa901b/c=0-64-2119-1259/local/-/media/USATODAY/USATODAY/2014/08/13/1407953244000-177513283.jpg?width=1320&height=746&fit=crop&format=pjpg&auto=webp",
+                model = hotelImg,
                 contentDescription = "Reservation's hotel image",
                 modifier = Modifier
                     .size(170.dp, 80.dp)
