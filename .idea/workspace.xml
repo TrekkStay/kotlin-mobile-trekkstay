@@ -9,15 +9,24 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0e28aad0-fb93-4b2a-8e7f-6cb21cc02950" name="Changes" comment="feat: reservation screen for hotel">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/activities/startup_screen.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/startup_1.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/startup_2.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/startup_3.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/top_right_arrow_ico.xml" afterDir="false" />
+    <list default="true" id="0e28aad0-fb93-4b2a-8e7f-6cb21cc02950" name="Changes" comment="feat: startup screen for app">
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/presentation/activities/hotel_detail_screen.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/airplane_ticket_ico.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/city_ico.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/conference_room_ico.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/fitness_ico.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/food_ico.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/laundry_ico.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/motor_ico.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/parking_ico.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/pool_ico.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/spa_ico.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/wifi_ico.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/deploymentTargetDropDown.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deploymentTargetDropDown.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/activities/startup_screen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/activities/startup_screen.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -398,6 +407,74 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration name="HotelDetailPreview" type="ComposePreviewRunConfiguration" singleton="false" temporary="true">
+      <module name="hotel.app.main" />
+      <option name="DEPLOY" value="true" />
+      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
+      <option name="DEPLOY_AS_INSTANT" value="false" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="ALL_USERS" value="false" />
+      <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
+      <option name="CLEAR_APP_STORAGE" value="false" />
+      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="--es composable com.trekkstay.hotel.feature.hotel.presentation.activities.Hotel_detail_screenKt.HotelDetailPreview" />
+      <option name="MODE" value="specific_activity" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="INSPECTION_WITHOUT_ACTIVITY_RESTART" value="false" />
+      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
+      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
+      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
+      <option name="DEBUGGER_TYPE" value="Auto" />
+      <Auto>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Auto>
+      <Hybrid>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Hybrid>
+      <Java>
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Java>
+      <Native>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Native>
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Java/Kotlin Method Sample (legacy)" />
+        <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
+        <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
+      </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY_CLASS" value="androidx.compose.ui.tooling.PreviewActivity" />
+      <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="true" />
+      <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
+      <compose-preview-run-configuration composable-fqn="com.trekkstay.hotel.feature.hotel.presentation.activities.Hotel_detail_screenKt.HotelDetailPreview" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="HotelReservationCardPreview" type="ComposePreviewRunConfiguration" singleton="false" temporary="true">
       <module name="hotel.app.main" />
       <option name="DEPLOY" value="true" />
@@ -604,6 +681,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Compose Preview.HotelDetailPreview" />
         <item itemvalue="Compose Preview.ReservationPreview" />
         <item itemvalue="Compose Preview.HotelReservationCardPreview" />
         <item itemvalue="Compose Preview.CreateRoomPreview" />
@@ -772,7 +850,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712719722067</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="feat: startup screen for app">
+      <option name="closed" value="true" />
+      <created>1712725808926</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1712725808926</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -818,6 +904,7 @@
     <MESSAGE value="feat: profile screen for customer" />
     <MESSAGE value="feat: home screen for hotel" />
     <MESSAGE value="feat: reservation screen for hotel" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: reservation screen for hotel" />
+    <MESSAGE value="feat: startup screen for app" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: startup screen for app" />
   </component>
 </project>

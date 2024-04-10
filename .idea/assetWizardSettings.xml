@@ -324,7 +324,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:$PROJECT_DIR$/../../../../../../Android/sdk/icons/material/materialicons/arrow_outward/baseline_arrow_outward_24.xml" />
+                                      <entry key="url" value="file:$PROJECT_DIR$/../../../../../../Android/sdk/icons/material/materialicons/location_city/baseline_location_city_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -334,7 +334,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="top_right_arrow_ico" />
+                            <entry key="outputName" value="city_ico" />
                           </map>
                         </option>
                       </PersistentState>

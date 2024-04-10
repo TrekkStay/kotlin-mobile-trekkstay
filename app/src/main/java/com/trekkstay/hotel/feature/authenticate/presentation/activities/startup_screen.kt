@@ -92,7 +92,7 @@ fun StartupScreen() {
                 ImageVector.vectorResource(R.drawable.filled_circle_ico),
                 null,
                 tint = TrekkStayCyan,
-                modifier = Modifier.size(140.dp).align(Alignment.TopEnd).offset(x = 15.dp, y = -30.dp)
+                modifier = Modifier.size(140.dp).align(Alignment.TopEnd).offset(x = 20.dp, y = -20.dp)
             )
             Image(
                 painter = painterResource(id = R.drawable.startup_3),
@@ -100,7 +100,7 @@ fun StartupScreen() {
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(120.dp, 120.dp)
-                    .offset(x = 25.dp, y = -20.dp)
+                    .offset(x = 25.dp, y = -5.dp)
                     .clip(CircleShape)
                     .align(Alignment.TopEnd)
             )
