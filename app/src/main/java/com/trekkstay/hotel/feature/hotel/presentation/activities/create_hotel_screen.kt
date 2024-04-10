@@ -28,7 +28,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
@@ -42,6 +41,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Place
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -49,35 +49,115 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.hotel.R
+import com.trekkstay.hotel.feature.hotel.domain.entities.Location
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.FacilityChip
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.HotelActionRow
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.InfoTextField
+import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelState
+import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
+import com.trekkstay.hotel.feature.hotel.presentation.states.location.LocationState
+import com.trekkstay.hotel.feature.hotel.presentation.states.location.LocationViewModel
+import com.trekkstay.hotel.feature.hotel.presentation.states.location.ViewProvinceAction
+import com.trekkstay.hotel.feature.hotel.presentation.states.location.ViewDistrictAction
+import com.trekkstay.hotel.feature.hotel.presentation.states.location.ViewWardAction
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun CreateHotelScreen(navController: NavHostController) {
-    var hotel_name by remember { mutableStateOf(TextFieldValue()) }
-    var hotel_email by remember { mutableStateOf(TextFieldValue()) }
-    var hotel_phone by remember { mutableStateOf(TextFieldValue()) }
-    var address_detail by remember { mutableStateOf(TextFieldValue()) }
-    var hotel_description by remember { mutableStateOf(TextFieldValue()) }
+fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: LocationViewModel, navController: NavHostController) {
+    val hotelName by remember { mutableStateOf(TextFieldValue()) }
+    val hotelEmail by remember { mutableStateOf(TextFieldValue()) }
+    val hotelPhone by remember { mutableStateOf(TextFieldValue()) }
+    val addressDetail by remember { mutableStateOf(TextFieldValue()) }
+    val hotelDescription by remember { mutableStateOf(TextFieldValue()) }
     val timeList = arrayOf("12:00", "12:30", "13:00", "13:30", "14:00")
-//    Get from api
-    val provinceList = arrayOf("Ha Noi", "Da Nang", "Da Lat", "Hue", "Hai Phong")
-    val districtList = arrayOf("Quan 1", "Quan 2", "Quan 3", "Quan 4", "Quan 5")
-    val wardList = arrayOf("Phuoc My", "Phuoc My", "Phuoc My", "Phuoc My", "Phuoc My")
+
+    var selectedProvince by remember { mutableStateOf<Location?>(null) }
+    var selectedDistrict by remember { mutableStateOf<Location?>(null) }
+    var selectedWard by remember { mutableStateOf<Location?>(null) }
+    var provinceList : List<Location> = emptyList()
+    var districtList : List<Location> = emptyList()
+    var wardList : List<Location> = emptyList()
     var selectedImageUris by remember { mutableStateOf<List<Uri?>>(emptyList()) }
     val photosPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickMultipleVisualMedia(),
         onResult = { selectedImageUris = it }
     )
+
+    val hotelState by hotelViewModel.state.observeAsState()
+    val locationState by locationViewModel.state.observeAsState()
+    var showDialog by remember { mutableStateOf(true) }
+    when (locationState) {
+        is LocationState.SuccessViewProvince -> {
+            provinceList = (locationState as LocationState.SuccessViewProvince).locationList.locationList
+        }
+        is LocationState.InvalidViewProvince -> {
+
+        }
+        is LocationState.ViewProvinceCalling -> {
+        }
+        is LocationState.SuccessViewDistrict -> {
+            districtList = (locationState as LocationState.SuccessViewDistrict).locationList.locationList
+
+        }
+        is LocationState.InvalidViewDistrict -> {
+
+        }
+        is LocationState.ViewDistrictCalling -> {
+        }
+        is LocationState.SuccessViewWard -> {
+            wardList = (locationState as LocationState.SuccessViewWard).locationList.locationList
+        }
+        is LocationState.InvalidViewWard -> {
+
+        }
+        is LocationState.ViewWardCalling -> {
+        }
+        else -> {
+            // Handle other states
+        }
+    }
+
+    if (showDialog) {
+        when (hotelState) {
+            is HotelState.SuccessCreateHotel -> {
+                showDialog = true
+
+            }
+            is HotelState.InvalidCreateHotel -> {
+                showDialog = true
+                AlertDialog(
+                    onDismissRequest = { showDialog = false },
+                    title = { Text("Create hotel fail") },
+                    text = { Text((hotelState as HotelState.InvalidCreateHotel).message) },
+                    confirmButton = {},
+                    dismissButton = {
+                        Button(onClick = { showDialog = false }) {
+                            Text("OK")
+                        }
+                    }
+                )
+            }
+            is HotelState.CreateHotelCalling -> {
+                // You can show a progress dialog or a loading indicator here
+            }
+            else -> {
+                // Handle other states
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        val action = ViewProvinceAction
+        locationViewModel.processAction(action)
+    }
 
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
@@ -115,30 +195,30 @@ fun CreateHotelScreen(navController: NavHostController) {
             ) {
                 InfoTextField(
                     label = "Hotel Name",
-                    text = hotel_name,
+                    text = hotelName,
                     icon = ImageVector.vectorResource(R.drawable.add_home_ico),
                 )
                 InfoTextField(
                     label = "Hotel Email",
-                    text = hotel_email,
+                    text = hotelEmail,
                     icon = Icons.Default.Email,
                 )
                 InfoTextField(
                     label = "Hotel Phone",
-                    text = hotel_phone,
+                    text = hotelPhone,
                     icon = Icons.Default.Phone,
                 )
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    DropDownMenu(
+                    TimeDropDownMenu(
                         widthSize = 170,
                         title = "Check In",
                         itemList = timeList,
                         leadingIcon = ImageVector.vectorResource(R.drawable.time_ico)
                     )
-                    DropDownMenu(
+                    TimeDropDownMenu(
                         widthSize = 180,
                         title = "Check Out",
                         itemList = timeList,
@@ -157,13 +237,24 @@ fun CreateHotelScreen(navController: NavHostController) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    DropDownMenu(widthSize = 115, title = "Province", itemList = provinceList)
-                    DropDownMenu(widthSize = 115, title = "District", itemList = districtList)
-                    DropDownMenu(widthSize = 115, title = "Ward", itemList = wardList)
+                    DropDownMenu(widthSize = 115, title = "Province", itemList = provinceList,{ selectedProvince = it
+                        districtList = emptyList()
+                        selectedDistrict = null
+                        selectedWard = null
+                        wardList = emptyList()
+                        val action = ViewDistrictAction( it.code)
+                        locationViewModel.processAction(action)
+                    })
+                    DropDownMenu(widthSize = 115, title = "District", itemList = districtList,{ selectedDistrict = it
+                        selectedWard = null
+                        wardList = emptyList()
+                        val action = ViewWardAction( it.code)
+                        locationViewModel.processAction(action)})
+                    DropDownMenu(widthSize = 115, title = "Ward", itemList = wardList,{ selectedWard = it })
                 }
                 InfoTextField(
                     label = "Address Detail",
-                    text = address_detail,
+                    text = addressDetail,
                     icon = Icons.Default.Place,
                 )
                 HotelActionRow(
@@ -205,7 +296,7 @@ fun CreateHotelScreen(navController: NavHostController) {
                 }
                 InfoTextField(
                     label = "Description",
-                    text = hotel_description,
+                    text = hotelDescription,
                     icon = Icons.Default.Info,
                     maxLine = 6
                 )
@@ -278,9 +369,10 @@ fun CreateHotelScreen(navController: NavHostController) {
     }
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DropDownMenu(
+fun TimeDropDownMenu(
     widthSize: Int,
     title: String,
     itemList: Array<String>,
@@ -341,8 +433,68 @@ fun DropDownMenu(
     }
 }
 
-@Preview(showBackground = true, device = "spec:width=411dp,height=1000dp")
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateHotelScreenPreview() {
-    CreateHotelScreen(navController = rememberNavController())
+fun DropDownMenu(
+    widthSize: Int,
+    title: String,
+    itemList: List<Location>,
+    onItemSelected: (Location) -> Unit,
+    leadingIcon: ImageVector? = null
+) {
+    var expanded by remember { mutableStateOf(false) }
+    var selectedText by remember { mutableStateOf(title) }
+
+    ExposedDropdownMenuBox(
+        modifier = Modifier.size(widthSize.dp, 50.dp),
+        expanded = expanded,
+        onExpandedChange = {
+            expanded = !expanded
+        }
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .size(widthSize.dp, 50.dp)
+                .background(Color.Transparent, shape = RoundedCornerShape(12.dp))
+                .border(1.dp, TrekkStayBlue, shape = RoundedCornerShape(12.dp))
+                .padding(horizontal = 15.dp)
+                .menuAnchor()
+        ) {
+            if (leadingIcon != null) {
+                Icon(leadingIcon, contentDescription = null, tint = TrekkStayBlue)
+            }
+            Text(
+                selectedText,
+                fontFamily = PoppinsFontFamily,
+                fontWeight = FontWeight.Medium,
+                fontSize = 14.sp,
+                color = Color.Black.copy(0.6f)
+            )
+            Icon(
+                Icons.Default.KeyboardArrowDown,
+                contentDescription = null,
+                tint = TrekkStayBlue,
+                modifier = Modifier.size(30.dp)
+            )
+        }
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            itemList.forEach { item ->
+                DropdownMenuItem(
+                    text = { Text(text = item.nameVi, fontFamily = PoppinsFontFamily) },
+                    onClick = {
+                        selectedText = item.nameVi
+                        expanded = false
+                        onItemSelected(item)
+                    }
+                )
+            }
+        }
+    }
 }

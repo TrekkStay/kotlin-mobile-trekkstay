@@ -11,6 +11,20 @@ import com.trekkstay.hotel.feature.authenticate.domain.usecases.LoginUseCase
 import com.trekkstay.hotel.feature.authenticate.domain.usecases.RegisterUseCase
 import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthViewModel
 import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthViewModel
+import com.trekkstay.hotel.feature.hotel.data.datasources.HotelRemoteDataSource
+import com.trekkstay.hotel.feature.hotel.data.datasources.HotelRemoteDataSourceImpl
+import com.trekkstay.hotel.feature.hotel.data.datasources.LocationRemoteDataSource
+import com.trekkstay.hotel.feature.hotel.data.datasources.LocationRemoteDataSourceImpl
+import com.trekkstay.hotel.feature.hotel.data.repositories.HotelRepoImpl
+import com.trekkstay.hotel.feature.hotel.data.repositories.LocationRepoImpl
+import com.trekkstay.hotel.feature.hotel.domain.repositories.HotelRepo
+import com.trekkstay.hotel.feature.hotel.domain.repositories.LocationRepo
+import com.trekkstay.hotel.feature.hotel.domain.usecases.hotel.CreateHotelUseCase
+import com.trekkstay.hotel.feature.hotel.domain.usecases.location.ViewDistrictUseCase
+import com.trekkstay.hotel.feature.hotel.domain.usecases.location.ViewProvinceUseCase
+import com.trekkstay.hotel.feature.hotel.domain.usecases.location.ViewWardUseCase
+import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
+import com.trekkstay.hotel.feature.hotel.presentation.states.location.LocationViewModel
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -23,10 +37,20 @@ val appModule = module {
     single { RegisterUseCase(get()) }
     single { EmpLoginUseCase(get()) }
     single { EmpRegisterUseCase(get()) }
-
     single <AuthRemoteDataSource>{ AuthRemoteDataSourceImpl(get()) }
     single <AuthRepo>{ AuthRepoImpl(get()) }
 
+    single { HotelViewModel(get()) }
+    single { CreateHotelUseCase(get()) }
+    single <HotelRemoteDataSource>{ HotelRemoteDataSourceImpl(get(),get()) }
+    single <HotelRepo>{ HotelRepoImpl(get())}
+
+    single { LocationViewModel(get()) }
+    single { ViewProvinceUseCase(get()) }
+    single { ViewDistrictUseCase(get()) }
+    single { ViewWardUseCase(get()) }
+    single <LocationRemoteDataSource>{ LocationRemoteDataSourceImpl(get()) }
+    single <LocationRepo>{ LocationRepoImpl(get())}
 
     single { Client(get()) }
     single { OkHttpClient() }

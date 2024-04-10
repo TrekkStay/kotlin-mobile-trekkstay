@@ -1,6 +1,6 @@
 package com.trekkstay.hotel.feature.hotel.domain.entities
 
-data class Province(
+data class Location(
     val code:String,
     val nameVi:String,
     val nameEn:String,

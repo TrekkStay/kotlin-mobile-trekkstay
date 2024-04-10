@@ -25,7 +25,7 @@ interface AuthRemoteDataSource {
 const val loginEndpoint = "user/login"
 const val registerEndpoint = "user/signup"
 const val empLoginEndpoint = "hotel-emp/login"
-const val empRegisterEndpoint = "hotel-emp/register"
+const val empRegisterEndpoint = "hotel-emp/create-owner"
 
 class AuthRemoteDataSourceImpl(private val client: Client) : AuthRemoteDataSource {
 

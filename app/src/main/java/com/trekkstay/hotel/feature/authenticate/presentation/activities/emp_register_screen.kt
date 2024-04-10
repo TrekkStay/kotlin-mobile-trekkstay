@@ -59,7 +59,7 @@ fun EmpRegisterScreen(viewModel: EmpAuthViewModel, navController: NavHostControl
                 AlertDialog(
                     onDismissRequest = {},
                     title = { Text("Registration Failed") },
-                    text = { Text((authState as AuthState.InvalidRegister).message) },
+                    text = { Text((authState as EmpAuthState.InvalidEmpRegister).message) },
                     confirmButton = {
                         Button(onClick = { showDialog = false }) {
                             Text("OK")
@@ -86,7 +86,7 @@ fun EmpRegisterScreen(viewModel: EmpAuthViewModel, navController: NavHostControl
             verticalArrangement = Arrangement.Top
         ) {
             IconButton(
-                onClick = { navController.navigate("login") },
+                onClick = { navController.navigate("emp_login") },
                 modifier = Modifier.align(Alignment.Start)
             ) {
                 Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")

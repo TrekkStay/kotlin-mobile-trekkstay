@@ -37,7 +37,10 @@ class Client(private val engine: OkHttpClient) {
                 val responseBody = response.body?.string()
                 val jsonResponse = responseBody?.let { JSONObject(it) }
                 jsonResponse?.let { json ->
-                    val data = json.optJSONObject("data")
+                    val data = json.opt("data")
+                    if (data != null) {
+                        print(data.toString())
+                    }
                     Response.whenResponse {
                         if (response.isSuccessful && data != null) {
                             success(response.header("status_code") ?: "201", response.message,  request.parser?.invoke(data.toString()))
@@ -87,13 +90,9 @@ class Client(private val engine: OkHttpClient) {
         return requestBuilder.url(urlBuilder.build()).build()
     }
 
-
-
-
-
     private fun buildRequestBody(request: PreparedRequest<*>): okhttp3.RequestBody? {
         val mediaType = "application/json".toMediaTypeOrNull()
-        val requestBodyString = request.request.requestBody?.toString()
+        val requestBodyString = request.request.requestBody
         return if (mediaType != null && requestBodyString != null) {
             requestBodyString.toRequestBody(mediaType)
         } else {

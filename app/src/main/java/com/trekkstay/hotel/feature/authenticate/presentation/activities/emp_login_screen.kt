@@ -223,7 +223,7 @@ fun EmpLoginScreen(viewModel: EmpAuthViewModel,navController: NavHostController)
                 )
                 Box(
                     modifier = Modifier.clickable {
-                        navController.navigate("register")
+                        navController.navigate("emp_register")
                     }
                 ) {
                     Text(

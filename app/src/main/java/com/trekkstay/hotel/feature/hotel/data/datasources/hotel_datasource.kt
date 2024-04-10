@@ -1,10 +1,13 @@
 package com.trekkstay.hotel.feature.hotel.data.datasources
 
+import android.content.Context
+import androidx.compose.ui.platform.LocalContext
 import com.google.android.gms.maps.model.LatLng
 import com.trekkstay.hotel.core.network.client.Client
 import com.trekkstay.hotel.core.network.method.RequestMethod
 import com.trekkstay.hotel.core.network.request.RequestQuery
 import com.trekkstay.hotel.core.network.response.Response
+import com.trekkstay.hotel.core.storage.LocalStore
 import com.trekkstay.hotel.env.Env
 import com.trekkstay.hotel.feature.authenticate.data.models.EmployeeModel
 import com.trekkstay.hotel.feature.authenticate.data.models.LoginResModel
@@ -12,6 +15,7 @@ import com.trekkstay.hotel.feature.authenticate.data.models.toEmployee
 import com.trekkstay.hotel.feature.authenticate.data.models.toLoginRes
 import com.trekkstay.hotel.feature.authenticate.domain.entities.Employee
 import com.trekkstay.hotel.feature.authenticate.domain.entities.LoginRes
+import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
@@ -46,7 +50,7 @@ interface HotelRemoteDataSource {
 
 const val createHotelEndpoint = "hotel/create"
 
-class HotelRemoteDataSourceImpl(private val client: Client) : HotelRemoteDataSource {
+class HotelRemoteDataSourceImpl(private val client: Client, private val context: Context) : HotelRemoteDataSource {
 
     override suspend fun createHotel(name: String,
                                      description: String,
@@ -116,10 +120,11 @@ class HotelRemoteDataSourceImpl(private val client: Client) : HotelRemoteDataSou
                 put("address_detail", addressDetail)
             }
 
-
+            val jwtKey = LocalStore.getKey(context, "jwtKey", "") // Get JWT key from LocalStore
             val request = RequestQuery(
                 method = RequestMethod.POST,
                 path = "http://52.163.61.213:8888/api/v1/$createHotelEndpoint",
+                headers = mapOf("Authorization" to "Bearer $jwtKey"),
                 requestBody = requestBodyJson.toString()
             )
 
