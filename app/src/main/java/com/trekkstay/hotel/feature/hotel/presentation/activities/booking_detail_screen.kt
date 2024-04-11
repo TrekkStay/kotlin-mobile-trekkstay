@@ -1,5 +1,6 @@
 package com.trekkstay.hotel.feature.hotel.presentation.activities
 
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,8 +42,7 @@ import com.trekkstay.hotel.feature.hotel.presentation.fragments.InfoTextField
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 
 @Composable
-fun BookingFormScreen() {
-    var expandedDesc by remember { mutableStateOf(false) }
+fun BookingDetailScreen() {
 
     var name by remember { mutableStateOf(TextFieldValue()) }
     var email by remember { mutableStateOf(TextFieldValue()) }
@@ -85,7 +85,6 @@ fun BookingFormScreen() {
                     textAlign = TextAlign.Justify,
                     fontFamily = PoppinsFontFamily,
                     fontSize = 16.sp,
-                    maxLines = if (expandedDesc) Int.MAX_VALUE else 3,
                     overflow = TextOverflow.Ellipsis
                 )
             }
@@ -153,6 +152,6 @@ fun BookingFormScreen() {
 
 @Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
 @Composable
-fun BookingFormPreview() {
-    BookingFormScreen()
+fun BookingDetailPreview() {
+    BookingDetailScreen()
 }
