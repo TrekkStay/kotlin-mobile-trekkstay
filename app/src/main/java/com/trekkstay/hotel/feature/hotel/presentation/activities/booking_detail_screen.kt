@@ -1,6 +1,8 @@
 package com.trekkstay.hotel.feature.hotel.presentation.activities
 
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -31,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
@@ -38,8 +43,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.InfoTextField
+import com.trekkstay.hotel.feature.hotel.presentation.fragments.RoomDetailCard
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
+import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 @Composable
 fun BookingDetailScreen() {
@@ -65,7 +73,7 @@ fun BookingDetailScreen() {
             ) {
                 Icon(Icons.Default.ArrowBack, contentDescription = null)
                 Text(
-                    text = "Booking Form",
+                    text = "Booking Detail",
                     fontFamily = PoppinsFontFamily,
                     fontWeight = FontWeight.Medium,
                     fontSize = 24.sp,
@@ -75,46 +83,118 @@ fun BookingDetailScreen() {
             }
 
             Column(
-                verticalArrangement = Arrangement.spacedBy(10.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 25.dp, vertical = 5.dp)
             ) {
-                Text(
-                    text = "Fill in the form with your information to process payment.",
-                    textAlign = TextAlign.Justify,
-                    fontFamily = PoppinsFontFamily,
-                    fontSize = 16.sp,
-                    overflow = TextOverflow.Ellipsis
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 15.dp, vertical = 20.dp)
+                ) {
+                    Text(
+                        text = "Estabeez Hotel",
+                        fontFamily = PoppinsFontFamily,
+                        fontSize = 14.sp,
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center
+                    )
+                }
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .size(200.dp)
+                ) {
+                    AsyncImage(
+                        model = "https://example.com/image.jpg",
+                        contentDescription = "Translated description of what the image contains"
+                    )
+                }
             }
 
             Column(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 20.dp, horizontal = 20.dp)
+                    .padding(start = 10.dp, end = 10.dp)
+                    .border(1.dp, TrekkStayBlue,  shape = RoundedCornerShape(30.dp) )
             ) {
-
-                InfoTextField(
-                    label = "Full Name",
-                    text =  name,
-                    onValueChange = { name = it },
-                    icon = Icons.Default.AccountCircle
-                )
-                InfoTextField(
-                    label = "Email Address",
-                    text = email,
-                    onValueChange = { email = it },
-                    icon = Icons.Default.Email,
-                )
-                InfoTextField(
-                    label = "Phone Number",
-                    text = phone,
-                    onValueChange = { phone = it },
-                    icon = Icons.Default.Phone,
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 15.dp, vertical = 5.dp)
+                ) {
+                    Text(
+                        text = "Name",
+                        fontFamily = PoppinsFontFamily,
+                        fontSize = 14.sp,
+                        modifier = Modifier.weight(1f)
+                            .padding(start = 20.dp),
+                        textAlign = TextAlign.Start
+                    )
+                    Text(
+                        text = "Bao Pham",
+                        fontFamily = PoppinsFontFamily,
+                        fontSize = 14.sp,
+                        modifier = Modifier.weight(1f)
+                            .padding(start = 20.dp),
+                        textAlign = TextAlign.Start
+                    )
+                }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 15.dp, vertical = 5.dp)
+                ) {
+                    Text(
+                        text = "Email",
+                        fontFamily = PoppinsFontFamily,
+                        fontSize = 14.sp,
+                        modifier = Modifier.weight(1f)
+                            .padding(start = 20.dp),
+                        textAlign = TextAlign.Start
+                    )
+                    Text(
+                        text = "baopham@gmail.com",
+                        fontFamily = PoppinsFontFamily,
+                        fontSize = 14.sp,
+                        modifier = Modifier.weight(1f)
+                            .padding(start = 20.dp),
+                        textAlign = TextAlign.Start
+                    )
+                }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 15.dp, vertical = 5.dp)
+                ) {
+                    Text(
+                        text = "Phone",
+                        fontFamily = PoppinsFontFamily,
+                        fontSize = 14.sp,
+                        modifier = Modifier.weight(1f)
+                            .padding(start = 20.dp),
+                        textAlign = TextAlign.Start
+                    )
+                    Text(
+                        text = "0978564322",
+                        fontFamily = PoppinsFontFamily,
+                        fontSize = 14.sp,
+                        modifier = Modifier.weight(1f)
+                            .padding(start = 20.dp),
+                        textAlign = TextAlign.Start
+                    )
+                }
             }
+
+
         }
         Box(
             modifier = Modifier
@@ -137,7 +217,7 @@ fun BookingDetailScreen() {
                 ) {
                     Spacer(modifier = Modifier.width(10.dp))
                     Text(
-                        text = "Continue",
+                        text = "Download Booking",
                         color = Color.White,
                         fontWeight = FontWeight.Bold
                     )
