@@ -1,21 +1,14 @@
 package com.trekkstay.hotel.feature.hotel.data.datasources
 
 import android.content.Context
-import androidx.compose.ui.platform.LocalContext
 import com.google.android.gms.maps.model.LatLng
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.trekkstay.hotel.core.network.client.Client
 import com.trekkstay.hotel.core.network.method.RequestMethod
 import com.trekkstay.hotel.core.network.request.RequestQuery
 import com.trekkstay.hotel.core.network.response.Response
 import com.trekkstay.hotel.core.storage.LocalStore
-import com.trekkstay.hotel.env.Env
-import com.trekkstay.hotel.feature.authenticate.data.models.EmployeeModel
-import com.trekkstay.hotel.feature.authenticate.data.models.LoginResModel
-import com.trekkstay.hotel.feature.authenticate.data.models.toEmployee
-import com.trekkstay.hotel.feature.authenticate.data.models.toLoginRes
-import com.trekkstay.hotel.feature.authenticate.domain.entities.Employee
-import com.trekkstay.hotel.feature.authenticate.domain.entities.LoginRes
-import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
@@ -46,9 +39,11 @@ interface HotelRemoteDataSource {
                             wardCode: String,
                             addressDetail: String,
                             ): Response<Unit>
+    suspend fun getHotelId(): Response<String>
 }
 
 const val createHotelEndpoint = "hotel/create"
+const val getHotelIdEndpoint = "hotel/my-hotel"
 
 class HotelRemoteDataSourceImpl(private val client: Client, private val context: Context) : HotelRemoteDataSource {
 
@@ -119,8 +114,9 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
                 put("ward_code", wardCode)
                 put("address_detail", addressDetail)
             }
+            println(requestBodyJson.toString())
 
-            val jwtKey = LocalStore.getKey(context, "jwtKey", "") // Get JWT key from LocalStore
+            val jwtKey = LocalStore.getKey(context, "jwtKey", "")
             val request = RequestQuery(
                 method = RequestMethod.POST,
                 path = "http://52.163.61.213:8888/api/v1/$createHotelEndpoint",
@@ -136,12 +132,38 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
         }
     }
 
+    override suspend fun getHotelId(): Response<String> {
+        return withContext(Dispatchers.IO) {
+            val jwtKey = LocalStore.getKey(context, "jwtKey", "")
+            val request = RequestQuery(
+                method = RequestMethod.POST,
+                path = "http://52.163.61.213:8888/api/v1/$getHotelIdEndpoint",
+                headers = mapOf("Authorization" to "Bearer $jwtKey"),
+                requestBody = null,
+            )
+
+            val response = client.execute<String>(
+                request = request,
+                parser = { responseData ->
+                    if (responseData is String) {
+                        val type = object : TypeToken<Map<String, Any>>() {}.type
+                        val map: Map<String, Any> = Gson().fromJson(responseData, type)
+                        parseResponse(map["id"])
+                    } else {
+                        null
+                    }
+                }
+            )
+            println("${response.data} tried doing")
+            response
+        }
+
+    }
 
     private inline fun <reified T : Any> parseResponse(responseData: Any?): T? {
         println("check for function call")
         return when (responseData) {
-            is LoginResModel -> responseData.toLoginRes() as? T
-            is EmployeeModel -> responseData.toEmployee() as T
+            is String -> responseData as? T
             else -> null
         }
     }

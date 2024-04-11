@@ -25,6 +25,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -32,7 +33,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -45,34 +49,116 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.hotel.R
+import com.trekkstay.hotel.feature.hotel.domain.entities.Location
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.FacilityChip
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.HotelActionRow
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.HotelRoomOptSelector
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.InfoTextField
+import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.GetHotelIdAction
+import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelState
+import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
+import com.trekkstay.hotel.feature.hotel.presentation.states.location.ViewProvinceAction
+import com.trekkstay.hotel.feature.hotel.presentation.states.room.CreateRoomAction
+import com.trekkstay.hotel.feature.hotel.presentation.states.room.RoomState
+import com.trekkstay.hotel.feature.hotel.presentation.states.room.RoomViewModel
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun CreateRoomScreen(navController: NavHostController) {
-    var room_type by remember { mutableStateOf(TextFieldValue()) }
+fun CreateRoomScreen(hotelViewModel: HotelViewModel,roomViewModel: RoomViewModel,navController: NavHostController) {
+    var hotelId by remember { mutableStateOf("") }
+    var roomType by remember { mutableStateOf(TextFieldValue()) }
     var description by remember { mutableStateOf(TextFieldValue()) }
     var quantity by remember { mutableStateOf(TextFieldValue()) }
-    var discount_rate by remember { mutableStateOf(TextFieldValue()) }
+    var discountRate by remember { mutableStateOf(TextFieldValue()) }
     var price by remember { mutableStateOf(TextFieldValue()) }
     var view by remember { mutableStateOf(TextFieldValue()) }
     var roomSize by remember { mutableStateOf(TextFieldValue()) }
     var selectedImageUris by remember { mutableStateOf<List<Uri?>>(emptyList()) }
+    var selectedBedNum by remember { mutableIntStateOf(0) }
+    var selectedAdultNumber by remember { mutableIntStateOf(0) }
+    var selectedChildNumber by remember { mutableIntStateOf(0) }
     val photosPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickMultipleVisualMedia(), onResult = { selectedImageUris = it}
     )
+    var selectedFacilities by remember { mutableStateOf(listOf<String>()) }
+    val facilities = listOf(
+    "Air Condition",
+    "Bath Tub",
+    "Shower",
+    "Balcony",
+    "Hair Dryer",
+    "Kitchen",
+    "Television",
+    "Slippers",
+    "Smoking")
+
+    val roomState by roomViewModel.state.observeAsState()
+    var showDialog by remember { mutableStateOf(true) }
+    if (showDialog) {
+        when (roomState) {
+            is RoomState.SuccessCreateRoom -> {
+                showDialog = true
+                AlertDialog(
+                    onDismissRequest = { showDialog = false },
+                    title = { Text("Create room success") },
+                    text = { Text("Create room successful") },
+                    confirmButton = {},
+                    dismissButton = {
+                        Button(onClick = { showDialog = false }) {
+                            Text("OK")
+                        }
+                    }
+                )
+            }
+            is RoomState.InvalidCreateRoom -> {
+                showDialog = true
+                AlertDialog(
+                    onDismissRequest = { showDialog = false },
+                    title = { Text("Create room fail") },
+                    text = { Text((roomState as RoomState.InvalidCreateRoom).message) },
+                    confirmButton = {},
+                    dismissButton = {
+                        Button(onClick = { showDialog = false }) {
+                            Text("OK")
+                        }
+                    }
+                )
+            }
+            is RoomState.CreateRoomCalling -> {
+                // You can show a progress dialog or a loading indicator here
+            }
+            else -> {
+                // Handle other states
+            }
+        }
+    }
+
+    val hotelState by hotelViewModel.state.observeAsState()
+    when (hotelState) {
+        is HotelState.SuccessGetHotelId -> {
+             hotelId =
+                (hotelState as HotelState.SuccessGetHotelId).id
+        }
+
+        is HotelState.InvalidGetHotelId -> {
+        }
+        is HotelState.GetHotelIdCalling -> {
+        }
+
+        else -> {}
+    }
+    LaunchedEffect(Unit) {
+        val action = GetHotelIdAction
+        hotelViewModel.processAction(action)
+    }
+    
 
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
@@ -109,29 +195,34 @@ fun CreateRoomScreen(navController: NavHostController) {
             ) {
                 InfoTextField(
                     label = "Room type",
-                    text = room_type,
+                    text = roomType,
+                    onValueChange = { roomType = it },
                     icon = ImageVector.vectorResource(R.drawable.bed_ico),
                 )
                 InfoTextField(
                     label = "Description",
                     text = description,
+                    onValueChange = { description = it },
                     icon = Icons.Default.Info,
                 )
                 InfoTextField(
                     label = "Quantity",
                     text = quantity,
+                    onValueChange = { quantity = it },
                     icon = ImageVector.vectorResource(R.drawable.box_ico),
                     type = "number"
                 )
                 InfoTextField(
                     label = "Discount Rate",
-                    text = discount_rate,
+                    text = discountRate,
+                    onValueChange = { discountRate = it },
                     icon = ImageVector.vectorResource(R.drawable.discount_ico),
                     type = "number"
                 )
                 InfoTextField(
                     label = "Original Price",
                     text = price,
+                    onValueChange = { price = it },
                     icon = ImageVector.vectorResource(R.drawable.money_circle_ico),
                     type = "number"
                 )
@@ -204,33 +295,75 @@ fun CreateRoomScreen(navController: NavHostController) {
                             .fillMaxWidth()
                             .padding(vertical = 10.dp)
                     ) {
-                        FacilityChip("Air Condition")
-                        FacilityChip("Bath Tub")
-                        FacilityChip("Shower")
-                        FacilityChip("Balcony")
-                        FacilityChip("Hair Dryer")
-                        FacilityChip("Kitchen")
-                        FacilityChip("Television")
-                        FacilityChip("Slippers")
-                        FacilityChip("Smoking")
+                        facilities.forEach { facility ->
+                            FacilityChip(
+                                label = facility,
+                                selected = facility in selectedFacilities,
+                                onSelectedChange = { isSelected ->
+                                    selectedFacilities = if (isSelected) {
+                                        selectedFacilities + facility
+                                    } else {
+                                        selectedFacilities - facility
+                                    }
+                                }
+                            )
+                        }
                     }
                     InfoTextField(
                         label = "View",
                         text = view,
+                        onValueChange = { view = it },
                         icon = ImageVector.vectorResource(R.drawable.eye_ico),
                     )
                     InfoTextField(
                         label = "Room Size",
                         text = roomSize,
+                        onValueChange = { roomSize = it },
                         icon = ImageVector.vectorResource(R.drawable.size_ico),
                         type = "number"
                     )
                     Spacer(modifier = Modifier.height(5.dp))
-                    HotelRoomOptSelector()
+                    HotelRoomOptSelector(
+                        onBedNumChange = { bedNum ->
+                            selectedBedNum = bedNum
+                        },
+                        onAdultNumberChange = { adultNumber ->
+                            selectedAdultNumber = adultNumber
+                        },
+                        onChildNumberChange = { childNumber ->
+                            selectedChildNumber = childNumber
+                        }
+                    )
                 }
             }
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    val action = CreateRoomAction(
+                        hotelId = hotelId,
+                        type = roomType.text,
+                        description = description.text,
+                        quantities = quantity.text.toIntOrNull() ?: 0,
+                        discountRate = discountRate.text.toIntOrNull() ?: 0,
+                        originalPrice =price.text.toIntOrNull() ?: 0,
+                        images = emptyList(),
+                        videos = emptyList(),
+                        airConditioner = "Air Condition" in facilities,
+                        bathTub =  "Bath Tub" in facilities,
+                        shower =  "Shower" in facilities,
+                        balcony = "Balcony" in facilities,
+                        hairDryer = "Hair Dryer" in facilities,
+                        kitchen = "Kitchen" in facilities,
+                        television = "Television" in facilities,
+                        slippers = "Slippers" in facilities,
+                        nonSmoking = "Smoking" in facilities,
+                        view = view.text,
+                        roomSize = roomSize.text.toIntOrNull() ?: 0,
+                        numberOfBed = selectedBedNum,
+                        adults = selectedAdultNumber,
+                        children = selectedChildNumber
+                    )
+                    roomViewModel.processAction(action)
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = TrekkStayBlue,
                     contentColor = Color.White
@@ -250,10 +383,4 @@ fun CreateRoomScreen(navController: NavHostController) {
             }
         }
     }
-}
-
-@Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
-@Composable
-fun CreateRoomPreview() {
-    CreateRoomScreen(navController = rememberNavController())
 }

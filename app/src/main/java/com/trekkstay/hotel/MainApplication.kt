@@ -11,6 +11,7 @@ import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthViewMode
 import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.location.LocationViewModel
+import com.trekkstay.hotel.feature.hotel.presentation.states.room.RoomViewModel
 import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
@@ -19,6 +20,7 @@ class MainActivity : ComponentActivity() {
     private val authStateManager: AuthViewModel by inject()
     private val empAuthStateManager: EmpAuthViewModel by inject()
     private val hotelStateManager : HotelViewModel by inject()
+    private val roomStateManager : RoomViewModel by inject()
     private val locationStateManager : LocationViewModel by inject()
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -26,7 +28,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         startKoinDependencyInjection(this)
         setContent {
-            AppRouter(authStateManager,empAuthStateManager, hotelStateManager,locationStateManager,this@MainActivity)
+            AppRouter(authStateManager,empAuthStateManager, hotelStateManager,roomStateManager,locationStateManager,this@MainActivity)
         }
     }
 

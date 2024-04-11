@@ -28,6 +28,7 @@ import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelRoomManage
 import com.trekkstay.hotel.feature.hotel.presentation.activities.SearchEngineScreen
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.location.LocationViewModel
+import com.trekkstay.hotel.feature.hotel.presentation.states.room.RoomViewModel
 import com.trekkstay.hotel.feature.qr_scanner.QRScannerScreen
 import com.trekkstay.hotel.feature.reservation.presentation.activities.CustomerReservationScreen
 import com.trekkstay.hotel.feature.reservation.presentation.activities.HotelReservationScreen
@@ -38,12 +39,13 @@ fun AppRouter(
     authStateManager: AuthViewModel,
     empAuthStateManager: EmpAuthViewModel,
     hotelViewModel: HotelViewModel,
+    roomViewModel: RoomViewModel,
     locationViewModel: LocationViewModel,
     activity: ComponentActivity,
 ) {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "hotel_main") {
+    NavHost(navController = navController, startDestination = "emp_login") {
         composable("login") {
             LoginScreen(authStateManager,navController)
         }
@@ -60,7 +62,7 @@ fun AppRouter(
             CustomerMainScreen()
         }
         composable("hotel_main") {
-            HotelScreen(hotelViewModel ,locationViewModel,activity)
+            HotelScreen(hotelViewModel ,roomViewModel,locationViewModel,activity)
         }
         composable("gg_map"){
             GGMap(onMapClicked = { latLng ->
@@ -99,7 +101,7 @@ fun CustomerRouter(navController: NavHostController) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HotelRouter(hotelViewModel: HotelViewModel,locationViewModel: LocationViewModel,navController: NavHostController,activity: ComponentActivity) {
+fun HotelRouter(hotelViewModel: HotelViewModel,roomViewModel: RoomViewModel,locationViewModel: LocationViewModel,navController: NavHostController,activity: ComponentActivity) {
     NavHost(
         navController = navController,
         startDestination = "hotel_home"
@@ -129,7 +131,7 @@ fun HotelRouter(hotelViewModel: HotelViewModel,locationViewModel: LocationViewMo
             HotelRoomManageScreen(navController)
         }
         composable("hotel_room_create") {
-            CreateRoomScreen(navController)
+            CreateRoomScreen(hotelViewModel,roomViewModel,navController)
         }
     }
 }

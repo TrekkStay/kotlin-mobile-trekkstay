@@ -35,6 +35,7 @@ class Client(private val engine: OkHttpClient) {
             try {
                 val response = engine.newCall(buildOkHttpRequest(request)).execute()
                 val responseBody = response.body?.string()
+                print(responseBody)
                 val jsonResponse = responseBody?.let { JSONObject(it) }
                 jsonResponse?.let { json ->
                     val data = json.opt("data")

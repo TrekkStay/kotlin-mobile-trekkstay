@@ -4,19 +4,11 @@ import com.trekkstay.hotel.core.network.client.Client
 import com.trekkstay.hotel.core.network.method.RequestMethod
 import com.trekkstay.hotel.core.network.request.RequestQuery
 import com.trekkstay.hotel.core.network.response.Response
-import com.trekkstay.hotel.env.Env
-import com.trekkstay.hotel.feature.authenticate.data.models.EmployeeModel
-import com.trekkstay.hotel.feature.authenticate.data.models.LoginResModel
-import com.trekkstay.hotel.feature.authenticate.data.models.toEmployee
-import com.trekkstay.hotel.feature.authenticate.data.models.toLoginRes
-import com.trekkstay.hotel.feature.authenticate.domain.entities.Employee
-import com.trekkstay.hotel.feature.authenticate.domain.entities.LoginRes
 import com.trekkstay.hotel.feature.hotel.data.models.LocationListModel
 import com.trekkstay.hotel.feature.hotel.data.models.toEntity
 import com.trekkstay.hotel.feature.hotel.domain.entities.LocationList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.json.JSONObject
 
 interface LocationRemoteDataSource {
     suspend fun viewProvince(): Response<LocationList>

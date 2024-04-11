@@ -31,3 +31,5 @@ data class CreateHotelAction(
 
 
 data class ViewHotelAction(val name:String) : HotelAction()
+
+object GetHotelIdAction:HotelAction()
