@@ -30,4 +30,4 @@ data class CreateRoomAction(
 
 
 
-data class ViewRoomAction(val limit:String) : RoomAction()
+data class ViewRoomAction(val hotelId: String) : RoomAction()

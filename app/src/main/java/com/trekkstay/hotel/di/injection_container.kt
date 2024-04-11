@@ -30,6 +30,7 @@ import com.trekkstay.hotel.feature.hotel.domain.usecases.location.ViewDistrictUs
 import com.trekkstay.hotel.feature.hotel.domain.usecases.location.ViewProvinceUseCase
 import com.trekkstay.hotel.feature.hotel.domain.usecases.location.ViewWardUseCase
 import com.trekkstay.hotel.feature.hotel.domain.usecases.room.CreateRoomUseCase
+import com.trekkstay.hotel.feature.hotel.domain.usecases.room.ViewRoomUseCase
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.location.LocationViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.room.RoomViewModel
@@ -57,6 +58,7 @@ val appModule = module {
 
     single { RoomViewModel(get()) }
     single { CreateRoomUseCase(get()) }
+    single { ViewRoomUseCase(get()) }
     single <RoomRemoteDataSource>{ RoomRemoteDataSourceImpl(get(),get()) }
     single <RoomRepo>{ RoomRepoImpl(get()) }
 

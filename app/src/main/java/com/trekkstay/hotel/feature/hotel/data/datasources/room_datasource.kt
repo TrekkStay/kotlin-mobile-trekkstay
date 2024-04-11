@@ -11,6 +11,7 @@ import com.trekkstay.hotel.feature.authenticate.data.models.EmployeeModel
 import com.trekkstay.hotel.feature.authenticate.data.models.LoginResModel
 import com.trekkstay.hotel.feature.authenticate.data.models.toEmployee
 import com.trekkstay.hotel.feature.authenticate.data.models.toLoginRes
+import com.trekkstay.hotel.feature.hotel.domain.entities.RoomList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
@@ -41,9 +42,14 @@ interface RoomRemoteDataSource {
         discountRate: Int,
         originalPrice: Int
     ): Response<Unit>
+
+    suspend fun viewRoom(
+        hotelId: String,
+    ): Response<RoomList>
 }
 
 const val createRoomEndpoint = "hotel-room/create"
+const val viewRoomEndpoint = "hotel-room/filter"
 
 class RoomRemoteDataSourceImpl(private val client: Client, private val context: Context) : RoomRemoteDataSource {
 
@@ -122,6 +128,23 @@ class RoomRemoteDataSourceImpl(private val client: Client, private val context: 
             response
         }
     }
+
+    override suspend fun viewRoom(
+        hotelId: String): Response<RoomList> {
+        return withContext(Dispatchers.IO) {
+            val request = RequestQuery(
+                method = RequestMethod.POST,
+                path = "http://52.163.61.213:8888/api/v1/$viewRoomEndpoint?hotel_id=$hotelId",
+                requestBody = null,
+            )
+
+            val response = client.execute<RoomList>(request = request)
+            println("${response.data} tried doing")
+            response
+        }
+    }
+
+
 
     private inline fun <reified T : Any> parseResponse(responseData: Any?): T? {
         println("check for function call")
