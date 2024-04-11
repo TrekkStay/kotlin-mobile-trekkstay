@@ -43,13 +43,11 @@ fun HotelBotNav(navController: NavHostController) {
         selectedTextColor = TrekkStayBlue,
         indicatorColor = TrekkStayBlue
     )
-    val indicatorTxtSize = 10.sp
     val indicatorIconSize = 28.dp
     NavigationBar(
         containerColor = Color.White
     ) {
         NavigationBarItem(
-            label = { Text("Home", fontSize = indicatorTxtSize) },
             selected = currentDestination?.hierarchy?.any {
                 it.route == "hotel_home"
             } == true,
@@ -69,7 +67,6 @@ fun HotelBotNav(navController: NavHostController) {
             colors = bottomBarIndicatorColor
         )
         NavigationBarItem(
-            label = { Text("Reservations", fontSize = indicatorTxtSize) },
             selected = currentDestination?.hierarchy?.any {
                 it.route == "hotel_reservations"
             } == true,
@@ -89,7 +86,6 @@ fun HotelBotNav(navController: NavHostController) {
             colors = bottomBarIndicatorColor
         )
         NavigationBarItem(
-            label = { Text("Scan QR", fontSize = indicatorTxtSize) },
             selected = currentDestination?.hierarchy?.any {
                 it.route == "hotel_QR"
             } == true,
@@ -109,7 +105,6 @@ fun HotelBotNav(navController: NavHostController) {
             colors = bottomBarIndicatorColor
         )
         NavigationBarItem(
-            label = { Text("Notification", fontSize = indicatorTxtSize) },
             selected = currentDestination?.hierarchy?.any {
                 it.route == "hotel_notifications"
             } == true,
@@ -140,7 +135,6 @@ fun HotelBotNav(navController: NavHostController) {
             colors = bottomBarIndicatorColor
         )
         NavigationBarItem(
-            label = { Text("Profile", fontSize = indicatorTxtSize) },
             selected = currentDestination?.hierarchy?.any {
                 it.route == "hotel_profile" ||
                 it.route == "hotel_room_manage" ||

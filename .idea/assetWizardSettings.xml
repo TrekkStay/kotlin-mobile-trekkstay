@@ -324,7 +324,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:$PROJECT_DIR$/../../../../../../Android/sdk/icons/material/materialicons/location_city/baseline_location_city_24.xml" />
+                                      <entry key="url" value="file:$PROJECT_DIR$/../../../../../../Android/sdk/icons/material/materialicons/visibility_off/baseline_visibility_off_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -334,7 +334,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="city_ico" />
+                            <entry key="outputName" value="eye_off_ico" />
                           </map>
                         </option>
                       </PersistentState>

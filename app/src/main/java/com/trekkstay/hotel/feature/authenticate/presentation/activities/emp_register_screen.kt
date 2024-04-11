@@ -1,9 +1,9 @@
 package com.trekkstay.hotel.feature.authenticate.presentation.activities
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
@@ -19,22 +19,24 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthState
+import com.example.hotel.R
 import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthState
 import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthViewModel
 import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpRegisterAction
-import com.trekkstay.hotel.feature.authenticate.presentation.states.RegisterAction
-import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
-import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 import com.trekkstay.hotel.ui.theme.black
 
 
@@ -45,6 +47,7 @@ fun EmpRegisterScreen(viewModel: EmpAuthViewModel, navController: NavHostControl
     var password by remember { mutableStateOf("") }
     val authState by viewModel.authState.observeAsState()
     var showDialog by remember { mutableStateOf(true) }
+    var passwordVisible by remember { mutableStateOf(false) }
     if (showDialog) {
         when (authState) {
             is EmpAuthState.SuccessEmpRegister -> {
@@ -172,12 +175,20 @@ fun EmpRegisterScreen(viewModel: EmpAuthViewModel, navController: NavHostControl
                         contentDescription = null
                     )
                 },
+                trailingIcon = {
+                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                        var passVisibleIco = (if (passwordVisible) R.drawable.eye_off_ico else R.drawable.eye_ico)
+                        Icon(ImageVector.vectorResource(passVisibleIco), contentDescription = null)
+                    }
+                },
                 shape = RoundedCornerShape(20.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = black,
                     unfocusedBorderColor = black,
                     cursorColor = black,
-                )
+                ),
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             )
             Spacer(modifier = Modifier.height(32.dp))
 

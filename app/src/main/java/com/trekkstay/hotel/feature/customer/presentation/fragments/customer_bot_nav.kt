@@ -43,7 +43,6 @@ fun CustomerBotNav(navController: NavHostController) {
         containerColor = Color.White
     ) {
         NavigationBarItem(
-            label = { Text("Home") },
             selected = currentDestination?.hierarchy?.any {
                 it.route == "customer_home"
             } == true,
@@ -63,7 +62,6 @@ fun CustomerBotNav(navController: NavHostController) {
             colors = bottomBarIndicatorColor
         )
         NavigationBarItem(
-            label = { Text("Reservations") },
             selected = currentDestination?.hierarchy?.any {
                 it.route == "customer_reservations"
             } == true,
@@ -83,7 +81,6 @@ fun CustomerBotNav(navController: NavHostController) {
             colors = bottomBarIndicatorColor
         )
         NavigationBarItem(
-            label = { Text("Notification") },
             selected = currentDestination?.hierarchy?.any {
                 it.route == "customer_notifications"
             } == true,
@@ -114,7 +111,6 @@ fun CustomerBotNav(navController: NavHostController) {
             colors = bottomBarIndicatorColor
         )
         NavigationBarItem(
-            label = { Text("Profile") },
             selected = currentDestination?.hierarchy?.any {
                 it.route == "customer_profile"
             } == true,

@@ -239,7 +239,7 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(onClick = {
-                    navController.navigate("hotel_room_manage")
+                    navController.navigate("hotel_profile")
                 }) {
                     Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = null)
                 }
