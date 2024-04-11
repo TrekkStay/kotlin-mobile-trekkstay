@@ -46,7 +46,7 @@ fun AppRouter(
 ) {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "customer_main") {
+    NavHost(navController = navController, startDestination = "hotel_main") {
         composable("start-up") {
             StartupScreen(navController)
         }
@@ -128,7 +128,7 @@ fun HotelRouter(hotelViewModel: HotelViewModel,roomViewModel: RoomViewModel,loca
             CreateHotelScreen(hotelViewModel,locationViewModel, navController)
         }
         composable(route = "hotel_room_manage") {
-            HotelRoomManageScreen(navController)
+            HotelRoomManageScreen(roomViewModel,navController)
         }
         composable("hotel_room_create") {
             CreateRoomScreen(hotelViewModel,roomViewModel,navController)

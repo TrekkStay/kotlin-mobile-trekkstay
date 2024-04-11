@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.trekkstay.hotel.feature.hotel.domain.repositories.RoomRepo
+import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelState
 import kotlinx.coroutines.launch
 
 class RoomViewModel(private val hotelRepo: RoomRepo) : ViewModel() {
@@ -53,6 +54,14 @@ class RoomViewModel(private val hotelRepo: RoomRepo) : ViewModel() {
                     result.fold(
                         { failure -> _state.postValue(RoomState.InvalidViewRoom(failure.message)) },
                         { success->  _state.postValue(RoomState.SuccessViewRoom(success)) }
+                    )
+                }
+                is GetHotelRoomAction ->{
+                    _state.postValue(RoomState.GetHotelRoomCalling)
+                    val result = hotelRepo.getHotelRoom()
+                    result.fold(
+                        { failure -> _state.postValue(RoomState.InvalidGetHotelRoom(failure.message)) },
+                        { success->  _state.postValue(RoomState.SuccessGetHotelRoom(success)) }
                     )
                 }
             }

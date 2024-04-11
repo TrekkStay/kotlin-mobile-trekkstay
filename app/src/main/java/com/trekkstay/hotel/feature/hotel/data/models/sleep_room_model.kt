@@ -1,6 +1,7 @@
 package com.trekkstay.hotel.feature.hotel.data.models
 
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 import com.trekkstay.hotel.core.typedef.DataMap
@@ -13,19 +14,16 @@ data class SleepRoomModel(
     companion object {
 
         fun fromJson(source: String): SleepRoomModel {
-
-            val type = object : TypeToken<Map<String, Any>>() {}.type
-            val map: Map<String, Any> = Gson().fromJson(source, type)
-
+            val type = object : TypeToken<Map<String, Int>>() {}.type
+            val map: Map<String, Int> = Gson().fromJson(source, type)
             return fromMap(map)
         }
 
 
         private fun fromMap(map: DataMap): SleepRoomModel {
-
             return SleepRoomModel(
-                adults = (map["adults"] as? String )?.toInt() ?: 0,
-                children = (map["children"] as? String )?.toInt() ?: 0,
+                adults = (map["adults"] as? Int ) ?: 0,
+                children = (map["children"] as? Int ) ?: 0,
             )
         }
 

@@ -29,11 +29,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.hotel.R
+import com.trekkstay.hotel.feature.hotel.domain.entities.Room
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 @Composable
-fun HotelRoomCard() {
+fun HotelRoomCard(
+    room : Room
+) {
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         modifier = Modifier
@@ -61,7 +64,7 @@ fun HotelRoomCard() {
             )
         }
         Text(
-            "Superior Double or Twin Room",
+            room.type,
             fontFamily = PoppinsFontFamily,
             fontWeight = FontWeight.SemiBold,
             fontSize = 18.sp
@@ -69,17 +72,17 @@ fun HotelRoomCard() {
         RoomInfoRow(
             icon = ImageVector.vectorResource(R.drawable.money_circle_ico),
             label = "Original price",
-            value = "120.0"
+            value = room.originalPrice
         )
         RoomInfoRow(
             icon = ImageVector.vectorResource(R.drawable.discount_ico),
             label = "Discount rate",
-            value = "10%"
+            value = room.discountRate
         )
         RoomInfoRow(
             icon = ImageVector.vectorResource(R.drawable.box_ico),
             label = "Quantity",
-            value = "4"
+            value = room.quantity
         )
     }
 }
@@ -88,7 +91,7 @@ fun HotelRoomCard() {
 private fun RoomInfoRow(
     icon: ImageVector,
     label: String,
-    value: String
+    value: Int,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -103,7 +106,7 @@ private fun RoomInfoRow(
             buildAnnotatedString {
                 append("$label: ")
                 withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                    append(value)
+                    append(value.toString())
                 }
             },
             fontFamily = PoppinsFontFamily,

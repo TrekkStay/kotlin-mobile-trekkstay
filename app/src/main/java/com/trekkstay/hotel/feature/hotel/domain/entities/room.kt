@@ -8,7 +8,7 @@ data class Room(
     val quantity: Int,
     val discountRate: Int,
     val originalPrice: Int,
-    val video: List<String>,
-    val image: List<String>,
+    val video: Media,
+    val image: Media,
     val facilities: RoomFacilities
 )

@@ -35,7 +35,7 @@ data class RoomFacilitiesModel(
 
 
         private fun fromMap(map: DataMap): RoomFacilitiesModel {
-
+            println(map["sleeps"].toString())
             return RoomFacilitiesModel(
                 roomSize = (map["room_size"] as? String )?.toInt() ?: 0,
                 numBed = (map["number_of_bed"] as? String )?.toInt() ?: 0,

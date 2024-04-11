@@ -35,7 +35,7 @@ interface RoomRepo {
         hotelId: String,
     ): ResultFuture<RoomList>
 
-
+    suspend fun getHotelRoom(): ResultFuture<String>
 
 }
 

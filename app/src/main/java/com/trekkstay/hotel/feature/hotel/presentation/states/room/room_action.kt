@@ -1,6 +1,7 @@
 package com.trekkstay.hotel.feature.hotel.presentation.states.room
 
 import com.google.android.gms.maps.model.LatLng
+import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelAction
 
 sealed class RoomAction
 data class CreateRoomAction(
@@ -31,3 +32,5 @@ data class CreateRoomAction(
 
 
 data class ViewRoomAction(val hotelId: String) : RoomAction()
+
+object GetHotelRoomAction: RoomAction()

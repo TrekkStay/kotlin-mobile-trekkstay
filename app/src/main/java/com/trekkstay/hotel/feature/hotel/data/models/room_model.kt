@@ -16,8 +16,8 @@ data class RoomModel(
     @SerializedName("quantity") val quantity: Int,
     @SerializedName("discount_rate") val discountRate: Int,
     @SerializedName("original_price") val originalPrice: Int,
-    @SerializedName("videos") val videos: List<String>,
-    @SerializedName("images") val images: List<String>,
+    @SerializedName("videos") val videos: MediaModel,
+    @SerializedName("images") val images: MediaModel,
    @SerializedName("facilities") val facilities: RoomFacilitiesModel
 ) {
     companion object {
@@ -40,9 +40,9 @@ data class RoomModel(
                 quantity = (map["quantity"] as? String)?.toInt() ?: 0,
                 discountRate = (map["discount_rate"] as? String)?.toInt() ?: 0,
                 originalPrice = (map["original_price"] as? String)?.toInt() ?: 0,
-                videos = (map["videos"] as? DataMap)?.get("urls") as? List<String> ?: emptyList(),
-                images = (map["images"] as? DataMap)?.get("urls") as? List<String> ?: emptyList(),
-                facilities =   RoomFacilitiesModel.fromJson(map["facilities"].toString()),
+                videos = MediaModel.fromJson(map["videos"].toString()),
+                images = MediaModel.fromJson(map["images"].toString()),
+                facilities =  RoomFacilitiesModel.fromJson(map["facilities"].toString()),
             )
         }
 
@@ -60,8 +60,8 @@ fun RoomModel.toEntity(): Room {
         quantity = quantity,
         discountRate = discountRate,
         originalPrice = originalPrice,
-        video = videos,
-        image = images,
+        video = videos.toEntity(),
+        image = images.toEntity(),
         facilities = facilities.toEntity()
     )
 }

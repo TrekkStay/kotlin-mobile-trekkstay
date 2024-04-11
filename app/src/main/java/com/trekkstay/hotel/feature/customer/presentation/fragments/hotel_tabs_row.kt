@@ -31,6 +31,8 @@ import androidx.compose.ui.unit.sp
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelState
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.ViewHotelAction
+import com.trekkstay.hotel.feature.hotel.presentation.states.room.GetHotelRoomAction
+import com.trekkstay.hotel.feature.hotel.presentation.states.room.RoomState
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 import kotlinx.coroutines.launch
@@ -47,7 +49,6 @@ fun HotelTabsRow(hotelViewModel: HotelViewModel) {
     when (hotelState) {
         is HotelState.SuccessViewHotel -> {
             val hotels = (hotelState as HotelState.SuccessViewHotel).list.hotelList
-            println((hotelState as HotelState.SuccessViewHotel))
 
             Column(
                 modifier = Modifier
@@ -291,8 +292,10 @@ fun HotelTabsRow(hotelViewModel: HotelViewModel) {
     }
 
     LaunchedEffect(Unit) {
-        val action = ViewHotelAction
-        hotelViewModel.processAction(action)
+        if (hotelState !is HotelState.SuccessViewHotel) {
+            val action = ViewHotelAction
+            hotelViewModel.processAction(action)
+        }
     }
 
 }

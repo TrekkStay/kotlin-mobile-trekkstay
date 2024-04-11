@@ -2,15 +2,15 @@ package com.trekkstay.hotel.feature.hotel.data.datasources
 
 
 import android.content.Context
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.trekkstay.hotel.core.network.client.Client
 import com.trekkstay.hotel.core.network.method.RequestMethod
 import com.trekkstay.hotel.core.network.request.RequestQuery
 import com.trekkstay.hotel.core.network.response.Response
 import com.trekkstay.hotel.core.storage.LocalStore
-import com.trekkstay.hotel.feature.authenticate.data.models.EmployeeModel
-import com.trekkstay.hotel.feature.authenticate.data.models.LoginResModel
-import com.trekkstay.hotel.feature.authenticate.data.models.toEmployee
-import com.trekkstay.hotel.feature.authenticate.data.models.toLoginRes
+import com.trekkstay.hotel.feature.hotel.data.models.RoomListModel
+import com.trekkstay.hotel.feature.hotel.data.models.toEntity
 import com.trekkstay.hotel.feature.hotel.domain.entities.RoomList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -46,10 +46,13 @@ interface RoomRemoteDataSource {
     suspend fun viewRoom(
         hotelId: String,
     ): Response<RoomList>
+
+    suspend fun getHotelRoom(): Response<String>
 }
 
 const val createRoomEndpoint = "hotel-room/create"
 const val viewRoomEndpoint = "hotel-room/filter"
+const val getHotelRoomEndpoint = "hotel/my-hotel"
 
 class RoomRemoteDataSourceImpl(private val client: Client, private val context: Context) : RoomRemoteDataSource {
 
@@ -138,10 +141,42 @@ class RoomRemoteDataSourceImpl(private val client: Client, private val context: 
                 requestBody = null,
             )
 
-            val response = client.execute<RoomList>(request = request)
-            println("${response.data} tried doing")
+
+            val response = client.execute<RoomList>(request = request,parser = { responseData ->
+                if (responseData is String) {
+                    parseResponse(RoomListModel.fromJson(responseData))
+                } else {
+                    null
+                }
+            })
             response
         }
+    }
+    override suspend fun getHotelRoom(): Response<String> {
+        return withContext(Dispatchers.IO) {
+            val jwtKey = LocalStore.getKey(context, "jwtKey", "")
+            val request = RequestQuery(
+                method = RequestMethod.POST,
+                path = "http://52.163.61.213:8888/api/v1/$getHotelIdEndpoint",
+                headers = mapOf("Authorization" to "Bearer $jwtKey"),
+                requestBody = null,
+            )
+
+            val response = client.execute<String>(
+                request = request,
+                parser = { responseData ->
+                    if (responseData is String) {
+                        val type = object : TypeToken<Map<String, Any>>() {}.type
+                        val map: Map<String, Any> = Gson().fromJson(responseData, type)
+                        parseResponse(map["id"])
+                    } else {
+                        null
+                    }
+                }
+            )
+            response
+        }
+
     }
 
 
@@ -149,8 +184,8 @@ class RoomRemoteDataSourceImpl(private val client: Client, private val context: 
     private inline fun <reified T : Any> parseResponse(responseData: Any?): T? {
         println("check for function call")
         return when (responseData) {
-            is LoginResModel -> responseData.toLoginRes() as? T
-            is EmployeeModel -> responseData.toEmployee() as T
+            is String -> responseData as? T
+            is RoomListModel -> responseData.toEntity() as? T
             else -> null
         }
     }
