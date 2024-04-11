@@ -35,33 +35,27 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.hotel.R
 import com.trekkstay.hotel.ui.theme.NunitoFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @Composable
-fun StartupScreen() {
+fun StartupScreen(navController: NavHostController) {
     Column {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .size(420.dp)
         ) {
-            Canvas(
-                modifier = Modifier.size(800.dp),
-                onDraw = {
-                    val strokeWidth = 400f
-                    drawCircle(
-                        color = TrekkStayBlue,
-                        radius = 170f,
-                        style = Stroke(
-                            width = strokeWidth
-                        ),
-                        center = Offset(560f, size.height / 2)
-                    )
-
-                }
+            Icon(
+                ImageVector.vectorResource(R.drawable.filled_circle_ico),
+                null,
+                tint = TrekkStayBlue,
+                modifier = Modifier.size(330.dp).align(Alignment.Center).offset(x = 10.dp)
             )
             Image(
                 painter = painterResource(id = R.drawable.startup_2),
@@ -139,6 +133,10 @@ fun StartupScreen() {
         ) {
             Button(
                 onClick = {
+                    navController.navigate("register") {
+                        popUpTo(navController.graph.findStartDestination().id)
+                        launchSingleTop = true
+                    }
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = TrekkStayCyan),
                 modifier = Modifier
@@ -163,8 +161,12 @@ fun StartupScreen() {
             Text("Or")
             Button(
                 onClick = {
+                    navController.navigate("emp_register") {
+                        popUpTo(navController.graph.findStartDestination().id)
+                        launchSingleTop = true
+                    }
                 },
-                colors = ButtonDefaults.buttonColors(containerColor = TrekkStayCyan),
+                colors = ButtonDefaults.buttonColors(containerColor = TrekkStayBlue),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(48.dp),
@@ -185,5 +187,5 @@ fun StartupScreen() {
 @Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
 @Composable
 fun MyAppPreview() {
-    StartupScreen()
+    StartupScreen(rememberNavController())
 }

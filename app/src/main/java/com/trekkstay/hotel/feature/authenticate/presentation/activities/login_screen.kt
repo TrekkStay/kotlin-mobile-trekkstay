@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
@@ -22,6 +23,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -34,7 +37,7 @@ import com.trekkstay.hotel.ui.theme.black
 
 
 @Composable
-fun LoginScreen(viewModel: AuthViewModel,navController: NavHostController) {
+fun LoginScreen(viewModel: AuthViewModel, navController: NavHostController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val authState by viewModel.authState.observeAsState()
@@ -45,11 +48,13 @@ fun LoginScreen(viewModel: AuthViewModel,navController: NavHostController) {
         when (authState) {
             is AuthState.SuccessLogin -> {
                 showDialog = true
-                LocalStore.saveKey(context, "jwtKey",
+                LocalStore.saveKey(
+                    context, "jwtKey",
                     (authState as AuthState.SuccessLogin).res.jwtToken
                 )
                 navController.navigate("customer_main")
             }
+
             is AuthState.InvalidLogin -> {
                 showDialog = true
                 AlertDialog(
@@ -64,9 +69,11 @@ fun LoginScreen(viewModel: AuthViewModel,navController: NavHostController) {
                     }
                 )
             }
+
             is AuthState.LoginCalling -> {
                 // You can show a progress dialog or a loading indicator here
             }
+
             else -> {
                 // Handle other states
             }
@@ -82,7 +89,7 @@ fun LoginScreen(viewModel: AuthViewModel,navController: NavHostController) {
             verticalArrangement = Arrangement.Top
         ) {
             IconButton(
-                onClick = { /* handle back click */ },
+                onClick = { navController.navigate("start-up") },
                 modifier = Modifier.align(Alignment.Start)
             ) {
                 Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -158,16 +165,16 @@ fun LoginScreen(viewModel: AuthViewModel,navController: NavHostController) {
                     color = TrekkStayCyan,
                     fontSize = 14.sp,
                     modifier = Modifier.clickable { /*TODO*/ },
-                            textDecoration = TextDecoration.Underline
+                    textDecoration = TextDecoration.Underline
                 )
             }
             Spacer(modifier = Modifier.height(32.dp))
             Button(
                 onClick = {
                     showDialog = true
-                    val action = LoginAction( email, password)
+                    val action = LoginAction(email, password)
                     viewModel.processAction(action)
-                          },
+                },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF238C98)),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -181,9 +188,9 @@ fun LoginScreen(viewModel: AuthViewModel,navController: NavHostController) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
-            )  {
+            ) {
                 HorizontalDivider(
-                    modifier = Modifier.weight(0.25f,fill = false),
+                    modifier = Modifier.weight(0.25f, fill = false),
                     thickness = 1.dp,
                     color = black,
                 )
@@ -196,7 +203,7 @@ fun LoginScreen(viewModel: AuthViewModel,navController: NavHostController) {
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 HorizontalDivider(
-                    modifier = Modifier.weight(0.25f,fill = false),
+                    modifier = Modifier.weight(0.25f, fill = false),
                     thickness = 1.dp,
                     color = Color(0xFF333333)
                 )
@@ -221,19 +228,18 @@ fun LoginScreen(viewModel: AuthViewModel,navController: NavHostController) {
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Normal
                 )
-                Box(
-                    modifier = Modifier.clickable {
-                        navController.navigate("register")
-                    }
-                ) {
-                    Text(
-                        text = "Sign up",
+                ClickableText(
+                    text = AnnotatedString("Register"),
+                    style = TextStyle(
                         color = TrekkStayCyan,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Normal,
                         textDecoration = TextDecoration.Underline
-                    )
-                }
+                    ),
+                    onClick = {
+                        navController.navigate("register")
+                    }
+                )
             }
 
 

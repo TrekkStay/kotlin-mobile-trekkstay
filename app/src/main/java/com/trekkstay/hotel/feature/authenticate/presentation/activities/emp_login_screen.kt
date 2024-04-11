@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
@@ -22,6 +23,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -30,11 +33,12 @@ import androidx.navigation.NavHostController
 import com.trekkstay.hotel.core.storage.LocalStore
 import com.trekkstay.hotel.feature.authenticate.presentation.states.*
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
+import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 import com.trekkstay.hotel.ui.theme.black
 
 
 @Composable
-fun EmpLoginScreen(viewModel: EmpAuthViewModel,navController: NavHostController) {
+fun EmpLoginScreen(viewModel: EmpAuthViewModel, navController: NavHostController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val authState by viewModel.authState.observeAsState()
@@ -45,11 +49,13 @@ fun EmpLoginScreen(viewModel: EmpAuthViewModel,navController: NavHostController)
         when (authState) {
             is EmpAuthState.SuccessEmpLogin -> {
                 showDialog = true
-                LocalStore.saveKey(context, "jwtKey",
+                LocalStore.saveKey(
+                    context, "jwtKey",
                     (authState as EmpAuthState.SuccessEmpLogin).res.jwtToken
                 )
                 navController.navigate("hotel_main")
             }
+
             is EmpAuthState.InvalidEmpLogin -> {
                 showDialog = true
                 AlertDialog(
@@ -64,9 +70,11 @@ fun EmpLoginScreen(viewModel: EmpAuthViewModel,navController: NavHostController)
                     }
                 )
             }
+
             is EmpAuthState.EmpLoginCalling -> {
                 // You can show a progress dialog or a loading indicator here
             }
+
             else -> {
                 // Handle other states
             }
@@ -82,7 +90,7 @@ fun EmpLoginScreen(viewModel: EmpAuthViewModel,navController: NavHostController)
             verticalArrangement = Arrangement.Top
         ) {
             IconButton(
-                onClick = { /* handle back click */ },
+                onClick = { navController.navigate("start-up") },
                 modifier = Modifier.align(Alignment.Start)
             ) {
                 Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -165,7 +173,7 @@ fun EmpLoginScreen(viewModel: EmpAuthViewModel,navController: NavHostController)
             Button(
                 onClick = {
                     showDialog = true
-                    val action = EmpLoginAction( email, password)
+                    val action = EmpLoginAction(email, password)
                     viewModel.processAction(action)
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF007EF2)),
@@ -181,9 +189,9 @@ fun EmpLoginScreen(viewModel: EmpAuthViewModel,navController: NavHostController)
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
-            )  {
+            ) {
                 HorizontalDivider(
-                    modifier = Modifier.weight(0.25f,fill = false),
+                    modifier = Modifier.weight(0.25f, fill = false),
                     thickness = 1.dp,
                     color = black,
                 )
@@ -196,7 +204,7 @@ fun EmpLoginScreen(viewModel: EmpAuthViewModel,navController: NavHostController)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 HorizontalDivider(
-                    modifier = Modifier.weight(0.25f,fill = false),
+                    modifier = Modifier.weight(0.25f, fill = false),
                     thickness = 1.dp,
                     color = Color(0xFF333333)
                 )
@@ -221,19 +229,18 @@ fun EmpLoginScreen(viewModel: EmpAuthViewModel,navController: NavHostController)
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Normal
                 )
-                Box(
-                    modifier = Modifier.clickable {
-                        navController.navigate("emp_register")
-                    }
-                ) {
-                    Text(
-                        text = "Sign up",
+                ClickableText(
+                    text = AnnotatedString("Register"),
+                    style = TextStyle(
                         color = TrekkStayBlue,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Normal,
                         textDecoration = TextDecoration.Underline
-                    )
-                }
+                    ),
+                    onClick = {
+                        navController.navigate("emp_register")
+                    }
+                )
             }
 
 

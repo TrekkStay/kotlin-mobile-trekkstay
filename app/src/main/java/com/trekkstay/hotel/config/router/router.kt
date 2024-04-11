@@ -20,6 +20,7 @@ import com.trekkstay.hotel.feature.customer.presentation.activities.CustomerHome
 import com.trekkstay.hotel.feature.customer.presentation.activities.CustomerMainScreen
 import com.trekkstay.hotel.feature.gg_map.GGMap
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.HotelProfileScreen
+import com.trekkstay.hotel.feature.authenticate.presentation.activities.StartupScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateHotelScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateRoomScreen
@@ -45,7 +46,10 @@ fun AppRouter(
 ) {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "emp_login") {
+    NavHost(navController = navController, startDestination = "start-up") {
+        composable("start-up") {
+            StartupScreen(navController)
+        }
         composable("login") {
             LoginScreen(authStateManager,navController)
         }

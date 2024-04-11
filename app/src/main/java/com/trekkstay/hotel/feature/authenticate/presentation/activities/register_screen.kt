@@ -3,6 +3,7 @@ package com.trekkstay.hotel.feature.authenticate.presentation.activities
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
@@ -18,7 +19,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -26,6 +30,8 @@ import androidx.navigation.NavHostController
 import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthState
 import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthViewModel
 import com.trekkstay.hotel.feature.authenticate.presentation.states.RegisterAction
+import com.trekkstay.hotel.ui.theme.TrekkStayBlue
+import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 import com.trekkstay.hotel.ui.theme.black
 
 
@@ -84,7 +90,7 @@ fun RegisterScreen(viewModel: AuthViewModel,navController: NavHostController) {
             verticalArrangement = Arrangement.Top
         ) {
             IconButton(
-                onClick = { navController.navigate("login") },
+                onClick = { navController.navigate("start-up") },
                 modifier = Modifier.align(Alignment.Start)
             ) {
                 Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -92,22 +98,23 @@ fun RegisterScreen(viewModel: AuthViewModel,navController: NavHostController) {
             Spacer(modifier = Modifier.height(16.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = "Welcome ",
+                    text = "Create ",
                     color = black,
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "Back",
-                    color = Color(0xFF238C98),
+                    text = "Account",
+                    color = TrekkStayCyan,
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "We missed you! Login to continue your journey with us.",
+                text = "Fill your information below or register with your social account.",
                 color = black,
+                textAlign = TextAlign.Center,
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Normal,
                 modifier = Modifier.padding(vertical = 8.dp),
@@ -230,13 +237,17 @@ fun RegisterScreen(viewModel: AuthViewModel,navController: NavHostController) {
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Normal
                 )
-                Text(
-                    text = "Sign in",
-                    color = Color(0xFF238C98),
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Normal,
-                    modifier = Modifier.clickable { /*TODO*/ },
-                    textDecoration = TextDecoration.Underline
+                ClickableText(
+                    text = AnnotatedString("Login"),
+                    style = TextStyle(
+                        color = TrekkStayCyan,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Normal,
+                        textDecoration = TextDecoration.Underline
+                    ),
+                    onClick = {
+                        navController.navigate("login")
+                    }
                 )
             }
 
