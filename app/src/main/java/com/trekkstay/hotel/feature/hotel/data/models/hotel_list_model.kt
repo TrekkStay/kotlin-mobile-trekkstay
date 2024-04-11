@@ -24,13 +24,7 @@ data class HotelListModel(
         }
 
         fun fromJson(source: String): HotelListModel {
-            JSONObject(source)
-                .let { json ->
-                    val data = json.opt("rows")?.toString()
-                    if (data != null) {
-                        fromList(data)
-                    }
-                }
+            println(source)
             val type = object : TypeToken<Map<String, Any>>() {}.type
             val map: Map<String, Any> = Gson().fromJson(source, type)
 
@@ -62,11 +56,11 @@ data class HotelListModel(
         }
 
 
-        private fun fromMap(map: DataMap,): HotelListModel {
+        private fun fromMap(map: DataMap): HotelListModel {
             val gson = Gson()
             return HotelListModel(
-            limit = map["limit"] as? Int ?: 0,
-            page = map["page"] as? Int ?: 0,
+            limit = (map["limit"] as? String)?.toInt() ?: 0,
+            page = (map["page"] as? String)?.toInt() ?: 0,
             hotelList = fromList(gson.toJson(map["rows"]))
             )
         }

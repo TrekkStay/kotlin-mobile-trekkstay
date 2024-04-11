@@ -108,7 +108,7 @@ fun HotelRouter(hotelViewModel: HotelViewModel,roomViewModel: RoomViewModel,loca
         startDestination = "hotel_home"
     ) {
         composable(route = "hotel_home") {
-            HotelHomeScreen(navController = navController)
+            HotelHomeScreen(hotelViewModel= hotelViewModel,navController = navController)
         }
         composable(route = "hotel_reservations") {
             HotelReservationScreen()

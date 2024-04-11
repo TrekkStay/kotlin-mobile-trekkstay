@@ -44,26 +44,7 @@ import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @Composable
 fun CustomerHomeScreen(hotelViewModel: HotelViewModel,navController: NavHostController) {
-    val hotelState by hotelViewModel.state.observeAsState()
-    when (hotelState) {
-        is HotelState.SuccessViewHotel -> {
-             println("Success!!!!!!!   "+
-                (hotelState as HotelState.SuccessViewHotel).list.hotelList.toString())
-        }
-        is HotelState.InvalidViewHotel -> {
 
-        }
-        is HotelState.ViewHotelCalling -> {
-        }
-
-        else -> {
-        }
-    }
-
-    LaunchedEffect(Unit) {
-        val action = ViewHotelAction
-        hotelViewModel.processAction(action)
-    }
 
     Column(
         modifier = Modifier
@@ -186,7 +167,7 @@ fun CustomerHomeScreen(hotelViewModel: HotelViewModel,navController: NavHostCont
             }
         }
         Spacer(modifier = Modifier.height(10.dp))
-        HotelTabsRow()
+        HotelTabsRow(hotelViewModel)
         Text(
             text = "See all",
             textAlign = TextAlign.End,

@@ -31,13 +31,10 @@ fun HotelCard(
     name: String,
     destination: String,
     rating: Double,
-    price: Double
+    price: Int
 ) {
-    val formattedPrice = if (price % 1 == 0.0) {
-        price.toInt().toString()
-    } else {
+    val formattedPrice =
         price.toString()
-    }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween,

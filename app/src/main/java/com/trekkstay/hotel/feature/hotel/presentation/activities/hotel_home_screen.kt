@@ -43,12 +43,13 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.trekkstay.hotel.feature.customer.presentation.fragments.DestinationCard
 import com.trekkstay.hotel.feature.customer.presentation.fragments.HotelTabsRow
+import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
 import com.trekkstay.hotel.ui.theme.NunitoFontFamily
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 @Composable
-fun HotelHomeScreen(navController: NavHostController) {
+fun HotelHomeScreen(hotelViewModel: HotelViewModel,navController: NavHostController) {
     Column(
         modifier = Modifier
             .padding(bottom = 70.dp)
@@ -170,7 +171,7 @@ fun HotelHomeScreen(navController: NavHostController) {
             }
         }
         Spacer(modifier = Modifier.height(10.dp))
-        HotelTabsRow()
+        HotelTabsRow(hotelViewModel = hotelViewModel)
         Text(
             text = "See all",
             textAlign = TextAlign.End,
@@ -217,11 +218,4 @@ fun HotelHomeScreen(navController: NavHostController) {
         )
         Spacer(modifier = Modifier.height(10.dp))
     }
-}
-
-@Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
-@Composable
-fun MyAppPreview() {
-    val navController = rememberNavController()
-    HotelHomeScreen(navController = navController)
 }

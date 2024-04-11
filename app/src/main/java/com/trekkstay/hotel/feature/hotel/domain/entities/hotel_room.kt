@@ -1,6 +1,6 @@
 package com.trekkstay.hotel.feature.hotel.domain.entities
 
-data class Room(
+data class HotelRoom(
     val id: String,
     val hotelId:String,
     val type: String,
@@ -8,7 +8,6 @@ data class Room(
     val quantity: Int,
     val discountRate: Int,
     val originalPrice: Int,
-    val video: List<String>,
-    val image: List<String>,
-    val facilities: RoomFacilities
+    val videos: List<String>,
+    val images: List<String>,
 )

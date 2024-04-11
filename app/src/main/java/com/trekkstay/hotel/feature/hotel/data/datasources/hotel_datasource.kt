@@ -119,7 +119,6 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
                 put("ward_code", wardCode)
                 put("address_detail", addressDetail)
             }
-            println(requestBodyJson.toString())
 
             val jwtKey = LocalStore.getKey(context, "jwtKey", "")
             val request = RequestQuery(

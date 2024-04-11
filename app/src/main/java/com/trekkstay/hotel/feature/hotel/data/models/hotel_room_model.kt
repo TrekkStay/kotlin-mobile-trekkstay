@@ -1,14 +1,14 @@
 package com.trekkstay.hotel.feature.hotel.data.models
 
-
-import com.google.android.gms.maps.model.LatLng
-import com.trekkstay.hotel.core.typedef.DataMap
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
-import com.trekkstay.hotel.feature.hotel.domain.entities.Room
+import com.trekkstay.hotel.core.typedef.DataMap
+import com.trekkstay.hotel.feature.hotel.domain.entities.HotelRoom
+import org.json.JSONArray
+import org.json.JSONObject
 
-data class RoomModel(
+data class HotelRoomModel(
     @SerializedName("id") val id: String,
     @SerializedName("hotel_id") val hotelId: String,
     @SerializedName("type") val type: String,
@@ -17,22 +17,43 @@ data class RoomModel(
     @SerializedName("discount_rate") val discountRate: Int,
     @SerializedName("original_price") val originalPrice: Int,
     @SerializedName("videos") val videos: List<String>,
-    @SerializedName("images") val images: List<String>,
-   @SerializedName("facilities") val facilities: RoomFacilitiesModel
-) {
+    @SerializedName("images") val images: List<String>,) {
     companion object {
 
 
-        fun fromJson(source: String): RoomModel {
+        fun fromJson(source: String): HotelRoomModel {
             val type = object : TypeToken<Map<String, Any>>() {}.type
             val map: Map<String, Any> = Gson().fromJson(source, type)
 
             return fromMap(map)
         }
+        fun fromList(source: String): List<HotelRoomModel>{
+            val jsonArray = JSONArray(source)
+            val list: MutableList<Map<String, Any>> = mutableListOf()
 
-        fun fromMap(map: DataMap): RoomModel {
+            for (i in 0 until jsonArray.length()) {
+                val jsonObject = jsonArray.getJSONObject(i)
+                val map = jsonObject.toMap()
+                list.add(map)
+            }
 
-            return RoomModel(
+            return list.map { fromMap(it) }
+        }
+        private fun JSONObject.toMap(): Map<String, Any> {
+            val map = mutableMapOf<String, Any>()
+            val keysItr = keys()
+
+            while (keysItr.hasNext()) {
+                val key = keysItr.next()
+                val value = getString(key)
+                map[key] = value
+            }
+
+            return map
+        }
+
+        fun fromMap(map: DataMap): HotelRoomModel {
+            return HotelRoomModel(
                 id = map["id"] as? String ?: "",
                 hotelId = map["hotel_id"] as? String ?: "",
                 type = map["type"] as? String ?: "",
@@ -42,7 +63,7 @@ data class RoomModel(
                 originalPrice = (map["original_price"] as? String)?.toInt() ?: 0,
                 videos = (map["videos"] as? DataMap)?.get("urls") as? List<String> ?: emptyList(),
                 images = (map["images"] as? DataMap)?.get("urls") as? List<String> ?: emptyList(),
-                facilities =   RoomFacilitiesModel.fromJson(map["facilities"].toString()),
+
             )
         }
 
@@ -51,8 +72,8 @@ data class RoomModel(
 }
 
 
-fun RoomModel.toEntity(): Room {
-    return Room(
+fun HotelRoomModel.toEntity(): HotelRoom {
+    return HotelRoom(
         id = id,
         hotelId = hotelId,
         type = type,
@@ -60,8 +81,7 @@ fun RoomModel.toEntity(): Room {
         quantity = quantity,
         discountRate = discountRate,
         originalPrice = originalPrice,
-        video = videos,
-        image = images,
-        facilities = facilities.toEntity()
+        videos = videos,
+        images = images,
     )
 }
