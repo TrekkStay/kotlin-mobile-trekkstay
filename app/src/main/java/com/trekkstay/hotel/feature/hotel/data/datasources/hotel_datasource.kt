@@ -9,6 +9,9 @@ import com.trekkstay.hotel.core.network.method.RequestMethod
 import com.trekkstay.hotel.core.network.request.RequestQuery
 import com.trekkstay.hotel.core.network.response.Response
 import com.trekkstay.hotel.core.storage.LocalStore
+import com.trekkstay.hotel.feature.hotel.data.models.HotelListModel
+import com.trekkstay.hotel.feature.hotel.data.models.toEntity
+import com.trekkstay.hotel.feature.hotel.domain.entities.HotelList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
@@ -40,10 +43,12 @@ interface HotelRemoteDataSource {
                             addressDetail: String,
                             ): Response<Unit>
     suspend fun getHotelId(): Response<String>
+    suspend fun viewHotel(): Response<HotelList>
 }
 
 const val createHotelEndpoint = "hotel/create"
 const val getHotelIdEndpoint = "hotel/my-hotel"
+const val viewHotelEndpoint = "hotel/filter"
 
 class HotelRemoteDataSourceImpl(private val client: Client, private val context: Context) : HotelRemoteDataSource {
 
@@ -160,10 +165,35 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
 
     }
 
+    override suspend fun viewHotel(): Response<HotelList> {
+        return withContext(Dispatchers.IO) {
+            val request = RequestQuery(
+                method = RequestMethod.POST,
+                path = "http://52.163.61.213:8888/api/v1/$viewHotelEndpoint",
+                requestBody = null,
+            )
+
+            val response = client.execute<HotelList>(
+                request = request,
+                parser = { responseData ->
+                    if (responseData is String) {
+                        parseResponse(HotelListModel.fromJson(responseData))
+                    } else {
+                        null
+                    }
+                }
+            )
+            println("${response.data} view hotel tried doing")
+            response
+        }
+
+    }
+
     private inline fun <reified T : Any> parseResponse(responseData: Any?): T? {
         println("check for function call")
         return when (responseData) {
             is String -> responseData as? T
+            is HotelListModel -> responseData.toEntity() as? T
             else -> null
         }
     }

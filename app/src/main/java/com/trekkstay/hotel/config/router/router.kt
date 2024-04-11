@@ -46,7 +46,7 @@ fun AppRouter(
 ) {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "start-up") {
+    NavHost(navController = navController, startDestination = "customer_main") {
         composable("start-up") {
             StartupScreen(navController)
         }
@@ -63,7 +63,7 @@ fun AppRouter(
             EmpRegisterScreen(empAuthStateManager,navController)
         }
         composable("customer_main") {
-            CustomerMainScreen()
+            CustomerMainScreen(hotelViewModel)
         }
         composable("hotel_main") {
             HotelScreen(hotelViewModel ,roomViewModel,locationViewModel,activity)
@@ -73,14 +73,14 @@ fun AppRouter(
 }
 
 @Composable
-fun CustomerRouter(navController: NavHostController) {
+fun CustomerRouter(hotelViewModel: HotelViewModel,navController: NavHostController) {
     NavHost(
         navController = navController,
         startDestination = "customer_home"
     ) {
         // Home Screen
         composable(route = "customer_home") {
-            CustomerHomeScreen(navController)
+            CustomerHomeScreen(hotelViewModel,navController)
         }
         composable(route = "customer_search_engine") {
             SearchEngineScreen(navController)

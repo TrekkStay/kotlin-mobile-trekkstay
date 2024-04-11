@@ -35,14 +35,11 @@ class Client(private val engine: OkHttpClient) {
             try {
                 val response = engine.newCall(buildOkHttpRequest(request)).execute()
                 val responseBody = response.body?.string()
-                println(responseBody)
                 val jsonResponse = responseBody?.let { JSONObject(it) }
                 jsonResponse?.let { json ->
                     val data = json.opt("data")
                     val status = json.optInt("status_code")
-                    if (data != null) {
-                        println(data.toString())
-                    }
+
                     Response.whenResponse {
                         if (response.isSuccessful && status in 200..299 ) {
                             if(data != null) {

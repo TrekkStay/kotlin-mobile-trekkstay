@@ -8,14 +8,17 @@ import androidx.navigation.compose.rememberNavController
 import com.trekkstay.hotel.config.router.CustomerRouter
 
 import com.trekkstay.hotel.feature.customer.presentation.fragments.CustomerBotNav
+import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CustomerMainScreen() {
+fun CustomerMainScreen(
+    hotelViewModel: HotelViewModel
+) {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = { CustomerBotNav(navController = navController) }
     ) { _ ->
-        CustomerRouter(navController)
+        CustomerRouter(hotelViewModel,navController)
     }
 }

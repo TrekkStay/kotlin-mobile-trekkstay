@@ -25,6 +25,7 @@ import com.trekkstay.hotel.feature.hotel.domain.repositories.LocationRepo
 import com.trekkstay.hotel.feature.hotel.domain.repositories.RoomRepo
 import com.trekkstay.hotel.feature.hotel.domain.usecases.hotel.CreateHotelUseCase
 import com.trekkstay.hotel.feature.hotel.domain.usecases.hotel.GetHotelIdUseCase
+import com.trekkstay.hotel.feature.hotel.domain.usecases.hotel.ViewHotelUseCase
 import com.trekkstay.hotel.feature.hotel.domain.usecases.location.ViewDistrictUseCase
 import com.trekkstay.hotel.feature.hotel.domain.usecases.location.ViewProvinceUseCase
 import com.trekkstay.hotel.feature.hotel.domain.usecases.location.ViewWardUseCase
@@ -49,12 +50,13 @@ val appModule = module {
 
     single { HotelViewModel(get()) }
     single { CreateHotelUseCase(get()) }
+    single { GetHotelIdUseCase(get())}
+    single { ViewHotelUseCase(get())}
     single <HotelRemoteDataSource>{ HotelRemoteDataSourceImpl(get(),get()) }
     single <HotelRepo>{ HotelRepoImpl(get())}
 
     single { RoomViewModel(get()) }
     single { CreateRoomUseCase(get()) }
-    single { GetHotelIdUseCase(get())}
     single <RoomRemoteDataSource>{ RoomRemoteDataSourceImpl(get(),get()) }
     single <RoomRepo>{ RoomRepoImpl(get()) }
 

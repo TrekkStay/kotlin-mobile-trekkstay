@@ -17,6 +17,9 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -32,12 +35,37 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.trekkstay.hotel.feature.customer.presentation.fragments.DestinationCard
 import com.trekkstay.hotel.feature.customer.presentation.fragments.HotelTabsRow
+import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelState
+import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
+import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.ViewHotelAction
 import com.trekkstay.hotel.ui.theme.NunitoFontFamily
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @Composable
-fun CustomerHomeScreen(navController: NavHostController) {
+fun CustomerHomeScreen(hotelViewModel: HotelViewModel,navController: NavHostController) {
+    val hotelState by hotelViewModel.state.observeAsState()
+    when (hotelState) {
+        is HotelState.SuccessViewHotel -> {
+             println("Success!!!!!!!   "+
+                (hotelState as HotelState.SuccessViewHotel).list.hotelList.toString())
+        }
+        is HotelState.InvalidViewHotel -> {
+
+        }
+        is HotelState.ViewHotelCalling -> {
+        }
+
+        else -> {
+            // Handle other states
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        val action = ViewHotelAction
+        hotelViewModel.processAction(action)
+    }
+
     Column(
         modifier = Modifier
             .padding(bottom = 70.dp)

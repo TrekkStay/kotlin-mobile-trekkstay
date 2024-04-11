@@ -1,2 +1,41 @@
 package com.trekkstay.hotel.feature.hotel.domain.entities
 
+import com.google.android.gms.maps.model.LatLng
+
+data class Hotel(
+
+    val id:String,
+    val name: String,
+    val ownerId: String,
+    val email: String,
+    val phone: String,
+    val checkInTime: String,
+    val checkOutTime: String,
+    val addressDetail: String,
+    val description: String,
+    val status: String,
+    val roomId: String,
+    val roomType: String,
+    val roomDes: String,
+    val roomQuantity: Int,
+    val roomDiscount: Int,
+    val originalPrice: Int,
+    val roomVideo: List<String>,
+    val roomImage: List<String>,
+    val province: Location,
+    val district: Location,
+    val ward: Location,
+    val airportTransfer: Boolean,
+    val conferenceRoom: Boolean,
+    val fitnessCenter: Boolean,
+    val foodService: Boolean,
+    val freeWifi: Boolean,
+    val laundryService: Boolean,
+    val motorBikeRental: Boolean,
+    val parkingArea: Boolean,
+    val spaService: Boolean,
+    val swimmingPool: Boolean,
+    val coordinates: LatLng,
+    val videos: List<String>,
+    val images: List<String>,
+    )
