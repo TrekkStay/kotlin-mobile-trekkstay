@@ -29,7 +29,15 @@ fun FacilityBullet(label: String) {
         "Spa Service" -> ImageVector.vectorResource(R.drawable.spa_ico)
         "Food Service" -> ImageVector.vectorResource(R.drawable.food_ico)
         "Laundry Service" -> ImageVector.vectorResource(R.drawable.laundry_ico)
-//        "Air Condition" -> ImageVector.vectorResource(R.drawable.ac_ico)
+        "Air Condition" -> ImageVector.vectorResource(R.drawable.air_ico)
+        "Balcony" -> ImageVector.vectorResource(R.drawable.balcony_ico)
+        "Bathtub" -> ImageVector.vectorResource(R.drawable.bathtub_ico)
+        "Hairdryer" -> ImageVector.vectorResource(R.drawable.dry_ico)
+        "Kitchen" -> ImageVector.vectorResource(R.drawable.kitchen_ico)
+        "Slippers" -> ImageVector.vectorResource(R.drawable.slippers_ico)
+        "Shower" -> ImageVector.vectorResource(R.drawable.shower_ico)
+        "Non Smoking" -> ImageVector.vectorResource(R.drawable.non_smoke_ico)
+        "Television" -> ImageVector.vectorResource(R.drawable.tv_ico)
         else -> null
     }
     Row(
