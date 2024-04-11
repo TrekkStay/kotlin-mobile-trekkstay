@@ -18,7 +18,6 @@ import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthViewMode
 import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthViewModel
 import com.trekkstay.hotel.feature.customer.presentation.activities.CustomerHomeScreen
 import com.trekkstay.hotel.feature.customer.presentation.activities.CustomerMainScreen
-import com.trekkstay.hotel.feature.gg_map.GGMap
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.HotelProfileScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.StartupScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelScreen
@@ -30,6 +29,7 @@ import com.trekkstay.hotel.feature.hotel.presentation.activities.SearchEngineScr
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.location.LocationViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.room.RoomViewModel
+import com.trekkstay.hotel.feature.notification.presentation.activities.CustomerNotificationScreen
 import com.trekkstay.hotel.feature.qr_scanner.QRScannerScreen
 import com.trekkstay.hotel.feature.reservation.presentation.activities.CustomerReservationScreen
 import com.trekkstay.hotel.feature.reservation.presentation.activities.HotelReservationScreen
@@ -91,7 +91,7 @@ fun CustomerRouter(navController: NavHostController) {
         }
         // Notifications
         composable(route = "customer_notifications") {
-            Text("Notifications")
+            CustomerNotificationScreen()
         }
         // Profile
         composable(route = "customer_profile") {

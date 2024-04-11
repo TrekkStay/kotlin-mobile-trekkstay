@@ -14,11 +14,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -28,7 +32,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -36,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.hotel.R
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.FacilityBullet
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
@@ -98,6 +105,37 @@ fun RoomDetailScreen() {
                     FacilityBullet(label = "Motorbike Rental")
                     FacilityBullet(label = "Fitness Center")
                     FacilityBullet(label = "Parking Area")
+                }
+                HorizontalDivider(color = TrekkStayCyan, thickness = 2.dp)
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp)
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Text(
+                            "$123",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp,
+                            fontFamily = PoppinsFontFamily,
+                            color = TrekkStayCyan
+                        )
+                    }
+                    Button(
+                        onClick = {
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF238C98)),
+                        modifier = Modifier
+                            .size(180.dp, 40.dp),
+                        shape = RoundedCornerShape(10.dp)
+                    ) {
+                        Icon(ImageVector.vectorResource(R.drawable.bed_ico), contentDescription = null)
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Text(text = "BOOK", color = Color.White, fontWeight = FontWeight.Bold)
+                    }
                 }
             }
         }
