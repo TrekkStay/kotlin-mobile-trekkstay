@@ -45,7 +45,16 @@ class RoomViewModel(private val hotelRepo: RoomRepo) : ViewModel() {
                         { _->  _state.postValue(RoomState.SuccessCreateRoom) }
                     )
                 }
-                is ViewRoomAction ->{}
+                is ViewRoomAction ->{
+                    _state.postValue(RoomState.ViewRoomCalling)
+                    val result = hotelRepo.viewRoom(
+                        action.hotelId,
+                    )
+                    result.fold(
+                        { failure -> _state.postValue(RoomState.InvalidViewRoom(failure.message)) },
+                        { success->  _state.postValue(RoomState.SuccessViewRoom(success)) }
+                    )
+                }
             }
         }
     }

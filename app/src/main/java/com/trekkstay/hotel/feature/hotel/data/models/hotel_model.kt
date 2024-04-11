@@ -44,15 +44,6 @@ data class HotelModel(
     @SerializedName("images") val images: List<String>,
 ) {
     companion object {
-        fun empty(): LocationModel {
-            return LocationModel(
-                code = "_empty.code",
-                nameVi ="_empty.name_vi",
-                nameEn ="_empty.name_en",
-                fullNameVi = "_empty.full_name_vi",
-                fullNameEn = "_empty.full_name_en"
-            )
-        }
 
         fun fromJson(source: String): HotelModel {
             val type = object : TypeToken<Map<String, Any>>() {}.type

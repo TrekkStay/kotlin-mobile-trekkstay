@@ -1,7 +1,10 @@
 package com.trekkstay.hotel.feature.hotel.domain.repositories
 
 
+import com.trekkstay.hotel.core.typedef.ResultFuture
 import com.trekkstay.hotel.core.typedef.ResultVoid
+import com.trekkstay.hotel.feature.hotel.domain.entities.RoomList
+
 interface RoomRepo {
     suspend fun createRoom(
         hotelId: String,
@@ -27,6 +30,11 @@ interface RoomRepo {
         discountRate: Int,
         originalPrice: Int
     ): ResultVoid
+
+    suspend fun viewRoom(
+        hotelId: String,
+    ): ResultFuture<RoomList>
+
 
 
 }

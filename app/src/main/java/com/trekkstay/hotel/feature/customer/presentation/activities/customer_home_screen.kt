@@ -57,7 +57,6 @@ fun CustomerHomeScreen(hotelViewModel: HotelViewModel,navController: NavHostCont
         }
 
         else -> {
-            // Handle other states
         }
     }
 

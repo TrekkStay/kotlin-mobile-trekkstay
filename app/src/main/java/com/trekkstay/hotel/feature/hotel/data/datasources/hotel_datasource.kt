@@ -132,7 +132,6 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
             val response = client.execute<Unit>(
                 request = request,
             )
-            println("${response.data} tried doing")
             response
         }
     }
@@ -159,7 +158,6 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
                     }
                 }
             )
-            println("${response.data} tried doing")
             response
         }
 
@@ -183,14 +181,12 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
                     }
                 }
             )
-            println("${response.data} view hotel tried doing")
             response
         }
 
     }
 
     private inline fun <reified T : Any> parseResponse(responseData: Any?): T? {
-        println("check for function call")
         return when (responseData) {
             is String -> responseData as? T
             is HotelListModel -> responseData.toEntity() as? T
