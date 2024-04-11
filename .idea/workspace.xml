@@ -9,9 +9,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0e28aad0-fb93-4b2a-8e7f-6cb21cc02950" name="Changes" comment="feat: hotel detail screen">
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+    <list default="true" id="0e28aad0-fb93-4b2a-8e7f-6cb21cc02950" name="Changes" comment="update: hotel detail screen">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/presentation/activities/hotel_detail_screen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/presentation/activities/hotel_detail_screen.kt" afterDir="false" />
     </list>
@@ -853,7 +851,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712762218923</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="update: hotel detail screen">
+      <option name="closed" value="true" />
+      <created>1712808010509</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1712808010509</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -901,6 +907,7 @@
     <MESSAGE value="feat: reservation screen for hotel" />
     <MESSAGE value="feat: startup screen for app" />
     <MESSAGE value="feat: hotel detail screen" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: hotel detail screen" />
+    <MESSAGE value="update: hotel detail screen" />
+    <option name="LAST_COMMIT_MESSAGE" value="update: hotel detail screen" />
   </component>
 </project>
