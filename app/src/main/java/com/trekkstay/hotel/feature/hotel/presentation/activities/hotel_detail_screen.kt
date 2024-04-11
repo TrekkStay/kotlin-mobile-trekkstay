@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
@@ -54,6 +55,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.hotel.R
+import com.trekkstay.hotel.feature.hotel.presentation.fragments.FacilityBullet
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
@@ -283,7 +285,7 @@ fun HotelDetailScreen() {
                         modifier = Modifier
                             .background(
                                 TrekkStayCyan,
-                                shape = RoundedCornerShape(30.dp)
+                                shape = CircleShape
                             )
                             .padding(15.dp)
                     )
@@ -364,38 +366,6 @@ fun HotelDetailScreen() {
         }
     }
 
-}
-
-@Composable
-fun FacilityBullet(label: String) {
-    val icon: ImageVector? = when (label) {
-        "Fitness Center" -> ImageVector.vectorResource(R.drawable.fitness_ico)
-        "Conference Room" -> ImageVector.vectorResource(R.drawable.conference_room_ico)
-        "Parking Area" -> ImageVector.vectorResource(R.drawable.parking_ico)
-        "Swimming Pool" -> ImageVector.vectorResource(R.drawable.pool_ico)
-        "Free Wifi" -> ImageVector.vectorResource(R.drawable.wifi_ico)
-        "Airport Transfer" -> ImageVector.vectorResource(R.drawable.airplane_ticket_ico)
-        "Motorbike Rental" -> ImageVector.vectorResource(R.drawable.motor_ico)
-        "Spa Service" -> ImageVector.vectorResource(R.drawable.spa_ico)
-        "Food Service" -> ImageVector.vectorResource(R.drawable.food_ico)
-        "Laundry Service" -> ImageVector.vectorResource(R.drawable.laundry_ico)
-        else -> null
-    }
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        if (icon != null) {
-            Icon(icon, contentDescription = null, tint = TrekkStayCyan)
-        }
-        Text(
-            text = label,
-            fontFamily = PoppinsFontFamily,
-            fontWeight = FontWeight.SemiBold,
-            color = Color.Black.copy(0.6f),
-            fontSize = 12.sp
-        )
-    }
 }
 
 @Composable
