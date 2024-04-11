@@ -35,23 +35,32 @@ class Client(private val engine: OkHttpClient) {
             try {
                 val response = engine.newCall(buildOkHttpRequest(request)).execute()
                 val responseBody = response.body?.string()
-                print(responseBody)
+                println(responseBody)
                 val jsonResponse = responseBody?.let { JSONObject(it) }
                 jsonResponse?.let { json ->
                     val data = json.opt("data")
+                    val status = json.optInt("status_code")
                     if (data != null) {
-                        print(data.toString())
+                        println(data.toString())
                     }
                     Response.whenResponse {
-                        if (response.isSuccessful && data != null) {
-                            success(response.header("status_code") ?: "201", response.message,  request.parser?.invoke(data.toString()))
+                        if (response.isSuccessful && status in 200..299 ) {
+                            if(data != null) {
+                                success(
+                                    status.toString(),
+                                    response.message,
+                                    request.parser?.invoke(data.toString())
+                                )
+                            }
+                            else{
+                                success(status.toString(),response.message,null)
+
+                            }
                         } else {
-                            val statusCode = response.header("status_code")
-                            val errorMessage = response.message
-                            if ((statusCode != null) && (statusCode.toIntOrNull() != null) && (statusCode.toInt() >= 400)) {
-                                invalid(statusCode, errorMessage)
+                            if ( (status in 300..499)) {
+                                invalid(status.toString(), response.message)
                             } else {
-                                failure(statusCode ?: "500", errorMessage)
+                                failure(status.toString(), response.message)
                             }
                         }
                     }

@@ -68,10 +68,7 @@ fun AppRouter(
         composable("hotel_main") {
             HotelScreen(hotelViewModel ,roomViewModel,locationViewModel,activity)
         }
-        composable("gg_map"){
-            GGMap(onMapClicked = { latLng ->
-                println("Clicked LatLng: $latLng") })
-        }
+
     }
 }
 
@@ -124,7 +121,6 @@ fun HotelRouter(hotelViewModel: HotelViewModel,roomViewModel: RoomViewModel,loca
                 activity
             )
         }
-//      Hotel Profile Screens
         composable(route = "hotel_profile") {
             HotelProfileScreen(navController)
         }

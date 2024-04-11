@@ -2,21 +2,15 @@ package com.trekkstay.hotel.feature.hotel.data.datasources
 
 
 import android.content.Context
-import androidx.compose.ui.platform.LocalContext
-import com.google.android.gms.maps.model.LatLng
 import com.trekkstay.hotel.core.network.client.Client
 import com.trekkstay.hotel.core.network.method.RequestMethod
 import com.trekkstay.hotel.core.network.request.RequestQuery
 import com.trekkstay.hotel.core.network.response.Response
 import com.trekkstay.hotel.core.storage.LocalStore
-import com.trekkstay.hotel.env.Env
 import com.trekkstay.hotel.feature.authenticate.data.models.EmployeeModel
 import com.trekkstay.hotel.feature.authenticate.data.models.LoginResModel
 import com.trekkstay.hotel.feature.authenticate.data.models.toEmployee
 import com.trekkstay.hotel.feature.authenticate.data.models.toLoginRes
-import com.trekkstay.hotel.feature.authenticate.domain.entities.Employee
-import com.trekkstay.hotel.feature.authenticate.domain.entities.LoginRes
-import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray

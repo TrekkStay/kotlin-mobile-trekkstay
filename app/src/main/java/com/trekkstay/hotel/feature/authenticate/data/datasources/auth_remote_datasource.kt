@@ -14,6 +14,7 @@ import com.trekkstay.hotel.feature.authenticate.domain.entities.LoginRes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
+import kotlin.random.Random
 
 interface AuthRemoteDataSource {
     suspend fun login(email: String, pass: String): Response<LoginRes>
@@ -64,7 +65,7 @@ class AuthRemoteDataSourceImpl(private val client: Client) : AuthRemoteDataSourc
             val requestBodyJson = JSONObject().apply {
                 put("full_name", name)
                 put("email", email)
-                put("phone", "")
+                put("phone", "0949222222")
                 put("password", pass)
             }
 
@@ -118,7 +119,7 @@ class AuthRemoteDataSourceImpl(private val client: Client) : AuthRemoteDataSourc
             val requestBodyJson = JSONObject().apply {
                 put("full_name", name)
                 put("email", email)
-                put("phone", "")
+                put("phone", "0949222${Random.nextInt(100, 999)}")
                 put("password", pass)
             }
 
