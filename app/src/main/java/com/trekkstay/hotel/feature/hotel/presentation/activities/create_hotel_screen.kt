@@ -66,6 +66,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import com.google.android.gms.maps.model.LatLng
+import com.trekkstay.hotel.feature.gg_map.GGMap
 import com.trekkstay.hotel.feature.hotel.domain.entities.Location
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.FacilityChip
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.HotelActionRow
@@ -90,6 +91,7 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
     var hotelDescription by remember { mutableStateOf(TextFieldValue()) }
     var checkInTime by remember { mutableStateOf("") }
     var checkOutTime by remember { mutableStateOf("") }
+    var selectedLatLng by remember { mutableStateOf(LatLng(0.0,0.0)) }
     val timeList = arrayOf("12:00", "12:30", "13:00", "13:30", "14:00")
     var selectedFacilities by remember { mutableStateOf(listOf<String>()) }
     val facilities = listOf("Airport Transfer",
@@ -118,6 +120,7 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
     val hotelState by hotelViewModel.state.observeAsState()
     val locationState by locationViewModel.state.observeAsState()
     var showDialog by remember { mutableStateOf(true) }
+    var showMap by remember {mutableStateOf(false)}
     when (locationState) {
         is LocationState.SuccessViewProvince -> {
             provinceList = (locationState as LocationState.SuccessViewProvince).locationList.locationList
@@ -228,247 +231,266 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
             .fillMaxHeight()
             .padding(bottom = 75.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .verticalScroll(rememberScrollState())
-        ) {
-            Spacer(modifier = Modifier.height(25.dp))
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(onClick = {
-                    navController.navigate("hotel_room_manage")
-                }) {
-                    Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = null)
-                }
-                Text(
-                    text = "Create Your Hotel",
-                    fontSize = 20.sp,
-                    fontFamily = PoppinsFontFamily,
-                    fontWeight = FontWeight.SemiBold,
-                )
-            }
-            Spacer(modifier = Modifier.height(10.dp))
-            HorizontalDivider(color = Color(0xFFE4E4E4), thickness = 3.dp)
+        if(showMap) {
+            GGMap(onMapClicked = {latLng ->
+                selectedLatLng= latLng
+                showMap =false
+            },)
+        }else{
             Column(
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-                modifier = Modifier.padding(horizontal = 25.dp, vertical = 20.dp)
-            ) {
-                InfoTextField(
-                    label = "Hotel Name",
-                    text = hotelName,
-                    onValueChange = { hotelName = it },
-                    icon = ImageVector.vectorResource(R.drawable.add_home_ico),
-                )
-                InfoTextField(
-                    label = "Hotel Email",
-                    text = hotelEmail,
-                    onValueChange = { hotelEmail = it },
-                    icon = Icons.Default.Email,
-                )
-                InfoTextField(
-                    label = "Hotel Phone",
-                    text = hotelPhone,
-                    onValueChange = { hotelPhone = it },
-                    icon = Icons.Default.Phone,
-                )
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    TimeDropDownMenu(
-                        widthSize = 170,
-                        title = "Check In",
-                        itemList = timeList,
-                        leadingIcon = ImageVector.vectorResource(R.drawable.time_ico),
-
-                                onItemSelected = { checkInTime = it}
-                    )
-                    TimeDropDownMenu(
-                        widthSize = 180,
-                        title = "Check Out",
-                        itemList = timeList,
-                        leadingIcon = ImageVector.vectorResource(R.drawable.time_ico),
-                        onItemSelected = { checkOutTime = it}
-                    )
-                }
-                HotelActionRow(
-                    label = "Hotel Location",
-                    leadingIcon = Icons.Default.Place,
-                    trailingIcon = ImageVector.vectorResource(R.drawable.map_ico),
-                    clickHandler = {
-                        //Open Google Maps
-                    }
-                )
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    DropDownMenu(widthSize = 115, title = "Province", itemList = provinceList,{ selectedProvince = it
-                        districtList = emptyList()
-                        selectedDistrict = null
-                        selectedWard = null
-                        wardList = emptyList()
-                        val action = ViewDistrictAction( it.code)
-                        locationViewModel.processAction(action)
-                    })
-                    DropDownMenu(widthSize = 115, title = "District", itemList = districtList,{ selectedDistrict = it
-                        selectedWard = null
-                        wardList = emptyList()
-                        val action = ViewWardAction( it.code)
-                        locationViewModel.processAction(action)})
-                    DropDownMenu(widthSize = 115, title = "Ward", itemList = wardList,{ selectedWard = it })
-                }
-                InfoTextField(
-                    label = "Address Detail",
-                    text = addressDetail,
-                    onValueChange = { addressDetail = it },
-                    icon = Icons.Default.Place,
-                )
-                HotelActionRow(
-                    label = "Video",
-                    leadingIcon = ImageVector.vectorResource(R.drawable.camera_ico),
-                    clickHandler = {
-                        //Upload Video
-                    }
-                )
-                HotelActionRow(
-                    label = "Image",
-                    leadingIcon = ImageVector.vectorResource(R.drawable.photo_ico),
-                    clickHandler = {
-                        photosPickerLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                    }
-                )
-                if (selectedImageUris.isNotEmpty()) {
-                    FlowRow(
-                        verticalArrangement = Arrangement.spacedBy(10.dp),
-                        horizontalArrangement = Arrangement.SpaceAround,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(5.dp))
-                            .background(Color(0xFFD9D9D9))
-                            .padding(vertical = 5.dp)
-
-                    ) {
-                        for (uri in selectedImageUris) {
-                            AsyncImage(
-                                model = uri,
-                                contentDescription = null,
-                                contentScale = ContentScale.FillBounds,
-                                modifier = Modifier
-                                    .size(160.dp, 100.dp)
-                                    .clip(RoundedCornerShape(10.dp))
-                            )
-                        }
-                    }
-                }
-                InfoTextField(
-                    label = "Description",
-                    text = hotelDescription,
-                    onValueChange = { hotelDescription = it },
-                    icon = Icons.Default.Info,
-                    maxLine = 6
-                )
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(5.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color(0xFFE4E4E4).copy(0.3f))
-                        .border(1.dp, TrekkStayBlue, shape = RoundedCornerShape(16.dp))
-                        .padding(20.dp)
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Menu,
-                            contentDescription = null,
-                            tint = TrekkStayBlue,
-                            modifier = Modifier.padding(horizontal = 10.dp)
-                        )
-                        Text(
-                            text = "Facilities",
-                            fontSize = 13.sp,
-                            fontFamily = PoppinsFontFamily,
-                            fontWeight = FontWeight.Medium,
-                            color = Color.Black.copy(0.6f)
-                        )
-                    }
-                    FlowRow(
-                        verticalArrangement = Arrangement.spacedBy(10.dp),
-                        horizontalArrangement = Arrangement.spacedBy(18.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 10.dp)
-                    ) {
-                        facilities.forEach { facility ->
-                            FacilityChip(
-                                label = facility,
-                                selected = facility in selectedFacilities,
-                                onSelectedChange = { isSelected ->
-                                    selectedFacilities = if (isSelected) {
-                                        selectedFacilities + facility
-                                    } else {
-                                        selectedFacilities - facility
-                                    }
-                                }
-                            )
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(5.dp))
-                }
-            }
-            Button(
-                onClick = {
-                    showDialog =true
-                    val filteredUris: List<Uri> = selectedImageUris.filterNotNull()
-                    val multipartParts: List<MultipartBody.Part> = convertToMultipart(filteredUris, context)
-
-                    val action = CreateHotelAction(
-                        name = hotelName.text,
-                        description = hotelDescription.text,
-                        airportTransfer = "Airport Transfer" in selectedFacilities,
-                        conferenceRoom = "Conference Room" in selectedFacilities,
-                        fitnessCenter = "Fitness Center" in selectedFacilities,
-                        foodService ="Food" in selectedFacilities,
-                        freeWifi ="Free Wifi" in selectedFacilities,
-                        laundryService = "Laundry" in selectedFacilities,
-                        motorBikeRental = "Motorbike Rental" in selectedFacilities,
-                        parkingArea = "Parking Area" in selectedFacilities,
-                        spaService  = "Spa" in selectedFacilities,
-                        swimmingPool =" Pool" in selectedFacilities,
-                        addressDetail = addressDetail.text,
-                        checkInTime = checkInTime,
-                        checkOutTime = checkOutTime,
-                        provinceCode = selectedProvince?.code ?:"",
-                        districtCode = selectedDistrict?.code ?: "",
-                        wardCode = selectedWard?.code ?:"",
-                        email = hotelEmail.text,
-                        phone = hotelPhone.text,
-                        videos = emptyList(),
-                        images = emptyList(),
-                        coordinates = LatLng(0.0,0.0),
-                    )
-                    hotelViewModel.processAction(action)
-                          },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = TrekkStayBlue,
-                    contentColor = Color.White
-                ),
-                contentPadding = PaddingValues(horizontal = 100.dp, vertical = 15.dp),
                 modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(5.dp),
-                shape = RoundedCornerShape(10.dp)
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
             ) {
-                Text(
-                    text = "Save Hotel",
-                    fontSize = 18.sp,
-                    fontFamily = PoppinsFontFamily,
-                    fontWeight = FontWeight.SemiBold
-                )
+                Spacer(modifier = Modifier.height(25.dp))
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    IconButton(onClick = {
+                        navController.navigate("hotel_room_manage")
+                    }) {
+                        Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = null)
+                    }
+                    Text(
+                        text = "Create Your Hotel",
+                        fontSize = 20.sp,
+                        fontFamily = PoppinsFontFamily,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+                HorizontalDivider(color = Color(0xFFE4E4E4), thickness = 3.dp)
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    modifier = Modifier.padding(horizontal = 25.dp, vertical = 20.dp)
+                ) {
+                    InfoTextField(
+                        label = "Hotel Name",
+                        text = hotelName,
+                        onValueChange = { hotelName = it },
+                        icon = ImageVector.vectorResource(R.drawable.add_home_ico),
+                    )
+                    InfoTextField(
+                        label = "Hotel Email",
+                        text = hotelEmail,
+                        onValueChange = { hotelEmail = it },
+                        icon = Icons.Default.Email,
+                    )
+                    InfoTextField(
+                        label = "Hotel Phone",
+                        text = hotelPhone,
+                        onValueChange = { hotelPhone = it },
+                        icon = Icons.Default.Phone,
+                    )
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        TimeDropDownMenu(
+                            widthSize = 170,
+                            title = "Check In",
+                            itemList = timeList,
+                            leadingIcon = ImageVector.vectorResource(R.drawable.time_ico),
+
+                            onItemSelected = { checkInTime = it }
+                        )
+                        TimeDropDownMenu(
+                            widthSize = 180,
+                            title = "Check Out",
+                            itemList = timeList,
+                            leadingIcon = ImageVector.vectorResource(R.drawable.time_ico),
+                            onItemSelected = { checkOutTime = it }
+                        )
+                    }
+                    HotelActionRow(
+                        label = if (selectedLatLng == LatLng(0.0, 0.0)) "Hotel Location" else "${selectedLatLng.latitude}:${selectedLatLng.longitude}",
+                        leadingIcon = Icons.Default.Place,
+                        trailingIcon = ImageVector.vectorResource(R.drawable.map_ico),
+                        clickHandler = {
+                            showMap = true
+                        }
+                    )
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        DropDownMenu(widthSize = 115, title = "Province", itemList = provinceList, {
+                            selectedProvince = it
+                            districtList = emptyList()
+                            selectedDistrict = null
+                            selectedWard = null
+                            wardList = emptyList()
+                            val action = ViewDistrictAction(it.code)
+                            locationViewModel.processAction(action)
+                        })
+                        DropDownMenu(widthSize = 115, title = "District", itemList = districtList, {
+                            selectedDistrict = it
+                            selectedWard = null
+                            wardList = emptyList()
+                            val action = ViewWardAction(it.code)
+                            locationViewModel.processAction(action)
+                        })
+                        DropDownMenu(
+                            widthSize = 115,
+                            title = "Ward",
+                            itemList = wardList,
+                            { selectedWard = it })
+                    }
+                    InfoTextField(
+                        label = "Address Detail",
+                        text = addressDetail,
+                        onValueChange = { addressDetail = it },
+                        icon = Icons.Default.Place,
+                    )
+                    HotelActionRow(
+                        label = "Video",
+                        leadingIcon = ImageVector.vectorResource(R.drawable.camera_ico),
+                        clickHandler = {
+                            //Upload Video
+                        }
+                    )
+                    HotelActionRow(
+                        label = "Image",
+                        leadingIcon = ImageVector.vectorResource(R.drawable.photo_ico),
+                        clickHandler = {
+                            photosPickerLauncher.launch(
+                                PickVisualMediaRequest(
+                                    ActivityResultContracts.PickVisualMedia.ImageOnly
+                                )
+                            )
+                        }
+                    )
+                    if (selectedImageUris.isNotEmpty()) {
+                        FlowRow(
+                            verticalArrangement = Arrangement.spacedBy(10.dp),
+                            horizontalArrangement = Arrangement.SpaceAround,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(5.dp))
+                                .background(Color(0xFFD9D9D9))
+                                .padding(vertical = 5.dp)
+
+                        ) {
+                            for (uri in selectedImageUris) {
+                                AsyncImage(
+                                    model = uri,
+                                    contentDescription = null,
+                                    contentScale = ContentScale.FillBounds,
+                                    modifier = Modifier
+                                        .size(160.dp, 100.dp)
+                                        .clip(RoundedCornerShape(10.dp))
+                                )
+                            }
+                        }
+                    }
+                    InfoTextField(
+                        label = "Description",
+                        text = hotelDescription,
+                        onValueChange = { hotelDescription = it },
+                        icon = Icons.Default.Info,
+                        maxLine = 6
+                    )
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(5.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color(0xFFE4E4E4).copy(0.3f))
+                            .border(1.dp, TrekkStayBlue, shape = RoundedCornerShape(16.dp))
+                            .padding(20.dp)
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Menu,
+                                contentDescription = null,
+                                tint = TrekkStayBlue,
+                                modifier = Modifier.padding(horizontal = 10.dp)
+                            )
+                            Text(
+                                text = "Facilities",
+                                fontSize = 13.sp,
+                                fontFamily = PoppinsFontFamily,
+                                fontWeight = FontWeight.Medium,
+                                color = Color.Black.copy(0.6f)
+                            )
+                        }
+                        FlowRow(
+                            verticalArrangement = Arrangement.spacedBy(10.dp),
+                            horizontalArrangement = Arrangement.spacedBy(18.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 10.dp)
+                        ) {
+                            facilities.forEach { facility ->
+                                FacilityChip(
+                                    label = facility,
+                                    selected = facility in selectedFacilities,
+                                    onSelectedChange = { isSelected ->
+                                        selectedFacilities = if (isSelected) {
+                                            selectedFacilities + facility
+                                        } else {
+                                            selectedFacilities - facility
+                                        }
+                                    }
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(5.dp))
+                    }
+                }
+                Button(
+                    onClick = {
+                        showDialog = true
+                        val filteredUris: List<Uri> = selectedImageUris.filterNotNull()
+                        val multipartParts: List<MultipartBody.Part> =
+                            convertToMultipart(filteredUris, context)
+
+                        val action = CreateHotelAction(
+                            name = hotelName.text,
+                            description = hotelDescription.text,
+                            airportTransfer = "Airport Transfer" in selectedFacilities,
+                            conferenceRoom = "Conference Room" in selectedFacilities,
+                            fitnessCenter = "Fitness Center" in selectedFacilities,
+                            foodService = "Food" in selectedFacilities,
+                            freeWifi = "Free Wifi" in selectedFacilities,
+                            laundryService = "Laundry" in selectedFacilities,
+                            motorBikeRental = "Motorbike Rental" in selectedFacilities,
+                            parkingArea = "Parking Area" in selectedFacilities,
+                            spaService = "Spa" in selectedFacilities,
+                            swimmingPool = " Pool" in selectedFacilities,
+                            addressDetail = addressDetail.text,
+                            checkInTime = checkInTime,
+                            checkOutTime = checkOutTime,
+                            provinceCode = selectedProvince?.code ?: "",
+                            districtCode = selectedDistrict?.code ?: "",
+                            wardCode = selectedWard?.code ?: "",
+                            email = hotelEmail.text,
+                            phone = hotelPhone.text,
+                            videos = emptyList(),
+                            images = emptyList(),
+                            coordinates = LatLng(0.0, 0.0),
+                        )
+                        hotelViewModel.processAction(action)
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = TrekkStayBlue,
+                        contentColor = Color.White
+                    ),
+                    contentPadding = PaddingValues(horizontal = 100.dp, vertical = 15.dp),
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(5.dp),
+                    shape = RoundedCornerShape(10.dp)
+                ) {
+                    Text(
+                        text = "Save Hotel",
+                        fontSize = 18.sp,
+                        fontFamily = PoppinsFontFamily,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
             }
         }
     }
