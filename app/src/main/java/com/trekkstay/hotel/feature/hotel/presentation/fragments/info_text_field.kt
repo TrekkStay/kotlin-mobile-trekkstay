@@ -29,15 +29,19 @@ import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 fun InfoTextField(
     label: String,
     text: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit,
     icon: ImageVector,
     type: String = "text",
     minLine: Int = 1,
     maxLine: Int = 1,
 ) {
-    var text by remember { mutableStateOf(text) }
+    var textFieldValue by remember { mutableStateOf(text) }
     OutlinedTextField(
-        value = text,
-        onValueChange = { text = it },
+        value = textFieldValue,
+        onValueChange = {
+            textFieldValue = it
+            onValueChange(it)
+        },
         label = {
             Text(
                 label,

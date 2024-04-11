@@ -45,6 +45,14 @@ class HotelViewModel(private val hotelRepo: HotelRepo) : ViewModel() {
                     )
                 }
                 is ViewHotelAction ->{}
+                is GetHotelIdAction ->{
+                    _state.postValue(HotelState.GetHotelIdCalling)
+                    val result = hotelRepo.getHotelId()
+                    result.fold(
+                        { failure -> _state.postValue(HotelState.InvalidGetHotelId(failure.message)) },
+                        { success->  _state.postValue(HotelState.SuccessGetHotelId(success)) }
+                    )
+                }
             }
         }
     }

@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -35,11 +36,15 @@ import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HotelRoomOptSelector() {
+fun HotelRoomOptSelector(
+    onBedNumChange: (Int) -> Unit,
+    onAdultNumberChange: (Int) -> Unit,
+    onChildNumberChange: (Int) -> Unit
+) {
     var isBotSheetVisible by remember { mutableStateOf(false) }
-    var bedNum by remember { mutableStateOf(1) }
-    var adultNumber by remember { mutableStateOf(1) }
-    var childNumber by remember { mutableStateOf(0) }
+    var bedNum by remember { mutableIntStateOf(1) }
+    var adultNumber by remember { mutableIntStateOf(1) }
+    var childNumber by remember { mutableIntStateOf(0) }
     val botSheetState = rememberModalBottomSheetState()
 
     Row(
@@ -63,7 +68,7 @@ fun HotelRoomOptSelector() {
                 .size(30.dp)
         )
         Text(
-            text = "${bedNum} Beds, ${adultNumber} Adults, ${childNumber} Children",
+            text = "$bedNum Beds, $adultNumber Adults, $childNumber Children",
             fontFamily = PoppinsFontFamily,
             fontWeight = FontWeight.Medium,
             fontSize = 13.sp,
@@ -79,18 +84,18 @@ fun HotelRoomOptSelector() {
                 OptionCounterRow(
                     label = "Bed",
                     count = bedNum,
-                    onIncrease = { bedNum += 1 },
-                    onDecrease = { if (bedNum > 1) bedNum -= 1 })
+                    onIncrease = { bedNum += 1; onBedNumChange(bedNum) },
+                    onDecrease = { if (bedNum > 1) {bedNum -= 1 ; onBedNumChange(bedNum) }})
                 OptionCounterRow(
                     label = "Adults",
                     count = adultNumber,
-                    onIncrease = { adultNumber += 1 },
-                    onDecrease = { if (adultNumber > 1) adultNumber -= 1 })
+                    onIncrease = { adultNumber += 1 ; onAdultNumberChange(adultNumber)},
+                    onDecrease = { if (adultNumber > 1) { adultNumber -= 1; onAdultNumberChange(adultNumber) } })
                 OptionCounterRow(
                     label = "Children",
                     count = childNumber,
-                    onIncrease = { childNumber += 1 },
-                    onDecrease = { if (childNumber > 0) childNumber -= 1 })
+                    onIncrease = { childNumber += 1;onChildNumberChange(childNumber) },
+                    onDecrease = { if (childNumber > 0) {childNumber -= 1 ; onChildNumberChange(childNumber)} })
                 Spacer(modifier = Modifier.size(30.dp))
             }
         }

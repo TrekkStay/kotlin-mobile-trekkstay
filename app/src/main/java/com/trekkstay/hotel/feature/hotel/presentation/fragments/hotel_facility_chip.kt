@@ -20,10 +20,9 @@ import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 @Composable
-fun FacilityChip(label: String) {
-    var selected by remember { mutableStateOf(false) }
+fun FacilityChip(label: String, selected: Boolean, onSelectedChange: (Boolean) -> Unit) {
     FilterChip(
-        onClick = { selected = !selected },
+        onClick = { onSelectedChange(!selected) },
         label = {
             Text(
                 label,

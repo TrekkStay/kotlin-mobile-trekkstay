@@ -1,6 +1,7 @@
 package com.trekkstay.hotel.feature.hotel.domain.repositories
 
 import com.google.android.gms.maps.model.LatLng
+import com.trekkstay.hotel.core.typedef.ResultFuture
 import com.trekkstay.hotel.core.typedef.ResultVoid
 
 interface HotelRepo {
@@ -29,4 +30,6 @@ interface HotelRepo {
         wardCode: String,
         addressDetail: String
     ): ResultVoid
+
+    suspend fun getHotelId(): ResultFuture<String>
 }

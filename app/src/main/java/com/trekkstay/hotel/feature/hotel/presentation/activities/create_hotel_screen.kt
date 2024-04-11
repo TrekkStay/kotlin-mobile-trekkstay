@@ -1,6 +1,9 @@
 package com.trekkstay.hotel.feature.hotel.presentation.activities
 
+import android.content.Context
+import android.database.Cursor
 import android.net.Uri
+import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -52,15 +55,22 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.hotel.R
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
+import com.google.android.gms.maps.model.LatLng
 import com.trekkstay.hotel.feature.hotel.domain.entities.Location
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.FacilityChip
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.HotelActionRow
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.InfoTextField
+import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.CreateHotelAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelState
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.location.LocationState
@@ -72,12 +82,26 @@ import com.trekkstay.hotel.feature.hotel.presentation.states.location.ViewWardAc
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: LocationViewModel, navController: NavHostController) {
-    val hotelName by remember { mutableStateOf(TextFieldValue()) }
-    val hotelEmail by remember { mutableStateOf(TextFieldValue()) }
-    val hotelPhone by remember { mutableStateOf(TextFieldValue()) }
-    val addressDetail by remember { mutableStateOf(TextFieldValue()) }
-    val hotelDescription by remember { mutableStateOf(TextFieldValue()) }
+    val context = LocalContext.current
+    var hotelName by remember { mutableStateOf(TextFieldValue()) }
+    var hotelEmail by remember { mutableStateOf(TextFieldValue()) }
+    var hotelPhone by remember { mutableStateOf(TextFieldValue()) }
+    var addressDetail by remember { mutableStateOf(TextFieldValue()) }
+    var hotelDescription by remember { mutableStateOf(TextFieldValue()) }
+    var checkInTime by remember { mutableStateOf("") }
+    var checkOutTime by remember { mutableStateOf("") }
     val timeList = arrayOf("12:00", "12:30", "13:00", "13:30", "14:00")
+    var selectedFacilities by remember { mutableStateOf(listOf<String>()) }
+    val facilities = listOf("Airport Transfer",
+    "Conference Room",
+    "Fitness Center",
+    "Food",
+    "Free Wifi",
+    "Laundry",
+    "Motorbike Rental",
+    "Parking Area",
+    "Spa",
+    "Pool")
 
     var selectedProvince by remember { mutableStateOf<Location?>(null) }
     var selectedDistrict by remember { mutableStateOf<Location?>(null) }
@@ -129,7 +153,17 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
         when (hotelState) {
             is HotelState.SuccessCreateHotel -> {
                 showDialog = true
-
+                AlertDialog(
+                    onDismissRequest = { showDialog = false },
+                    title = { Text("Create hotel success") },
+                    text = { Text("Create hotel $hotelName successful") },
+                    confirmButton = {},
+                    dismissButton = {
+                        Button(onClick = { showDialog = false }) {
+                            Text("OK")
+                        }
+                    }
+                )
             }
             is HotelState.InvalidCreateHotel -> {
                 showDialog = true
@@ -152,6 +186,35 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
                 // Handle other states
             }
         }
+    }
+
+    fun uriToFile(uri: Uri, context: Context): File? {
+        var filePath: String? = null
+        val projection = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor: Cursor? = context.contentResolver.query(uri, projection, null, null, null)
+        cursor?.use {
+            val columnIndex: Int = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            it.moveToFirst()
+            filePath = it.getString(columnIndex)
+        }
+        return filePath?.let { File(it) }
+    }
+
+    fun createPartFromFile(file: File): MultipartBody.Part {
+        val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData("image", file.name, requestFile)
+    }
+
+    fun convertToMultipart(selectedImageUris: List<Uri>, context: Context): List<MultipartBody.Part> {
+        val parts = mutableListOf<MultipartBody.Part>()
+        for (uri in selectedImageUris) {
+            val file = uriToFile(uri, context)
+            if (file != null) {
+                val part = createPartFromFile(file)
+                parts.add(part)
+            }
+        }
+        return parts
     }
 
     LaunchedEffect(Unit) {
@@ -196,16 +259,19 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
                 InfoTextField(
                     label = "Hotel Name",
                     text = hotelName,
+                    onValueChange = { hotelName = it },
                     icon = ImageVector.vectorResource(R.drawable.add_home_ico),
                 )
                 InfoTextField(
                     label = "Hotel Email",
                     text = hotelEmail,
+                    onValueChange = { hotelEmail = it },
                     icon = Icons.Default.Email,
                 )
                 InfoTextField(
                     label = "Hotel Phone",
                     text = hotelPhone,
+                    onValueChange = { hotelPhone = it },
                     icon = Icons.Default.Phone,
                 )
                 Row(
@@ -216,13 +282,16 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
                         widthSize = 170,
                         title = "Check In",
                         itemList = timeList,
-                        leadingIcon = ImageVector.vectorResource(R.drawable.time_ico)
+                        leadingIcon = ImageVector.vectorResource(R.drawable.time_ico),
+
+                                onItemSelected = { checkInTime = it}
                     )
                     TimeDropDownMenu(
                         widthSize = 180,
                         title = "Check Out",
                         itemList = timeList,
-                        leadingIcon = ImageVector.vectorResource(R.drawable.time_ico)
+                        leadingIcon = ImageVector.vectorResource(R.drawable.time_ico),
+                        onItemSelected = { checkOutTime = it}
                     )
                 }
                 HotelActionRow(
@@ -255,6 +324,7 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
                 InfoTextField(
                     label = "Address Detail",
                     text = addressDetail,
+                    onValueChange = { addressDetail = it },
                     icon = Icons.Default.Place,
                 )
                 HotelActionRow(
@@ -297,6 +367,7 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
                 InfoTextField(
                     label = "Description",
                     text = hotelDescription,
+                    onValueChange = { hotelDescription = it },
                     icon = Icons.Default.Info,
                     maxLine = 6
                 )
@@ -332,22 +403,56 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
                             .fillMaxWidth()
                             .padding(vertical = 10.dp)
                     ) {
-                        FacilityChip("Airport Transfer")
-                        FacilityChip("Conference Room")
-                        FacilityChip("Fitness Center")
-                        FacilityChip("Food")
-                        FacilityChip("Free Wifi")
-                        FacilityChip("Laundry")
-                        FacilityChip("Motorbike Rental")
-                        FacilityChip("Parking Area")
-                        FacilityChip("Spa")
-                        FacilityChip("Pool")
+                        facilities.forEach { facility ->
+                            FacilityChip(
+                                label = facility,
+                                selected = facility in selectedFacilities,
+                                onSelectedChange = { isSelected ->
+                                    selectedFacilities = if (isSelected) {
+                                        selectedFacilities + facility
+                                    } else {
+                                        selectedFacilities - facility
+                                    }
+                                }
+                            )
+                        }
                     }
                     Spacer(modifier = Modifier.height(5.dp))
                 }
             }
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    showDialog =true
+                    val filteredUris: List<Uri> = selectedImageUris.filterNotNull()
+                    val multipartParts: List<MultipartBody.Part> = convertToMultipart(filteredUris, context)
+
+                    val action = CreateHotelAction(
+                        name = hotelName.text,
+                        description = hotelDescription.text,
+                        airportTransfer = "Airport Transfer" in selectedFacilities,
+                        conferenceRoom = "Conference Room" in selectedFacilities,
+                        fitnessCenter = "Fitness Center" in selectedFacilities,
+                        foodService ="Food" in selectedFacilities,
+                        freeWifi ="Free Wifi" in selectedFacilities,
+                        laundryService = "Laundry" in selectedFacilities,
+                        motorBikeRental = "Motorbike Rental" in selectedFacilities,
+                        parkingArea = "Parking Area" in selectedFacilities,
+                        spaService  = "Spa" in selectedFacilities,
+                        swimmingPool =" Pool" in selectedFacilities,
+                        addressDetail = addressDetail.text,
+                        checkInTime = checkInTime,
+                        checkOutTime = checkOutTime,
+                        provinceCode = selectedProvince?.code ?:"",
+                        districtCode = selectedDistrict?.code ?: "",
+                        wardCode = selectedWard?.code ?:"",
+                        email = hotelEmail.text,
+                        phone = hotelPhone.text,
+                        videos = emptyList(),
+                        images = emptyList(),
+                        coordinates = LatLng(0.0,0.0),
+                    )
+                    hotelViewModel.processAction(action)
+                          },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = TrekkStayBlue,
                     contentColor = Color.White
@@ -376,6 +481,7 @@ fun TimeDropDownMenu(
     widthSize: Int,
     title: String,
     itemList: Array<String>,
+    onItemSelected: (String) -> Unit,
     leadingIcon: ImageVector? = null
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -426,6 +532,7 @@ fun TimeDropDownMenu(
                     onClick = {
                         selectedText = item
                         expanded = false
+                        onItemSelected(item)
                     }
                 )
             }
