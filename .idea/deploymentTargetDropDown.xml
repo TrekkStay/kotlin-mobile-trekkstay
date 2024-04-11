@@ -8,13 +8,13 @@
       <entry key="HotelDetailPreview">
         <State />
       </entry>
-      <entry key="HotelReservationCardPreview">
-        <State />
-      </entry>
       <entry key="ReservationPreview">
         <State />
       </entry>
       <entry key="RoomDetailPreview">
+        <State />
+      </entry>
+      <entry key="RoomManagementPreview">
         <State />
       </entry>
       <entry key="app">
