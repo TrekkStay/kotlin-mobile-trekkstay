@@ -26,6 +26,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.hotel.R
+import com.trekkstay.hotel.config.router.AppRouter
 import com.trekkstay.hotel.feature.authenticate.presentation.fragments.ProfileNavButton
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 
@@ -83,7 +84,9 @@ fun HotelProfileScreen(navController: NavHostController) {
                 ImageVector.vectorResource(R.drawable.discount_ico), type = "hotel"
             )
             ProfileNavButton("Change Password", ImageVector.vectorResource(R.drawable.key_ico), type = "hotel")
-            ProfileNavButton("Sign out", Icons.AutoMirrored.Filled.ExitToApp, type = "hotel")
+            ProfileNavButton("Sign out", Icons.AutoMirrored.Filled.ExitToApp, type = "hotel", onClick = {
+                AppRouter.navigateTo("start-up")
+            })
         }
     }
 }

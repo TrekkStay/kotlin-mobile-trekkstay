@@ -176,7 +176,6 @@ fun StartupScreen(navController: NavHostController) {
                     text = "BECOME A PARTNER WITH US!",
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
-                    textDecoration = TextDecoration.Underline,
                 )
             }
         }

@@ -3,7 +3,6 @@ package com.trekkstay.hotel.config.router
 import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -35,43 +34,68 @@ import com.trekkstay.hotel.feature.qr_scanner.QRScannerScreen
 import com.trekkstay.hotel.feature.reservation.presentation.activities.CustomerReservationScreen
 import com.trekkstay.hotel.feature.reservation.presentation.activities.HotelReservationScreen
 
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun AppRouter(
-    authStateManager: AuthViewModel,
-    empAuthStateManager: EmpAuthViewModel,
-    hotelViewModel: HotelViewModel,
-    roomViewModel: RoomViewModel,
-    locationViewModel: LocationViewModel,
-    activity: ComponentActivity,
-) {
-    val navController = rememberNavController()
+object AppRouter {
+    private var navController: NavHostController? = null
+    private lateinit var authStateManager: AuthViewModel
+    private lateinit var empAuthStateManager: EmpAuthViewModel
+    private lateinit var hotelViewModel: HotelViewModel
+    private lateinit var roomViewModel: RoomViewModel
+    private lateinit var locationViewModel: LocationViewModel
+    private lateinit var activity: ComponentActivity
 
-    NavHost(navController = navController, startDestination = "start-up") {
-        composable("start-up") {
-            StartupScreen(navController)
-        }
-        composable("login") {
-            LoginScreen(authStateManager,navController)
-        }
-        composable("emp_login") {
-            EmpLoginScreen(empAuthStateManager,navController)
-        }
-        composable("register") {
-            RegisterScreen(authStateManager,navController)
-        }
-        composable("emp_register") {
-            EmpRegisterScreen(empAuthStateManager,navController)
-        }
-        composable("customer_main") {
-            CustomerMainScreen(hotelViewModel)
-        }
-        composable("hotel_main") {
-            HotelScreen(hotelViewModel ,roomViewModel,locationViewModel,activity)
-        }
+    fun initialize(
+        authStateManager: AuthViewModel,
+        empAuthStateManager: EmpAuthViewModel,
+        hotelViewModel: HotelViewModel,
+        roomViewModel: RoomViewModel,
+        locationViewModel: LocationViewModel,
+        activity: ComponentActivity,
+        navController: NavHostController
+    ) {
+        this.authStateManager = authStateManager
+        this.empAuthStateManager = empAuthStateManager
+        this.hotelViewModel = hotelViewModel
+        this.roomViewModel = roomViewModel
+        this.locationViewModel = locationViewModel
+        this.activity = activity
+        this.navController = navController
+    }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    @Composable
+    fun Navigation() {
+        val navController = navController ?: rememberNavController()
+
+        NavHost(navController = navController, startDestination = "start-up") {
+            composable("start-up") {
+                StartupScreen(navController = navController)
+            }
+            composable("login") {
+                LoginScreen(authStateManager, navController = navController)
+            }
+            composable("emp_login") {
+                EmpLoginScreen(empAuthStateManager, navController = navController)
+            }
+            composable("register") {
+                RegisterScreen(authStateManager, navController = navController)
+            }
+            composable("emp_register") {
+                EmpRegisterScreen(empAuthStateManager, navController = navController)
+            }
+            composable("customer_main") {
+                CustomerMainScreen(hotelViewModel)
+            }
+            composable("hotel_main") {
+                HotelScreen(hotelViewModel, roomViewModel, locationViewModel, activity)
+            }
+        }
+    }
+
+    fun navigateTo(destination: String) {
+        navController?.navigate(destination)
     }
 }
+
 
 @Composable
 fun CustomerRouter(hotelViewModel: HotelViewModel,navController: NavHostController) {
