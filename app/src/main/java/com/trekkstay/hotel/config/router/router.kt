@@ -47,7 +47,7 @@ fun AppRouter(
 ) {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "hotel_main") {
+    NavHost(navController = navController, startDestination = "start-up") {
         composable("start-up") {
             StartupScreen(navController)
         }
@@ -118,7 +118,7 @@ fun HotelRouter(hotelViewModel: HotelViewModel,roomViewModel: RoomViewModel,loca
             HotelReservationScreen()
         }
         composable(route = "hotel_notifications") {
-            Text("Notifications")
+            CustomerNotificationScreen()
         }
         composable("hotel_QR") {
             QRScannerScreen(
