@@ -3,6 +3,7 @@ package com.trekkstay.hotel.feature.hotel.presentation.activities
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
@@ -36,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
@@ -43,14 +46,16 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.hotel.R
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.InfoTextField
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.RoomDetailCard
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 @Composable
-fun BookingDetailScreen() {
+fun BookingDetailScreen(navController: NavController) {
 
     var name by remember { mutableStateOf(TextFieldValue()) }
     var email by remember { mutableStateOf(TextFieldValue()) }
@@ -71,7 +76,11 @@ fun BookingDetailScreen() {
                     .fillMaxWidth()
                     .padding(horizontal = 15.dp, vertical = 20.dp)
             ) {
-                Icon(Icons.Default.ArrowBack, contentDescription = null)
+                Icon(
+                    Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null,
+                    Modifier.clickable{
+                        navController.popBackStack()
+                    })
                 Text(
                     text = "Booking Detail",
                     fontFamily = PoppinsFontFamily,
@@ -83,6 +92,7 @@ fun BookingDetailScreen() {
             }
 
             Column(
+                horizontalAlignment = Alignment.CenterHorizontally  ,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 25.dp, vertical = 5.dp)
@@ -101,7 +111,14 @@ fun BookingDetailScreen() {
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center
                     )
+
                 }
+                Image(
+                    painter = painterResource(id = R.drawable.qr_scanner),
+                    modifier = Modifier
+                        .size(200.dp),
+                    contentDescription = "QR"
+                )
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -206,7 +223,7 @@ fun BookingDetailScreen() {
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Button(
+                /*Button(
                     onClick = {
                         // Handle button click
                     },
@@ -221,17 +238,11 @@ fun BookingDetailScreen() {
                         color = Color.White,
                         fontWeight = FontWeight.Bold
                     )
-                }
+                }*/
             }
         }
 
     }
 
 
-}
-
-@Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
-@Composable
-fun BookingDetailPreview() {
-    BookingDetailScreen()
 }

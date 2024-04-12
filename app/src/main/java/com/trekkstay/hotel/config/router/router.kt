@@ -20,6 +20,7 @@ import com.trekkstay.hotel.feature.customer.presentation.activities.CustomerHome
 import com.trekkstay.hotel.feature.customer.presentation.activities.CustomerMainScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.HotelProfileScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.StartupScreen
+import com.trekkstay.hotel.feature.hotel.presentation.activities.BookingDetailScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateHotelScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateRoomScreen
@@ -110,6 +111,9 @@ fun HotelRouter(hotelViewModel: HotelViewModel,roomViewModel: RoomViewModel,loca
         composable(route = "hotel_home") {
             HotelHomeScreen(hotelViewModel= hotelViewModel,navController = navController)
         }
+        composable(route = "booking_detail"){
+            BookingDetailScreen(navController = navController)
+        }
         composable(route = "hotel_reservations") {
             HotelReservationScreen()
         }
@@ -118,6 +122,7 @@ fun HotelRouter(hotelViewModel: HotelViewModel,roomViewModel: RoomViewModel,loca
         }
         composable("hotel_QR") {
             QRScannerScreen(
+                navController= navController,
                 activity
             )
         }

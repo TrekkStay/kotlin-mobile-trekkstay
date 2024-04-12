@@ -15,21 +15,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavController
 import com.example.hotel.R
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanIntentResult
@@ -37,7 +32,7 @@ import com.journeyapps.barcodescanner.ScanOptions
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun QRScannerScreen(activity: ComponentActivity) {
+fun QRScannerScreen(navController: NavController,activity: ComponentActivity) {
     val textResult = remember { mutableStateOf("") }
 
     val barCodeLauncher = rememberLauncherForActivityResult(ScanContract()) { result ->
@@ -45,6 +40,7 @@ fun QRScannerScreen(activity: ComponentActivity) {
             Toast.makeText(activity, "Cancelled", Toast.LENGTH_SHORT).show()
         } else {
             textResult.value = result.contents
+            navController.navigate("booking_detail")
         }
     }
 
@@ -68,9 +64,7 @@ fun QRScannerScreen(activity: ComponentActivity) {
         }
     }
 
-    Scaffold(
-
-    ) { innerPadding ->
+    Scaffold { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -85,11 +79,7 @@ fun QRScannerScreen(activity: ComponentActivity) {
                     .clickable { checkCameraPermission() },
                 contentDescription = "QR"
             )
-            Text(
-                text = textResult.value,
-                fontSize = 30.sp,
-                fontWeight = FontWeight.Bold
-            )
+
         }
     }
 }
