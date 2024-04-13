@@ -14,22 +14,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.trekkstay.hotel.feature.notification.presentation.fragments.NotificationCard
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
-import com.trekkstay.hotel.ui.theme.TrekkStayCyan
+import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 @Composable
-fun CustomerNotificationScreen() {
+fun HotelNotificationScreen() {
     Column(
         modifier = Modifier.padding(top = 25.dp, bottom = 90.dp)
     ) {
         Text(
             text = "Notification",
             fontSize = 20.sp,
-            color = TrekkStayCyan,
+            color = TrekkStayBlue,
             fontFamily = PoppinsFontFamily,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier
@@ -68,10 +67,4 @@ fun CustomerNotificationScreen() {
             NotificationCard("discount", "Ehiz hotel offers 30% discount")
         }
     }
-}
-
-@Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
-@Composable
-fun CustomerNotiPreview() {
-    CustomerNotificationScreen()
 }

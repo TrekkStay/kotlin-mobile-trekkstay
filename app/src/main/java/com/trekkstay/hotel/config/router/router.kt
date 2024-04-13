@@ -30,6 +30,7 @@ import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewMode
 import com.trekkstay.hotel.feature.hotel.presentation.states.location.LocationViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.room.RoomViewModel
 import com.trekkstay.hotel.feature.notification.presentation.activities.CustomerNotificationScreen
+import com.trekkstay.hotel.feature.notification.presentation.activities.HotelNotificationScreen
 import com.trekkstay.hotel.feature.qr_scanner.QRScannerScreen
 import com.trekkstay.hotel.feature.reservation.presentation.activities.CustomerReservationScreen
 import com.trekkstay.hotel.feature.reservation.presentation.activities.HotelReservationScreen
@@ -142,7 +143,7 @@ fun HotelRouter(hotelViewModel: HotelViewModel,roomViewModel: RoomViewModel,loca
             HotelReservationScreen()
         }
         composable(route = "hotel_notifications") {
-            CustomerNotificationScreen()
+            HotelNotificationScreen()
         }
         composable("hotel_QR") {
             QRScannerScreen(

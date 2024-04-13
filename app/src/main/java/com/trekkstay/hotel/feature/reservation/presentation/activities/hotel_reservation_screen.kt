@@ -18,6 +18,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Tab
@@ -43,12 +44,13 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun HotelReservationScreen() {
-    Column {
-        Spacer(modifier = Modifier.height(25.dp))
+    Column (
+        modifier = Modifier.padding(top = 15.dp)
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 20.dp, end = 20.dp),
+                .padding(horizontal = 25.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -56,6 +58,7 @@ fun HotelReservationScreen() {
                 text = "Reservation",
                 fontFamily = PoppinsFontFamily,
                 fontWeight = FontWeight.SemiBold,
+                color = TrekkStayBlue,
                 fontSize = 20.sp
             )
             IconButton(onClick = { /*TODO*/ }) {
@@ -66,7 +69,8 @@ fun HotelReservationScreen() {
                 )
             }
         }
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(5.dp))
+        HorizontalDivider(color = Color(0xFFE4E4E4), thickness = 2.dp)
         HotelReservationTabsRow()
     }
 }
@@ -83,7 +87,7 @@ private fun HotelReservationTabsRow() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 10.dp, end = 10.dp)
+            .padding(top = 10.dp,start = 10.dp, end = 10.dp)
     ) {
         TabRow(
             divider = {},

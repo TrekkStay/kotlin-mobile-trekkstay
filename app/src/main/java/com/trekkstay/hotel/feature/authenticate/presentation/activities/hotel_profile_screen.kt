@@ -29,6 +29,7 @@ import com.example.hotel.R
 import com.trekkstay.hotel.config.router.AppRouter
 import com.trekkstay.hotel.feature.authenticate.presentation.fragments.ProfileNavButton
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
+import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 @Composable
 fun HotelProfileScreen(navController: NavHostController) {
@@ -38,6 +39,7 @@ fun HotelProfileScreen(navController: NavHostController) {
             text = "My account",
             fontSize = 20.sp,
             fontFamily = PoppinsFontFamily,
+            color = TrekkStayBlue,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier
                 .fillMaxWidth()

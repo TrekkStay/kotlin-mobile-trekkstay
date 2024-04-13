@@ -25,14 +25,17 @@ import com.example.hotel.R
 import com.trekkstay.hotel.config.router.AppRouter
 import com.trekkstay.hotel.feature.authenticate.presentation.fragments.ProfileNavButton
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
+import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @Composable
 fun CustomerProfileScreen(navController: NavHostController) {
-    Column {
-        Spacer(modifier = Modifier.height(25.dp))
+    Column (
+        modifier = Modifier.padding(top = 25.dp)
+    ) {
         Text(
             text = "My account",
             fontSize = 20.sp,
+            color = TrekkStayCyan,
             fontFamily = PoppinsFontFamily,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier
