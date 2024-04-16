@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -30,9 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import com.trekkstay.hotel.feature.hotel.domain.entities.Location
 import com.trekkstay.hotel.feature.hotel.domain.entities.Room
-import com.trekkstay.hotel.feature.hotel.domain.entities.RoomList
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.HotelRoomCard
 import com.trekkstay.hotel.feature.hotel.presentation.states.room.GetHotelRoomAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.room.RoomState
@@ -42,8 +41,8 @@ import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 @Composable
-fun HotelRoomManageScreen(roomViewModel: RoomViewModel,navController: NavHostController) {
-    var roomList : List<Room> = emptyList()
+fun HotelRoomManageScreen(roomViewModel: RoomViewModel, navController: NavHostController) {
+    var roomList: List<Room> = emptyList()
 
     val roomState by roomViewModel.state.observeAsState()
     LaunchedEffect(Unit) {
@@ -57,24 +56,30 @@ fun HotelRoomManageScreen(roomViewModel: RoomViewModel,navController: NavHostCon
             val action = ViewRoomAction((roomState as RoomState.SuccessGetHotelRoom).id)
             roomViewModel.processAction(action)
         }
+
         is RoomState.InvalidGetHotelRoom -> {
 
 
         }
+
         is RoomState.GetHotelRoomCalling -> {
 
         }
+
         is RoomState.SuccessViewRoom -> {
             roomList = (roomState as RoomState.SuccessViewRoom).roomList.roomList
 
         }
+
         is RoomState.InvalidViewRoom -> {
 
 
         }
+
         is RoomState.ViewRoomCalling -> {
 
         }
+
         else -> {
             // Handle other states
         }
@@ -119,19 +124,42 @@ fun HotelRoomManageScreen(roomViewModel: RoomViewModel,navController: NavHostCon
                     fontSize = 20.sp
                 )
             }
-            Column(
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 15.dp,vertical = 10.dp)
-                    .verticalScroll(rememberScrollState())
-            ) {
-                roomList.forEach { room ->
-                    HotelRoomCard(
-                        room
+            if (roomList.isEmpty()) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Text(
+                        text = "There is no room in your hotel yet.",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        fontFamily = PoppinsFontFamily,
+                        color = Color.Gray
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Text(
+                        text = "Tap the + button to add a new room.",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        fontFamily = PoppinsFontFamily,
+                        color = Color.Gray
                     )
                 }
-
+            } else {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 15.dp, vertical = 10.dp)
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    roomList.forEach { room ->
+                        HotelRoomCard(
+                            room
+                        )
+                    }
+                }
             }
         }
     }
