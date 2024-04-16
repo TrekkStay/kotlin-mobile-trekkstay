@@ -20,9 +20,11 @@ import com.trekkstay.hotel.feature.customer.presentation.activities.CustomerMain
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.HotelProfileScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.StartupScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.BookingDetailScreen
+import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateEmpScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateHotelScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateRoomScreen
+import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelEmpListScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelHomeScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelRoomManageScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.SearchEngineScreen
@@ -162,6 +164,12 @@ fun HotelRouter(hotelViewModel: HotelViewModel,roomViewModel: RoomViewModel,loca
         }
         composable("hotel_room_create") {
             CreateRoomScreen(hotelViewModel,roomViewModel,navController)
+        }
+        composable(route = "hotel_emp_list") {
+            HotelEmpListScreen(navController)
+        }
+        composable("hotel_emp_create") {
+            CreateEmpScreen(navController)
         }
     }
 }

@@ -1,7 +1,5 @@
 package com.trekkstay.hotel.feature.authenticate.presentation.activities
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,7 +18,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -31,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,7 +38,6 @@ import com.trekkstay.hotel.core.storage.LocalStore
 import com.trekkstay.hotel.feature.authenticate.presentation.states.*
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 import com.trekkstay.hotel.ui.theme.black
-
 
 @Composable
 fun LoginScreen(viewModel: AuthViewModel, navController: NavHostController) {
@@ -157,7 +154,8 @@ fun LoginScreen(viewModel: AuthViewModel, navController: NavHostController) {
                 },
                 trailingIcon = {
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                        var passVisibleIco = (if (passwordVisible) R.drawable.eye_off_ico else R.drawable.eye_ico)
+                        val passVisibleIco =
+                            (if (passwordVisible) R.drawable.eye_off_ico else R.drawable.eye_ico)
                         Icon(ImageVector.vectorResource(passVisibleIco), contentDescription = null)
                     }
                 },
@@ -171,18 +169,17 @@ fun LoginScreen(viewModel: AuthViewModel, navController: NavHostController) {
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             )
             Spacer(modifier = Modifier.height(32.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Start
-            ) {
-                Text(
-                    text = "Forgot password?",
-                    color = TrekkStayCyan,
-                    fontSize = 14.sp,
-                    modifier = Modifier.clickable { /*TODO*/ },
-                    textDecoration = TextDecoration.Underline
-                )
-            }
+            Text(
+                text = "Forgot password?",
+                textAlign = TextAlign.End,
+                color = TrekkStayCyan,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Medium,
+                textDecoration = TextDecoration.Underline,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { /*TODO*/ }
+            )
             Spacer(modifier = Modifier.height(32.dp))
             Button(
                 onClick = {
@@ -229,14 +226,6 @@ fun LoginScreen(viewModel: AuthViewModel, navController: NavHostController) {
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-
-            }
-            Spacer(modifier = Modifier.height(32.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
                 Text(
                     text = "Doesn't have an account? ",
                     color = black,
@@ -259,23 +248,5 @@ fun LoginScreen(viewModel: AuthViewModel, navController: NavHostController) {
 
 
         }
-    }
-}
-
-
-@Composable
-fun SocialButton(imageVector: ImageVector) {
-    Box(
-        modifier = Modifier
-            .size(48.dp)
-            .clip(shape = MaterialTheme.shapes.medium)
-            .border(BorderStroke(1.dp, Color.Gray), shape = MaterialTheme.shapes.medium),
-        contentAlignment = Alignment.Center
-    ) {
-        Icon(
-            imageVector = imageVector,
-            contentDescription = null,
-            tint = Color(0xFF333333)
-        )
     }
 }

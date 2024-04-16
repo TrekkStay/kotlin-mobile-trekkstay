@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -153,7 +154,8 @@ fun EmpLoginScreen(viewModel: EmpAuthViewModel, navController: NavHostController
                 },
                 trailingIcon = {
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                        var passVisibleIco = (if (passwordVisible) R.drawable.eye_off_ico else R.drawable.eye_ico)
+                        val passVisibleIco =
+                            (if (passwordVisible) R.drawable.eye_off_ico else R.drawable.eye_ico)
                         Icon(ImageVector.vectorResource(passVisibleIco), contentDescription = null)
                     }
                 },
@@ -167,18 +169,15 @@ fun EmpLoginScreen(viewModel: EmpAuthViewModel, navController: NavHostController
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             )
             Spacer(modifier = Modifier.height(32.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Start
-            ) {
-                Text(
-                    text = "Forgot password?",
-                    color = TrekkStayBlue,
-                    fontSize = 14.sp,
-                    modifier = Modifier.clickable { /*TODO*/ },
-                    textDecoration = TextDecoration.Underline
-                )
-            }
+            Text(
+                text = "Forgot password?",
+                textAlign = TextAlign.End,
+                fontWeight = FontWeight.Medium,
+                color = TrekkStayBlue,
+                fontSize = 15.sp,
+                textDecoration = TextDecoration.Underline,
+                modifier = Modifier.fillMaxWidth().clickable { /*TODO*/ }
+            )
             Spacer(modifier = Modifier.height(32.dp))
             Button(
                 onClick = {

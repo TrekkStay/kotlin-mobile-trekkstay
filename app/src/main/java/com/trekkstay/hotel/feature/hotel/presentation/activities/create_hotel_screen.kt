@@ -565,7 +565,7 @@ fun TimeDropDownMenu(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DropDownMenu(
+private fun DropDownMenu(
     widthSize: Int,
     title: String,
     itemList: List<Location>,

@@ -76,7 +76,11 @@ fun HotelProfileScreen(navController: NavHostController) {
                         launchSingleTop = true
                     }
                 })
-            ProfileNavButton("Staff Management", Icons.Default.AccountBox, type = "hotel")
+            ProfileNavButton("Staff Management", Icons.Default.AccountBox, type = "hotel", onClick = {
+                navController.navigate("hotel_emp_list") {
+                    popUpTo(navController.graph.findStartDestination().id)
+                }
+            })
             ProfileNavButton(
                 "Statistic Report",
                 ImageVector.vectorResource(R.drawable.bar_chart_ico), type = "hotel"
