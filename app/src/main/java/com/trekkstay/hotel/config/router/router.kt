@@ -8,6 +8,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.CustomerProfileScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.EmpLoginScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.EmpRegisterScreen
@@ -19,14 +21,18 @@ import com.trekkstay.hotel.feature.customer.presentation.activities.CustomerHome
 import com.trekkstay.hotel.feature.customer.presentation.activities.CustomerMainScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.HotelProfileScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.StartupScreen
+import com.trekkstay.hotel.feature.hotel.domain.entities.Hotel
+import com.trekkstay.hotel.feature.hotel.domain.entities.Room
 import com.trekkstay.hotel.feature.hotel.presentation.activities.BookingDetailScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateEmpScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateHotelScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateRoomScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelEmpListScreen
+import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelDetailScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelHomeScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelRoomManageScreen
+import com.trekkstay.hotel.feature.hotel.presentation.activities.RoomDetailScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.SearchEngineScreen
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.location.LocationViewModel
@@ -69,7 +75,7 @@ object AppRouter {
     fun Navigation() {
         val navController = navController ?: rememberNavController()
 
-        NavHost(navController = navController, startDestination = "start-up") {
+        NavHost(navController = navController, startDestination = "hotel_main") {
             composable("start-up") {
                 StartupScreen(navController = navController)
             }
@@ -159,8 +165,24 @@ fun HotelRouter(hotelViewModel: HotelViewModel,roomViewModel: RoomViewModel,loca
         composable("hotel_create"){
             CreateHotelScreen(hotelViewModel,locationViewModel, navController)
         }
+        composable(route = "hotel_detail/{hotelId}") { backStackEntry ->
+
+            val id = backStackEntry.arguments?.getString("hotelId")
+
+            if (id != null) {
+                HotelDetailScreen(navController,hotelViewModel, id)
+            }
+        }
         composable(route = "hotel_room_manage") {
             HotelRoomManageScreen(roomViewModel,navController)
+        }
+        composable(route = "hotel_room_detail/{roomJson}") { backStackEntry ->
+            println(backStackEntry.arguments)
+            val roomJson = backStackEntry.arguments?.getString("roomJson")
+            val roomType = object : TypeToken<Room>() {}.type
+            val gson = Gson()
+            val room = gson.fromJson<Room>(roomJson, roomType)
+            RoomDetailScreen(navController, room)
         }
         composable("hotel_room_create") {
             CreateRoomScreen(hotelViewModel,roomViewModel,navController)

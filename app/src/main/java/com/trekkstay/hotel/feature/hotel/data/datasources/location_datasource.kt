@@ -44,7 +44,6 @@ class LocationRemoteDataSourceImpl(private val client: Client) : LocationRemoteD
 
 
             )
-            println("${response.data} tried doing")
             response
         }
     }
@@ -70,7 +69,6 @@ class LocationRemoteDataSourceImpl(private val client: Client) : LocationRemoteD
                 }
             )
 
-            println("${response.data} tried province doing")
             response
         }
     }
@@ -97,13 +95,11 @@ class LocationRemoteDataSourceImpl(private val client: Client) : LocationRemoteD
 
 
             )
-            println("${response.data} tried doing")
             response
         }
     }
 
     private inline fun <reified T : Any> parseResponse(responseData: Any?): T? {
-        println("check for function call")
         return when (responseData) {
             is LocationListModel -> responseData.toEntity() as? T
             else -> null

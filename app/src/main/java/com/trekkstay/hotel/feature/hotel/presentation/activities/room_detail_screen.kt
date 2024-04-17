@@ -27,13 +27,19 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import com.trekkstay.hotel.feature.hotel.domain.entities.Room
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.RoomDetailCard
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @Composable
-fun RoomDetailScreen() {
-    var hotelName = "Ruby Saigon Hotel - Ben Thanh"
+fun RoomDetailScreen(
+    navController: NavHostController,
+    room: Room
+) {
+    val hotelName = "Ruby Saigon Hotel - Ben Thanh"
     Box(
         modifier = Modifier
             .fillMaxHeight()
@@ -47,10 +53,7 @@ fun RoomDetailScreen() {
                     rememberScrollState()
                 )
         ) {
-            RoomDetailCard()
-            RoomDetailCard()
-            RoomDetailCard()
-            RoomDetailCard()
+            RoomDetailCard(room)
         }
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -66,6 +69,7 @@ fun RoomDetailScreen() {
                 .align(Alignment.TopCenter)
         ) {
             IconButton(onClick = {
+                navController.popBackStack()
             }) {
                 Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = null)
             }
@@ -82,12 +86,4 @@ fun RoomDetailScreen() {
             )
         }
     }
-}
-
-
-
-@Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
-@Composable
-fun RoomDetailPreview() {
-    RoomDetailScreen()
 }

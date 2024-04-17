@@ -347,22 +347,22 @@ fun CreateRoomScreen(hotelViewModel: HotelViewModel,roomViewModel: RoomViewModel
                         originalPrice =price.text.toIntOrNull() ?: 0,
                         images = emptyList(),
                         videos = emptyList(),
-                        airConditioner = "Air Condition" in facilities,
-                        bathTub =  "Bath Tub" in facilities,
-                        shower =  "Shower" in facilities,
-                        balcony = "Balcony" in facilities,
-                        hairDryer = "Hair Dryer" in facilities,
-                        kitchen = "Kitchen" in facilities,
-                        television = "Television" in facilities,
-                        slippers = "Slippers" in facilities,
-                        nonSmoking = "Smoking" in facilities,
+                        airConditioner = "Air Condition" in selectedFacilities,
+                        bathTub =  "Bath Tub" in selectedFacilities,
+                        shower =  "Shower" in selectedFacilities,
+                        balcony = "Balcony" in selectedFacilities,
+                        hairDryer = "Hair Dryer" in selectedFacilities,
+                        kitchen = "Kitchen" in selectedFacilities,
+                        television = "Television" in selectedFacilities,
+                        slippers = "Slippers" in selectedFacilities,
+                        nonSmoking = "Smoking" in selectedFacilities,
                         view = view.text,
                         roomSize = roomSize.text.toIntOrNull() ?: 0,
                         numberOfBed = selectedBedNum,
                         adults = selectedAdultNumber,
                         children = selectedChildNumber
                     )
-                    roomViewModel.processAction(action)
+                        roomViewModel.processAction(action)
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = TrekkStayBlue,

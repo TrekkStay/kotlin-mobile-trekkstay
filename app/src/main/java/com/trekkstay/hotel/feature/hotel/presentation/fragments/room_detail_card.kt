@@ -46,26 +46,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.hotel.R
+import com.trekkstay.hotel.feature.hotel.domain.entities.Room
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun RoomDetailCard() {
-    var roomType = "Superior Double or Twin Room"
-    var roomDesc =
-        "The car parking and the Wi-Fi are always free, so you can stay in touch and come and go as you please. Conveniently situated in the Phú Nhuận part of Ho Chi Minh City, this property puts you close to attractions and interesting dining options. Don't leave before paying a visit to the famous War Remnants Museum. Rated with 5 stars, this high-quality property provides guests with access to massage, restaurant and hot tub on-site."
-    var adultNum = 2
-    var childNum = 0
-    var bedNum = 2
-    var roomSize = 5.0
-    var roomView = "Sea View"
+fun RoomDetailCard(
+    room: Room
+) {
     var roomImgList = arrayOf(
         "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/880ae3c6-0414-481b-aead-5968a48a560d/dfuky40-bbfeb6ac-8675-4cf7-a0b0-4bdbbc0299d4.png/v1/fill/w_512,h_512,q_80,strp/a_i__art___pretty_girl_by_draxionmufara_dfuky40-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NTEyIiwicGF0aCI6IlwvZlwvODgwYWUzYzYtMDQxNC00ODFiLWFlYWQtNTk2OGE0OGE1NjBkXC9kZnVreTQwLWJiZmViNmFjLTg2NzUtNGNmNy1hMGIwLTRiZGJiYzAyOTlkNC5wbmciLCJ3aWR0aCI6Ijw9NTEyIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.CYceDA6vX83Rkq_rhdV3Q4ObSpHylffYnDMvoY6i2x8",
         "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/880ae3c6-0414-481b-aead-5968a48a560d/dfuky40-bbfeb6ac-8675-4cf7-a0b0-4bdbbc0299d4.png/v1/fill/w_512,h_512,q_80,strp/a_i__art___pretty_girl_by_draxionmufara_dfuky40-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NTEyIiwicGF0aCI6IlwvZlwvODgwYWUzYzYtMDQxNC00ODFiLWFlYWQtNTk2OGE0OGE1NjBkXC9kZnVreTQwLWJiZmViNmFjLTg2NzUtNGNmNy1hMGIwLTRiZGJiYzAyOTlkNC5wbmciLCJ3aWR0aCI6Ijw9NTEyIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.CYceDA6vX83Rkq_rhdV3Q4ObSpHylffYnDMvoY6i2x8",
         "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/880ae3c6-0414-481b-aead-5968a48a560d/dfuky40-bbfeb6ac-8675-4cf7-a0b0-4bdbbc0299d4.png/v1/fill/w_512,h_512,q_80,strp/a_i__art___pretty_girl_by_draxionmufara_dfuky40-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NTEyIiwicGF0aCI6IlwvZlwvODgwYWUzYzYtMDQxNC00ODFiLWFlYWQtNTk2OGE0OGE1NjBkXC9kZnVreTQwLWJiZmViNmFjLTg2NzUtNGNmNy1hMGIwLTRiZGJiYzAyOTlkNC5wbmciLCJ3aWR0aCI6Ijw9NTEyIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.CYceDA6vX83Rkq_rhdV3Q4ObSpHylffYnDMvoY6i2x8"
     )
-    var roomPrice = 123.0
     var expandedDesc by remember { mutableStateOf(false) }
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
@@ -93,7 +87,7 @@ fun RoomDetailCard() {
             }
         }
         Text(
-            text = roomType,
+            text = room.type,
             fontSize = 15.sp,
             fontFamily = PoppinsFontFamily,
             fontWeight = FontWeight.Medium,
@@ -112,27 +106,27 @@ fun RoomDetailCard() {
             RoomInfoRow(
                 icon = ImageVector.vectorResource(R.drawable.people_ico),
                 label = "Adults",
-                value = "$adultNum"
+                value = "${room.facilities.sleepRoom.adults}"
             )
             RoomInfoRow(
                 icon = ImageVector.vectorResource(R.drawable.child_ico),
                 label = "Children",
-                value = "$childNum"
+                value = "${room.facilities.sleepRoom.children}"
             )
             RoomInfoRow(
                 icon = ImageVector.vectorResource(R.drawable.bed_ico),
                 label = "Beds",
-                value = "$bedNum"
+                value = "${room.facilities.numBed}"
             )
             RoomInfoRow(
                 icon = ImageVector.vectorResource(R.drawable.size_ico),
                 label = "m2",
-                value = "$roomSize"
+                value = "${room.facilities.roomSize}"
             )
             RoomInfoRow(
                 icon = ImageVector.vectorResource(R.drawable.eye_ico),
                 label = "",
-                value = roomView
+                value = room.facilities.view
             )
         }
         HorizontalDivider(color = Color(0xFFB8B8B9), thickness = 2.dp)
@@ -168,7 +162,7 @@ fun RoomDetailCard() {
                 )
             }
             Text(
-                roomDesc,
+                room.description,
                 textAlign = TextAlign.Justify,
                 fontFamily = PoppinsFontFamily,
                 fontSize = 12.sp,
@@ -194,12 +188,15 @@ fun RoomDetailCard() {
                     .fillMaxWidth()
                     .padding(vertical = 10.dp)
             ) {
-                FacilityBullet(label = "Air Condition")
-                FacilityBullet(label = "Kitchen")
-                FacilityBullet(label = "Television")
-                FacilityBullet(label = "Balcony")
-                FacilityBullet(label = "Fitness Center")
-                FacilityBullet(label = "Parking Area")
+                if(room.facilities.airConditioner){FacilityBullet(label = "Air Condition")}
+                if(room.facilities.kitchen){FacilityBullet(label = "Kitchen")}
+                if(room.facilities.television){FacilityBullet(label = "Television")}
+                if(room.facilities.balcony){FacilityBullet(label = "Balcony")}
+                if(room.facilities.bathTub){FacilityBullet(label = "Bathtub")}
+                if(room.facilities.hairDryer){FacilityBullet(label = "Hairdryer")}
+                if(room.facilities.shower){FacilityBullet(label = "Shower")}
+                if(room.facilities.nonSmoking) {FacilityBullet(label = "Non Smoking")}
+                if(room.facilities.slippers) {FacilityBullet(label = "Slippers")}
             }
         }
         HorizontalDivider(color = TrekkStayCyan, thickness = 2.dp)
@@ -213,7 +210,7 @@ fun RoomDetailCard() {
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    "$$roomPrice",
+                    "$${room.originalPrice}",
                     fontWeight = FontWeight.Bold,
                     fontSize = 24.sp,
                     fontFamily = PoppinsFontFamily,

@@ -33,11 +33,21 @@ data class HotelModel(
 ) {
     companion object {
 
+        private fun JSONObject.toMap(): Map<String, Any> {
+            val map = mutableMapOf<String, Any>()
+            val keysItr = keys()
+
+            while (keysItr.hasNext()) {
+                val key = keysItr.next()
+                val value = getString(key)
+                map[key] = value
+            }
+
+            return map
+        }
         fun fromJson(source: String): HotelModel {
-
-            val type = object : TypeToken<Map<String, Any>>() {}.type
-            val map: Map<String, Any> = Gson().fromJson(source, type)
-
+            val jsonObject = JSONObject(source)
+            val map = jsonObject.toMap()
             return fromMap(map)
         }
 
@@ -45,7 +55,6 @@ data class HotelModel(
         fun fromMap(map: DataMap): HotelModel {
             val type = object : TypeToken<Map<String, Any>>() {}.type
             val coordinates: Map<String, Any> = Gson().fromJson(map["coordinates"].toString(), type)
-
             return HotelModel(
                 id = map["id"] as? String ?: "",
                 name = map["name"] as? String ?: "",
@@ -75,6 +84,8 @@ data class HotelModel(
 
 
 fun HotelModel.toEntity(): Hotel {
+    println(id)
+    println(HotelModel)
     return Hotel(
         id = id,
         name = name,

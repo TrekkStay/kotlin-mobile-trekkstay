@@ -144,6 +144,7 @@ class RoomRemoteDataSourceImpl(private val client: Client, private val context: 
 
             val response = client.execute<RoomList>(request = request,parser = { responseData ->
                 if (responseData is String) {
+
                     parseResponse(RoomListModel.fromJson(responseData))
                 } else {
                     null

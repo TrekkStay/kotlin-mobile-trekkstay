@@ -27,15 +27,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.hotel.R
+import com.google.gson.Gson
 import com.trekkstay.hotel.feature.hotel.domain.entities.Room
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 @Composable
 fun HotelRoomCard(
-    room : Room
+    room : Room, navController: NavHostController
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -44,8 +46,9 @@ fun HotelRoomCard(
             .background(Color.White, shape = RoundedCornerShape(10.dp))
             .border(2.dp, TrekkStayBlue, shape = RoundedCornerShape(10.dp))
             .padding(15.dp)
-            .clickable {
-                //Navigate to edit room
+            .clickable {val gson = Gson()
+                val roomJson = gson.toJson(room)
+                navController.navigate("hotel_room_detail/$roomJson")
             }
     ) {
         Box(
