@@ -1,5 +1,6 @@
 package com.trekkstay.hotel.feature.hotel.presentation.states.hotel
 
+import com.trekkstay.hotel.feature.hotel.domain.entities.Hotel
 import com.trekkstay.hotel.feature.hotel.domain.entities.HotelList
 import com.trekkstay.hotel.feature.hotel.domain.entities.LocationList
 
@@ -19,6 +20,9 @@ sealed class HotelState {
     data class SuccessViewHotel(val list: HotelList) : HotelState()
 
 
+    object HotelDetailCalling : HotelState()
+    data class InvalidHotelDetail(val message: String) : HotelState()
+    data class SuccessHotelDetail(val hotel: Hotel) : HotelState()
 
     data class AuthenticateError(val message: String) : HotelState()
 }

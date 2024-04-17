@@ -292,7 +292,6 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
                             title = "Check In",
                             itemList = timeList,
                             leadingIcon = ImageVector.vectorResource(R.drawable.time_ico),
-
                             onItemSelected = { checkInTime = it }
                         )
                         TimeDropDownMenu(
@@ -470,7 +469,7 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
                             phone = hotelPhone.text,
                             videos = emptyList(),
                             images = emptyList(),
-                            coordinates = LatLng(0.0, 0.0),
+                            coordinates = selectedLatLng,
                         )
                         hotelViewModel.processAction(action)
                     },

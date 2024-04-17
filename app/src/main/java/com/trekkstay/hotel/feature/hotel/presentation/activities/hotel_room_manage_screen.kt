@@ -146,7 +146,7 @@ fun HotelRoomManageScreen(roomViewModel: RoomViewModel, navController: NavHostCo
                         color = Color.Gray
                     )
                 }
-            } else {
+            }else {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                     modifier = Modifier
@@ -156,7 +156,8 @@ fun HotelRoomManageScreen(roomViewModel: RoomViewModel, navController: NavHostCo
                 ) {
                     roomList.forEach { room ->
                         HotelRoomCard(
-                            room
+                            room,
+                            navController
                         )
                     }
                 }

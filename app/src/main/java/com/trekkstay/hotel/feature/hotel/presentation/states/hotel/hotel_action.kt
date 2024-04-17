@@ -32,5 +32,8 @@ data class CreateHotelAction(
 
 object ViewHotelAction : HotelAction()
 
-
 object GetHotelIdAction:HotelAction()
+
+data class HotelDetailAction(
+    val id: String
+):HotelAction()

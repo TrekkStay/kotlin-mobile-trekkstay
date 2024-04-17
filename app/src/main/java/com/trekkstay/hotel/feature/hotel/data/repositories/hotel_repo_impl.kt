@@ -10,6 +10,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.trekkstay.hotel.core.typedef.ResultFuture
 import com.trekkstay.hotel.core.typedef.ResultVoid
 import com.trekkstay.hotel.feature.hotel.data.datasources.HotelRemoteDataSource
+import com.trekkstay.hotel.feature.hotel.domain.entities.Hotel
 import com.trekkstay.hotel.feature.hotel.domain.entities.HotelList
 import com.trekkstay.hotel.feature.hotel.domain.repositories.HotelRepo
 
@@ -74,6 +75,16 @@ class HotelRepoImpl(private val remoteDataSource: HotelRemoteDataSource) : Hotel
 
     override suspend fun getHotelId(): ResultFuture<String>{
         return when (val response = remoteDataSource.getHotelId())
+        {
+            is Response.Success -> response.data!!.right()
+            is Response.Invalid -> ApiInvalid(response.message ?: "Unknown error", response.status ?: "-1").left()
+            is Response.Failure -> throw ApiException(response.message ?: "Unknown error", response.status ?: "-1")
+        }
+
+    }
+
+    override suspend fun hotelDetail(id:String): ResultFuture<Hotel>{
+        return when (val response = remoteDataSource.hotelDetail(id))
         {
             is Response.Success -> response.data!!.right()
             is Response.Invalid -> ApiInvalid(response.message ?: "Unknown error", response.status ?: "-1").left()

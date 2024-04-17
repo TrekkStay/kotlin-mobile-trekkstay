@@ -1,7 +1,6 @@
 package com.trekkstay.hotel.feature.customer.presentation.fragments
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,17 +27,17 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelState
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.ViewHotelAction
-import com.trekkstay.hotel.feature.hotel.presentation.states.room.GetHotelRoomAction
-import com.trekkstay.hotel.feature.hotel.presentation.states.room.RoomState
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 import kotlinx.coroutines.launch
 
 @Composable
-fun HotelTabsRow(hotelViewModel: HotelViewModel) {
+fun HotelTabsRow(hotelViewModel: HotelViewModel,navController: NavHostController) {
     val hotelTabs = arrayOf("Nearby", "Recommended", "Popular", "Most Searched")
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = { hotelTabs.size })
@@ -115,18 +114,10 @@ fun HotelTabsRow(hotelViewModel: HotelViewModel) {
                         ) {
                             items(endIndex - startIndex) { index ->
                                 val hotel = hotels[startIndex + index]
-                                val roomPrice = if (hotel.room.isNotEmpty()) {
-                                    hotel.room.first().originalPrice
-                                } else {
 
-                                    1
-                                }
                                 HotelCard(
-                                    name = hotel.name,
-                                    destination = hotel.addressDetail,
-                                    rating = 5.0,
-                                    price = roomPrice,
-                                    imgUrl = "https://www.usatoday.com/gcdn/-mm-/05b227ad5b8ad4e9dcb53af4f31d7fbdb7fa901b/c=0-64-2119-1259/local/-/media/USATODAY/USATODAY/2014/08/13/1407953244000-177513283.jpg?width=1320&height=746&fit=crop&format=pjpg&auto=webp"
+                                hotel,
+                                    navController
                                 )
                             }
                         }
@@ -191,7 +182,7 @@ fun HotelTabsRow(hotelViewModel: HotelViewModel) {
                 HorizontalPager(
                     modifier = Modifier.fillMaxSize(),
                     state = pagerState,
-                ) { page ->
+                ) {
 
                     LazyRow(
                         horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -199,13 +190,7 @@ fun HotelTabsRow(hotelViewModel: HotelViewModel) {
                     ) {
                         items(5) {
 
-                            HotelCard(
-                                name = "...",
-                                destination = "...",
-                                rating = 0.0,
-                                price = 0,
-                                imgUrl = "https://www.usatoday.com/gcdn/-mm-/05b227ad5b8ad4e9dcb53af4f31d7fbdb7fa901b/c=0-64-2119-1259/local/-/media/USATODAY/USATODAY/2014/08/13/1407953244000-177513283.jpg?width=1320&height=746&fit=crop&format=pjpg&auto=webp"
-                            )
+                            HotelCard(navController =navController)
                         }
                     }
                 }
@@ -266,21 +251,15 @@ fun HotelTabsRow(hotelViewModel: HotelViewModel) {
                 HorizontalPager(
                     modifier = Modifier.fillMaxSize(),
                     state = pagerState,
-                ) { page ->
+                ) {
 
-                        LazyRow(
+                    LazyRow(
                             horizontalArrangement = Arrangement.spacedBy(10.dp),
                             contentPadding = PaddingValues(5.dp)
                         ) {
                             items(5) {
 
-                                HotelCard(
-                                    name = "...",
-                                    destination = "...",
-                                    rating = 0.0,
-                                    price = 0,
-                                    imgUrl = "https://www.usatoday.com/gcdn/-mm-/05b227ad5b8ad4e9dcb53af4f31d7fbdb7fa901b/c=0-64-2119-1259/local/-/media/USATODAY/USATODAY/2014/08/13/1407953244000-177513283.jpg?width=1320&height=746&fit=crop&format=pjpg&auto=webp"
-                                )
+                                HotelCard(navController = navController)
                             }
                         }
                     }

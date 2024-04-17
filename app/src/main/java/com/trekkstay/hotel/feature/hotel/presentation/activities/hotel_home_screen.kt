@@ -171,7 +171,7 @@ fun HotelHomeScreen(hotelViewModel: HotelViewModel,navController: NavHostControl
             }
         }
         Spacer(modifier = Modifier.height(10.dp))
-        HotelTabsRow(hotelViewModel = hotelViewModel)
+        HotelTabsRow(hotelViewModel = hotelViewModel,navController)
         Text(
             text = "See all",
             textAlign = TextAlign.End,

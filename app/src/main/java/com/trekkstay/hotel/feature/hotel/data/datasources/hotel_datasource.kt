@@ -10,7 +10,9 @@ import com.trekkstay.hotel.core.network.request.RequestQuery
 import com.trekkstay.hotel.core.network.response.Response
 import com.trekkstay.hotel.core.storage.LocalStore
 import com.trekkstay.hotel.feature.hotel.data.models.HotelListModel
+import com.trekkstay.hotel.feature.hotel.data.models.HotelModel
 import com.trekkstay.hotel.feature.hotel.data.models.toEntity
+import com.trekkstay.hotel.feature.hotel.domain.entities.Hotel
 import com.trekkstay.hotel.feature.hotel.domain.entities.HotelList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -44,11 +46,16 @@ interface HotelRemoteDataSource {
                             ): Response<Unit>
     suspend fun getHotelId(): Response<String>
     suspend fun viewHotel(): Response<HotelList>
+    suspend fun hotelDetail(
+        id:String
+    ): Response<Hotel>
 }
 
 const val createHotelEndpoint = "hotel/create"
 const val getHotelIdEndpoint = "hotel/my-hotel"
 const val viewHotelEndpoint = "hotel/filter"
+const val hotelDetailEndpoint = "hotel/"
+
 
 class HotelRemoteDataSourceImpl(private val client: Client, private val context: Context) : HotelRemoteDataSource {
 
@@ -180,6 +187,31 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
                     }
                 }
             )
+            println("${response.data} tried doing")
+            response
+        }
+
+    }
+
+    override suspend fun hotelDetail(id:String): Response<Hotel> {
+        return withContext(Dispatchers.IO) {
+            val request = RequestQuery(
+                method = RequestMethod.GET,
+                path = "http://52.163.61.213:8888/api/v1/$hotelDetailEndpoint$id",
+                requestBody = null,
+            )
+
+            val response = client.execute<Hotel>(
+                request = request,
+                parser = { responseData ->
+                    if (responseData is String) {
+                        parseResponse(HotelModel.fromJson(responseData))
+                    } else {
+                        null
+                    }
+                }
+            )
+
             response
         }
 
@@ -189,6 +221,7 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
         return when (responseData) {
             is String -> responseData as? T
             is HotelListModel -> responseData.toEntity() as? T
+            is HotelModel -> responseData.toEntity() as? T
             else -> null
         }
     }
