@@ -324,7 +324,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:$PROJECT_DIR$/../../../../../../Android/sdk/icons/material/materialiconstwotone/content_paste/twotone_content_paste_24.xml" />
+                                      <entry key="url" value="file:$PROJECT_DIR$/../../../../../../Android/sdk/icons/material/materialiconstwotone/filter_list/twotone_filter_list_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -334,7 +334,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="contract_ico" />
+                            <entry key="outputName" value="filter_list_ico" />
                           </map>
                         </option>
                       </PersistentState>

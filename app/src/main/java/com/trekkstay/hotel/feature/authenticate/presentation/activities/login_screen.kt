@@ -245,8 +245,6 @@ fun LoginScreen(viewModel: AuthViewModel, navController: NavHostController) {
                     }
                 )
             }
-
-
         }
     }
 }

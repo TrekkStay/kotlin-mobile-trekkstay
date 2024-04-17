@@ -88,6 +88,7 @@ fun SearchResultScreen() {
                 .padding(horizontal = 15.dp)
         ) {
             CustomerSortHotel()
+
         }
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(10.dp),
