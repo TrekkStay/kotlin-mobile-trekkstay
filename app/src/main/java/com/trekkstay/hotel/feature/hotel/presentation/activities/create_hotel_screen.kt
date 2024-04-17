@@ -1,9 +1,9 @@
 package com.trekkstay.hotel.feature.hotel.presentation.activities
 
+import android.content.ContentResolver
 import android.content.Context
-import android.database.Cursor
 import android.net.Uri
-import android.provider.MediaStore
+import android.webkit.MimeTypeMap
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -61,9 +61,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.hotel.R
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import com.google.android.gms.maps.model.LatLng
 import com.trekkstay.hotel.feature.gg_map.GGMap
@@ -71,7 +68,6 @@ import com.trekkstay.hotel.feature.hotel.domain.entities.Location
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.FacilityChip
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.HotelActionRow
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.InfoTextField
-import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.CreateHotelAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelState
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.location.LocationState
@@ -79,11 +75,16 @@ import com.trekkstay.hotel.feature.hotel.presentation.states.location.LocationVi
 import com.trekkstay.hotel.feature.hotel.presentation.states.location.ViewProvinceAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.location.ViewDistrictAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.location.ViewWardAction
+import com.trekkstay.hotel.feature.hotel.presentation.states.media.MediaState
+import com.trekkstay.hotel.feature.hotel.presentation.states.media.MediaViewModel
+import com.trekkstay.hotel.feature.hotel.presentation.states.media.UploadMediaAction
+import java.io.FileOutputStream
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: LocationViewModel, navController: NavHostController) {
+fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: LocationViewModel, mediaViewModel: MediaViewModel,navController: NavHostController) {
     val context = LocalContext.current
+    val contentResolver = context.contentResolver
     var hotelName by remember { mutableStateOf(TextFieldValue()) }
     var hotelEmail by remember { mutableStateOf(TextFieldValue()) }
     var hotelPhone by remember { mutableStateOf(TextFieldValue()) }
@@ -105,6 +106,22 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
     "Spa",
     "Pool")
 
+    fun queryFile(context: Context, uri: Uri): File {
+        val inputStream = context.contentResolver.openInputStream(uri)
+        val outputFile = File(context.cacheDir, "temp_file")
+        inputStream?.use { input ->
+            FileOutputStream(outputFile).use { output ->
+                input.copyTo(output)
+            }
+        }
+        return outputFile
+    }
+    fun getFileExtension(uri: Uri, contentResolver: ContentResolver): String {
+        val mimeTypeMap = MimeTypeMap.getSingleton()
+        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri)) ?: ""
+    }
+
+
     var selectedProvince by remember { mutableStateOf<Location?>(null) }
     var selectedDistrict by remember { mutableStateOf<Location?>(null) }
     var selectedWard by remember { mutableStateOf<Location?>(null) }
@@ -113,14 +130,50 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
     var wardList : List<Location> = emptyList()
     var selectedImageUris by remember { mutableStateOf<List<Uri?>>(emptyList()) }
     val photosPickerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickMultipleVisualMedia(),
-        onResult = { selectedImageUris = it }
-    )
+        contract = ActivityResultContracts.PickMultipleVisualMedia()
+    ) { uris ->
+        selectedImageUris = uris
+
+        val selectedFiles = uris.map { uri ->
+            queryFile(context,uri)
+        }
+        val fileExtensions = uris.map{
+                uri ->
+            getFileExtension(uri, contentResolver)
+        }
+        println(fileExtensions)
+
+        val mediaAction = UploadMediaAction(
+            selectedFiles,
+            fileExtensions
+        )
+
+        mediaViewModel.processAction(mediaAction)
+    }
+
+
+
+
 
     val hotelState by hotelViewModel.state.observeAsState()
     val locationState by locationViewModel.state.observeAsState()
+    val mediaState by mediaViewModel.state.observeAsState()
     var showDialog by remember { mutableStateOf(true) }
     var showMap by remember {mutableStateOf(false)}
+
+    when (mediaState){
+        is MediaState.SuccessUploadMedia -> {
+            println((mediaState as MediaState.SuccessUploadMedia).media.media)
+        }
+        is MediaState.InvalidUploadMedia -> {
+
+        }
+        is MediaState.UploadMediaCalling -> {
+        }
+        else ->{
+
+        }
+    }
     when (locationState) {
         is LocationState.SuccessViewProvince -> {
             provinceList = (locationState as LocationState.SuccessViewProvince).locationList.locationList
@@ -191,34 +244,7 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
         }
     }
 
-    fun uriToFile(uri: Uri, context: Context): File? {
-        var filePath: String? = null
-        val projection = arrayOf(MediaStore.Images.Media.DATA)
-        val cursor: Cursor? = context.contentResolver.query(uri, projection, null, null, null)
-        cursor?.use {
-            val columnIndex: Int = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-            it.moveToFirst()
-            filePath = it.getString(columnIndex)
-        }
-        return filePath?.let { File(it) }
-    }
 
-    fun createPartFromFile(file: File): MultipartBody.Part {
-        val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-        return MultipartBody.Part.createFormData("image", file.name, requestFile)
-    }
-
-    fun convertToMultipart(selectedImageUris: List<Uri>, context: Context): List<MultipartBody.Part> {
-        val parts = mutableListOf<MultipartBody.Part>()
-        for (uri in selectedImageUris) {
-            val file = uriToFile(uri, context)
-            if (file != null) {
-                val part = createPartFromFile(file)
-                parts.add(part)
-            }
-        }
-        return parts
-    }
 
     LaunchedEffect(Unit) {
         val action = ViewProvinceAction
@@ -442,11 +468,8 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
                 Button(
                     onClick = {
                         showDialog = true
-                        val filteredUris: List<Uri> = selectedImageUris.filterNotNull()
-                        val multipartParts: List<MultipartBody.Part> =
-                            convertToMultipart(filteredUris, context)
 
-                        val action = CreateHotelAction(
+                        /*val action = CreateHotelAction(
                             name = hotelName.text,
                             description = hotelDescription.text,
                             airportTransfer = "Airport Transfer" in selectedFacilities,
@@ -471,7 +494,13 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
                             images = emptyList(),
                             coordinates = selectedLatLng,
                         )
+
                         hotelViewModel.processAction(action)
+                        */
+
+
+
+
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = TrekkStayBlue,

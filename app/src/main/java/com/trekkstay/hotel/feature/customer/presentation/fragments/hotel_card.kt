@@ -180,7 +180,7 @@ fun HotelCard(
                     )
                 }
                 Text(
-                    text = "$$0/night",
+                    text = "$0/night",
                     fontSize = 11.sp,
                     fontFamily = PoppinsFontFamily,
                     fontWeight = FontWeight.Medium

@@ -36,6 +36,7 @@ import com.trekkstay.hotel.feature.hotel.presentation.activities.RoomDetailScree
 import com.trekkstay.hotel.feature.hotel.presentation.activities.SearchEngineScreen
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.location.LocationViewModel
+import com.trekkstay.hotel.feature.hotel.presentation.states.media.MediaViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.room.RoomViewModel
 import com.trekkstay.hotel.feature.notification.presentation.activities.CustomerNotificationScreen
 import com.trekkstay.hotel.feature.notification.presentation.activities.HotelNotificationScreen
@@ -50,6 +51,7 @@ object AppRouter {
     private lateinit var hotelViewModel: HotelViewModel
     private lateinit var roomViewModel: RoomViewModel
     private lateinit var locationViewModel: LocationViewModel
+    private lateinit var mediaViewModel: MediaViewModel
     private lateinit var activity: ComponentActivity
 
     fun initialize(
@@ -58,6 +60,7 @@ object AppRouter {
         hotelViewModel: HotelViewModel,
         roomViewModel: RoomViewModel,
         locationViewModel: LocationViewModel,
+        mediaViewModel: MediaViewModel,
         activity: ComponentActivity,
         navController: NavHostController
     ) {
@@ -66,6 +69,7 @@ object AppRouter {
         this.hotelViewModel = hotelViewModel
         this.roomViewModel = roomViewModel
         this.locationViewModel = locationViewModel
+        this.mediaViewModel = mediaViewModel
         this.activity = activity
         this.navController = navController
     }
@@ -95,7 +99,8 @@ object AppRouter {
                 CustomerMainScreen(hotelViewModel)
             }
             composable("hotel_main") {
-                HotelScreen(hotelViewModel, roomViewModel, locationViewModel, activity)
+                HotelScreen(hotelViewModel, roomViewModel, locationViewModel,
+                    mediaViewModel, activity)
             }
         }
     }
@@ -136,7 +141,7 @@ fun CustomerRouter(hotelViewModel: HotelViewModel,navController: NavHostControll
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HotelRouter(hotelViewModel: HotelViewModel,roomViewModel: RoomViewModel,locationViewModel: LocationViewModel,navController: NavHostController,activity: ComponentActivity) {
+fun HotelRouter(hotelViewModel: HotelViewModel,roomViewModel: RoomViewModel,locationViewModel: LocationViewModel,mediaViewModel: MediaViewModel,navController: NavHostController,activity: ComponentActivity) {
     NavHost(
         navController = navController,
         startDestination = "hotel_home"
@@ -163,7 +168,7 @@ fun HotelRouter(hotelViewModel: HotelViewModel,roomViewModel: RoomViewModel,loca
             HotelProfileScreen(navController)
         }
         composable("hotel_create"){
-            CreateHotelScreen(hotelViewModel,locationViewModel, navController)
+            CreateHotelScreen(hotelViewModel,locationViewModel, mediaViewModel,navController)
         }
         composable(route = "hotel_detail/{hotelId}") { backStackEntry ->
 

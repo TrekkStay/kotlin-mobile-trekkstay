@@ -187,7 +187,6 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
                     }
                 }
             )
-            println("${response.data} tried doing")
             response
         }
 

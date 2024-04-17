@@ -15,24 +15,31 @@ import com.trekkstay.hotel.feature.hotel.data.datasources.HotelRemoteDataSource
 import com.trekkstay.hotel.feature.hotel.data.datasources.HotelRemoteDataSourceImpl
 import com.trekkstay.hotel.feature.hotel.data.datasources.LocationRemoteDataSource
 import com.trekkstay.hotel.feature.hotel.data.datasources.LocationRemoteDataSourceImpl
+import com.trekkstay.hotel.feature.hotel.data.datasources.MediaRemoteDataSource
+import com.trekkstay.hotel.feature.hotel.data.datasources.MediaRemoteDataSourceImpl
 import com.trekkstay.hotel.feature.hotel.data.datasources.RoomRemoteDataSource
 import com.trekkstay.hotel.feature.hotel.data.datasources.RoomRemoteDataSourceImpl
 import com.trekkstay.hotel.feature.hotel.data.repositories.HotelRepoImpl
 import com.trekkstay.hotel.feature.hotel.data.repositories.LocationRepoImpl
+import com.trekkstay.hotel.feature.hotel.data.repositories.MediaRepoImpl
 import com.trekkstay.hotel.feature.hotel.data.repositories.RoomRepoImpl
 import com.trekkstay.hotel.feature.hotel.domain.repositories.HotelRepo
 import com.trekkstay.hotel.feature.hotel.domain.repositories.LocationRepo
+import com.trekkstay.hotel.feature.hotel.domain.repositories.MediaRepo
 import com.trekkstay.hotel.feature.hotel.domain.repositories.RoomRepo
 import com.trekkstay.hotel.feature.hotel.domain.usecases.hotel.CreateHotelUseCase
 import com.trekkstay.hotel.feature.hotel.domain.usecases.hotel.GetHotelIdUseCase
+import com.trekkstay.hotel.feature.hotel.domain.usecases.hotel.HotelDetailUseCase
 import com.trekkstay.hotel.feature.hotel.domain.usecases.hotel.ViewHotelUseCase
 import com.trekkstay.hotel.feature.hotel.domain.usecases.location.ViewDistrictUseCase
 import com.trekkstay.hotel.feature.hotel.domain.usecases.location.ViewProvinceUseCase
 import com.trekkstay.hotel.feature.hotel.domain.usecases.location.ViewWardUseCase
+import com.trekkstay.hotel.feature.hotel.domain.usecases.media.UploadMediaUseCase
 import com.trekkstay.hotel.feature.hotel.domain.usecases.room.CreateRoomUseCase
 import com.trekkstay.hotel.feature.hotel.domain.usecases.room.ViewRoomUseCase
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.location.LocationViewModel
+import com.trekkstay.hotel.feature.hotel.presentation.states.media.MediaViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.room.RoomViewModel
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
@@ -53,6 +60,7 @@ val appModule = module {
     single { CreateHotelUseCase(get()) }
     single { GetHotelIdUseCase(get())}
     single { ViewHotelUseCase(get())}
+    single { HotelDetailUseCase(get()) }
     single <HotelRemoteDataSource>{ HotelRemoteDataSourceImpl(get(),get()) }
     single <HotelRepo>{ HotelRepoImpl(get())}
 
@@ -61,6 +69,11 @@ val appModule = module {
     single { ViewRoomUseCase(get()) }
     single <RoomRemoteDataSource>{ RoomRemoteDataSourceImpl(get(),get()) }
     single <RoomRepo>{ RoomRepoImpl(get()) }
+
+    single { MediaViewModel(get()) }
+    single { UploadMediaUseCase(get()) }
+    single <MediaRemoteDataSource>{ MediaRemoteDataSourceImpl(get()) }
+    single <MediaRepo>{ MediaRepoImpl(get()) }
 
     single { LocationViewModel(get()) }
     single { ViewProvinceUseCase(get()) }

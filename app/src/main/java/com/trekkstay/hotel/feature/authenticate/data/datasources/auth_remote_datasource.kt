@@ -37,6 +37,7 @@ class AuthRemoteDataSourceImpl(private val client: Client) : AuthRemoteDataSourc
                 put("password", pass)
             }
 
+
             val request = RequestQuery(
                 method = RequestMethod.POST,
                 path = "http://52.163.61.213:8888/api/v1/$loginEndpoint",
