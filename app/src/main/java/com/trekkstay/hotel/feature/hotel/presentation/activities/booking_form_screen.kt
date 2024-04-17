@@ -14,8 +14,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.InfoTextField
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
+import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @Composable
 fun BookingFormScreen() {
@@ -63,17 +64,16 @@ fun BookingFormScreen() {
                     .fillMaxWidth()
                     .padding(horizontal = 15.dp, vertical = 20.dp)
             ) {
-                Icon(Icons.Default.ArrowBack, contentDescription = null)
+                Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = null)
                 Text(
                     text = "Booking Form",
                     fontFamily = PoppinsFontFamily,
-                    fontWeight = FontWeight.Medium,
+                    fontWeight = FontWeight.SemiBold,
                     fontSize = 24.sp,
                     modifier = Modifier.weight(1f),
                     textAlign = TextAlign.Center
                 )
             }
-
             Column(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 modifier = Modifier
@@ -82,45 +82,41 @@ fun BookingFormScreen() {
             ) {
                 Text(
                     text = "Fill in the form with your information to process payment.",
-                    textAlign = TextAlign.Justify,
+                    textAlign = TextAlign.Center,
                     fontFamily = PoppinsFontFamily,
+                    color = Color.Gray,
+                    fontWeight = FontWeight.Medium,
                     fontSize = 16.sp,
                     maxLines = if (expandedDesc) Int.MAX_VALUE else 3,
                     overflow = TextOverflow.Ellipsis
                 )
-            }
-
-            Column(
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 20.dp, horizontal = 20.dp)
-            ) {
-
                 InfoTextField(
                     label = "Full Name",
-                    text =  name,
+                    text = name,
                     onValueChange = { name = it },
-                    icon = Icons.Default.AccountCircle
+                    icon = Icons.Default.AccountCircle,
+                    view = "customer"
                 )
                 InfoTextField(
                     label = "Email Address",
                     text = email,
                     onValueChange = { email = it },
                     icon = Icons.Default.Email,
+                    view = "customer"
                 )
                 InfoTextField(
                     label = "Phone Number",
                     text = phone,
                     onValueChange = { phone = it },
                     icon = Icons.Default.Phone,
+                    view = "customer"
                 )
             }
         }
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(20.dp),
+                .padding(vertical = 40.dp, horizontal = 50.dp),
             contentAlignment = Alignment.BottomCenter
         ) {
             Row(
@@ -131,16 +127,19 @@ fun BookingFormScreen() {
                     onClick = {
                         // Handle button click
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF238C98)),
+                    colors = ButtonDefaults.buttonColors(containerColor = TrekkStayCyan),
                     modifier = Modifier
-                        .size(200.dp, 40.dp),
+                        .fillMaxWidth()
+                        .size(50.dp),
                     shape = RoundedCornerShape(10.dp)
                 ) {
                     Spacer(modifier = Modifier.width(10.dp))
                     Text(
                         text = "Continue",
                         color = Color.White,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 15.sp,
+                        fontFamily = PoppinsFontFamily
                     )
                 }
             }

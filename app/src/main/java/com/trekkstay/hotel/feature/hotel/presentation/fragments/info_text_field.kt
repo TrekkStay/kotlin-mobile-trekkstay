@@ -21,9 +21,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.toColorInt
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
+import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @Composable
 fun InfoTextField(
@@ -32,10 +32,12 @@ fun InfoTextField(
     onValueChange: (TextFieldValue) -> Unit,
     icon: ImageVector,
     type: String = "text",
+    view: String = "hotel",
     minLine: Int = 1,
     maxLine: Int = 1,
 ) {
     var textFieldValue by remember { mutableStateOf(text) }
+    var boxColor = (if (view == "hotel") TrekkStayBlue else if (view == "customer") TrekkStayCyan else Color.White)
     OutlinedTextField(
         value = textFieldValue,
         onValueChange = {
@@ -55,7 +57,7 @@ fun InfoTextField(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = TrekkStayBlue
+                tint = boxColor
             )
         },
         textStyle = TextStyle(
@@ -64,9 +66,9 @@ fun InfoTextField(
         ),
         shape = RoundedCornerShape(12.dp),
         colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = Color("#007EF2".toColorInt()),
-            unfocusedBorderColor = Color("#007EF2".toColorInt()),
-            cursorColor = Color("#007EF2".toColorInt()),
+            focusedBorderColor = boxColor,
+            unfocusedBorderColor = boxColor,
+            cursorColor = boxColor,
         ),
         minLines = minLine,
         maxLines = maxLine,
