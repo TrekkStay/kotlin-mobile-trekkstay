@@ -9,8 +9,12 @@ import com.trekkstay.hotel.core.network.method.RequestMethod
 import com.trekkstay.hotel.core.network.request.RequestQuery
 import com.trekkstay.hotel.core.network.response.Response
 import com.trekkstay.hotel.core.storage.LocalStore
+import com.trekkstay.hotel.feature.hotel.data.models.HotelModel
 import com.trekkstay.hotel.feature.hotel.data.models.RoomListModel
+import com.trekkstay.hotel.feature.hotel.data.models.RoomModel
 import com.trekkstay.hotel.feature.hotel.data.models.toEntity
+import com.trekkstay.hotel.feature.hotel.domain.entities.Hotel
+import com.trekkstay.hotel.feature.hotel.domain.entities.Room
 import com.trekkstay.hotel.feature.hotel.domain.entities.RoomList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -48,11 +52,16 @@ interface RoomRemoteDataSource {
     ): Response<RoomList>
 
     suspend fun getHotelRoom(): Response<String>
+
+    suspend fun roomDetail(
+        id:String
+    ): Response<Room>
 }
 
 const val createRoomEndpoint = "hotel-room/create"
 const val viewRoomEndpoint = "hotel-room/filter"
 const val getHotelRoomEndpoint = "hotel/my-hotel"
+const val roomDetailEndpoint = "hotel-room/"
 
 class RoomRemoteDataSourceImpl(private val client: Client, private val context: Context) : RoomRemoteDataSource {
 
@@ -158,7 +167,7 @@ class RoomRemoteDataSourceImpl(private val client: Client, private val context: 
             val jwtKey = LocalStore.getKey(context, "jwtKey", "")
             val request = RequestQuery(
                 method = RequestMethod.POST,
-                path = "http://52.163.61.213:8888/api/v1/$getHotelIdEndpoint",
+                path = "http://52.163.61.213:8888/api/v1/$getHotelRoomEndpoint",
                 headers = mapOf("Authorization" to "Bearer $jwtKey"),
                 requestBody = null,
             )
@@ -180,6 +189,30 @@ class RoomRemoteDataSourceImpl(private val client: Client, private val context: 
 
     }
 
+    override suspend fun roomDetail(id:String): Response<Room> {
+        return withContext(Dispatchers.IO) {
+            val request = RequestQuery(
+                method = RequestMethod.GET,
+                path = "http://52.163.61.213:8888/api/v1/$roomDetailEndpoint$id",
+                requestBody = null,
+            )
+
+            val response = client.execute<Room>(
+                request = request,
+                parser = { responseData ->
+                    if (responseData is String) {
+                        parseResponse(RoomModel.fromJson(responseData))
+                    } else {
+                        null
+                    }
+                }
+            )
+
+            response
+        }
+
+    }
+
 
 
     private inline fun <reified T : Any> parseResponse(responseData: Any?): T? {
@@ -187,6 +220,7 @@ class RoomRemoteDataSourceImpl(private val client: Client, private val context: 
         return when (responseData) {
             is String -> responseData as? T
             is RoomListModel -> responseData.toEntity() as? T
+            is RoomModel -> responseData.toEntity() as? T
             else -> null
         }
     }

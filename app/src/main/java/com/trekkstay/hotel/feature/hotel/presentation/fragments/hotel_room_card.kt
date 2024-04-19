@@ -46,9 +46,8 @@ fun HotelRoomCard(
             .background(Color.White, shape = RoundedCornerShape(10.dp))
             .border(2.dp, TrekkStayBlue, shape = RoundedCornerShape(10.dp))
             .padding(15.dp)
-            .clickable {val gson = Gson()
-                val roomJson = gson.toJson(room)
-                navController.navigate("hotel_room_detail/$roomJson")
+            .clickable {
+                navController.navigate("hotel_room_detail/${room.id}")
             }
     ) {
         Box(
@@ -58,7 +57,7 @@ fun HotelRoomCard(
                 .clip(RoundedCornerShape(10.dp))
         ) {
             AsyncImage(
-                model = "https://www.usatoday.com/gcdn/-mm-/05b227ad5b8ad4e9dcb53af4f31d7fbdb7fa901b/c=0-64-2119-1259/local/-/media/USATODAY/USATODAY/2014/08/13/1407953244000-177513283.jpg?width=1320&height=746&fit=crop&format=pjpg&auto=webp",
+                model = if(room.image.media.isEmpty()){"https://www.usatoday.com/gcdn/-mm-/05b227ad5b8ad4e9dcb53af4f31d7fbdb7fa901b/c=0-64-2119-1259/local/-/media/USATODAY/USATODAY/2014/08/13/1407953244000-177513283.jpg?width=1320&height=746&fit=crop&format=pjpg&auto=webp"}else{ room.image.media.first()},
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier

@@ -7,6 +7,7 @@ import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 import com.trekkstay.hotel.feature.hotel.domain.entities.Room
+import org.json.JSONObject
 
 data class RoomModel(
     @SerializedName("id") val id: String,
@@ -23,10 +24,21 @@ data class RoomModel(
     companion object {
 
 
-        fun fromJson(source: String): RoomModel {
-            val type = object : TypeToken<Map<String, Any>>() {}.type
-            val map: Map<String, Any> = Gson().fromJson(source, type)
+        private fun JSONObject.toMap(): Map<String, Any> {
+            val map = mutableMapOf<String, Any>()
+            val keysItr = keys()
 
+            while (keysItr.hasNext()) {
+                val key = keysItr.next()
+                val value = getString(key)
+                map[key] = value
+            }
+
+            return map
+        }
+        fun fromJson(source: String): RoomModel {
+            val jsonObject = JSONObject(source)
+            val map = jsonObject.toMap()
             return fromMap(map)
         }
 

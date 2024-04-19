@@ -1,7 +1,7 @@
 package com.trekkstay.hotel.feature.hotel.presentation.states.room
 
+import com.trekkstay.hotel.feature.hotel.domain.entities.Room
 import com.trekkstay.hotel.feature.hotel.domain.entities.RoomList
-import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelState
 
 sealed class RoomState {
     object Idle : RoomState()
@@ -18,6 +18,9 @@ sealed class RoomState {
     data class InvalidGetHotelRoom(val message: String) : RoomState()
     data class SuccessGetHotelRoom(val id: String) : RoomState()
 
+    object RoomDetailCalling : RoomState()
+    data class InvalidRoomDetail(val message: String) : RoomState()
+    data class SuccessRoomDetail(val room: Room) : RoomState()
 
     data class AuthenticateError(val message: String) : RoomState()
 }

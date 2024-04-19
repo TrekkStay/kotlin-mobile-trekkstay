@@ -5,10 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.trekkstay.hotel.feature.hotel.domain.repositories.RoomRepo
-import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelState
 import kotlinx.coroutines.launch
 
-class RoomViewModel(private val hotelRepo: RoomRepo) : ViewModel() {
+class RoomViewModel(private val roomRepo: RoomRepo) : ViewModel() {
     private val _state = MutableLiveData<RoomState>()
     val state: LiveData<RoomState> = _state
 
@@ -17,7 +16,7 @@ class RoomViewModel(private val hotelRepo: RoomRepo) : ViewModel() {
             when (action) {
                 is CreateRoomAction -> {
                     _state.postValue(RoomState.CreateRoomCalling)
-                    val result = hotelRepo.createRoom(
+                    val result = roomRepo.createRoom(
                         action.hotelId,
                         action.type,
                         action.description,
@@ -48,7 +47,7 @@ class RoomViewModel(private val hotelRepo: RoomRepo) : ViewModel() {
                 }
                 is ViewRoomAction ->{
                     _state.postValue(RoomState.ViewRoomCalling)
-                    val result = hotelRepo.viewRoom(
+                    val result = roomRepo.viewRoom(
                         action.hotelId,
                     )
                     result.fold(
@@ -58,10 +57,18 @@ class RoomViewModel(private val hotelRepo: RoomRepo) : ViewModel() {
                 }
                 is GetHotelRoomAction ->{
                     _state.postValue(RoomState.GetHotelRoomCalling)
-                    val result = hotelRepo.getHotelRoom()
+                    val result = roomRepo.getHotelRoom()
                     result.fold(
                         { failure -> _state.postValue(RoomState.InvalidGetHotelRoom(failure.message)) },
                         { success->  _state.postValue(RoomState.SuccessGetHotelRoom(success)) }
+                    )
+                }
+                is RoomDetailAction ->{
+                    _state.postValue(RoomState.RoomDetailCalling)
+                    val result = roomRepo.roomDetail(action.id)
+                    result.fold(
+                        { failure -> _state.postValue(RoomState.InvalidRoomDetail(failure.message)) },
+                        { success->  _state.postValue(RoomState.SuccessRoomDetail(success)) }
                     )
                 }
             }

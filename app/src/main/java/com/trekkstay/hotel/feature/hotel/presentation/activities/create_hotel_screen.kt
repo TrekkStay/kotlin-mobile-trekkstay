@@ -198,10 +198,6 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
     }
 
 
-
-
-
-
     val hotelState by hotelViewModel.state.observeAsState()
     val locationState by locationViewModel.state.observeAsState()
     val mediaState by mediaViewModel.state.observeAsState()
@@ -471,7 +467,6 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
                                 .clip(RoundedCornerShape(5.dp))
                                 .background(Color(0xFFD9D9D9))
                                 .padding(vertical = 5.dp)
-
                         ) {
                             for (uri in selectedVideoUris) {
                                 AndroidView(

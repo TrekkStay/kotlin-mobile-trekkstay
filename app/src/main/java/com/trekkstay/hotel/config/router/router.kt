@@ -181,16 +181,15 @@ fun HotelRouter(hotelViewModel: HotelViewModel,roomViewModel: RoomViewModel,loca
         composable(route = "hotel_room_manage") {
             HotelRoomManageScreen(roomViewModel,navController)
         }
-        composable(route = "hotel_room_detail/{roomJson}") { backStackEntry ->
-            println(backStackEntry.arguments)
-            val roomJson = backStackEntry.arguments?.getString("roomJson")
-            val roomType = object : TypeToken<Room>() {}.type
-            val gson = Gson()
-            val room = gson.fromJson<Room>(roomJson, roomType)
-            RoomDetailScreen(navController, room)
+        composable(route = "hotel_room_detail/{roomId}") { backStackEntry ->
+            val id = backStackEntry.arguments?.getString("roomId")
+
+            if (id != null) {
+                RoomDetailScreen(navController, roomViewModel,id)
+            }
         }
         composable("hotel_room_create") {
-            CreateRoomScreen(hotelViewModel,roomViewModel,navController)
+            CreateRoomScreen(hotelViewModel,roomViewModel,mediaViewModel,navController)
         }
         composable(route = "hotel_emp_list") {
             HotelEmpListScreen(navController)

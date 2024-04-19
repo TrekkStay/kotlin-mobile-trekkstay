@@ -34,3 +34,7 @@ data class CreateRoomAction(
 data class ViewRoomAction(val hotelId: String) : RoomAction()
 
 object GetHotelRoomAction: RoomAction()
+
+data class RoomDetailAction(
+    val id: String
+):RoomAction()

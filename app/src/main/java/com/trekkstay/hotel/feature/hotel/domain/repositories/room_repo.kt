@@ -3,6 +3,8 @@ package com.trekkstay.hotel.feature.hotel.domain.repositories
 
 import com.trekkstay.hotel.core.typedef.ResultFuture
 import com.trekkstay.hotel.core.typedef.ResultVoid
+import com.trekkstay.hotel.feature.hotel.domain.entities.Hotel
+import com.trekkstay.hotel.feature.hotel.domain.entities.Room
 import com.trekkstay.hotel.feature.hotel.domain.entities.RoomList
 
 interface RoomRepo {
@@ -37,5 +39,8 @@ interface RoomRepo {
 
     suspend fun getHotelRoom(): ResultFuture<String>
 
+    suspend fun roomDetail(
+        id:String
+    ): ResultFuture<Room>
 }
 
