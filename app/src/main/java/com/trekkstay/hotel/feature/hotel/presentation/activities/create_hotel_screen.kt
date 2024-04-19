@@ -52,6 +52,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MenuItemColors
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.layout.ContentScale
@@ -640,11 +641,20 @@ private fun DropDownMenu(
         }
         ExposedDropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.width(180.dp).background(Color.White)
         ) {
             itemList.forEach { item ->
                 DropdownMenuItem(
                     text = { Text(text = item.nameVi, fontFamily = PoppinsFontFamily) },
+                    colors = MenuItemColors(
+                        textColor = TrekkStayBlue,
+                        leadingIconColor = TrekkStayBlue,
+                        trailingIconColor = TrekkStayBlue,
+                        disabledTextColor = TrekkStayBlue,
+                        disabledLeadingIconColor = TrekkStayBlue,
+                        disabledTrailingIconColor = TrekkStayBlue
+                    ),
                     onClick = {
                         selectedText = item.nameVi
                         expanded = false

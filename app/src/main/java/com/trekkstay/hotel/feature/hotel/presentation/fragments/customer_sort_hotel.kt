@@ -1,6 +1,7 @@
 package com.trekkstay.hotel.feature.hotel.presentation.fragments
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -92,14 +93,26 @@ fun CustomerSortHotel() {
                     modifier = Modifier.padding(horizontal = 40.dp,vertical = 20.dp)
                 ) {
                     radioOptions.forEach { sorter ->
-                        Row(verticalAlignment = Alignment.CenterVertically) {
+                        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().clickable{
+                            if (selectedOption == sorter) {
+                                selectedOption = ""
+                            } else {
+                                selectedOption = sorter
+                            }
+                        }) {
                             RadioButton(
                                 colors = RadioButtonDefaults.colors(
                                     selectedColor = TrekkStayCyan,
                                     unselectedColor = TrekkStayCyan
                                 ),
                                 selected = (sorter == selectedOption),
-                                onClick = { selectedOption = sorter }
+                                onClick = {
+                                    if (selectedOption == sorter) {
+                                        selectedOption = ""
+                                    } else {
+                                        selectedOption = sorter
+                                    }
+                                }
                             )
                             Text(
                                 text = sorter,
@@ -112,49 +125,7 @@ fun CustomerSortHotel() {
                     }
                 }
                 HorizontalDivider(color = Color(0xFFE4E4E4), thickness = 2.dp, modifier = Modifier.padding(horizontal = 25.dp))
-                Row(
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 20.dp),
-                ) {
-                    Button(
-                        onClick = { selectedOption = "" },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = TrekkStayCyan.copy(0.25f),
-                            contentColor = TrekkStayCyan
-                        ),
-                        contentPadding = PaddingValues(horizontal = 30.dp, vertical = 15.dp),
-                        shape = RoundedCornerShape(10.dp),
-                        modifier = Modifier.width(160.dp)
-                    ) {
-                        Text(
-                            text = "Reset",
-                            fontSize = 17.sp,
-                            fontFamily = PoppinsFontFamily,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    }
-                    Button(
-                        onClick = {
-                            //apply sort
-                            isBotSheetVisible = false
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = TrekkStayCyan,
-                            contentColor = Color.White
-                        ),
-                        contentPadding = PaddingValues(horizontal = 30.dp, vertical = 15.dp),
-                        shape = RoundedCornerShape(10.dp),
-                        modifier = Modifier.width(160.dp)
-                    ) {
-                        Text(
-                            text = "Apply Sort",
-                            fontSize = 17.sp,
-                            fontFamily = PoppinsFontFamily,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.height(50.dp))
+                Spacer(modifier = Modifier.height(100.dp))
             }
         }
     }

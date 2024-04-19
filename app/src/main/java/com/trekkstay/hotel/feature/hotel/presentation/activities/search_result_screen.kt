@@ -28,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.trekkstay.hotel.feature.hotel.presentation.fragments.CustomerFilterHotel
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.CustomerSortHotel
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.HotelSearchResultCard
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
@@ -83,12 +84,13 @@ fun SearchResultScreen() {
         }
         Spacer(modifier = Modifier.height(0.dp))
         Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 15.dp)
         ) {
             CustomerSortHotel()
-
+            CustomerFilterHotel()
         }
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(10.dp),
