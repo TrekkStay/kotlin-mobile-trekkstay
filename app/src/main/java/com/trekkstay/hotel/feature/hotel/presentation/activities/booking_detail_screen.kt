@@ -1,248 +1,169 @@
 package com.trekkstay.hotel.feature.hotel.presentation.activities
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
+import androidx.navigation.compose.rememberNavController
 import com.example.hotel.R
-import com.trekkstay.hotel.feature.hotel.presentation.fragments.InfoTextField
-import com.trekkstay.hotel.feature.hotel.presentation.fragments.RoomDetailCard
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
-import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 @Composable
 fun BookingDetailScreen(navController: NavController) {
-
-    var name by remember { mutableStateOf(TextFieldValue()) }
-    var email by remember { mutableStateOf(TextFieldValue()) }
-    var phone by remember { mutableStateOf(TextFieldValue()) }
-
-    Box(
-        modifier = Modifier.padding(bottom = 70.dp)
+    val hotelName = "Estabeez Hotel"
+    val bookingID = "004Wf32QR"
+    val customerName = "Bao Pham"
+    val customerEmail = "vCqg6@example.com"
+    val customerPhone = "+84 123 456 789"
+    Column(
+        modifier = Modifier
+            .padding(top = 25.dp, bottom = 80.dp)
     ) {
-        Column(
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .padding(bottom = 80.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp)
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
+            Icon(
+                Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = null,
+                Modifier.clickable {
+                    navController.popBackStack()
+                })
+            Text(
+                text = "Booking Detail",
+                fontFamily = PoppinsFontFamily,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 20.sp,
+                modifier = Modifier.weight(1f),
+                textAlign = TextAlign.Center
+            )
+        }
+        Column(
+            verticalArrangement = Arrangement.spacedBy(30.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 20.dp, vertical = 30.dp)
+        ) {
+            Text(
+                text = hotelName,
+                fontFamily = PoppinsFontFamily,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold,
+                textAlign = TextAlign.Center
+            )
+            Image(
+                painter = painterResource(id = R.drawable.qr_scanner),
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 15.dp, vertical = 20.dp)
-            ) {
-                Icon(
-                    Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null,
-                    Modifier.clickable{
-                        navController.popBackStack()
-                    })
-                Text(
-                    text = "Booking Detail",
-                    fontFamily = PoppinsFontFamily,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 24.sp,
-                    modifier = Modifier.weight(1f),
-                    textAlign = TextAlign.Center
-                )
-            }
-
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally  ,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 25.dp, vertical = 5.dp)
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 15.dp, vertical = 20.dp)
-                ) {
-                    Text(
-                        text = "Estabeez Hotel",
-                        fontFamily = PoppinsFontFamily,
-                        fontSize = 14.sp,
-                        modifier = Modifier.weight(1f),
-                        textAlign = TextAlign.Center
-                    )
-
-                }
-                Image(
-                    painter = painterResource(id = R.drawable.qr_scanner),
-                    modifier = Modifier
-                        .size(200.dp),
-                    contentDescription = "QR"
-                )
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .size(200.dp)
-                ) {
-                    AsyncImage(
-                        model = "https://example.com/image.jpg",
-                        contentDescription = "Translated description of what the image contains"
-                    )
-                }
-            }
-
+                    .size(200.dp),
+                contentDescription = "QR"
+            )
+            Text(
+                buildAnnotatedString {
+                    withStyle(style = SpanStyle(color = Color.Gray)) {
+                        append("Booking ID: ")
+                    }
+                    append(bookingID)
+                },
+                fontFamily = PoppinsFontFamily,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Medium
+            )
             Column(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 modifier = Modifier
-                    .padding(start = 10.dp, end = 10.dp)
-                    .border(1.dp, TrekkStayBlue,  shape = RoundedCornerShape(30.dp) )
+                    .border(1.dp, Color(0xFFC4C4C4), shape = RoundedCornerShape(20.dp))
+                    .padding(vertical = 20.dp, horizontal = 30.dp)
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 15.dp, vertical = 5.dp)
-                ) {
-                    Text(
-                        text = "Name",
-                        fontFamily = PoppinsFontFamily,
-                        fontSize = 14.sp,
-                        modifier = Modifier.weight(1f)
-                            .padding(start = 20.dp),
-                        textAlign = TextAlign.Start
-                    )
-                    Text(
-                        text = "Bao Pham",
-                        fontFamily = PoppinsFontFamily,
-                        fontSize = 14.sp,
-                        modifier = Modifier.weight(1f)
-                            .padding(start = 20.dp),
-                        textAlign = TextAlign.Start
-                    )
-                }
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 15.dp, vertical = 5.dp)
-                ) {
-                    Text(
-                        text = "Email",
-                        fontFamily = PoppinsFontFamily,
-                        fontSize = 14.sp,
-                        modifier = Modifier.weight(1f)
-                            .padding(start = 20.dp),
-                        textAlign = TextAlign.Start
-                    )
-                    Text(
-                        text = "baopham@gmail.com",
-                        fontFamily = PoppinsFontFamily,
-                        fontSize = 14.sp,
-                        modifier = Modifier.weight(1f)
-                            .padding(start = 20.dp),
-                        textAlign = TextAlign.Start
-                    )
-                }
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 15.dp, vertical = 5.dp)
-                ) {
-                    Text(
-                        text = "Phone",
-                        fontFamily = PoppinsFontFamily,
-                        fontSize = 14.sp,
-                        modifier = Modifier.weight(1f)
-                            .padding(start = 20.dp),
-                        textAlign = TextAlign.Start
-                    )
-                    Text(
-                        text = "0978564322",
-                        fontFamily = PoppinsFontFamily,
-                        fontSize = 14.sp,
-                        modifier = Modifier.weight(1f)
-                            .padding(start = 20.dp),
-                        textAlign = TextAlign.Start
-                    )
+                BookingInfoRow("Name", customerName)
+                BookingInfoRow("Email", customerEmail)
+                BookingInfoRow("Phone", customerPhone)
+                Row() {
+                    Column {
+                        Text(
+                            "Check In",
+                        )
+                        Text(
+                            "Apr 17",
+                        )
+                    }
+                    Column {
+                        Text(
+                            "Check Out",
+                        )
+                        Text(
+                            "Apr 20",
+                        )
+                    }
                 }
             }
-
-
         }
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(20.dp),
-            contentAlignment = Alignment.BottomCenter
-        ) {
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                /*Button(
-                    onClick = {
-                        // Handle button click
-                    },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF238C98)),
-                    modifier = Modifier
-                        .size(200.dp, 40.dp),
-                    shape = RoundedCornerShape(10.dp)
-                ) {
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Text(
-                        text = "Download Booking",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold
-                    )
-                }*/
-            }
-        }
-
     }
+}
 
+@Composable
+private fun BookingInfoRow(
+    label: String,
+    value: String
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        Text(
+            text = label,
+            fontFamily = PoppinsFontFamily,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 13.sp,
+            color = Color.Gray,
+            modifier = Modifier.width(120.dp)
+        )
+        Text(
+            text = value,
+            fontFamily = PoppinsFontFamily,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .weight(1f)
+        )
+    }
+}
 
+@Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
+@Composable
+fun BookingDetailPreview() {
+    BookingDetailScreen(rememberNavController())
 }
