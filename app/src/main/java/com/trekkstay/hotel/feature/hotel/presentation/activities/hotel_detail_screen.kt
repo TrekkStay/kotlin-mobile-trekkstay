@@ -2,7 +2,6 @@ package com.trekkstay.hotel.feature.hotel.presentation.activities
 
 import android.net.Uri
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,12 +26,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -43,7 +44,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -58,7 +58,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -72,8 +71,6 @@ import com.trekkstay.hotel.feature.hotel.presentation.fragments.FacilityBullet
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelDetailAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelState
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
-import com.trekkstay.hotel.feature.hotel.presentation.states.location.LocationState
-import com.trekkstay.hotel.feature.hotel.presentation.states.location.ViewProvinceAction
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
@@ -103,16 +100,14 @@ fun HotelDetailScreen(
             val cheapRoomPrice = if (hotel.room.isNotEmpty()) {
                 hotel.room.first().originalPrice
             } else {
-
                 1
             }.toString()
-            val hotelImgList = if(hotel.images.media.isEmpty()) {
+            val hotelImgList = if (hotel.images.media.isEmpty()) {
                 arrayOf(
                     "https://www.usatoday.com/gcdn/-mm-/05b227ad5b8ad4e9dcb53af4f31d7fbdb7fa901b/c=0-64-2119-1259/local/-/media/USATODAY/USATODAY/2014/08/13/1407953244000-177513283.jpg?width=1320&height=746&fit=crop&format=pjpg&auto=webp",
                 )
 
-            }
-            else{
+            } else {
                 hotel.images.media.toTypedArray()
             }
             val hotelVideoList = hotel.videos.media.toTypedArray()
@@ -131,8 +126,8 @@ fun HotelDetailScreen(
                             .size(200.dp)
                     ) {
 
-                        HorizontalPager(state = rememberPagerState(pageCount = {hotelVideoList.size+ hotelImgList.size })) {
-                            if (hotel.videos.media.isNotEmpty() && it<hotelVideoList.size) {
+                        HorizontalPager(state = rememberPagerState(pageCount = { hotelVideoList.size + hotelImgList.size })) {
+                            if (hotel.videos.media.isNotEmpty() && it < hotelVideoList.size) {
                                 AndroidView(
                                     factory = { context ->
                                         PlayerView(context).apply {
@@ -152,10 +147,9 @@ fun HotelDetailScreen(
                                     },
                                     modifier = Modifier.fillMaxSize()
                                 )
-                            }
-                            else{
+                            } else {
                                 AsyncImage(
-                                    model = hotelImgList[it-hotelVideoList.size],
+                                    model = hotelImgList[it - hotelVideoList.size],
                                     contentDescription = null,
                                     contentScale = ContentScale.Crop,
                                     modifier = Modifier
@@ -164,8 +158,19 @@ fun HotelDetailScreen(
                                 )
                             }
                         }
-
-
+                        IconButton(
+                            modifier = Modifier.background(
+                                Color.Black.copy(alpha = 0.4f),
+                                shape = CircleShape
+                            ),
+                            onClick = { navController.popBackStack() }
+                        ) {
+                            Icon(
+                                Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                                contentDescription = null,
+                                tint = Color.White
+                            )
+                        }
                     }
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -428,24 +433,32 @@ fun HotelDetailScreen(
                             .size(180.dp, 40.dp),
                         shape = RoundedCornerShape(10.dp)
                     ) {
-                        Icon(ImageVector.vectorResource(R.drawable.bed_ico), contentDescription = null)
+                        Icon(
+                            ImageVector.vectorResource(R.drawable.bed_ico),
+                            contentDescription = null
+                        )
                         Spacer(modifier = Modifier.width(10.dp))
-                        Text(text = "See All Rooms", color = Color.White, fontWeight = FontWeight.Bold)
+                        Text(
+                            text = "See All Rooms",
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold
+                        )
                     }
                 }
             }
         }
+
         is HotelState.InvalidHotelDetail -> {
 
         }
+
         is HotelState.HotelDetailCalling -> {
         }
+
         else -> {
             // Handle other states
         }
     }
-
-
 }
 
 @Composable

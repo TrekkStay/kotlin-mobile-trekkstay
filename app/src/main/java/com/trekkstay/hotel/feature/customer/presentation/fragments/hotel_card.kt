@@ -33,15 +33,13 @@ fun HotelCard(
     hotel: Hotel? = null,
     navController: NavHostController,
 ) {
-    if(hotel != null) {
+    if (hotel != null) {
         val roomPrice = if (hotel.room.isNotEmpty()) {
             hotel.room.first().originalPrice
         } else {
-
             1
         }.toString()
         Column(
-
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
@@ -54,7 +52,11 @@ fun HotelCard(
                 }
         ) {
             AsyncImage(
-                model = if(hotel.images.media.isEmpty()){"https://www.usatoday.com/gcdn/-mm-/05b227ad5b8ad4e9dcb53af4f31d7fbdb7fa901b/c=0-64-2119-1259/local/-/media/USATODAY/USATODAY/2014/08/13/1407953244000-177513283.jpg?width=1320&height=746&fit=crop&format=pjpg&auto=webp"}else{ hotel.images.media.first()},
+                model = if (hotel.images.media.isEmpty()) {
+                    "https://www.usatoday.com/gcdn/-mm-/05b227ad5b8ad4e9dcb53af4f31d7fbdb7fa901b/c=0-64-2119-1259/local/-/media/USATODAY/USATODAY/2014/08/13/1407953244000-177513283.jpg?width=1320&height=746&fit=crop&format=pjpg&auto=webp"
+                } else {
+                    hotel.images.media.first()
+                },
                 contentDescription = "This is an example image",
                 modifier = Modifier
                     .size(180.dp, 100.dp)
@@ -99,7 +101,7 @@ fun HotelCard(
                         modifier = Modifier.size(15.dp)
                     )
                     Text(
-                        text = hotel.description,
+                        text = hotel.addressDetail,
                         fontSize = 11.sp,
                         fontFamily = PoppinsFontFamily,
                         fontWeight = FontWeight.Medium
@@ -113,8 +115,7 @@ fun HotelCard(
                 )
             }
         }
-    }
-    else{
+    } else {
         Column(
 
             horizontalAlignment = Alignment.CenterHorizontally,

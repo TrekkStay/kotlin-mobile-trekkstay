@@ -1,6 +1,7 @@
 package com.trekkstay.hotel.feature.hotel.presentation.activities
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +16,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -34,7 +36,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.hotel.R
+import com.trekkstay.hotel.feature.hotel.presentation.fragments.RoomDetailCard
+import com.trekkstay.hotel.feature.shared.Utils.formatPrice
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
+import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @Composable
 fun BookingDetailScreen(navController: NavController) {
@@ -43,6 +48,8 @@ fun BookingDetailScreen(navController: NavController) {
     val customerName = "Bao Pham"
     val customerEmail = "vCqg6@example.com"
     val customerPhone = "+84 123 456 789"
+    val roomNum = 1
+    val totalPrice = 1000.0
     Column(
         modifier = Modifier
             .padding(top = 25.dp, bottom = 80.dp)
@@ -101,7 +108,7 @@ fun BookingDetailScreen(navController: NavController) {
                 fontWeight = FontWeight.Medium
             )
             Column(
-                verticalArrangement = Arrangement.spacedBy(10.dp),
+                verticalArrangement = Arrangement.spacedBy(15.dp),
                 modifier = Modifier
                     .border(1.dp, Color(0xFFC4C4C4), shape = RoundedCornerShape(20.dp))
                     .padding(vertical = 20.dp, horizontal = 30.dp)
@@ -109,25 +116,19 @@ fun BookingDetailScreen(navController: NavController) {
                 BookingInfoRow("Name", customerName)
                 BookingInfoRow("Email", customerEmail)
                 BookingInfoRow("Phone", customerPhone)
-                Row() {
-                    Column {
-                        Text(
-                            "Check In",
-                        )
-                        Text(
-                            "Apr 17",
-                        )
-                    }
-                    Column {
-                        Text(
-                            "Check Out",
-                        )
-                        Text(
-                            "Apr 20",
-                        )
-                    }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    BookDateCol(label = "Check In", date = "Apr 17")
+                    Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null)
+                    BookDateCol(label = "Check Out", date = "Apr 20")
                 }
+                BookingInfoRow("Number of rooms", "$roomNum")
+                BookingInfoRow("Total", "$ ${formatPrice(totalPrice)}")
             }
+            //RoomDetailCard(room = room)
         }
     }
 }
@@ -147,17 +148,46 @@ private fun BookingInfoRow(
             text = label,
             fontFamily = PoppinsFontFamily,
             fontWeight = FontWeight.SemiBold,
-            fontSize = 13.sp,
+            fontSize = 12.sp,
             color = Color.Gray,
-            modifier = Modifier.width(120.dp)
+            modifier = Modifier.width(140.dp)
         )
         Text(
             text = value,
             fontFamily = PoppinsFontFamily,
-            fontSize = 14.sp,
+            fontSize = 13.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
                 .weight(1f)
+        )
+    }
+}
+
+@Composable
+private fun BookDateCol(
+    label: String,
+    date: String
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(5.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            label,
+            fontFamily = PoppinsFontFamily,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 13.sp,
+            color = Color.Gray,
+        )
+        Text(
+            date,
+            fontFamily = PoppinsFontFamily,
+            fontWeight = FontWeight.Bold,
+            fontSize = 13.sp,
+            color = Color.White,
+            modifier = Modifier
+                .background(TrekkStayCyan, shape = RoundedCornerShape(5.dp))
+                .padding(10.dp)
         )
     }
 }
