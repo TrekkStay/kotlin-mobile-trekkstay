@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,12 +28,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.hotel.R
 import com.trekkstay.hotel.config.router.AppRouter
+import com.trekkstay.hotel.core.storage.LocalStore
 import com.trekkstay.hotel.feature.authenticate.presentation.fragments.ProfileNavButton
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 @Composable
 fun HotelProfileScreen(navController: NavHostController) {
+    val context = LocalContext.current
     Column {
         Spacer(modifier = Modifier.height(25.dp))
         Text(
@@ -91,6 +94,7 @@ fun HotelProfileScreen(navController: NavHostController) {
             )
             ProfileNavButton("Change Password", ImageVector.vectorResource(R.drawable.key_ico), type = "hotel")
             ProfileNavButton("Sign out", Icons.AutoMirrored.Filled.ExitToApp, type = "hotel", onClick = {
+                LocalStore.removeAllKeys(context)
                 AppRouter.navigateTo("start-up")
             })
         }

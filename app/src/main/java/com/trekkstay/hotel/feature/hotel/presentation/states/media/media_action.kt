@@ -9,3 +9,8 @@ data class UploadMediaAction(
     val extension: List<String>
 ) : MediaAction()
 
+data class UploadVideoAction(
+    val media: List<File>,
+    val extension: List<String>
+) : MediaAction()
+

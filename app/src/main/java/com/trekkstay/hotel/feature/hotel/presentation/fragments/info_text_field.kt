@@ -72,6 +72,6 @@ fun InfoTextField(
         ),
         minLines = minLine,
         maxLines = maxLine,
-        keyboardOptions = if (type == "number") KeyboardOptions.Default.copy(keyboardType=KeyboardType.Number) else KeyboardOptions.Default
+        keyboardOptions = if (type == "number") KeyboardOptions.Default.copy(autoCorrectEnabled = false,keyboardType=KeyboardType.Number) else KeyboardOptions.Default
     )
 }

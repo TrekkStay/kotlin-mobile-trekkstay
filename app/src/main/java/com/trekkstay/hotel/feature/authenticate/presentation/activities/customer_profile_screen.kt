@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -23,12 +24,16 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.hotel.R
 import com.trekkstay.hotel.config.router.AppRouter
+import com.trekkstay.hotel.core.storage.LocalStore
 import com.trekkstay.hotel.feature.authenticate.presentation.fragments.ProfileNavButton
+import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthState
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @Composable
 fun CustomerProfileScreen(navController: NavHostController) {
+
+    val context = LocalContext.current
     Column (
         modifier = Modifier.padding(top = 25.dp)
     ) {
@@ -57,6 +62,7 @@ fun CustomerProfileScreen(navController: NavHostController) {
             ProfileNavButton("Edit Information", Icons.Default.AccountBox, type = "customer")
             ProfileNavButton("Sign out", Icons.AutoMirrored.Filled.ExitToApp, type = "customer",
                 onClick = {
+                    LocalStore.removeAllKeys(context)
                     AppRouter.navigateTo("start-up")
                 })
         }

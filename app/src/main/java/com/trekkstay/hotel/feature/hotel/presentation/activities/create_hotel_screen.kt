@@ -3,7 +3,10 @@ package com.trekkstay.hotel.feature.hotel.presentation.activities
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
+import android.provider.MediaStore
+import android.view.ViewGroup
 import android.webkit.MimeTypeMap
+import android.widget.FrameLayout
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -59,9 +62,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.hotel.R
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.ui.PlayerView
 import java.io.File
 import com.google.android.gms.maps.model.LatLng
 import com.trekkstay.hotel.feature.gg_map.GGMap
@@ -69,6 +76,7 @@ import com.trekkstay.hotel.feature.hotel.domain.entities.Location
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.FacilityChip
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.HotelActionRow
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.InfoTextField
+import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.CreateHotelAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelState
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.location.LocationState
@@ -79,6 +87,7 @@ import com.trekkstay.hotel.feature.hotel.presentation.states.location.ViewWardAc
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.MediaState
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.MediaViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.UploadMediaAction
+import com.trekkstay.hotel.feature.hotel.presentation.states.media.UploadVideoAction
 import java.io.FileOutputStream
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -107,9 +116,31 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
     "Spa",
     "Pool")
 
+     fun getFileName(context: Context, uri: Uri): String? {
+        var fileName: String? = null
+        val projection = arrayOf(MediaStore.MediaColumns.DISPLAY_NAME)
+        context.contentResolver.query(uri, projection, null, null, null)?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                fileName = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME))
+            }
+        }
+        return fileName
+    }
     fun queryFile(context: Context, uri: Uri): File {
+        val fileName = getFileName(context, uri) ?: "image_file"
         val inputStream = context.contentResolver.openInputStream(uri)
-        val outputFile = File(context.cacheDir, "temp_file")
+        val outputFile = File(context.cacheDir, fileName)
+        inputStream?.use { input ->
+            FileOutputStream(outputFile).use { output ->
+                input.copyTo(output)
+            }
+        }
+        return outputFile
+    }
+    fun queryVideo(context: Context, uri: Uri): File {
+        val fileName = getFileName(context, uri) ?: "video_file"
+        val inputStream = context.contentResolver.openInputStream(uri)
+        val outputFile = File(context.cacheDir, fileName)
         inputStream?.use { input ->
             FileOutputStream(outputFile).use { output ->
                 input.copyTo(output)
@@ -123,6 +154,7 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
     }
 
 
+
     var selectedProvince by remember { mutableStateOf<Location?>(null) }
     var selectedDistrict by remember { mutableStateOf<Location?>(null) }
     var selectedWard by remember { mutableStateOf<Location?>(null) }
@@ -130,27 +162,41 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
     var districtList : List<Location> = emptyList()
     var wardList : List<Location> = emptyList()
     var selectedImageUris by remember { mutableStateOf<List<Uri?>>(emptyList()) }
+    var selectedVideoUris by remember { mutableStateOf<List<Uri?>>(emptyList()) }
+    var selectedFile by remember{ mutableStateOf<List<File>>(emptyList())}
+    var selectedExtension by remember{ mutableStateOf<List<String>>(emptyList())}
+    var selectedVideoFile by remember{ mutableStateOf<List<File>>(emptyList())}
+    var selectedVideoExtension by remember{ mutableStateOf<List<String>>(emptyList())}
+    var imageUrls by remember{ mutableStateOf<List<String>>(emptyList())}
     val photosPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickMultipleVisualMedia()
     ) { uris ->
         selectedImageUris = uris
 
-        val selectedFiles = uris.map { uri ->
+         selectedFile = uris.map { uri ->
             queryFile(context,uri)
         }
-        val fileExtensions = uris.map{
+         selectedExtension = uris.map{
                 uri ->
             getFileExtension(uri, contentResolver)
         }
-        println(fileExtensions)
 
-        val mediaAction = UploadMediaAction(
-            selectedFiles,
-            fileExtensions
-        )
-
-        mediaViewModel.processAction(mediaAction)
     }
+    val videoPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetMultipleContents()
+    ) { uris ->
+        selectedVideoUris = uris
+
+        selectedVideoFile = uris.map { uri ->
+            queryVideo(context,uri)
+        }
+        selectedVideoExtension = uris.map{
+                uri ->
+            getFileExtension(uri, contentResolver)
+        }
+
+    }
+
 
 
 
@@ -163,8 +209,48 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
     var showMap by remember {mutableStateOf(false)}
 
     when (mediaState){
+        is MediaState.SuccessUploadVideo -> {
+            val action = CreateHotelAction(
+                name = hotelName.text,
+                description = hotelDescription.text,
+                airportTransfer = "Airport Transfer" in selectedFacilities,
+                conferenceRoom = "Conference Room" in selectedFacilities,
+                fitnessCenter = "Fitness Center" in selectedFacilities,
+                foodService = "Food" in selectedFacilities,
+                freeWifi = "Free Wifi" in selectedFacilities,
+                laundryService = "Laundry" in selectedFacilities,
+                motorBikeRental = "Motorbike Rental" in selectedFacilities,
+                parkingArea = "Parking Area" in selectedFacilities,
+                spaService = "Spa" in selectedFacilities,
+                swimmingPool = " Pool" in selectedFacilities,
+                addressDetail = addressDetail.text,
+                checkInTime = checkInTime,
+                checkOutTime = checkOutTime,
+                provinceCode = selectedProvince?.code ?: "",
+                districtCode = selectedDistrict?.code ?: "",
+                wardCode = selectedWard?.code ?: "",
+                email = hotelEmail.text,
+                phone = hotelPhone.text,
+                videos = (mediaState as MediaState.SuccessUploadVideo).media.media,
+                images = imageUrls,
+                coordinates = selectedLatLng,
+            )
+
+            hotelViewModel.processAction(action)
+        }
+        is MediaState.InvalidUploadVideo -> {
+
+        }
+        is MediaState.UploadVideoCalling -> {
+        }
         is MediaState.SuccessUploadMedia -> {
-            println((mediaState as MediaState.SuccessUploadMedia).media.media)
+            imageUrls =  (mediaState as MediaState.SuccessUploadMedia).media.media
+            val mediaAction = UploadVideoAction(
+                selectedVideoFile,
+                selectedVideoExtension,
+            )
+            mediaViewModel.processAction(mediaAction)
+
         }
         is MediaState.InvalidUploadMedia -> {
 
@@ -373,9 +459,48 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
                         label = "Video",
                         leadingIcon = ImageVector.vectorResource(R.drawable.camera_ico),
                         clickHandler = {
-                            //Upload Video
+                            videoPickerLauncher.launch("video/*")
                         }
                     )
+                    if (selectedVideoUris.isNotEmpty()) {
+                        FlowRow(
+                            verticalArrangement = Arrangement.spacedBy(10.dp),
+                            horizontalArrangement = Arrangement.SpaceAround,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(5.dp))
+                                .background(Color(0xFFD9D9D9))
+                                .padding(vertical = 5.dp)
+
+                        ) {
+                            for (uri in selectedVideoUris) {
+                                AndroidView(
+                                    factory = {
+                                        PlayerView(context).apply {
+                                            player = ExoPlayer.Builder(context).build().apply {
+                                                uri?.let { it1 -> MediaItem.fromUri(it1) }
+                                                    ?.let { it2 -> setMediaItem(it2) }
+                                                repeatMode = ExoPlayer.REPEAT_MODE_ALL
+                                                playWhenReady = playWhenReady
+                                                prepare()
+                                                play()
+                                            }
+                                            useController = true
+                                            FrameLayout.LayoutParams(
+                                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                                ViewGroup.LayoutParams.MATCH_PARENT
+                                            )
+                                        }
+
+
+                                    },
+                                    modifier = Modifier
+                                        .size(320.dp, 200.dp)
+                                        .clip(RoundedCornerShape(10.dp))
+                                )
+                            }
+                        }
+                    }
                     HotelActionRow(
                         label = "Image",
                         leadingIcon = ImageVector.vectorResource(R.drawable.photo_ico),
@@ -469,39 +594,11 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
                 Button(
                     onClick = {
                         showDialog = true
-
-                        /*val action = CreateHotelAction(
-                            name = hotelName.text,
-                            description = hotelDescription.text,
-                            airportTransfer = "Airport Transfer" in selectedFacilities,
-                            conferenceRoom = "Conference Room" in selectedFacilities,
-                            fitnessCenter = "Fitness Center" in selectedFacilities,
-                            foodService = "Food" in selectedFacilities,
-                            freeWifi = "Free Wifi" in selectedFacilities,
-                            laundryService = "Laundry" in selectedFacilities,
-                            motorBikeRental = "Motorbike Rental" in selectedFacilities,
-                            parkingArea = "Parking Area" in selectedFacilities,
-                            spaService = "Spa" in selectedFacilities,
-                            swimmingPool = " Pool" in selectedFacilities,
-                            addressDetail = addressDetail.text,
-                            checkInTime = checkInTime,
-                            checkOutTime = checkOutTime,
-                            provinceCode = selectedProvince?.code ?: "",
-                            districtCode = selectedDistrict?.code ?: "",
-                            wardCode = selectedWard?.code ?: "",
-                            email = hotelEmail.text,
-                            phone = hotelPhone.text,
-                            videos = emptyList(),
-                            images = emptyList(),
-                            coordinates = selectedLatLng,
+                        val mediaAction = UploadMediaAction(
+                            selectedFile,
+                            selectedExtension,
                         )
-
-                        hotelViewModel.processAction(action)
-                        */
-
-
-
-
+                        mediaViewModel.processAction(mediaAction)
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = TrekkStayBlue,

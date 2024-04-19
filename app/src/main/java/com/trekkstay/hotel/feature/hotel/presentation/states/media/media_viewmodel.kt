@@ -22,6 +22,14 @@ class MediaViewModel(private val mediaRepo: MediaRepo) : ViewModel() {
                         { media ->  _state.postValue(MediaState.SuccessUploadMedia(media)) }
                     )
                 }
+                is UploadVideoAction -> {
+                _state.postValue(MediaState.UploadVideoCalling)
+                val result = mediaRepo.uploadMedia(action.media,action.extension)
+                result.fold(
+                    { failure -> _state.postValue(MediaState.InvalidUploadVideo(failure.message)) },
+                    { media ->  _state.postValue(MediaState.SuccessUploadVideo(media)) }
+                )
+            }
 
             }
         }
