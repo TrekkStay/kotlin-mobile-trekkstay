@@ -1,5 +1,7 @@
 package com.trekkstay.hotel.feature.hotel.presentation.activities
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,10 +31,12 @@ import androidx.navigation.NavHostController
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.DateRangeSelector
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.DestinationSearchBar
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.CustomerRoomOptSelector
+import com.trekkstay.hotel.feature.hotel.presentation.states.search.SearchViewModel
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun SearchEngineScreen(navController: NavHostController) {
+fun SearchEngineScreen(searchViewModel: SearchViewModel,navController: NavHostController) {
     Scaffold(
     ) { innerPadding ->
         Column(
@@ -79,16 +83,8 @@ fun SearchEngineScreen(navController: NavHostController) {
                             modifier = Modifier.align(Alignment.Center)
                         )
                     }
-//                    Icon(Icons.Default.LocationOn, contentDescription = null)
                 }
             }
         }
     }
 }
-//
-//@RequiresApi(Build.VERSION_CODES.O)
-//@Preview(showBackground = true, showSystemUi = true)
-//@Composable
-//fun MyAppPreview() {
-//    SearchEngineScreen()
-//}

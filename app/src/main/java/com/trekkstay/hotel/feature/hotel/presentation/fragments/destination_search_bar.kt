@@ -29,6 +29,7 @@ import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DestinationSearchBar() {
+
     val destinationArr = arrayOf("Ha Noi", "Da Nang", "Da Lat", "Hue", "Hai Phong")
     var selectedDestination by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
