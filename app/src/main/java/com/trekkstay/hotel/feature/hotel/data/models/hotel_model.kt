@@ -71,7 +71,7 @@ data class HotelModel(
                 district = LocationModel.fromJson(map["district"].toString()),
                 ward = LocationModel.fromJson(map["ward"].toString()),
                 facilities = HotelFacilitiesModel.fromJson(map["facilities"].toString()),
-                coordinates = LatLng((coordinates["lat"] as? String )?.toDouble() ?: 0.0, (coordinates["lng"] as? String )?.toDouble() ?: 0.0),
+                coordinates = LatLng((coordinates["lat"] as? Double )?: 0.0, (coordinates["lng"] as? Double ) ?: 0.0),
                 videos = MediaModel.fromJson(map["videos"].toString()),
                 images = MediaModel.fromJson(map["images"].toString())
                 )
