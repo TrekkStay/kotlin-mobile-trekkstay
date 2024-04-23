@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,21 +31,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.hotel.R
 import com.trekkstay.hotel.feature.customer.presentation.fragments.DestinationCard
 import com.trekkstay.hotel.ui.theme.NunitoFontFamily
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 @Composable
-fun HotelHomeOwner()  {
+fun HotelHomeOwner() {
     Column(
         modifier = Modifier
             .padding(bottom = 70.dp)
@@ -100,7 +104,6 @@ fun HotelHomeOwner()  {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 10.dp, end = 10.dp)
-                .border(1.dp, Color(0xFFE3E3E4), RoundedCornerShape(20.dp))
                 .padding(15.dp),
         ) {
             Row(
@@ -117,97 +120,131 @@ fun HotelHomeOwner()  {
                         .clip(CircleShape)
                 )
                 Text(
-                    text = "Hello User",
+                    text = "Welcome back, Bao Pham!",
                     fontSize = 16.sp,
                     fontFamily = PoppinsFontFamily,
                     fontWeight = FontWeight.Medium
                 )
             }
+
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(20.dp),
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .size(300.dp, 45.dp)
-                        .background(
-                            Color(0xFFC4C4C4).copy(alpha = 0.65f),
-                            RoundedCornerShape(15.dp)
-                        )
-                        .padding(10.dp)
-                        .clickable {
-                        }
-                ) {
-                    Text(
-                        text = "Search For Hotels",
-                        color = Color(0xFF303030).copy(alpha = 0.24f),
-                        fontSize = 16.sp,
-                        fontFamily = PoppinsFontFamily,
-                        fontWeight = FontWeight.Medium
-                    )
-                    Icon(Icons.Default.Search, contentDescription = null)
-                }
-                IconButton(
-                    modifier = Modifier.border(2.dp, Color(0xFFB8B8B9).copy(alpha = 0.42f)),
-                    onClick = { /*TODO*/ }) {
-                    Icon(
-                        Icons.Default.Menu,
-                        contentDescription = null,
-                        tint = TrekkStayBlue
-                    )
-                }
-            }
-        }
-        Spacer(modifier = Modifier.height(10.dp))
-
-
-        Text(
-            text = "See all",
-            textAlign = TextAlign.End,
-            color = TrekkStayBlue,
-            fontSize = 18.sp,
-            fontFamily = PoppinsFontFamily,
-            fontWeight = FontWeight.Medium,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(end = 10.dp)
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        Text(
-            text = "Explore",
-            fontFamily = PoppinsFontFamily,
-            fontWeight = FontWeight.Bold,
-            fontSize = 20.sp,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 10.dp)
-        )
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-            contentPadding = PaddingValues(10.dp)
-        ) {
-            items(3) {
-                DestinationCard(
-                    name = "Da Lat",
-                    hotelNum = 186,
-                    imgUrl = "https://www.usatoday.com/gcdn/-mm-/05b227ad5b8ad4e9dcb53af4f31d7fbdb7fa901b/c=0-64-2119-1259/local/-/media/USATODAY/USATODAY/2014/08/13/1407953244000-177513283.jpg?width=1320&height=746&fit=crop&format=pjpg&auto=webp"
+                Text(
+                    text = "Overview Hotel",
+                    fontSize = 24.sp,
+                    fontFamily = PoppinsFontFamily,
+                    fontWeight = FontWeight.Medium
                 )
             }
         }
-        Text(
-            text = "See all",
-            textAlign = TextAlign.End,
-            color = TrekkStayBlue,
-            fontSize = 18.sp,
-            fontFamily = PoppinsFontFamily,
-            fontWeight = FontWeight.Medium,
+        Spacer(modifier = Modifier.height(10.dp))
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(end = 10.dp)
-        )
+                .shadow(2.dp, shape = RoundedCornerShape(10.dp))
+                .background(Color(0x0085FF).copy(alpha = 0.55f), shape = RoundedCornerShape(10.dp))
+                .padding(horizontal = 15.dp, vertical = 20.dp)
+        ) {
+            Column(
+                verticalArrangement = Arrangement.SpaceAround,
+                modifier = Modifier
+                    .padding(5.dp)
+                    .fillMaxHeight()
+            ) {
+                Text(
+                    "Today Reservation",
+                    textAlign = TextAlign.Left,
+                    fontSize = 24.sp,
+                    fontFamily = PoppinsFontFamily,
+                    fontWeight = FontWeight.Medium,
+                    color = Color.White,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                Text(
+                    "125 bookings",
+                    textAlign = TextAlign.Left,
+                    fontWeight = FontWeight.SemiBold,
+                    fontFamily = PoppinsFontFamily,
+                    color = Color.Black,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End, // Aligns items to start and end
+                    modifier = Modifier.fillMaxWidth() // Ensures the Row fills the width of its parent
+                ) {
+                    Text(
+                        "View More", // Assuming this is the text associated with the icon
+                        fontWeight = FontWeight.SemiBold,
+                        fontFamily = PoppinsFontFamily,
+                        color = Color.Black,
+                        modifier = Modifier.padding(10.dp, 0.dp)
+                    )
+                    Icon(
+                        painter = painterResource(id = R.drawable.more),
+                        tint = Color.White,
+                        contentDescription = null
+                    )
+                }
+            }
+        }
+        Spacer(modifier = Modifier.height(10.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .shadow(2.dp, shape = RoundedCornerShape(10.dp))
+                .background(Color(0x7365C7).copy(alpha = 0.55f), shape = RoundedCornerShape(10.dp))
+                .padding(horizontal = 15.dp, vertical = 20.dp)
+        ) {
+            Column(
+                verticalArrangement = Arrangement.SpaceAround,
+                modifier = Modifier
+                    .padding(5.dp)
+                    .fillMaxHeight()
+            ) {
+                Text(
+                    "Hotel Staff",
+                    textAlign = TextAlign.Left,
+                    fontSize = 24.sp,
+                    fontFamily = PoppinsFontFamily,
+                    fontWeight = FontWeight.Medium,
+                    color = Color.White,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                Text(
+                    "125 employees",
+                    textAlign = TextAlign.Left,
+                    fontWeight = FontWeight.SemiBold,
+                    fontFamily = PoppinsFontFamily,
+                    color = Color.Black,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End, // Aligns items to start and end
+                    modifier = Modifier.fillMaxWidth() // Ensures the Row fills the width of its parent
+                ) {
+                    Text(
+                        "View More", // Assuming this is the text associated with the icon
+                        fontWeight = FontWeight.SemiBold,
+                        fontFamily = PoppinsFontFamily,
+                        color = Color.Black,
+                        modifier = Modifier.padding(10.dp, 0.dp)
+                    )
+                    Icon(
+                        painter = painterResource(id = R.drawable.more),
+                        tint = Color.White,
+                        contentDescription = null
+                    )
+                }
+            }
+        }
+
         Spacer(modifier = Modifier.height(10.dp))
     }
 }
