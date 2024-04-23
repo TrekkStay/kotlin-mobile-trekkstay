@@ -1,6 +1,9 @@
 package com.trekkstay.hotel.feature.hotel.presentation.activities
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +21,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,69 +35,143 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.trekkstay.hotel.feature.hotel.domain.entities.Destination
+import com.trekkstay.hotel.feature.hotel.domain.entities.Hotel
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.DateRangeSelector
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.DestinationSearchBar
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.CustomerRoomOptSelector
+import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
+import com.trekkstay.hotel.feature.hotel.presentation.states.search.SearchHotelAction
+import com.trekkstay.hotel.feature.hotel.presentation.states.search.SearchState
+import com.trekkstay.hotel.feature.hotel.presentation.states.search.SearchViewModel
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun SearchEngineScreen(navController: NavHostController) {
-    Scaffold(
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(onClick = {
-                    navController.popBackStack()
-                }) {
-                    Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = "backFromSearch")
+fun SearchEngineScreen(hotelViewModel:HotelViewModel, searchViewModel: SearchViewModel,navController: NavHostController) {
+    var selectedDestination by remember { mutableStateOf<Destination?>(null) }
+    var showResult by remember { mutableStateOf(false) }
+    var searchedHotel by remember {
+        mutableStateOf(listOf<Hotel>())
+    }
+    val searchState by searchViewModel.state.observeAsState()
+    when (searchState) {
+        is SearchState.SuccessSearchHotel -> {
+            println( (searchState as SearchState.SuccessSearchHotel).list.hotelList)
+            showResult = true
+            searchedHotel = (searchState as SearchState.SuccessSearchHotel).list.hotelList
+        }
+        is SearchState.InvalidSearchHotel -> {
+        }
+        is SearchState.SearchHotelCalling -> {
+        }
+        else -> {}
+    }
+
+
+        Scaffold(
+        ) { innerPadding ->
+            if(showResult && searchedHotel.isNotEmpty()){
+                SearchResultScreen(hotels = searchedHotel) {
+
+                    showResult = false
+                    println(showResult)
                 }
-                Text(text = "Search Hotel",fontFamily = PoppinsFontFamily, fontWeight = FontWeight.Bold, fontSize = 20.sp)
             }
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(20.dp),
-                modifier = Modifier
-                    .padding(20.dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(Color(0xFFE4E4E4).copy(0.5f))
-                    .padding(20.dp)
-            ) {
-                DestinationSearchBar()
-                DateRangeSelector(type = "search")
-                CustomerRoomOptSelector()
-                Row {
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(10.dp))
-                            .background(Color(0xFF238C98).copy(0.24f))
-                            .size(240.dp, 30.dp)
+            else {
+                Column(
+                    modifier = Modifier
+                        .padding(innerPadding)
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
+                        IconButton(onClick = {
+                            navController.popBackStack()
+                        }) {
+                            Icon(
+                                Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                                contentDescription = "backFromSearch"
+                            )
+                        }
                         Text(
-                            text = "Search",
-                            fontWeight = FontWeight.Bold,
+                            text = "Search Hotel",
                             fontFamily = PoppinsFontFamily,
-                            color = Color(0xFF238C98).copy(0.9f),
-                            fontSize = 16.sp,
-                            modifier = Modifier.align(Alignment.Center)
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp
                         )
                     }
-//                    Icon(Icons.Default.LocationOn, contentDescription = null)
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(20.dp),
+                        modifier = Modifier
+                            .padding(20.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                            .background(Color(0xFFE4E4E4).copy(0.5f))
+                            .padding(20.dp)
+                    ) {
+                        DestinationSearchBar(searchViewModel,
+                            onDestinationSelected = {
+                                selectedDestination = it
+                            }
+                        )
+                        DateRangeSelector(type = "search")
+                        CustomerRoomOptSelector()
+                        Row {
+                            Box(
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(10.dp))
+                                    .background(Color(0xFF238C98).copy(0.24f))
+                                    .size(240.dp, 30.dp)
+                                    .clickable {
+                                        if (selectedDestination != null) {
+                                            when (selectedDestination?.unit) {
+                                                "district_code" -> {
+                                                    val action =
+                                                        SearchHotelAction(districtCode = selectedDestination!!.code)
+                                                    searchViewModel.processAction(action)
+                                                }
+
+                                                "province_code" -> {
+                                                    val action =
+                                                        SearchHotelAction(provinceCode = selectedDestination!!.code)
+                                                    searchViewModel.processAction(action)
+                                                }
+
+                                                "ward_code" -> {
+                                                    val action =
+                                                        SearchHotelAction(wardCode = selectedDestination!!.code)
+                                                    searchViewModel.processAction(action)
+                                                }
+
+                                                else -> {
+                                                    val action = SearchHotelAction()
+                                                    searchViewModel.processAction(action)
+                                                }
+                                            }
+
+
+                                        } else {
+                                            val action = SearchHotelAction()
+                                            searchViewModel.processAction(action)
+                                        }
+                                    }
+                            ) {
+                                Text(
+                                    text = "Search",
+                                    fontWeight = FontWeight.Bold,
+                                    fontFamily = PoppinsFontFamily,
+                                    color = Color(0xFF238C98).copy(0.9f),
+                                    fontSize = 16.sp,
+                                    modifier = Modifier.align(Alignment.Center)
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }
-    }
+
 }
-//
-//@RequiresApi(Build.VERSION_CODES.O)
-//@Preview(showBackground = true, showSystemUi = true)
-//@Composable
-//fun MyAppPreview() {
-//    SearchEngineScreen()
-//}

@@ -1,8 +1,12 @@
 package com.trekkstay.hotel.feature.hotel.presentation.activities
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.view.ViewGroup
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +15,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -44,6 +49,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -61,12 +67,17 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.app.ActivityCompat
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.hotel.R
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.ui.PlayerView
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.FacilityBullet
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelDetailAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelState
@@ -201,6 +212,15 @@ fun HotelDetailScreen(
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 16.sp
                         )
+                        Box(
+                            modifier = Modifier
+                                .aspectRatio(3.5f / 1f)
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(16.dp))
+                                .background(Color.White)
+                        ) {
+                            MapViewContainer(location = hotel.coordinates, context = context)
+                        }
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(5.dp)
                         ) {
@@ -530,4 +550,34 @@ fun ReviewCard(
         }
     }
 }
+
+@Composable
+private fun MapViewContainer(
+    location: LatLng,
+    context: Context
+) {
+    AndroidView(
+        factory = { _ ->
+            MapView(context).apply {
+                layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+                )
+                getMapAsync { googleMap ->
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15f))
+
+                    // Disable user interaction with the map
+                    googleMap.uiSettings.setAllGesturesEnabled(false)
+
+                    // Add marker for the given location
+                    googleMap.addMarker(MarkerOptions().position(location))
+                }
+                onCreate(null)
+                onResume()
+            }
+        },
+        modifier = Modifier.fillMaxSize()
+    )
+}
+
 

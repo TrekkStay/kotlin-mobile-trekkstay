@@ -2,6 +2,7 @@ package com.trekkstay.hotel.feature.hotel.presentation.activities
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,9 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ButtonDefaults
@@ -31,10 +30,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hotel.R
+import com.trekkstay.hotel.feature.hotel.domain.entities.Hotel
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.CustomerFilterHotel
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.CustomerSortHotel
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.HotelSearchResultCard
@@ -42,7 +41,10 @@ import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @Composable
-fun SearchResultScreen() {
+fun SearchResultScreen(
+    hotels: List<Hotel>,
+    onBackPress: () -> Unit
+) {
     Column(
         modifier = Modifier
             .padding(top = 15.dp, bottom = 70.dp)
@@ -56,11 +58,15 @@ fun SearchResultScreen() {
                     color = Color(0xFFC4C4C4).copy(alpha = 0.65f),
                     shape = RoundedCornerShape(15.dp)
                 )
+                .clickable{
+                    onBackPress()
+                }
                 .padding(10.dp),
+
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(
-                onClick = { /*TODO*/ }) {
+                onClick = {  }) {
                 Icon(
                     Icons.Default.Search,
                     contentDescription = null,
@@ -120,15 +126,9 @@ fun SearchResultScreen() {
             verticalArrangement = Arrangement.spacedBy(10.dp),
             contentPadding = PaddingValues(15.dp),
         ) {
-            items(5) {
-                HotelSearchResultCard()
+            items(hotels.size) {
+                HotelSearchResultCard(hotels[it])
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun MyListHotelPreview() {
-    SearchResultScreen()
 }

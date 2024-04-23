@@ -21,6 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -34,11 +35,6 @@ fun HotelCard(
     navController: NavHostController,
 ) {
     if (hotel != null) {
-        val roomPrice = if (hotel.room.isNotEmpty()) {
-            hotel.room.first().originalPrice
-        } else {
-            1
-        }.toString()
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween,
@@ -63,55 +59,53 @@ fun HotelCard(
                     .clip(RoundedCornerShape(12.dp))
             )
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     hotel.name,
                     fontFamily = PoppinsFontFamily,
                     fontWeight = FontWeight.SemiBold,
-                    fontSize = 17.sp
+                    fontSize = 15.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f)
                 )
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(5.dp)
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(3.dp)
                 ) {
                     Icon(
                         Icons.Default.Star,
                         tint = Color(0xFFF3B95F),
-                        modifier = Modifier.size(20.dp),
+                        modifier = Modifier.size(15.dp),
                         contentDescription = null
                     )
                     Text(
                         "5.0",
-                        fontSize = 17.sp,
+                        fontSize = 10.sp,
                         fontFamily = PoppinsFontFamily,
                         fontWeight = FontWeight.Bold
                     )
                 }
             }
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Row {
-                    Icon(
-                        Icons.Outlined.LocationOn,
-                        tint = Color(0xFF238C98),
-                        contentDescription = null,
-                        modifier = Modifier.size(15.dp)
-                    )
-                    Text(
-                        text = hotel.addressDetail,
-                        fontSize = 11.sp,
-                        fontFamily = PoppinsFontFamily,
-                        fontWeight = FontWeight.Medium
-                    )
-                }
+                Icon(
+                    Icons.Outlined.LocationOn,
+                    tint = Color(0xFF238C98),
+                    contentDescription = null,
+                    modifier = Modifier.size(15.dp)
+                )
                 Text(
-                    text = "$$roomPrice/night",
+                    text = hotel.addressDetail,
                     fontSize = 11.sp,
                     fontFamily = PoppinsFontFamily,
-                    fontWeight = FontWeight.Medium
+                    fontWeight = FontWeight.Medium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         }

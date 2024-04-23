@@ -436,7 +436,7 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
                             selectedDistrict = it
                             selectedWard = null
                             wardList = emptyList()
-                            val action = ViewWardAction(it.code)
+                            val action = ViewWardAction( it.code)
                             locationViewModel.processAction(action)
                         })
                         DropDownMenu(

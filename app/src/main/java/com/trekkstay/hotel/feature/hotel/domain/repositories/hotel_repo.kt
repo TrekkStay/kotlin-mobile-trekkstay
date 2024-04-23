@@ -35,7 +35,9 @@ interface HotelRepo {
 
     suspend fun getHotelId(): ResultFuture<String>
 
-    suspend fun viewHotel(): ResultFuture<HotelList>
+    suspend fun viewHotel(
+         name: String?, provinceCode: String?, districtCode: String?, wardCode: String?,  priceOrder: String?
+    ): ResultFuture<HotelList>
 
     suspend fun hotelDetail(
         id:String

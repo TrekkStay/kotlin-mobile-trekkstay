@@ -30,7 +30,9 @@ data class CreateHotelAction(
 ) : HotelAction()
 
 
-object ViewHotelAction : HotelAction()
+data class ViewHotelAction(
+    val name: String?= null,val provinceCode: String?= null,val districtCode: String?= null,val wardCode: String?= null, val priceOrder: String?= null
+) : HotelAction()
 
 object GetHotelIdAction:HotelAction()
 

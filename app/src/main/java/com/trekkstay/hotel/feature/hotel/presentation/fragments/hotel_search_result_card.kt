@@ -36,19 +36,17 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.trekkstay.hotel.feature.hotel.domain.entities.Hotel
 import com.trekkstay.hotel.feature.shared.Utils.formatPrice
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @Composable
-fun HotelSearchResultCard() {
-    var hotelImg =
-        "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/880ae3c6-0414-481b-aead-5968a48a560d/dfuky40-bbfeb6ac-8675-4cf7-a0b0-4bdbbc0299d4.png/v1/fill/w_512,h_512,q_80,strp/a_i__art___pretty_girl_by_draxionmufara_dfuky40-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NTEyIiwicGF0aCI6IlwvZlwvODgwYWUzYzYtMDQxNC00ODFiLWFlYWQtNTk2OGE0OGE1NjBkXC9kZnVreTQwLWJiZmViNmFjLTg2NzUtNGNmNy1hMGIwLTRiZGJiYzAyOTlkNC5wbmciLCJ3aWR0aCI6Ijw9NTEyIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.CYceDA6vX83Rkq_rhdV3Q4ObSpHylffYnDMvoY6i2x8"
-    var hotelName = "Ruby Saigon Hotel"
-    var hotelLocation = "District 1, Ho Chi Minh city"
+fun HotelSearchResultCard(hotel: Hotel) {
+
     var hotelRating = "7.2"
-    var originalPrice = 1040.2
-    var discountRate = 35.0
+    var originalPrice = if(hotel.room.isNotEmpty())hotel.room.first().originalPrice else 0
+    var discountRate = if(hotel.room.isNotEmpty())hotel.room.first().discountRate else 0
     var discountPrice = originalPrice - (originalPrice * (discountRate / 100))
     var liked by remember { mutableStateOf(false) }
     var likedTint = (if (liked) TrekkStayCyan else Color(0xFFB8B8B9))
@@ -61,7 +59,9 @@ fun HotelSearchResultCard() {
             .padding(vertical = 15.dp)
     ) {
         AsyncImage(
-            model = hotelImg,
+            model = if(hotel.images.media.isNotEmpty())hotel.images.media.first() else {
+                "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/880ae3c6-0414-481b-aead-5968a48a560d/dfuky40-bbfeb6ac-8675-4cf7-a0b0-4bdbbc0299d4.png/v1/fill/w_512,h_512,q_80,strp/a_i__art___pretty_girl_by_draxionmufara_dfuky40-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NTEyIiwicGF0aCI6IlwvZlwvODgwYWUzYzYtMDQxNC00ODFiLWFlYWQtNTk2OGE0OGE1NjBkXC9kZnVreTQwLWJiZmViNmFjLTg2NzUtNGNmNy1hMGIwLTRiZGJiYzAyOTlkNC5wbmciLCJ3aWR0aCI6Ijw9NTEyIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.CYceDA6vX83Rkq_rhdV3Q4ObSpHylffYnDMvoY6i2x8"
+            },
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -82,7 +82,7 @@ fun HotelSearchResultCard() {
                     .weight(1f)
             ) {
                 Text(
-                    hotelName,
+                    hotel.name,
                     fontSize = 17.sp,
                     fontFamily = PoppinsFontFamily,
                     fontWeight = FontWeight.SemiBold,
@@ -102,7 +102,7 @@ fun HotelSearchResultCard() {
                         modifier = Modifier.size(18.dp)
                     )
                     Text(
-                        hotelLocation,
+                        hotel.addressDetail,
                         fontSize = 13.sp,
                         fontFamily = PoppinsFontFamily,
                         fontWeight = FontWeight.Medium,
@@ -159,14 +159,14 @@ fun HotelSearchResultCard() {
                 .padding(horizontal = 15.dp)
         ) {
             Text(
-                "$ ${formatPrice(originalPrice)}",
+                "$ ${formatPrice(originalPrice.toDouble())}",
                 fontFamily = PoppinsFontFamily,
                 fontSize = 12.sp,
                 textDecoration = TextDecoration.LineThrough
             )
             Spacer(modifier = Modifier.width(10.dp))
             Text(
-                "$ ${formatPrice(discountPrice)}",
+                "$ ${formatPrice(discountPrice.toDouble())}",
                 color = TrekkStayCyan,
                 fontWeight = FontWeight.SemiBold,
                 fontFamily = PoppinsFontFamily,

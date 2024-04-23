@@ -136,7 +136,6 @@ class RoomRemoteDataSourceImpl(private val client: Client, private val context: 
             )
 
             val response = client.execute<Unit>(request = request)
-            println("${response.data} tried doing")
             response
         }
     }

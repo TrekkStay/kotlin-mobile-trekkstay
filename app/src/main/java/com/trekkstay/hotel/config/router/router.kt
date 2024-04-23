@@ -38,6 +38,7 @@ import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewMode
 import com.trekkstay.hotel.feature.hotel.presentation.states.location.LocationViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.MediaViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.room.RoomViewModel
+import com.trekkstay.hotel.feature.hotel.presentation.states.search.SearchViewModel
 import com.trekkstay.hotel.feature.notification.presentation.activities.CustomerNotificationScreen
 import com.trekkstay.hotel.feature.notification.presentation.activities.HotelNotificationScreen
 import com.trekkstay.hotel.feature.qr_scanner.QRScannerScreen
@@ -52,6 +53,7 @@ object AppRouter {
     private lateinit var roomViewModel: RoomViewModel
     private lateinit var locationViewModel: LocationViewModel
     private lateinit var mediaViewModel: MediaViewModel
+    private lateinit var searchViewModel: SearchViewModel
     private lateinit var activity: ComponentActivity
 
     fun initialize(
@@ -61,6 +63,7 @@ object AppRouter {
         roomViewModel: RoomViewModel,
         locationViewModel: LocationViewModel,
         mediaViewModel: MediaViewModel,
+        searchViewModel: SearchViewModel,
         activity: ComponentActivity,
         navController: NavHostController
     ) {
@@ -70,6 +73,7 @@ object AppRouter {
         this.roomViewModel = roomViewModel
         this.locationViewModel = locationViewModel
         this.mediaViewModel = mediaViewModel
+        this.searchViewModel = searchViewModel
         this.activity = activity
         this.navController = navController
     }
@@ -79,7 +83,7 @@ object AppRouter {
     fun Navigation() {
         val navController = navController ?: rememberNavController()
 
-        NavHost(navController = navController, startDestination = "hotel_main") {
+        NavHost(navController = navController, startDestination = "customer_main") {
             composable("start-up") {
                 StartupScreen(navController = navController)
             }
@@ -96,7 +100,7 @@ object AppRouter {
                 EmpRegisterScreen(empAuthStateManager, navController = navController)
             }
             composable("customer_main") {
-                CustomerMainScreen(hotelViewModel)
+                CustomerMainScreen(hotelViewModel, searchViewModel)
             }
             composable("hotel_main") {
                 HotelScreen(hotelViewModel, roomViewModel, locationViewModel,
@@ -111,8 +115,9 @@ object AppRouter {
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CustomerRouter(hotelViewModel: HotelViewModel,navController: NavHostController) {
+fun CustomerRouter(hotelViewModel: HotelViewModel,searchViewModel: SearchViewModel,navController: NavHostController) {
     NavHost(
         navController = navController,
         startDestination = "customer_home"
@@ -122,7 +127,7 @@ fun CustomerRouter(hotelViewModel: HotelViewModel,navController: NavHostControll
             CustomerHomeScreen(hotelViewModel,navController)
         }
         composable(route = "customer_search_engine") {
-            SearchEngineScreen(navController)
+            SearchEngineScreen(hotelViewModel,searchViewModel,navController)
         }
         // Reservation
         composable(route = "customer_reservations") {
