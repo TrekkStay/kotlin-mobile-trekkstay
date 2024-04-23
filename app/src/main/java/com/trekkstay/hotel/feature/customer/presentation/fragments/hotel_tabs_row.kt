@@ -272,7 +272,7 @@ fun HotelTabsRow(hotelViewModel: HotelViewModel,navController: NavHostController
 
     LaunchedEffect(Unit) {
         if (hotelState !is HotelState.SuccessViewHotel) {
-            val action = ViewHotelAction
+            val action = ViewHotelAction()
             hotelViewModel.processAction(action)
         }
     }

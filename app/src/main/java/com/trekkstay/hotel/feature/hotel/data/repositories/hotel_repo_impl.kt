@@ -93,8 +93,10 @@ class HotelRepoImpl(private val remoteDataSource: HotelRemoteDataSource) : Hotel
 
     }
 
-    override suspend fun viewHotel(): ResultFuture<HotelList>{
-        return when (val response = remoteDataSource.viewHotel())
+    override suspend fun viewHotel(
+         name: String?, provinceCode: String?, districtCode: String?, wardCode: String?,  priceOrder: String?
+    ): ResultFuture<HotelList>{
+        return when (val response = remoteDataSource.viewHotel(name, provinceCode, districtCode, wardCode, priceOrder))
         {
             is Response.Success -> response.data!!.right()
             is Response.Invalid -> ApiInvalid(response.message ?: "Unknown error", response.status ?: "-1").left()

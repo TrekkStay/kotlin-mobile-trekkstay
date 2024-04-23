@@ -84,8 +84,6 @@ data class HotelModel(
 
 
 fun HotelModel.toEntity(): Hotel {
-    println(id)
-    println(HotelModel)
     return Hotel(
         id = id,
         name = name,

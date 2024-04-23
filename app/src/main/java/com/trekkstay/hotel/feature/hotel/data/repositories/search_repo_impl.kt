@@ -7,12 +7,12 @@ import com.trekkstay.hotel.core.errors.ApiInvalid
 import com.trekkstay.hotel.core.network.response.Response
 import com.trekkstay.hotel.core.typedef.ResultFuture
 import com.trekkstay.hotel.feature.hotel.data.datasources.SearchRemoteDataSource
-import com.trekkstay.hotel.feature.hotel.domain.entities.LocationList
+import com.trekkstay.hotel.feature.hotel.domain.entities.DestinationList
 import com.trekkstay.hotel.feature.hotel.domain.repositories.SearchRepo
 
 class SearchRepoImpl(private val remoteDataSource: SearchRemoteDataSource) : SearchRepo {
     override suspend fun viewDestination(
-    ): ResultFuture<LocationList>{
+    ): ResultFuture<DestinationList>{
         return when (val response = remoteDataSource.viewDestination()
         ){
             is Response.Success -> response.data!!.right()

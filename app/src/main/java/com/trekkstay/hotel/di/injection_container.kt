@@ -81,7 +81,7 @@ val appModule = module {
     single <MediaRemoteDataSource>{ MediaRemoteDataSourceImpl(get()) }
     single <MediaRepo>{ MediaRepoImpl(get()) }
 
-    single { SearchViewModel(get()) }
+    single { SearchViewModel(get(),get()) }
     single { ViewDestinationUseCase(get()) }
     single <SearchRemoteDataSource>{ SearchRemoteDataSourceImpl(get(),get()) }
     single <SearchRepo>{ SearchRepoImpl(get()) }

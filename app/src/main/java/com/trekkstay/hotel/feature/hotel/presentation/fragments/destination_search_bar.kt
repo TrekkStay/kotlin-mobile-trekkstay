@@ -14,7 +14,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -24,16 +26,44 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.trekkstay.hotel.feature.hotel.domain.entities.Destination
+import com.trekkstay.hotel.feature.hotel.domain.entities.Location
+import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelState
+import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
+import com.trekkstay.hotel.feature.hotel.presentation.states.location.ViewProvinceAction
+import com.trekkstay.hotel.feature.hotel.presentation.states.search.SearchState
+import com.trekkstay.hotel.feature.hotel.presentation.states.search.SearchViewModel
+import com.trekkstay.hotel.feature.hotel.presentation.states.search.ViewDestinationAction
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DestinationSearchBar() {
+fun DestinationSearchBar(searchViewModel: SearchViewModel,
+                         onDestinationSelected: (Destination) -> Unit
+) {
 
-    val destinationArr = arrayOf("Ha Noi", "Da Nang", "Da Lat", "Hue", "Hai Phong")
+    var destinationArr by remember {
+        mutableStateOf(listOf<Destination>())
+    }
     var selectedDestination by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
     val keyboard = LocalSoftwareKeyboardController.current
+    val searchState by searchViewModel.state.observeAsState()
+    when (searchState) {
+        is SearchState.SuccessViewDestination -> {
+            destinationArr = (searchState as SearchState.SuccessViewDestination).destinations.destinationList
+        }
+        is SearchState.InvalidViewDestination -> {
+        }
+        is SearchState.ViewDestinationCalling -> {
+        }
+        else -> {}
+    }
+
+    LaunchedEffect(Unit) {
+        val action = ViewDestinationAction
+        searchViewModel.processAction(action)
+    }
 
     ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = !expanded }) {
         TextField(
@@ -81,13 +111,14 @@ fun DestinationSearchBar() {
                 DropdownMenuItem(
                     text = {
                         Text(
-                            text = it,
+                            text = it.name,
                             fontFamily = PoppinsFontFamily,
                             fontWeight = FontWeight.Medium
                         )
                     },
                     onClick = {
-                        selectedDestination = it
+                        selectedDestination = it.name
+                        onDestinationSelected(it)
                         keyboard?.hide()
                         expanded = false
                     }

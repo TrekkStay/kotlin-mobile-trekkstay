@@ -127,7 +127,7 @@ fun CustomerRouter(hotelViewModel: HotelViewModel,searchViewModel: SearchViewMod
             CustomerHomeScreen(hotelViewModel,navController)
         }
         composable(route = "customer_search_engine") {
-            SearchEngineScreen(searchViewModel,navController)
+            SearchEngineScreen(hotelViewModel,searchViewModel,navController)
         }
         // Reservation
         composable(route = "customer_reservations") {

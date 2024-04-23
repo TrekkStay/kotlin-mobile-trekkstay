@@ -45,7 +45,9 @@ interface HotelRemoteDataSource {
                             addressDetail: String,
                             ): Response<Unit>
     suspend fun getHotelId(): Response<String>
-    suspend fun viewHotel(): Response<HotelList>
+    suspend fun viewHotel(
+         name: String?, provinceCode: String?, districtCode: String?, wardCode: String?,  priceOrder: String?
+    ): Response<HotelList>
     suspend fun hotelDetail(
         id:String
     ): Response<Hotel>
@@ -169,11 +171,31 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
 
     }
 
-    override suspend fun viewHotel(): Response<HotelList> {
+    override suspend fun viewHotel( name: String?, provinceCode: String?, districtCode: String?, wardCode: String?,  priceOrder: String?): Response<HotelList> {
         return withContext(Dispatchers.IO) {
+
+            val queryParams = buildString {
+                append(viewHotelEndpoint)
+
+                if (name != null) {
+                    append("?name=$name")
+                }
+                if (provinceCode != null) {
+                    append(if (containsQueryParams(this.toString())) "&province_code=$provinceCode" else "?province_code=$provinceCode")
+                }
+                if (districtCode != null) {
+                    append(if (containsQueryParams(this.toString())) "&district_code=$districtCode" else "?district_code=$districtCode")
+                }
+                if (wardCode != null) {
+                    append(if (containsQueryParams(this.toString())) "&ward_code=$wardCode" else "?ward_code=$wardCode")
+                }
+                if (priceOrder != null) {
+                    append(if (containsQueryParams(this.toString())) "&price_order=$priceOrder" else "?price_order=$priceOrder")
+                }
+            }
             val request = RequestQuery(
                 method = RequestMethod.POST,
-                path = "http://52.163.61.213:8888/api/v1/$viewHotelEndpoint",
+                path = "http://52.163.61.213:8888/api/v1/$queryParams",
                 requestBody = null,
             )
 
@@ -191,6 +213,10 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
         }
 
     }
+    private fun containsQueryParams(queryParams: String): Boolean {
+        return queryParams.contains("?")
+    }
+
 
     override suspend fun hotelDetail(id:String): Response<Hotel> {
         return withContext(Dispatchers.IO) {
