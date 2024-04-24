@@ -34,6 +34,9 @@ data class ViewHotelAction(
     val name: String?= null,val provinceCode: String?= null,val districtCode: String?= null,val wardCode: String?= null, val priceOrder: String?= null
 ) : HotelAction()
 
+data class SearchHotelAction(val locationCode: String?, val priceOrder: String?,val checkInDate: String?,val checkOutDate: String?,val adults: Int?,val children: Int?,val numOfRoom: Int?,val limit: Int?,val page: Int?
+) : HotelAction()
+
 object GetHotelIdAction:HotelAction()
 
 data class HotelDetailAction(

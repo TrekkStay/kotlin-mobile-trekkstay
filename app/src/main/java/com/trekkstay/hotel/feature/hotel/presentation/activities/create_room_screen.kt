@@ -80,6 +80,7 @@ import com.trekkstay.hotel.feature.hotel.presentation.states.media.MediaViewMode
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.UploadMediaAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.UploadVideoAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.room.CreateRoomAction
+import com.trekkstay.hotel.feature.hotel.presentation.states.room.GetHotelRoomAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.room.RoomState
 import com.trekkstay.hotel.feature.hotel.presentation.states.room.RoomViewModel
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
@@ -92,7 +93,6 @@ import java.io.FileOutputStream
 fun CreateRoomScreen(hotelViewModel: HotelViewModel, roomViewModel: RoomViewModel, mediaViewModel: MediaViewModel,navController: NavHostController) {
     val context = LocalContext.current
     val contentResolver = context.contentResolver
-    var isRoomCreate = false
     var hotelId by remember { mutableStateOf("") }
     var roomType by remember { mutableStateOf(TextFieldValue()) }
     var description by remember { mutableStateOf(TextFieldValue()) }
@@ -191,38 +191,39 @@ fun CreateRoomScreen(hotelViewModel: HotelViewModel, roomViewModel: RoomViewMode
     val roomState by roomViewModel.state.observeAsState()
     val mediaState by mediaViewModel.state.observeAsState()
     var showDialog by remember { mutableStateOf(true) }
+    var hasUploadedVideo by remember { mutableStateOf(false) }
 
 
     when (mediaState){
         is MediaState.SuccessUploadVideo -> {
-            if(!isRoomCreate) {
+            if (!hasUploadedVideo) {
                 val action = CreateRoomAction(
-                    hotelId = hotelId,
-                    type = roomType.text,
-                    description = description.text,
-                    quantities = quantity.text.toIntOrNull() ?: 0,
-                    discountRate = discountRate.text.toIntOrNull() ?: 0,
-                    originalPrice = price.text.toIntOrNull() ?: 0,
-                    images = imageUrls,
-                    videos = (mediaState as MediaState.SuccessUploadVideo).media.media,
-                    airConditioner = "Air Condition" in selectedFacilities,
-                    bathTub = "Bath Tub" in selectedFacilities,
-                    shower = "Shower" in selectedFacilities,
-                    balcony = "Balcony" in selectedFacilities,
-                    hairDryer = "Hair Dryer" in selectedFacilities,
-                    kitchen = "Kitchen" in selectedFacilities,
-                    television = "Television" in selectedFacilities,
-                    slippers = "Slippers" in selectedFacilities,
-                    nonSmoking = "Smoking" in selectedFacilities,
-                    view = view.text,
-                    roomSize = roomSize.text.toIntOrNull() ?: 0,
-                    numberOfBed = selectedBedNum,
-                    adults = selectedAdultNumber,
-                    children = selectedChildNumber
-                )
+                hotelId = hotelId,
+                type = roomType.text,
+                description = description.text,
+                quantities = quantity.text.toIntOrNull() ?: 0,
+                discountRate = discountRate.text.toIntOrNull() ?: 0,
+                originalPrice = price.text.toIntOrNull() ?: 0,
+                images = imageUrls,
+                videos = (mediaState as MediaState.SuccessUploadVideo).media.media,
+                airConditioner = "Air Condition" in selectedFacilities,
+                bathTub = "Bath Tub" in selectedFacilities,
+                shower = "Shower" in selectedFacilities,
+                balcony = "Balcony" in selectedFacilities,
+                hairDryer = "Hair Dryer" in selectedFacilities,
+                kitchen = "Kitchen" in selectedFacilities,
+                television = "Television" in selectedFacilities,
+                slippers = "Slippers" in selectedFacilities,
+                nonSmoking = "Smoking" in selectedFacilities,
+                view = view.text,
+                roomSize = roomSize.text.toIntOrNull() ?: 0,
+                numberOfBed = selectedBedNum,
+                adults = selectedAdultNumber,
+                children = selectedChildNumber
+            )
                 roomViewModel.processAction(action)
+                hasUploadedVideo = true
             }
-            isRoomCreate = true
         }
         is MediaState.InvalidUploadVideo -> {
 
@@ -257,7 +258,10 @@ fun CreateRoomScreen(hotelViewModel: HotelViewModel, roomViewModel: RoomViewMode
                     text = { Text("Create room successful") },
                     confirmButton = {},
                     dismissButton = {
-                        Button(onClick = { showDialog = false }) {
+                        Button(onClick = {
+                            showDialog = false
+                            navController.navigate("hotel_room_manage")
+                        }) {
                             Text("OK")
                         }
                     }
@@ -265,7 +269,6 @@ fun CreateRoomScreen(hotelViewModel: HotelViewModel, roomViewModel: RoomViewMode
             }
             is RoomState.InvalidCreateRoom -> {
                 showDialog = true
-                isRoomCreate = true
                 AlertDialog(
                     onDismissRequest = { showDialog = false },
                     title = { Text("Create room fail") },
@@ -523,6 +526,7 @@ fun CreateRoomScreen(hotelViewModel: HotelViewModel, roomViewModel: RoomViewMode
             }
             Button(
                 onClick = {
+                    hasUploadedVideo = false
                     showDialog = true
                     val mediaAction = UploadMediaAction(
                         selectedFile,

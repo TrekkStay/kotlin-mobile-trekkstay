@@ -42,4 +42,7 @@ interface HotelRepo {
     suspend fun hotelDetail(
         id:String
     ): ResultFuture<Hotel>
+
+    suspend fun searchHotel( locationCode: String?,  priceOrder: String?, checkInDate: String?, checkOutDate: String?, adults: Int?, children: Int?, numOfRoom: Int?, limit: Int?, page: Int?
+    ): ResultFuture<HotelList>
 }

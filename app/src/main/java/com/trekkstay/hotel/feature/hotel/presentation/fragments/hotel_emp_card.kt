@@ -27,17 +27,14 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hotel.R
+import com.trekkstay.hotel.feature.authenticate.domain.entities.HotelEmp
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 @Composable
-fun HotelEmpCard() {
-    var empId = "#21127711"
-    var empFullName = "Pham Hong Gia Bao"
-    var empEmail = "tt26419@gmail"
-    var empPhone = "+84 123 456 789"
-    var empContract = "Full-time"
-    var empBaseSalary = "$10,000"
+fun HotelEmpCard(
+    emp: HotelEmp
+) {
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         modifier = Modifier
@@ -50,7 +47,7 @@ fun HotelEmpCard() {
             }
     ) {
         Text(
-            empId,
+            emp.id,
             fontFamily = PoppinsFontFamily,
             fontWeight = FontWeight.SemiBold,
             fontSize = 18.sp
@@ -58,27 +55,27 @@ fun HotelEmpCard() {
         EmpInfoRow(
             icon = Icons.Default.AccountBox,
             label = "Full Name",
-            value = empFullName
+            value = emp.name
         )
         EmpInfoRow(
             icon = Icons.Default.Email,
             label = "Email",
-            value = empEmail
+            value = emp.email
         )
         EmpInfoRow(
             icon = ImageVector.vectorResource(R.drawable.discount_ico),
             label = "Phone",
-            value = empPhone
+            value = emp.phone
         )
         EmpInfoRow(
             icon = ImageVector.vectorResource(R.drawable.contract_ico),
             label = "Contract",
-            value = empContract
+            value = emp.contract
         )
         EmpInfoRow(
             icon = ImageVector.vectorResource(R.drawable.money_circle_ico),
             label = "Base Salary",
-            value = empBaseSalary
+            value = "$ "+emp.salary.toString()
         )
     }
 }

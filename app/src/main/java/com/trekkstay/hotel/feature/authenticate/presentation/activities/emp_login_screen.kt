@@ -56,6 +56,10 @@ fun EmpLoginScreen(viewModel: EmpAuthViewModel, navController: NavHostController
                     context, "jwtKey",
                     (authState as EmpAuthState.SuccessEmpLogin).res.jwtToken
                 )
+                LocalStore.saveKey(
+                    context, "hotelId",
+                    (authState as EmpAuthState.SuccessEmpLogin).res.hotelId
+                )
                 navController.navigate("hotel_main")
             }
 

@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -39,6 +41,7 @@ import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelState
 import com.trekkstay.hotel.feature.hotel.presentation.states.room.RoomDetailAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.room.RoomState
 import com.trekkstay.hotel.feature.hotel.presentation.states.room.RoomViewModel
+import com.trekkstay.hotel.feature.hotel.presentation.states.room.ViewRoomAction
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
@@ -50,41 +53,26 @@ fun RoomDetailScreen(
 ) {
     val hotelName = "Ruby Saigon Hotel - Ben Thanh"
     LaunchedEffect(Unit) {
-        val action = RoomDetailAction(id)
+        val action = ViewRoomAction(id)
         roomViewModel.processAction(action)
     }
 
     val roomState by roomViewModel.state.observeAsState()
     when (roomState) {
-        is RoomState.SuccessRoomDetail -> {
-            Box(
+        is RoomState.SuccessViewRoom -> {
+            Column(
                 modifier = Modifier
-                    .fillMaxHeight()
+                    .fillMaxSize()
+                    .background(Color.White)
                     .padding(bottom = 80.dp)
+                    .verticalScroll(rememberScrollState())
             ) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
-                    modifier = Modifier
-                        .padding(top = 80.dp, start = 10.dp, end = 10.dp)
-                        .verticalScroll(
-                            rememberScrollState()
-                        )
-                ) {
-
-                    RoomDetailCard((roomState as RoomState.SuccessRoomDetail).room)
-                }
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .shadow(15.dp, shape = RoundedCornerShape(bottomStart = 30.dp, bottomEnd = 30.dp))
-                        .background(
-                            Color.White,
-                            shape = RoundedCornerShape(bottomStart = 30.dp, bottomEnd = 30.dp)
-                        )
                         .padding(horizontal = 20.dp, vertical = 10.dp)
-                        .align(Alignment.TopCenter)
                 ) {
                     IconButton(onClick = {
                         navController.popBackStack()
@@ -103,16 +91,20 @@ fun RoomDetailScreen(
                         modifier = Modifier.weight(1f)
                     )
                 }
+
+                    (roomState as RoomState.SuccessViewRoom).roomList.roomList.forEach { room ->
+                        RoomDetailCard(room)
+                    }
+
+
             }
+        }
 
+        is RoomState.InvalidViewRoom -> {
 
         }
 
-        is RoomState.InvalidRoomDetail -> {
-
-        }
-
-        is RoomState.RoomDetailCalling -> {
+        is RoomState.ViewRoomCalling -> {
         }
 
         else -> {

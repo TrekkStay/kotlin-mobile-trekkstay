@@ -215,7 +215,6 @@ class RoomRemoteDataSourceImpl(private val client: Client, private val context: 
 
 
     private inline fun <reified T : Any> parseResponse(responseData: Any?): T? {
-        println("check for function call")
         return when (responseData) {
             is String -> responseData as? T
             is RoomListModel -> responseData.toEntity() as? T

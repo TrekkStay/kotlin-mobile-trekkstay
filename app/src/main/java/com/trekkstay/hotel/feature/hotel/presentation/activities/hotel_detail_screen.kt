@@ -447,6 +447,7 @@ fun HotelDetailScreen(
                     }
                     Button(
                         onClick = {
+                            navController.navigate("hotel_room_detail/${hotel.id}")
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF238C98)),
                         modifier = Modifier

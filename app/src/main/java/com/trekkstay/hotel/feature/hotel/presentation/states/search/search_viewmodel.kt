@@ -27,12 +27,16 @@ class SearchViewModel(private val searchRepo: SearchRepo,private  val hotelRepo:
                 }
                 is SearchHotelAction ->{
                     _state.postValue(SearchState.SearchHotelCalling)
-                    val result = hotelRepo.viewHotel(
-                        action.name,
-                        action.provinceCode,
-                        action.districtCode,
-                        action.wardCode,
-                        action.priceOrder
+                    val result = hotelRepo.searchHotel(
+                        action.locationCode,
+                        action.priceOrder,
+                        action.checkInDate,
+                        action.checkOutDate,
+                        action.adults,
+                        action.children,
+                        action.numOfRoom,
+                        action.limit,
+                        action.page
                     )
                     result.fold(
                         { failure -> _state.postValue(SearchState.InvalidSearchHotel(failure.message)) },

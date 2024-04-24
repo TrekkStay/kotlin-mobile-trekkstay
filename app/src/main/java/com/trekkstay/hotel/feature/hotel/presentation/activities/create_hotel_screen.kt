@@ -203,36 +203,40 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
     val mediaState by mediaViewModel.state.observeAsState()
     var showDialog by remember { mutableStateOf(true) }
     var showMap by remember {mutableStateOf(false)}
+    var hasUploadedVideo by remember { mutableStateOf(false) }
 
     when (mediaState){
         is MediaState.SuccessUploadVideo -> {
-            val action = CreateHotelAction(
-                name = hotelName.text,
-                description = hotelDescription.text,
-                airportTransfer = "Airport Transfer" in selectedFacilities,
-                conferenceRoom = "Conference Room" in selectedFacilities,
-                fitnessCenter = "Fitness Center" in selectedFacilities,
-                foodService = "Food" in selectedFacilities,
-                freeWifi = "Free Wifi" in selectedFacilities,
-                laundryService = "Laundry" in selectedFacilities,
-                motorBikeRental = "Motorbike Rental" in selectedFacilities,
-                parkingArea = "Parking Area" in selectedFacilities,
-                spaService = "Spa" in selectedFacilities,
-                swimmingPool = " Pool" in selectedFacilities,
-                addressDetail = addressDetail.text,
-                checkInTime = checkInTime,
-                checkOutTime = checkOutTime,
-                provinceCode = selectedProvince?.code ?: "",
-                districtCode = selectedDistrict?.code ?: "",
-                wardCode = selectedWard?.code ?: "",
-                email = hotelEmail.text,
-                phone = hotelPhone.text,
-                videos = (mediaState as MediaState.SuccessUploadVideo).media.media,
-                images = imageUrls,
-                coordinates = selectedLatLng,
-            )
+            if(!hasUploadedVideo) {
+                val action = CreateHotelAction(
+                    name = hotelName.text,
+                    description = hotelDescription.text,
+                    airportTransfer = "Airport Transfer" in selectedFacilities,
+                    conferenceRoom = "Conference Room" in selectedFacilities,
+                    fitnessCenter = "Fitness Center" in selectedFacilities,
+                    foodService = "Food" in selectedFacilities,
+                    freeWifi = "Free Wifi" in selectedFacilities,
+                    laundryService = "Laundry" in selectedFacilities,
+                    motorBikeRental = "Motorbike Rental" in selectedFacilities,
+                    parkingArea = "Parking Area" in selectedFacilities,
+                    spaService = "Spa" in selectedFacilities,
+                    swimmingPool = " Pool" in selectedFacilities,
+                    addressDetail = addressDetail.text,
+                    checkInTime = checkInTime,
+                    checkOutTime = checkOutTime,
+                    provinceCode = selectedProvince?.code ?: "",
+                    districtCode = selectedDistrict?.code ?: "",
+                    wardCode = selectedWard?.code ?: "",
+                    email = hotelEmail.text,
+                    phone = hotelPhone.text,
+                    videos = (mediaState as MediaState.SuccessUploadVideo).media.media,
+                    images = imageUrls,
+                    coordinates = selectedLatLng,
+                )
 
-            hotelViewModel.processAction(action)
+                hotelViewModel.processAction(action)
+                hasUploadedVideo=true
+            }
         }
         is MediaState.InvalidUploadVideo -> {
 
@@ -589,6 +593,7 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
                 Button(
                     onClick = {
                         showDialog = true
+                        hasUploadedVideo=false
                         val mediaAction = UploadMediaAction(
                             selectedFile,
                             selectedExtension,

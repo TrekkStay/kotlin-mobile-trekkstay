@@ -7,8 +7,7 @@ import java.io.File
 sealed class SearchAction
 object ViewDestinationAction : SearchAction()
 
-data class SearchHotelAction(
-    val name: String?= null,val provinceCode: String?= null,val districtCode: String?= null,val wardCode: String?= null, val priceOrder: String?= null
+data class SearchHotelAction(val locationCode: String?= null, val priceOrder: String?= null,val checkInDate: String?= null,val checkOutDate: String?= null,val adults: Int?= null,val children: Int?= null,val numOfRoom: Int?= null,val limit: Int?= null,val page: Int?= null
 ) : SearchAction()
 
 

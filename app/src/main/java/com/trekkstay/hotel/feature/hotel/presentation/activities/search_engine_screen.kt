@@ -40,6 +40,7 @@ import com.trekkstay.hotel.feature.hotel.domain.entities.Hotel
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.DateRangeSelector
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.DestinationSearchBar
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.CustomerRoomOptSelector
+import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelState
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.search.SearchHotelAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.search.SearchState
@@ -48,7 +49,7 @@ import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun SearchEngineScreen(hotelViewModel:HotelViewModel, searchViewModel: SearchViewModel,navController: NavHostController) {
+fun SearchEngineScreen(searchViewModel: SearchViewModel,navController: NavHostController) {
     var selectedDestination by remember { mutableStateOf<Destination?>(null) }
     var showResult by remember { mutableStateOf(false) }
     var searchedHotel by remember {
@@ -57,7 +58,6 @@ fun SearchEngineScreen(hotelViewModel:HotelViewModel, searchViewModel: SearchVie
     val searchState by searchViewModel.state.observeAsState()
     when (searchState) {
         is SearchState.SuccessSearchHotel -> {
-            println( (searchState as SearchState.SuccessSearchHotel).list.hotelList)
             showResult = true
             searchedHotel = (searchState as SearchState.SuccessSearchHotel).list.hotelList
         }
@@ -75,7 +75,6 @@ fun SearchEngineScreen(hotelViewModel:HotelViewModel, searchViewModel: SearchVie
                 SearchResultScreen(hotels = searchedHotel) {
 
                     showResult = false
-                    println(showResult)
                 }
             }
             else {
@@ -127,31 +126,10 @@ fun SearchEngineScreen(hotelViewModel:HotelViewModel, searchViewModel: SearchVie
                                     .size(240.dp, 30.dp)
                                     .clickable {
                                         if (selectedDestination != null) {
-                                            when (selectedDestination?.unit) {
-                                                "district_code" -> {
-                                                    val action =
-                                                        SearchHotelAction(districtCode = selectedDestination!!.code)
-                                                    searchViewModel.processAction(action)
-                                                }
 
-                                                "province_code" -> {
-                                                    val action =
-                                                        SearchHotelAction(provinceCode = selectedDestination!!.code)
-                                                    searchViewModel.processAction(action)
-                                                }
-
-                                                "ward_code" -> {
-                                                    val action =
-                                                        SearchHotelAction(wardCode = selectedDestination!!.code)
-                                                    searchViewModel.processAction(action)
-                                                }
-
-                                                else -> {
-                                                    val action = SearchHotelAction()
-                                                    searchViewModel.processAction(action)
-                                                }
-                                            }
-
+                                            val action =
+                                                SearchHotelAction(locationCode = selectedDestination!!.code,limit=40,page=1,)
+                                            searchViewModel.processAction(action)
 
                                         } else {
                                             val action = SearchHotelAction()

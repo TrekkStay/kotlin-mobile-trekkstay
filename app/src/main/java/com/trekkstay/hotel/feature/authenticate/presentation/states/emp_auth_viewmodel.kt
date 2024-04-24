@@ -31,6 +31,22 @@ class EmpAuthViewModel(private val authRepo: AuthRepo) : ViewModel() {
                         { _authState.postValue(EmpAuthState.SuccessEmpRegister) }
                     )
                 }
+                is EmpCreateAction -> {
+                    _authState.postValue(EmpAuthState.EmpCreateCalling)
+                    val result = authRepo.empCreate(action.email, action.name, action.phone,action.contract,action.salary)
+                    result.fold(
+                        { failure -> _authState.postValue(EmpAuthState.InvalidEmpCreate(failure.message)) },
+                        { _authState.postValue(EmpAuthState.SuccessEmpCreate) }
+                    )
+                }
+                is ViewEmpAction -> {
+                    _authState.postValue(EmpAuthState.ViewEmpCalling)
+                    val result = authRepo.viewEmp(action.hotelId)
+                    result.fold(
+                        { failure -> _authState.postValue(EmpAuthState.InvalidViewEmp(failure.message)) },
+                        { list->  _authState.postValue(EmpAuthState.SuccessViewEmp(list)) }
+                    )
+                }
             }
         }
     }

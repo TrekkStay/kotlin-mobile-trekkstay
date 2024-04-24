@@ -104,6 +104,16 @@ class HotelRepoImpl(private val remoteDataSource: HotelRemoteDataSource) : Hotel
         }
 
     }
+
+    override suspend fun searchHotel(
+        locationCode: String?,  priceOrder: String?, checkInDate: String?, checkOutDate: String?, adults: Int?, children: Int?, numOfRoom: Int?, limit: Int?, page: Int?
+    ): ResultFuture<HotelList>{
+        return when (val response = remoteDataSource.searchHotel(locationCode,priceOrder,checkInDate,checkOutDate,adults,children,numOfRoom, limit,page))
+        {
+            is Response.Success -> response.data!!.right()
+            is Response.Invalid -> ApiInvalid(response.message ?: "Unknown error", response.status ?: "-1").left()
+            is Response.Failure -> throw ApiException(response.message ?: "Unknown error", response.status ?: "-1")
+        }
+
+    }
 }
-
-

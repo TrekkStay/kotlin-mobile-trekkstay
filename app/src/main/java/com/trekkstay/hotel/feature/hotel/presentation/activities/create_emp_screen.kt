@@ -47,17 +47,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.hotel.R
+import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.InfoTextField
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 @Composable
-fun CreateEmpScreen(navController: NavHostController) {
+fun CreateEmpScreen(empAuthViewModel: EmpAuthViewModel,navController: NavHostController) {
     var empFullname by remember { mutableStateOf(TextFieldValue()) }
     var empEmail by remember { mutableStateOf(TextFieldValue()) }
     var empPhone by remember { mutableStateOf(TextFieldValue()) }
     val contractList = arrayOf("Full-time", "Part-time", "Internship")
     var empBaseSalary by remember { mutableStateOf(TextFieldValue()) }
+
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
@@ -80,7 +82,7 @@ fun CreateEmpScreen(navController: NavHostController) {
                     Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = null)
                 }
                 Text(
-                    text = "Create hotel room",
+                    text = "Create employee",
                     fontSize = 20.sp,
                     fontFamily = PoppinsFontFamily,
                     fontWeight = FontWeight.SemiBold,

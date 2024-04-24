@@ -8,6 +8,7 @@ import com.google.gson.reflect.TypeToken
 import com.trekkstay.hotel.feature.authenticate.domain.entities.Employee
 
 data class EmployeeModel(
+    @SerializedName("hotel_id") val hotelId: String,
     @SerializedName("full_name") val name: String,
     @SerializedName("email") val email: String,
     @SerializedName("phone") val phone: String,
@@ -17,6 +18,7 @@ data class EmployeeModel(
     companion object {
         fun empty(): EmployeeModel {
             return EmployeeModel(
+                hotelId = "_empty.hotelId",
                 name = "_empty.name",
                 email ="_empty.email",
                 phone ="_empty.phone",
@@ -35,6 +37,7 @@ data class EmployeeModel(
             println("$map fromMap")
             val tokenMap = map["token"] as DataMap
             return EmployeeModel(
+                hotelId = map["hotel_id"] as String,
                 name = map["full_name"] as String,
                 email = map["email"] as String,
                 phone = map["phone"] as String,
@@ -48,5 +51,5 @@ data class EmployeeModel(
 
 
 fun EmployeeModel.toEmployee(): Employee {
-    return Employee(name, email,phone,refreshToken, accessToken )
+    return Employee(hotelId,name, email,phone,refreshToken, accessToken )
 }

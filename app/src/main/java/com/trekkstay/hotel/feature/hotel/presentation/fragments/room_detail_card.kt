@@ -89,39 +89,17 @@ fun RoomDetailCard(
                 .clip(RoundedCornerShape(10.dp))
         ) {
 
-            HorizontalPager(state = rememberPagerState(pageCount = { room.video.media.size+ roomImgList.size })) {
-                if(room.video.media.isNotEmpty()&& it< room.video.media.size) {
-                    AndroidView(
-                        factory = { context ->
-                            PlayerView(context).apply {
-                                player = ExoPlayer.Builder(context).build().apply {
-                                    setMediaItem(MediaItem.fromUri(Uri.parse(room.video.media[it])))
-                                    repeatMode = ExoPlayer.REPEAT_MODE_ALL
-                                    playWhenReady = playWhenReady
-                                    prepare()
-                                    play()
-                                }
-                                useController = true
-                                layoutParams = ViewGroup.LayoutParams(
-                                    ViewGroup.LayoutParams.MATCH_PARENT,
-                                    ViewGroup.LayoutParams.MATCH_PARENT
-                                )
-                            }
-                        },
-                        modifier = Modifier.fillMaxSize()
-                    )
-                }
-                else {
+
                     AsyncImage(
-                        model = roomImgList[it-room.video.media.size],
+                        model = roomImgList.first(),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .fillMaxWidth()
                             .size(135.dp)
                     )
-                }
-            }
+
+
         }
         Text(
             text = room.type,

@@ -20,6 +20,11 @@ sealed class HotelState {
     data class SuccessViewHotel(val list: HotelList) : HotelState()
 
 
+    object SearchHotelCalling : HotelState()
+    data class InvalidSearchHotel(val message: String) : HotelState()
+    data class SuccessSearchHotel(val list: HotelList) : HotelState()
+
+
     object HotelDetailCalling : HotelState()
     data class InvalidHotelDetail(val message: String) : HotelState()
     data class SuccessHotelDetail(val hotel: Hotel) : HotelState()

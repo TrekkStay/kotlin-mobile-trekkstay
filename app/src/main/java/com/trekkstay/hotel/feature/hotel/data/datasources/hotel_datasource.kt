@@ -48,6 +48,9 @@ interface HotelRemoteDataSource {
     suspend fun viewHotel(
          name: String?, provinceCode: String?, districtCode: String?, wardCode: String?,  priceOrder: String?
     ): Response<HotelList>
+    suspend fun searchHotel(
+        locationCode: String?,  priceOrder: String?, checkInDate: String?, checkOutDate: String?, adults: Int?, children: Int?, numOfRoom: Int?, limit: Int?, page: Int?
+    ): Response<HotelList>
     suspend fun hotelDetail(
         id:String
     ): Response<Hotel>
@@ -56,6 +59,7 @@ interface HotelRemoteDataSource {
 const val createHotelEndpoint = "hotel/create"
 const val getHotelIdEndpoint = "hotel/my-hotel"
 const val viewHotelEndpoint = "hotel/filter"
+const val searchHotelEndpoint = "hotel/search"
 const val hotelDetailEndpoint = "hotel/"
 
 
@@ -148,7 +152,7 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
         return withContext(Dispatchers.IO) {
             val jwtKey = LocalStore.getKey(context, "jwtKey", "")
             val request = RequestQuery(
-                method = RequestMethod.POST,
+                method = RequestMethod.GET,
                 path = "http://52.163.61.213:8888/api/v1/$getHotelIdEndpoint",
                 headers = mapOf("Authorization" to "Bearer $jwtKey"),
                 requestBody = null,
@@ -194,7 +198,61 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
                 }
             }
             val request = RequestQuery(
-                method = RequestMethod.POST,
+                method = RequestMethod.GET,
+                path = "http://52.163.61.213:8888/api/v1/$queryParams",
+                requestBody = null,
+            )
+
+            val response = client.execute<HotelList>(
+                request = request,
+                parser = { responseData ->
+                    if (responseData is String) {
+                        parseResponse(HotelListModel.fromJson(responseData))
+                    } else {
+                        null
+                    }
+                }
+            )
+            response
+        }
+
+    }
+
+
+    override suspend fun searchHotel(
+        locationCode: String?,  priceOrder: String?, checkInDate: String?, checkOutDate: String?, adults: Int?, children: Int?, numOfRoom: Int?, limit: Int?, page: Int?): Response<HotelList> {
+        return withContext(Dispatchers.IO) {
+
+            val queryParams = buildString {
+                append(searchHotelEndpoint)
+
+                if (locationCode != null) {
+                    append("?location_code=$locationCode")
+                }
+                if (priceOrder != null) {
+                    append(if (containsQueryParams(this.toString())) "&price_order=$priceOrder" else "?price_order=$priceOrder")
+                }
+                if (checkInDate != null) {
+                    append(if (containsQueryParams(this.toString())) "&check_in_date=$checkInDate" else "?check_out_date=$checkOutDate")
+                }
+                if (adults != null) {
+                    append(if (containsQueryParams(this.toString())) "&adults=$adults" else "?adults=$adults")
+                }
+                if (children != null) {
+                    append(if (containsQueryParams(this.toString())) "&children=$children" else "?children=$children")
+                }
+                if (numOfRoom != null) {
+                    append(if (containsQueryParams(this.toString())) "&num_of_room=$numOfRoom" else "?num_of_room=$numOfRoom")
+                }
+                if (limit != null) {
+                    append(if (containsQueryParams(this.toString())) "&limit=$limit" else "?limit=$limit")
+                }
+                if (page != null) {
+                    append(if (containsQueryParams(this.toString())) "&page=$page" else "?page=$page")
+                }
+            }
+            val request = RequestQuery(
+                method = RequestMethod.GET,
                 path = "http://52.163.61.213:8888/api/v1/$queryParams",
                 requestBody = null,
             )
