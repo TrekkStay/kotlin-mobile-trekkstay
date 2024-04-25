@@ -7,10 +7,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.DateRangePicker
 import androidx.compose.material3.DateRangePickerState
@@ -33,6 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
+import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -57,6 +60,38 @@ fun DateRangeSelector(
             }
             SearchDateInput("Check-out", state) {
                 isBotSheetVisible = true
+            }
+        } else if (type == "book") {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 10.dp)
+                    .clickable {
+                        isBotSheetVisible = true
+                    }
+            ) {
+                if (state.selectedEndDateMillis != null && state.selectedStartDateMillis != null) {
+                    BookDateCol(
+                        label = "Check In",
+                        formatDateFromMillis(state.selectedStartDateMillis!!)
+                    )
+                    Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null)
+                    BookDateCol(
+                        label = "Check Out",
+                        formatDateFromMillis(state.selectedEndDateMillis!!)
+                    )
+                } else {
+                    Text(
+                        "Select Check In & Check Out Date",
+                        color = TrekkStayCyan,
+                        fontFamily = PoppinsFontFamily,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 14.sp,
+                        modifier = Modifier.padding(vertical = 10.dp)
+                    )
+                }
             }
         }
         if (isBotSheetVisible) {
@@ -127,5 +162,35 @@ fun SearchDateInput(label: String, state: DateRangePickerState, onClick: () -> U
                 )
             }
         }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+private fun BookDateCol(
+    label: String,
+    date: String,
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(5.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            label,
+            fontFamily = PoppinsFontFamily,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 13.sp,
+            color = Color.Gray,
+        )
+        Text(
+            date,
+            fontFamily = PoppinsFontFamily,
+            fontWeight = FontWeight.Bold,
+            fontSize = 13.sp,
+            color = Color.White,
+            modifier = Modifier
+                .background(TrekkStayCyan, shape = RoundedCornerShape(5.dp))
+                .padding(10.dp)
+        )
     }
 }

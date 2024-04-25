@@ -1,6 +1,8 @@
 package com.trekkstay.hotel.feature.hotel.presentation.activities
 
-import android.graphics.Paint.Align
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,24 +10,23 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -46,10 +47,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hotel.R
+import com.trekkstay.hotel.feature.hotel.presentation.fragments.DateRangeSelector
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.InfoTextField
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun BookingFormScreen() {
     var expandedDesc by remember { mutableStateOf(false) }
@@ -57,8 +60,9 @@ fun BookingFormScreen() {
     var name by remember { mutableStateOf(TextFieldValue()) }
     var email by remember { mutableStateOf(TextFieldValue()) }
     var phone by remember { mutableStateOf(TextFieldValue()) }
+    var roomNum by remember { mutableStateOf(1) }
     val radioOptions = listOf("VNPay", "Paypal", "Apple Pay")
-    val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioOptions[1] ) }
+    val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioOptions[1]) }
 
     Box(
         modifier = Modifier.padding(bottom = 70.dp)
@@ -120,45 +124,84 @@ fun BookingFormScreen() {
                     text = phone,
                     onValueChange = { phone = it },
                     icon = Icons.Default.Phone,
-                    view = "customer"
+                    view = "customer",
+                    type = "number"
                 )
-                Text(
-                    text = "Payment Method",
-                    textAlign = TextAlign.Center,
-                    fontFamily = PoppinsFontFamily,
-                    color = Color.Gray,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
-                    maxLines = if (expandedDesc) Int.MAX_VALUE else 3,
-                    overflow = TextOverflow.Ellipsis
+                Spacer(modifier = Modifier.height(0.5.dp))
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(13.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(55.dp)
+                        .border(1.dp, TrekkStayCyan, RoundedCornerShape(12.dp))
+                        .padding(horizontal = 12.dp)
                 )
-            }
-            Column {
-                radioOptions.forEach { text ->
-                    Row(
-                        Modifier
-                            .fillMaxWidth()
-                            .selectable(
-                                selected = (text == selectedOption),
-                                onClick = {
-                                    onOptionSelected(text)
-                                }
-                            )
-                            .padding(horizontal = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        RadioButton(
-                            selected = (text == selectedOption),
-                            onClick = { onOptionSelected(text) }
-                        )
+                {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.bed_ico),
+                        contentDescription = null,
+                        tint = TrekkStayCyan
+                    )
+                    Row(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = text,
+                            "Room Number",
                             fontFamily = PoppinsFontFamily,
-                            fontWeight = FontWeight.SemiBold
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = Color.Black.copy(0.6f)
                         )
                     }
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        IconButton(onClick = {
+                            if (roomNum > 1) roomNum--
+                        }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_remove_24),
+                                contentDescription = null
+                            )
+                        }
+                        Text(
+                            "$roomNum",
+                            fontFamily = PoppinsFontFamily,
+                            color = TrekkStayCyan,
+                            modifier = Modifier.padding(8.dp)
+                        )
+                        IconButton(onClick = {
+                            roomNum++
+                        }) {
+                            Icon(Icons.Default.Add, contentDescription = null)
+                        }
+                    }
                 }
+                DateRangeSelector(type = "book")
             }
+//            Column {
+//                radioOptions.forEach { text ->
+//                    Row(
+//                        Modifier
+//                            .fillMaxWidth()
+//                            .selectable(
+//                                selected = (text == selectedOption),
+//                                onClick = {
+//                                    onOptionSelected(text)
+//                                }
+//                            )
+//                            .padding(horizontal = 16.dp),
+//                        verticalAlignment = Alignment.CenterVertically
+//                    ) {
+//                        RadioButton(
+//                            selected = (text == selectedOption),
+//                            onClick = { onOptionSelected(text) }
+//                        )
+//                        Text(
+//                            text = text,
+//                            fontFamily = PoppinsFontFamily,
+//                            fontWeight = FontWeight.SemiBold
+//                        )
+//                    }
+//                }
+//            }
         }
         Box(
             modifier = Modifier
@@ -191,10 +234,10 @@ fun BookingFormScreen() {
                 }
             }
         }
-
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
 @Composable
 fun BookingFormPreview() {

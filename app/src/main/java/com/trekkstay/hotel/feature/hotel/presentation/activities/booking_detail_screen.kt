@@ -166,11 +166,11 @@ private fun BookingInfoRow(
 @Composable
 private fun BookDateCol(
     label: String,
-    date: String
+    date: String,
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(5.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             label,
