@@ -1,5 +1,7 @@
 package com.trekkstay.hotel.feature.hotel.presentation.activities
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,7 +21,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,20 +39,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hotel.R
 import com.trekkstay.hotel.feature.hotel.domain.entities.Hotel
+import com.trekkstay.hotel.feature.hotel.domain.entities.MarkerInfo
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.CustomerFilterHotel
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.CustomerSortHotel
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.HotelSearchResultCard
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SearchResultScreen(
     hotels: List<Hotel>,
+    location: String,
+    checkIn: String,
+    checkOut: String,
+    numGuess: Int,
     onBackPress: () -> Unit
 ) {
-//    Sort
     var sortCriteria by remember { mutableStateOf("") }
-//    Filter
     val neighborList = listOf(
         "Ben Thanh Market",
         "Nguyen Hue Street",
@@ -61,95 +68,116 @@ fun SearchResultScreen(
     )
     var filteredNeighborhood by remember { mutableStateOf("") }
     var filteredRatings by remember { mutableStateOf(listOf<Int>()) }
-    Column(
-        modifier = Modifier
-            .padding(top = 15.dp, bottom = 70.dp)
-            .fillMaxSize()
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(15.dp)
-                .background(
-                    color = Color(0xFFC4C4C4).copy(alpha = 0.65f),
-                    shape = RoundedCornerShape(15.dp)
-                )
-                .clickable{
-                    onBackPress()
-                }
-                .padding(10.dp),
+    var showResult by remember { mutableStateOf(false) }
 
-            verticalAlignment = Alignment.CenterVertically
+    fun formatDateString(inputDate: String): String {
+        val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val outputFormatter = DateTimeFormatter.ofPattern("MM/dd")
+        val date = LocalDate.parse(inputDate, inputFormatter)
+        return date.format(outputFormatter)
+    }
+    if(showResult){
+        val markerList = hotels.map { hotel ->
+            val latLng = hotel.coordinates
+            val price = hotel.room.firstOrNull()?.originalPrice ?: 0.0
+            val name = hotel.name
+            MarkerInfo(latLng, price.toDouble(),
+                name)
+        }
+        MapWithMarkers(markerList = markerList){
+            showResult = false
+        }
+
+    }
+    else {
+        Column(
+            modifier = Modifier
+                .padding(top = 15.dp, bottom = 70.dp)
+                .fillMaxSize()
         ) {
-            IconButton(
-                onClick = {  }) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(15.dp)
+                    .background(
+                        color = Color(0xFFC4C4C4).copy(alpha = 0.65f),
+                        shape = RoundedCornerShape(15.dp)
+                    )
+                    .clickable {
+                        onBackPress()
+                    }
+                    .padding(10.dp),
+
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Icon(
                     Icons.Default.Search,
                     contentDescription = null,
                     tint = TrekkStayCyan
                 )
+
+                Column(
+                    verticalArrangement = Arrangement.SpaceAround,
+                ) {
+                    Text(
+                        location,
+                        textAlign = TextAlign.Left,
+                        fontSize = 16.sp,
+                        fontFamily = PoppinsFontFamily,
+                        fontWeight = FontWeight.SemiBold,
+                        color = TrekkStayCyan,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
+                    Text(
+                        text = "${formatDateString(checkIn)} - ${formatDateString(checkOut)} * $numGuess Guests",
+                        fontSize = 16.sp,
+                        fontFamily = PoppinsFontFamily,
+                        fontWeight = FontWeight.Medium,
+                        color = TrekkStayCyan,
+                    )
+                }
             }
-            Column(
-                verticalArrangement = Arrangement.SpaceAround,
+            Spacer(modifier = Modifier.height(0.dp))
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 15.dp)
             ) {
-                Text(
-                    "Ho Chi Minh city",
-                    textAlign = TextAlign.Left,
-                    fontSize = 16.sp,
-                    fontFamily = PoppinsFontFamily,
-                    fontWeight = FontWeight.SemiBold,
-                    color = TrekkStayCyan,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                CustomerSortHotel(sortCriteria, onSort = { sortCriteria = it })
+                CustomerFilterHotel(
+                    neighborList,
+                    filteredNeighborhood,
+                    filteredRatings,
+                    filterNeighborhood = { filteredNeighborhood = it },
+                    filterRatings = { filteredRatings = it }
                 )
-                Text(
-                    text = "Feb 2 - Feb 9 * 2 Guests",
-                    fontSize = 16.sp,
-                    fontFamily = PoppinsFontFamily,
-                    fontWeight = FontWeight.Medium,
-                    color = TrekkStayCyan,
+                OutlinedButton(
+                    contentPadding = PaddingValues(10.dp),
+                    border = BorderStroke(2.dp, TrekkStayCyan),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = Color.Transparent,
+                        contentColor = TrekkStayCyan
+                    ),
+                    modifier = Modifier.width(90.dp),
+                    onClick = { showResult = true }
                 )
+                {
+                    Icon(
+                        ImageVector.vectorResource(R.drawable.map_ico),
+                        contentDescription = null,
+                        tint = TrekkStayCyan
+                    )
+                }
             }
-        }
-        Spacer(modifier = Modifier.height(0.dp))
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 15.dp)
-        ) {
-            CustomerSortHotel(sortCriteria, onSort = { sortCriteria = it })
-            CustomerFilterHotel(
-                neighborList,
-                filteredNeighborhood,
-                filteredRatings,
-                filterNeighborhood = { filteredNeighborhood = it },
-                filterRatings = { filteredRatings = it }
-            )
-            OutlinedButton(
-                contentPadding = PaddingValues(10.dp),
-                border = BorderStroke(2.dp, TrekkStayCyan),
-                colors = ButtonDefaults.outlinedButtonColors(
-                    containerColor = Color.Transparent,
-                    contentColor = TrekkStayCyan
-                ),
-                modifier = Modifier.width(90.dp),
-                onClick = { /*TODO*/ }
-            )
-            {
-                Icon(
-                    ImageVector.vectorResource(R.drawable.map_ico),
-                    contentDescription = null,
-                    tint = TrekkStayCyan
-                )
-            }
-        }
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            contentPadding = PaddingValues(15.dp),
-        ) {
-            items(hotels.size) {
-                HotelSearchResultCard(hotels[it])
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                contentPadding = PaddingValues(15.dp),
+            ) {
+                items(hotels.size) {
+                    HotelSearchResultCard(hotels[it])
+                }
             }
         }
     }

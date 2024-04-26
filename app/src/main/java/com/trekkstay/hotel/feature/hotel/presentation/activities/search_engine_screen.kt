@@ -21,9 +21,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -37,33 +37,53 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.trekkstay.hotel.feature.hotel.domain.entities.Destination
 import com.trekkstay.hotel.feature.hotel.domain.entities.Hotel
+import com.trekkstay.hotel.feature.hotel.presentation.fragments.CustomerRoomOptSelector
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.DateRangeSelector
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.DestinationSearchBar
-import com.trekkstay.hotel.feature.hotel.presentation.fragments.CustomerRoomOptSelector
-import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelState
-import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.search.SearchHotelAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.search.SearchState
 import com.trekkstay.hotel.feature.hotel.presentation.states.search.SearchViewModel
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SearchEngineScreen(searchViewModel: SearchViewModel,navController: NavHostController) {
+
     var selectedDestination by remember { mutableStateOf<Destination?>(null) }
+    var selectedDateRange by remember { mutableStateOf<Pair<Long, Long>?>(null) }
+    var roomNumber by remember { mutableIntStateOf(1) }
+    var adultNumber by remember { mutableIntStateOf(1) }
+    var childNumber by remember { mutableIntStateOf(0) }
     var showResult by remember { mutableStateOf(false) }
+
     var searchedHotel by remember {
         mutableStateOf(listOf<Hotel>())
+    }
+
+    fun formatDateRange(startDateMillis: Long, endDateMillis: Long): Pair<String, String> {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val startDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(startDateMillis), ZoneId.systemDefault())
+        val endDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(endDateMillis), ZoneId.systemDefault())
+        val formattedStartDate = startDate.format(formatter)
+        val formattedEndDate = endDate.format(formatter)
+        return Pair(formattedStartDate, formattedEndDate)
     }
     val searchState by searchViewModel.state.observeAsState()
     when (searchState) {
         is SearchState.SuccessSearchHotel -> {
+            println("ok")
             showResult = true
             searchedHotel = (searchState as SearchState.SuccessSearchHotel).list.hotelList
         }
         is SearchState.InvalidSearchHotel -> {
+            println((searchState as SearchState.InvalidSearchHotel).message)
         }
         is SearchState.SearchHotelCalling -> {
+            println("checking")
         }
         else -> {}
     }
@@ -72,8 +92,10 @@ fun SearchEngineScreen(searchViewModel: SearchViewModel,navController: NavHostCo
         Scaffold(
         ) { innerPadding ->
             if(showResult && searchedHotel.isNotEmpty()){
-                SearchResultScreen(hotels = searchedHotel) {
-
+                val (formattedCheckInDate, formattedCheckOutDate) = formatDateRange(selectedDateRange!!.first,
+                    selectedDateRange!!.second
+                )
+                SearchResultScreen(hotels = searchedHotel, location = selectedDestination!!.name,numGuess = adultNumber+childNumber, checkIn = formattedCheckInDate, checkOut = formattedCheckOutDate) {
                     showResult = false
                 }
             }
@@ -117,7 +139,13 @@ fun SearchEngineScreen(searchViewModel: SearchViewModel,navController: NavHostCo
                             }
                         )
                         DateRangeSelector(type = "search")
-                        CustomerRoomOptSelector()
+                        { dateRange ->
+                            selectedDateRange = dateRange
+                        }
+                        CustomerRoomOptSelector(
+                            onRoomNumberSelected = { roomNumber = it },
+                            onAdultNumberSelected = { adultNumber = it },
+                            onChildNumberSelected = { childNumber = it })
                         Row {
                             Box(
                                 modifier = Modifier
@@ -126,14 +154,22 @@ fun SearchEngineScreen(searchViewModel: SearchViewModel,navController: NavHostCo
                                     .size(240.dp, 30.dp)
                                     .clickable {
                                         if (selectedDestination != null) {
-
+                                            val (formattedCheckInDate, formattedCheckOutDate) = formatDateRange(selectedDateRange!!.first,
+                                                selectedDateRange!!.second
+                                            )
                                             val action =
-                                                SearchHotelAction(locationCode = selectedDestination!!.code,limit=40,page=1,)
+                                                SearchHotelAction(
+                                                    locationCode = selectedDestination!!.code,
+                                                    limit = 40,
+                                                    page = 1,
+                                                    numOfRoom = roomNumber,
+                                                    adults = adultNumber,
+                                                    children = childNumber,
+                                                    checkInDate =formattedCheckInDate,
+                                                    checkOutDate = formattedCheckOutDate,
+                                                )
                                             searchViewModel.processAction(action)
 
-                                        } else {
-                                            val action = SearchHotelAction()
-                                            searchViewModel.processAction(action)
                                         }
                                     }
                             ) {
@@ -151,5 +187,7 @@ fun SearchEngineScreen(searchViewModel: SearchViewModel,navController: NavHostCo
                 }
             }
         }
+
+
 
 }

@@ -233,7 +233,10 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
                     append(if (containsQueryParams(this.toString())) "&price_order=$priceOrder" else "?price_order=$priceOrder")
                 }
                 if (checkInDate != null) {
-                    append(if (containsQueryParams(this.toString())) "&check_in_date=$checkInDate" else "?check_out_date=$checkOutDate")
+                    append(if (containsQueryParams(this.toString())) "&check_in_date=$checkInDate" else "?check_in_date=$checkInDate")
+                }
+                if (checkOutDate != null) {
+                    append(if (containsQueryParams(this.toString())) "&check_out_date=$checkOutDate" else "?check_out_date=$checkOutDate")
                 }
                 if (adults != null) {
                     append(if (containsQueryParams(this.toString())) "&adults=$adults" else "?adults=$adults")
@@ -242,7 +245,7 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
                     append(if (containsQueryParams(this.toString())) "&children=$children" else "?children=$children")
                 }
                 if (numOfRoom != null) {
-                    append(if (containsQueryParams(this.toString())) "&num_of_room=$numOfRoom" else "?num_of_room=$numOfRoom")
+                    append(if (containsQueryParams(this.toString())) "&num_of_rooms=$numOfRoom" else "?num_of_rooms=$numOfRoom")
                 }
                 if (limit != null) {
                     append(if (containsQueryParams(this.toString())) "&limit=$limit" else "?limit=$limit")

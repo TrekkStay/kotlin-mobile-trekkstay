@@ -23,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,7 +46,8 @@ import java.time.format.DateTimeFormatter
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateRangeSelector(
-    type: String
+    type: String,
+    onDateRangeSelected: (Pair<Long, Long>) -> Unit
 ) {
     var isBotSheetVisible by remember { mutableStateOf(false) }
     val state = rememberDateRangePickerState()
@@ -101,8 +103,15 @@ fun DateRangeSelector(
                 },
                 sheetState = botSheetState
             ) {
-                DateRangePicker(state = state)
+                DateRangePicker(
+                    state = state)
             }
+        }
+    }
+    LaunchedEffect(state.selectedStartDateMillis, state.selectedEndDateMillis) {
+        if (state.selectedStartDateMillis != null && state.selectedEndDateMillis != null) {
+            onDateRangeSelected(Pair(state.selectedStartDateMillis!!, state.selectedEndDateMillis!!))
+            isBotSheetVisible = false
         }
     }
 }

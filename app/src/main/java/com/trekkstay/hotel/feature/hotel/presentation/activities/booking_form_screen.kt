@@ -174,7 +174,9 @@ fun BookingFormScreen() {
                         }
                     }
                 }
-                DateRangeSelector(type = "book")
+                DateRangeSelector(type = "book",
+                    ) {
+                }
             }
 //            Column {
 //                radioOptions.forEach { text ->

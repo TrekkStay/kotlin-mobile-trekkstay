@@ -44,12 +44,11 @@ import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 @Composable
 fun HotelSearchResultCard(hotel: Hotel) {
 
-    var hotelRating = "7.2"
-    var originalPrice = if(hotel.room.isNotEmpty())hotel.room.first().originalPrice else 0
-    var discountRate = if(hotel.room.isNotEmpty())hotel.room.first().discountRate else 0
-    var discountPrice = originalPrice - (originalPrice * (discountRate / 100))
+    val hotelRating = "7.2"
+    val originalPrice = if(hotel.room.isNotEmpty())hotel.room.first().originalPrice else 0
+    val discountRate = if(hotel.room.isNotEmpty())hotel.room.first().discountRate else 0
     var liked by remember { mutableStateOf(false) }
-    var likedTint = (if (liked) TrekkStayCyan else Color(0xFFB8B8B9))
+    val likedTint = (if (liked) TrekkStayCyan else Color(0xFFB8B8B9))
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
@@ -166,7 +165,7 @@ fun HotelSearchResultCard(hotel: Hotel) {
             )
             Spacer(modifier = Modifier.width(10.dp))
             Text(
-                "$ ${formatPrice(discountPrice.toDouble())}",
+                "$ ${formatPrice(originalPrice - (originalPrice * (discountRate / 100.0)))}",
                 color = TrekkStayCyan,
                 fontWeight = FontWeight.SemiBold,
                 fontFamily = PoppinsFontFamily,

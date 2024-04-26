@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -30,11 +31,15 @@ import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomerRoomOptSelector() {
+fun CustomerRoomOptSelector(
+    onRoomNumberSelected: (Int) -> Unit,
+    onAdultNumberSelected: (Int) -> Unit,
+    onChildNumberSelected: (Int) -> Unit
+) {
     var isBotSheetVisible by remember { mutableStateOf(false) }
-    var roomNumber by remember { mutableStateOf(1) }
-    var adultNumber by remember { mutableStateOf(1) }
-    var childNumber by remember { mutableStateOf(0) }
+    var roomNumber by remember { mutableIntStateOf(1) }
+    var adultNumber by remember { mutableIntStateOf(1) }
+    var childNumber by remember { mutableIntStateOf(0) }
     val botSheetState = rememberModalBottomSheetState()
 
     Row(
@@ -55,7 +60,7 @@ fun CustomerRoomOptSelector() {
                 .padding(8.dp)
         )
         Text(
-            text = "${roomNumber} Room, ${adultNumber} Adults, ${childNumber} Children",
+            text = "$roomNumber Room, $adultNumber Adults, $childNumber Children",
             fontWeight = FontWeight.Medium,
             fontFamily = PoppinsFontFamily,
             fontSize = 16.sp
@@ -70,18 +75,45 @@ fun CustomerRoomOptSelector() {
                 OptionCounterRow(
                     label = "Room",
                     count = roomNumber,
-                    onIncrease = { roomNumber += 1 },
-                    onDecrease = { if (roomNumber > 1) roomNumber -= 1 })
+                    onIncrease = {
+                        roomNumber += 1
+                        onRoomNumberSelected(roomNumber)
+                    },
+                    onDecrease = {
+                        if (roomNumber > 1) {
+                            roomNumber -= 1
+                            onRoomNumberSelected(roomNumber)
+                        }
+                    }
+                )
                 OptionCounterRow(
                     label = "Adults",
                     count = adultNumber,
-                    onIncrease = { adultNumber += 1 },
-                    onDecrease = { if (adultNumber > 1) adultNumber -= 1 })
+                    onIncrease = {
+                        adultNumber += 1
+                        onAdultNumberSelected(adultNumber)
+                    },
+                    onDecrease = {
+                        if (adultNumber > 1) {
+                            adultNumber -= 1
+                            onAdultNumberSelected(adultNumber)
+                        }
+                    }
+                )
                 OptionCounterRow(
                     label = "Children",
                     count = childNumber,
-                    onIncrease = { childNumber += 1 },
-                    onDecrease = { if (childNumber > 0) childNumber -= 1 })
+                    onIncrease = {
+                        childNumber += 1
+                        onChildNumberSelected(childNumber)
+                    },
+                    onDecrease = {
+                        if (childNumber > 0) {
+                            childNumber -= 1
+                            onChildNumberSelected(childNumber)
+                        }
+                    }
+                )
                 Spacer(modifier = Modifier.size(30.dp))
             }
         }

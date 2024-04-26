@@ -100,7 +100,7 @@ object AppRouter {
                 EmpRegisterScreen(empAuthViewModel, navController = navController)
             }
             composable("customer_main") {
-                CustomerMainScreen(hotelViewModel, searchViewModel)
+                CustomerMainScreen(hotelViewModel, roomViewModel,searchViewModel)
             }
             composable("hotel_main") {
                 HotelScreen(
@@ -118,7 +118,7 @@ object AppRouter {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CustomerRouter(hotelViewModel: HotelViewModel,searchViewModel: SearchViewModel,navController: NavHostController) {
+fun CustomerRouter(hotelViewModel: HotelViewModel,roomViewModel: RoomViewModel,searchViewModel: SearchViewModel,navController: NavHostController) {
     NavHost(
         navController = navController,
         startDestination = "customer_home"
@@ -136,6 +136,13 @@ fun CustomerRouter(hotelViewModel: HotelViewModel,searchViewModel: SearchViewMod
 
             if (id != null) {
                 HotelDetailScreen(navController,hotelViewModel, id)
+            }
+        }
+        composable(route = "hotel_room_detail/{roomId}") { backStackEntry ->
+            val id = backStackEntry.arguments?.getString("roomId")
+
+            if (id != null) {
+                RoomDetailScreen(navController, roomViewModel,id)
             }
         }
         // Reservation
