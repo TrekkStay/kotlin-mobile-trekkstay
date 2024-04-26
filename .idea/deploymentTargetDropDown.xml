@@ -2,10 +2,7 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="BookingFormPreview">
-        <State />
-      </entry>
-      <entry key="MyListHotelPreview">
+      <entry key="HotelBookingDetailPreview">
         <State />
       </entry>
       <entry key="app">
