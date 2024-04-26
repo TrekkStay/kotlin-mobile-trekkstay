@@ -23,6 +23,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -45,6 +49,18 @@ fun SearchResultScreen(
     hotels: List<Hotel>,
     onBackPress: () -> Unit
 ) {
+//    Sort
+    var sortCriteria by remember { mutableStateOf("") }
+//    Filter
+    val neighborList = listOf(
+        "Ben Thanh Market",
+        "Nguyen Hue Street",
+        "Xuan Huong Lake",
+        "Love Valley",
+        "Langbiang Mountain"
+    )
+    var filteredNeighborhood by remember { mutableStateOf("") }
+    var filteredRatings by remember { mutableStateOf(listOf<Int>()) }
     Column(
         modifier = Modifier
             .padding(top = 15.dp, bottom = 70.dp)
@@ -102,8 +118,14 @@ fun SearchResultScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 15.dp)
         ) {
-            CustomerSortHotel()
-            CustomerFilterHotel()
+            CustomerSortHotel(sortCriteria, onSort = { sortCriteria = it })
+            CustomerFilterHotel(
+                neighborList,
+                filteredNeighborhood,
+                filteredRatings,
+                filterNeighborhood = { filteredNeighborhood = it },
+                filterRatings = { filteredRatings = it }
+            )
             OutlinedButton(
                 contentPadding = PaddingValues(10.dp),
                 border = BorderStroke(2.dp, TrekkStayCyan),

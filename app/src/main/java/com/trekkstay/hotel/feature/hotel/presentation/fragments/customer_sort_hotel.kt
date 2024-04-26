@@ -32,7 +32,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hotel.R
@@ -41,17 +40,19 @@ import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomerSortHotel() {
+fun CustomerSortHotel(
+    sortCriteria: String,
+    onSort: (String) -> Unit
+) {
     var isBotSheetVisible by remember { mutableStateOf(false) }
     val botSheetState = rememberModalBottomSheetState()
     val radioOptions = listOf("Price Increase","Price Decrease")
-    var selectedOption by remember { mutableStateOf("") }
     OutlinedButton(
         contentPadding = PaddingValues(10.dp),
         border = BorderStroke(2.dp, TrekkStayCyan),
         colors = ButtonDefaults.outlinedButtonColors(
-            containerColor = if (selectedOption == "") Color.Transparent else TrekkStayCyan,
-            contentColor = if (selectedOption == "") TrekkStayCyan else Color.White
+            containerColor = if (sortCriteria == "") Color.Transparent else TrekkStayCyan,
+            contentColor = if (sortCriteria == "") TrekkStayCyan else Color.White
         ),
         modifier = Modifier.width(125.dp),
         onClick = {
@@ -90,24 +91,26 @@ fun CustomerSortHotel() {
                     modifier = Modifier.padding(horizontal = 40.dp,vertical = 20.dp)
                 ) {
                     radioOptions.forEach { sorter ->
-                        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().clickable{
-                            if (selectedOption == sorter) {
-                                selectedOption = ""
-                            } else {
-                                selectedOption = sorter
-                            }
-                        }) {
+                        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                if (sortCriteria == sorter) {
+                                    onSort("")
+                                } else {
+                                    onSort(sorter)
+                                }
+                            }) {
                             RadioButton(
                                 colors = RadioButtonDefaults.colors(
                                     selectedColor = TrekkStayCyan,
                                     unselectedColor = TrekkStayCyan
                                 ),
-                                selected = (sorter == selectedOption),
+                                selected = (sorter == sortCriteria),
                                 onClick = {
-                                    if (selectedOption == sorter) {
-                                        selectedOption = ""
+                                    if (sortCriteria == sorter) {
+                                        onSort("")
                                     } else {
-                                        selectedOption = sorter
+                                        onSort(sorter)
                                     }
                                 }
                             )
@@ -126,10 +129,4 @@ fun CustomerSortHotel() {
             }
         }
     }
-}
-
-@Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
-@Composable
-fun SortHotelPreview() {
-    CustomerSortHotel()
 }

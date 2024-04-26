@@ -51,18 +51,15 @@ import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun CustomerFilterHotel() {
+fun CustomerFilterHotel(
+    neighborList: List<String>,
+    filteredNeighborhood: String,
+    filteredRatings: List<Int>,
+    filterNeighborhood: (String) -> Unit,
+    filterRatings: (List<Int>) -> Unit
+) {
     var isBotSheetVisible by remember { mutableStateOf(false) }
     val botSheetState = rememberModalBottomSheetState()
-    var selectedNeighborhood by remember { mutableStateOf("") }
-    val neighborList = listOf(
-        "Ben Thanh Market",
-        "Nguyen Hue Street",
-        "Xuan Huong Lake",
-        "Love Valley",
-        "Langbiang Mountain"
-    )
-    var selectedRatings by remember { mutableStateOf(listOf<Int>()) }
     val ratingList = listOf(3, 4, 5)
     var selectedOption by remember { mutableIntStateOf(0) }
     OutlinedButton(
@@ -84,18 +81,18 @@ fun CustomerFilterHotel() {
             fontSize = 15.sp
         )
         Spacer(modifier = Modifier.width(10.dp))
-        if (selectedNeighborhood == "" && selectedRatings.isEmpty()) {
+        if (filteredNeighborhood == "" && filteredRatings.isEmpty()) {
             Icon(ImageVector.vectorResource(R.drawable.filter_list_ico), contentDescription = null)
         } else {
-            var neighborNum = (if (selectedNeighborhood != "") 1 else 0)
-            selectedOption = neighborNum + selectedRatings.size
+            var neighborNum = (if (filteredNeighborhood != "") 1 else 0)
+            selectedOption = neighborNum + filteredRatings.size
             Text(
                 "$selectedOption",
                 color = TrekkStayCyan,
                 fontFamily = PoppinsFontFamily,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier
-                    .background(Color.White,shape = CircleShape)
+                    .background(Color.White, shape = CircleShape)
                     .padding(horizontal = 5.dp)
             )
         }
@@ -140,7 +137,7 @@ fun CustomerFilterHotel() {
                             fontSize = 20.sp
                         )
                         IconButton(onClick = {
-                            selectedNeighborhood = ""
+                            filterNeighborhood("")
                         }) {
                             Icon(
                                 ImageVector.vectorResource(R.drawable.ico_filter_off),
@@ -156,12 +153,12 @@ fun CustomerFilterHotel() {
                             .padding(horizontal = 10.dp)
                     ) {
                         neighborList.forEach { neighbor ->
-                            val isSelected = neighbor == selectedNeighborhood
+                            val isSelected = neighbor == filteredNeighborhood
                             CustomerNeighborFilterChip(
                                 label = neighbor,
                                 selected = isSelected,
                                 onSelectedChange = { selected ->
-                                    selectedNeighborhood = selected
+                                    filterNeighborhood(selected)
                                 })
                         }
                     }
@@ -179,7 +176,7 @@ fun CustomerFilterHotel() {
                             fontSize = 20.sp
                         )
                         IconButton(onClick = {
-                            selectedRatings = emptyList()
+                            filterRatings(emptyList())
                         }) {
                             Icon(
                                 ImageVector.vectorResource(R.drawable.ico_filter_off),
@@ -197,12 +194,12 @@ fun CustomerFilterHotel() {
                         ratingList.forEach { rating ->
                             CustomerRatingFilterChip(
                                 star = rating,
-                                selected = rating in selectedRatings,
+                                selected = rating in filteredRatings,
                                 onSelectedChange = { isSelected ->
-                                    selectedRatings = if (isSelected) {
-                                        selectedRatings + rating
+                                    if (isSelected) {
+                                        filterRatings(filteredRatings + rating)
                                     } else {
-                                        selectedRatings - rating
+                                        filterRatings(filteredRatings - rating)
                                     }
                                 })
                         }
@@ -299,5 +296,20 @@ private fun CustomerRatingFilterChip(
 @Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
 @Composable
 fun FilterHotelPreview() {
-    CustomerFilterHotel()
+    val neighborList = listOf(
+        "Ben Thanh Market",
+        "Nguyen Hue Street",
+        "Xuan Huong Lake",
+        "Love Valley",
+        "Langbiang Mountain"
+    )
+    var filteredNeighborhood by remember { mutableStateOf("") }
+    var filteredRatings by remember { mutableStateOf(listOf<Int>()) }
+    CustomerFilterHotel(
+        neighborList,
+        filteredNeighborhood,
+        filteredRatings,
+        filterNeighborhood = { filteredNeighborhood = it },
+        filterRatings = { filteredRatings = it }
+    )
 }
