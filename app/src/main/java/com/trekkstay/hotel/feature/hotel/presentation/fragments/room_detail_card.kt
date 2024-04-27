@@ -1,8 +1,5 @@
 package com.trekkstay.hotel.feature.hotel.presentation.fragments
 
-import android.net.Uri
-import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -12,13 +9,10 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Button
@@ -37,7 +31,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -45,17 +38,15 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import coil.compose.AsyncImage
 import com.example.hotel.R
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.ui.PlayerView
 import com.trekkstay.hotel.feature.hotel.domain.entities.Room
+import com.trekkstay.hotel.feature.shared.Utils.formatPrice
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
@@ -64,7 +55,6 @@ import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 fun RoomDetailCard(
     room: Room
 ) {
-    val context = LocalContext.current
     val roomImgList = if(room.image.media.isEmpty()) {
         arrayOf(
             "https://www.usatoday.com/gcdn/-mm-/05b227ad5b8ad4e9dcb53af4f31d7fbdb7fa901b/c=0-64-2119-1259/local/-/media/USATODAY/USATODAY/2014/08/13/1407953244000-177513283.jpg?width=1320&height=746&fit=crop&format=pjpg&auto=webp",
@@ -88,18 +78,14 @@ fun RoomDetailCard(
                 .size(135.dp)
                 .clip(RoundedCornerShape(10.dp))
         ) {
-
-
-                    AsyncImage(
-                        model = roomImgList.first(),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .size(135.dp)
-                    )
-
-
+            AsyncImage(
+                model = roomImgList.first(),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .size(135.dp)
+            )
         }
         Text(
             text = room.type,
@@ -221,15 +207,22 @@ fun RoomDetailCard(
                 .fillMaxWidth()
                 .padding(vertical = 10.dp)
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Text(
-                    "$${room.originalPrice}",
+                    "$ ${formatPrice(room.originalPrice - (room.originalPrice * (room.discountRate / 100.0)))}",
                     fontWeight = FontWeight.Bold,
                     fontSize = 24.sp,
                     fontFamily = PoppinsFontFamily,
                     color = TrekkStayCyan
+                )
+                Text(
+                    "$ ${formatPrice(room.originalPrice.toDouble())}",
+                    fontFamily = PoppinsFontFamily,
+                    fontSize = 12.sp,
+                    textDecoration = TextDecoration.LineThrough
                 )
             }
             Button(

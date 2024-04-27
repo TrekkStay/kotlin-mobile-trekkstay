@@ -1,12 +1,9 @@
 package com.trekkstay.hotel.feature.hotel.presentation.activities
 
-import android.Manifest
 import android.content.Context
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.view.ViewGroup
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -67,7 +64,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.app.ActivityCompat
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.hotel.R
@@ -95,6 +91,8 @@ fun HotelDetailScreen(
     val context = LocalContext.current
     var star = 4.5
     var reviewNum = 1863
+    var liked by remember { mutableStateOf(false) }
+    val likedTint = (if (liked) TrekkStayCyan else Color(0xFFB8B8B9))
 
     var expandedDesc by remember { mutableStateOf(false) }
 
@@ -197,7 +195,14 @@ fun HotelDetailScreen(
                             fontSize = 20.sp,
                             modifier = Modifier.weight(1f)
                         )
-                        Icon(Icons.Default.Favorite, contentDescription = null)
+                        IconButton(onClick = { liked = !liked }) {
+                            Icon(
+                                Icons.Default.Favorite,
+                                contentDescription = null,
+                                tint = likedTint,
+                                modifier = Modifier.size(30.dp)
+                            )
+                        }
                     }
                     HorizontalDivider(color = Color(0xFFB8B8B9), thickness = 2.dp)
                     Column(
