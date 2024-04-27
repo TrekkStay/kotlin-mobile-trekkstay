@@ -44,6 +44,32 @@ interface HotelRemoteDataSource {
                             wardCode: String,
                             addressDetail: String,
                             ): Response<Unit>
+
+    suspend fun updateHotel(name: String,
+                            description: String,
+                            airportTransfer: Boolean,
+                            conferenceRoom: Boolean,
+                            fitnessCenter: Boolean,
+                            foodService: Boolean,
+                            freeWifi: Boolean,
+                            laundryService: Boolean,
+                            motorBikeRental: Boolean,
+                            parkingArea: Boolean,
+                            spaService: Boolean,
+                            swimmingPool: Boolean,
+                            coordinates: LatLng,
+                            videos: List<String>,
+                            images: List<String>,
+                            email: String,
+                            phone: String,
+                            checkInTime: String,
+                            checkOutTime: String,
+                            provinceCode: String,
+                            districtCode: String,
+                            wardCode: String,
+                            addressDetail: String,
+    ): Response<Unit>
+
     suspend fun getHotelId(): Response<String>
     suspend fun viewHotel(
          name: String?, provinceCode: String?, districtCode: String?, wardCode: String?,  priceOrder: String?
@@ -57,6 +83,7 @@ interface HotelRemoteDataSource {
 }
 
 const val createHotelEndpoint = "hotel/create"
+const val updateHotelEndpoint = "hotel/update"
 const val getHotelIdEndpoint = "hotel/my-hotel"
 const val viewHotelEndpoint = "hotel/filter"
 const val searchHotelEndpoint = "hotel/search"
@@ -135,7 +162,7 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
 
             val jwtKey = LocalStore.getKey(context, "jwtKey", "")
             val request = RequestQuery(
-                method = RequestMethod.POST,
+                method = RequestMethod.PATCH,
                 path = "http://52.163.61.213:8888/api/v1/$createHotelEndpoint",
                 headers = mapOf("Authorization" to "Bearer $jwtKey"),
                 requestBody = requestBodyJson.toString()
@@ -147,6 +174,92 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
             response
         }
     }
+
+
+    override suspend fun updateHotel(name: String,
+                                     description: String,
+                                     airportTransfer: Boolean,
+                                     conferenceRoom: Boolean,
+                                     fitnessCenter: Boolean,
+                                     foodService: Boolean,
+                                     freeWifi: Boolean,
+                                     laundryService: Boolean,
+                                     motorBikeRental: Boolean,
+                                     parkingArea: Boolean,
+                                     spaService: Boolean,
+                                     swimmingPool: Boolean,
+                                     coordinates: LatLng,
+                                     videos: List<String>,
+                                     images: List<String>,
+                                     email: String,
+                                     phone: String,
+                                     checkInTime: String,
+                                     checkOutTime: String,
+                                     provinceCode: String,
+                                     districtCode: String,
+                                     wardCode: String,
+                                     addressDetail: String,
+    ): Response<Unit> {
+        return withContext(Dispatchers.IO) {
+            val facilitiesJson = JSONObject().apply {
+                put("airport_transfer", airportTransfer)
+                put("conference_room", conferenceRoom)
+                put("fitness_center", fitnessCenter)
+                put("food_service", foodService)
+                put("free_wifi", freeWifi)
+                put("laundry_service", laundryService)
+                put("motor_bike_rental", motorBikeRental)
+                put("parking_area", parkingArea)
+                put("spa_service", spaService)
+                put("swimming_pool", swimmingPool)
+            }
+
+            val coordinatesJson = JSONObject().apply {
+                put("lat", coordinates.latitude)
+                put("lng", coordinates.longitude)
+            }
+
+            val videosJson = JSONObject().apply {
+                put("urls", JSONArray(videos))
+            }
+
+            val imagesJson = JSONObject().apply {
+                put("urls", JSONArray(images))
+            }
+
+            val requestBodyJson = JSONObject().apply {
+                put("id",LocalStore.getKey(context, "hotelId", ""))
+                put("name", name)
+                put("description", description)
+                put("facilities", facilitiesJson)
+                put("coordinates", coordinatesJson)
+                put("videos", videosJson)
+                put("images", imagesJson)
+                put("email", email)
+                put("phone", phone)
+                put("check_in_time", checkInTime)
+                put("check_out_time", checkOutTime)
+                put("province_code", provinceCode)
+                put("district_code", districtCode)
+                put("ward_code", wardCode)
+                put("address_detail", addressDetail)
+            }
+
+            val jwtKey = LocalStore.getKey(context, "jwtKey", "")
+            val request = RequestQuery(
+                method = RequestMethod.POST,
+                path = "http://52.163.61.213:8888/api/v1/${updateHotelEndpoint}",
+                headers = mapOf("Authorization" to "Bearer $jwtKey"),
+                requestBody = requestBodyJson.toString()
+            )
+
+            val response = client.execute<Unit>(
+                request = request,
+            )
+            response
+        }
+    }
+
 
     override suspend fun getHotelId(): Response<String> {
         return withContext(Dispatchers.IO) {

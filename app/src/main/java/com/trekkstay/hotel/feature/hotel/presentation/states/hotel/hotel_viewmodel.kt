@@ -44,6 +44,36 @@ class HotelViewModel(private val hotelRepo: HotelRepo) : ViewModel() {
                         { _->  _state.postValue(HotelState.SuccessCreateHotel) }
                     )
                 }
+                is UpdateHotelAction -> {
+                    _state.postValue(HotelState.UpdateHotelCalling)
+                    val result = hotelRepo.updateHotel(action.name,
+                        action.description,
+                        action.airportTransfer,
+                        action.conferenceRoom,
+                        action.fitnessCenter,
+                        action.foodService,
+                        action.freeWifi,
+                        action.laundryService,
+                        action.motorBikeRental,
+                        action.parkingArea,
+                        action.spaService,
+                        action.swimmingPool,
+                        action.coordinates,
+                        action.videos,
+                        action.images,
+                        action.email,
+                        action.phone,
+                        action.checkInTime,
+                        action.checkOutTime,
+                        action.provinceCode,
+                        action.districtCode,
+                        action.wardCode,
+                        action.addressDetail)
+                    result.fold(
+                        { failure -> _state.postValue(HotelState.InvalidUpdateHotel(failure.message)) },
+                        { _->  _state.postValue(HotelState.SuccessUpdateHotel) }
+                    )
+                }
                 is ViewHotelAction ->{
                     _state.postValue(HotelState.ViewHotelCalling)
                     val result = hotelRepo.viewHotel(
