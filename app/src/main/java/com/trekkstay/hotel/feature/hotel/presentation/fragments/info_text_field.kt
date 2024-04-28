@@ -1,8 +1,11 @@
 package com.trekkstay.hotel.feature.hotel.presentation.fragments
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -59,6 +62,18 @@ fun InfoTextField(
                 contentDescription = null,
                 tint = boxColor
             )
+        },
+        trailingIcon = {
+            if (textFieldValue.text.isNotEmpty()) {
+                Icon(
+                    imageVector = Icons.Default.Clear,
+                    contentDescription = null,
+                    tint = boxColor,
+                    modifier = Modifier.clickable {
+                        textFieldValue = TextFieldValue("")
+                    }
+                )
+            }
         },
         textStyle = TextStyle(
             fontFamily = PoppinsFontFamily,

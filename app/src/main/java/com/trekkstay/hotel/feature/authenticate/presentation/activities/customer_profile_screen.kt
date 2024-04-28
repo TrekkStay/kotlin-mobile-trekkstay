@@ -19,9 +19,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.hotel.R
 import com.trekkstay.hotel.config.router.AppRouter
 import com.trekkstay.hotel.core.storage.LocalStore
@@ -59,7 +61,9 @@ fun CustomerProfileScreen(navController: NavHostController) {
             ) {
                 navController.navigate("customer_reset_pw")
             }
-            ProfileNavButton("Edit Information", Icons.Default.AccountBox, type = "customer")
+            ProfileNavButton("Edit Information", Icons.Default.AccountBox, type = "customer") {
+                navController.navigate("customer_edit_info")
+            }
             ProfileNavButton("Sign out", Icons.AutoMirrored.Filled.ExitToApp, type = "customer",
                 onClick = {
                     LocalStore.removeAllKeys(context)

@@ -8,8 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.trekkstay.hotel.feature.authenticate.presentation.activities.CustomerEditInfoScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.CustomerProfileScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.CustomerResetPwScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.EmpLoginScreen
@@ -22,8 +21,6 @@ import com.trekkstay.hotel.feature.customer.presentation.activities.CustomerHome
 import com.trekkstay.hotel.feature.customer.presentation.activities.CustomerMainScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.HotelProfileScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.StartupScreen
-import com.trekkstay.hotel.feature.hotel.domain.entities.Hotel
-import com.trekkstay.hotel.feature.hotel.domain.entities.Room
 import com.trekkstay.hotel.feature.hotel.presentation.activities.BookingDetailScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateEmpScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelScreen
@@ -84,7 +81,7 @@ object AppRouter {
     fun Navigation() {
         val navController = navController ?: rememberNavController()
 
-        NavHost(navController = navController, startDestination = "customer_main") {
+        NavHost(navController = navController, startDestination = "start-up") {
             composable("start-up") {
                 StartupScreen(navController = navController)
             }
@@ -160,6 +157,9 @@ fun CustomerRouter(hotelViewModel: HotelViewModel,roomViewModel: RoomViewModel,s
         }
         composable(route = "customer_reset_pw") {
             CustomerResetPwScreen(navController = navController)
+        }
+        composable(route = "customer_edit_info") {
+            CustomerEditInfoScreen(navController = navController)
         }
     }
 }

@@ -67,7 +67,7 @@ fun PassField(
             IconButton(onClick = { passwordVisible = !passwordVisible }) {
                 val passVisibleIco =
                     (if (passwordVisible) R.drawable.eye_off_ico else R.drawable.eye_ico)
-                Icon(ImageVector.vectorResource(passVisibleIco), contentDescription = null)
+                Icon(ImageVector.vectorResource(passVisibleIco), contentDescription = null, tint = boxColor)
             }
         },
         textStyle = TextStyle(
