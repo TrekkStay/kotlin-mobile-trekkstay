@@ -36,6 +36,7 @@ import androidx.navigation.NavHostController
 import com.example.hotel.R
 import com.trekkstay.hotel.core.storage.LocalStore
 import com.trekkstay.hotel.feature.authenticate.presentation.states.*
+import com.trekkstay.hotel.feature.shared.TextDialog
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 import com.trekkstay.hotel.ui.theme.black
 
@@ -65,16 +66,10 @@ fun EmpLoginScreen(viewModel: EmpAuthViewModel, navController: NavHostController
 
             is EmpAuthState.InvalidEmpLogin -> {
                 showDialog = true
-                AlertDialog(
-                    onDismissRequest = { showDialog = false },
-                    title = { Text("Login Failed") },
-                    text = { Text((authState as EmpAuthState.InvalidEmpLogin).message) },
-                    confirmButton = {},
-                    dismissButton = {
-                        Button(onClick = { showDialog = false }) {
-                            Text("OK")
-                        }
-                    }
+                TextDialog(
+                    title = "Login Failed",
+                    msg = "Wrong email or password. Please try again!!!",
+                    onDismiss = { showDialog = false }
                 )
             }
 

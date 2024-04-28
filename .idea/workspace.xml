@@ -9,7 +9,12 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0e28aad0-fb93-4b2a-8e7f-6cb21cc02950" name="Changes" comment="feat: reset password screen for hotel side" />
+    <list default="true" id="0e28aad0-fb93-4b2a-8e7f-6cb21cc02950" name="Changes" comment="chore: connect route to hotel reset password screen">
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/activities/emp_login_screen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/activities/emp_login_screen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/activities/login_screen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/activities/login_screen.kt" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,7 +23,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[/Users/simongin/.android/avd/Pixel_4_XL_Newer_.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[/Users/simongin/.android/avd/Pixel_4_XL.avd]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -125,7 +130,7 @@
       <recent name="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/config/router" />
     </key>
   </component>
-  <component name="RunManager" selected="Compose Preview.HotelResetPwPreview">
+  <component name="RunManager" selected="Android App.app">
     <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
       <module name="hotel.app.main" />
       <option name="DEPLOY" value="true" />
@@ -1038,7 +1043,15 @@
       <option name="project" value="LOCAL" />
       <updated>1714292783102</updated>
     </task>
-    <option name="localTasksCounter" value="45" />
+    <task id="LOCAL-00045" summary="chore: connect route to hotel reset password screen">
+      <option name="closed" value="true" />
+      <created>1714292991246</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1714292991246</updated>
+    </task>
+    <option name="localTasksCounter" value="46" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -1066,7 +1079,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="feat: startup screen for app" />
     <MESSAGE value="feat: hotel detail screen" />
     <MESSAGE value="update: hotel detail screen" />
     <MESSAGE value="update: image slider for hotel detail screen" />
@@ -1091,6 +1103,7 @@
     <MESSAGE value="feat: edit information screen for customer" />
     <MESSAGE value="chore: fix spelling in ui" />
     <MESSAGE value="feat: reset password screen for hotel side" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: reset password screen for hotel side" />
+    <MESSAGE value="chore: connect route to hotel reset password screen" />
+    <option name="LAST_COMMIT_MESSAGE" value="chore: connect route to hotel reset password screen" />
   </component>
 </project>
