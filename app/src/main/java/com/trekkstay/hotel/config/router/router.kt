@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.CustomerProfileScreen
+import com.trekkstay.hotel.feature.authenticate.presentation.activities.CustomerResetPwScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.EmpLoginScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.EmpRegisterScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.LoginScreen
@@ -83,7 +84,7 @@ object AppRouter {
     fun Navigation() {
         val navController = navController ?: rememberNavController()
 
-        NavHost(navController = navController, startDestination = "start-up") {
+        NavHost(navController = navController, startDestination = "customer_main") {
             composable("start-up") {
                 StartupScreen(navController = navController)
             }
@@ -156,6 +157,9 @@ fun CustomerRouter(hotelViewModel: HotelViewModel,roomViewModel: RoomViewModel,s
         // Profile
         composable(route = "customer_profile") {
             CustomerProfileScreen(navController = navController)
+        }
+        composable(route = "customer_reset_pw") {
+            CustomerResetPwScreen(navController = navController)
         }
     }
 }

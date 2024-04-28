@@ -26,13 +26,11 @@ import com.example.hotel.R
 import com.trekkstay.hotel.config.router.AppRouter
 import com.trekkstay.hotel.core.storage.LocalStore
 import com.trekkstay.hotel.feature.authenticate.presentation.fragments.ProfileNavButton
-import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthState
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @Composable
 fun CustomerProfileScreen(navController: NavHostController) {
-
     val context = LocalContext.current
     Column (
         modifier = Modifier.padding(top = 25.dp)
@@ -58,7 +56,9 @@ fun CustomerProfileScreen(navController: NavHostController) {
                 "Change Password",
                 ImageVector.vectorResource(R.drawable.key_ico),
                 type = "customer"
-            )
+            ) {
+                navController.navigate("customer_reset_pw")
+            }
             ProfileNavButton("Edit Information", Icons.Default.AccountBox, type = "customer")
             ProfileNavButton("Sign out", Icons.AutoMirrored.Filled.ExitToApp, type = "customer",
                 onClick = {
