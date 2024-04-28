@@ -5,6 +5,9 @@
       <entry key="BookingFormPreview">
         <State />
       </entry>
+      <entry key="CustomerEditInfoPreview">
+        <State />
+      </entry>
       <entry key="CustomerResetPwPreview">
         <State />
       </entry>

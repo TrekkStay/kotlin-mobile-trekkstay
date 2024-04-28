@@ -111,7 +111,7 @@ fun CustomerEditInfoScreen(navController: NavHostController) {
             shape = RoundedCornerShape(10.dp)
         ) {
             Text(
-                text = "Change Password",
+                text = "Update Information",
                 fontSize = 18.sp,
                 fontFamily = PoppinsFontFamily,
                 fontWeight = FontWeight.SemiBold
