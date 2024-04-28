@@ -20,6 +20,7 @@ import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthViewM
 import com.trekkstay.hotel.feature.customer.presentation.activities.CustomerHomeScreen
 import com.trekkstay.hotel.feature.customer.presentation.activities.CustomerMainScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.HotelProfileScreen
+import com.trekkstay.hotel.feature.authenticate.presentation.activities.HotelResetPwScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.StartupScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.BookingDetailScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateEmpScreen
@@ -221,6 +222,9 @@ fun HotelRouter(empAuthViewModel: EmpAuthViewModel,hotelViewModel: HotelViewMode
         }
         composable("hotel_emp_create") {
             CreateEmpScreen(empAuthViewModel,navController)
+        }
+        composable("hotel_reset_pw") {
+            HotelResetPwScreen(navController)
         }
     }
 }

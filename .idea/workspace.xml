@@ -9,13 +9,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0e28aad0-fb93-4b2a-8e7f-6cb21cc02950" name="Changes" comment="chore: fix spelling in ui">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/activities/hotel_reset_pw_screen.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/shared/text_dialog.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/activities/customer_reset_pw_screen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/activities/customer_reset_pw_screen.kt" afterDir="false" />
-    </list>
+    <list default="true" id="0e28aad0-fb93-4b2a-8e7f-6cb21cc02950" name="Changes" comment="feat: reset password screen for hotel side" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1036,7 +1030,15 @@
       <option name="project" value="LOCAL" />
       <updated>1714291185733</updated>
     </task>
-    <option name="localTasksCounter" value="44" />
+    <task id="LOCAL-00044" summary="feat: reset password screen for hotel side">
+      <option name="closed" value="true" />
+      <created>1714292783102</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1714292783102</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -1064,7 +1066,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="feat: reservation screen for hotel" />
     <MESSAGE value="feat: startup screen for app" />
     <MESSAGE value="feat: hotel detail screen" />
     <MESSAGE value="update: hotel detail screen" />
@@ -1089,6 +1090,7 @@
     <MESSAGE value="refactor: passfield for password fields in reset password screen" />
     <MESSAGE value="feat: edit information screen for customer" />
     <MESSAGE value="chore: fix spelling in ui" />
-    <option name="LAST_COMMIT_MESSAGE" value="chore: fix spelling in ui" />
+    <MESSAGE value="feat: reset password screen for hotel side" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: reset password screen for hotel side" />
   </component>
 </project>
