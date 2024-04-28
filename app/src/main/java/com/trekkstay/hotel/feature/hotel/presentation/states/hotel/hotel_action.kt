@@ -67,3 +67,5 @@ object GetHotelIdAction:HotelAction()
 data class HotelDetailAction(
     val id: String
 ):HotelAction()
+
+data class ViewHotelNearAction(val coordinate: LatLng, val maxRange: Double) : HotelAction()

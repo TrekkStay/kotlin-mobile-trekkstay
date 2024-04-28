@@ -5,8 +5,6 @@ import com.trekkstay.hotel.feature.hotel.domain.entities.HotelList
 import com.trekkstay.hotel.feature.hotel.domain.entities.LocationList
 
 sealed class HotelState {
-    object Idle : HotelState()
-
     object CreateHotelCalling : HotelState()
     data class InvalidCreateHotel(val message: String) : HotelState()
     object SuccessCreateHotel : HotelState()
@@ -34,5 +32,8 @@ sealed class HotelState {
     data class InvalidHotelDetail(val message: String) : HotelState()
     data class SuccessHotelDetail(val hotel: Hotel) : HotelState()
 
-    data class AuthenticateError(val message: String) : HotelState()
+
+    object ViewHotelNearCalling : HotelState()
+    data class InvalidViewHotelNear(val message: String) : HotelState()
+    data class SuccessViewHotelNear(val list: List<Hotel>) : HotelState()
 }
