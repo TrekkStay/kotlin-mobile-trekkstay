@@ -61,8 +61,8 @@ fun BookingFormScreen() {
     var email by remember { mutableStateOf(TextFieldValue()) }
     var phone by remember { mutableStateOf(TextFieldValue()) }
     var roomNum by remember { mutableStateOf(1) }
-    val radioOptions = listOf("VNPay", "Paypal", "Apple Pay")
-    val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioOptions[1]) }
+    var adultNum by remember { mutableStateOf(1) }
+    var childNum by remember { mutableStateOf(0) }
 
     Box(
         modifier = Modifier.padding(bottom = 70.dp)
@@ -127,83 +127,25 @@ fun BookingFormScreen() {
                     view = "customer",
                     type = "number"
                 )
-                Spacer(modifier = Modifier.height(0.5.dp))
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(13.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(55.dp)
-                        .border(1.dp, TrekkStayCyan, RoundedCornerShape(12.dp))
-                        .padding(horizontal = 12.dp)
-                )
-                {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.bed_ico),
-                        contentDescription = null,
-                        tint = TrekkStayCyan
-                    )
-                    Row(modifier = Modifier.weight(1f)) {
-                        Text(
-                            "Room Number",
-                            fontFamily = PoppinsFontFamily,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Medium,
-                            color = Color.Black.copy(0.6f)
-                        )
-                    }
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        IconButton(onClick = {
-                            if (roomNum > 1) roomNum--
-                        }) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.baseline_remove_24),
-                                contentDescription = null
-                            )
-                        }
-                        Text(
-                            "$roomNum",
-                            fontFamily = PoppinsFontFamily,
-                            color = TrekkStayCyan,
-                            modifier = Modifier.padding(8.dp)
-                        )
-                        IconButton(onClick = {
-                            roomNum++
-                        }) {
-                            Icon(Icons.Default.Add, contentDescription = null)
-                        }
-                    }
-                }
+                GuestInfoRow(title = "Room Number", count = roomNum, icon = ImageVector.vectorResource(R.drawable.bed_ico),onIncrement = {
+                    roomNum++
+                }, onDecrement = {
+                    if (roomNum > 1) roomNum--
+                })
+                GuestInfoRow(title = "Adults", count = adultNum, icon = ImageVector.vectorResource(R.drawable.people_ico), onIncrement = {
+                    adultNum++
+                }, onDecrement = {
+                    if (adultNum > 1) adultNum--
+                })
+                GuestInfoRow(title = "Children", count = childNum, icon = ImageVector.vectorResource(R.drawable.child_ico), onIncrement = {
+                    childNum++
+                }, onDecrement = {
+                    if (childNum > 0) childNum--
+                })
                 DateRangeSelector(type = "book",
                     ) {
                 }
             }
-//            Column {
-//                radioOptions.forEach { text ->
-//                    Row(
-//                        Modifier
-//                            .fillMaxWidth()
-//                            .selectable(
-//                                selected = (text == selectedOption),
-//                                onClick = {
-//                                    onOptionSelected(text)
-//                                }
-//                            )
-//                            .padding(horizontal = 16.dp),
-//                        verticalAlignment = Alignment.CenterVertically
-//                    ) {
-//                        RadioButton(
-//                            selected = (text == selectedOption),
-//                            onClick = { onOptionSelected(text) }
-//                        )
-//                        Text(
-//                            text = text,
-//                            fontFamily = PoppinsFontFamily,
-//                            fontWeight = FontWeight.SemiBold
-//                        )
-//                    }
-//                }
-//            }
         }
         Box(
             modifier = Modifier
@@ -234,6 +176,62 @@ fun BookingFormScreen() {
                         fontFamily = PoppinsFontFamily
                     )
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun GuestInfoRow(
+    title: String,
+    count: Int,
+    icon: ImageVector,
+    onIncrement: () -> Unit,
+    onDecrement: () -> Unit,
+) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(13.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(55.dp)
+            .border(1.dp, TrekkStayCyan, RoundedCornerShape(12.dp))
+            .padding(horizontal = 12.dp)
+    )
+    {
+        Icon(
+            icon,
+            contentDescription = null,
+            tint = TrekkStayCyan
+        )
+        Row(modifier = Modifier.weight(1f)) {
+            Text(
+                title,
+                fontFamily = PoppinsFontFamily,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Medium,
+                color = Color.Black.copy(0.6f)
+            )
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            IconButton(onClick = {
+                onDecrement()
+            }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.baseline_remove_24),
+                    contentDescription = null
+                )
+            }
+            Text(
+                "$count",
+                fontFamily = PoppinsFontFamily,
+                color = TrekkStayCyan,
+                modifier = Modifier.padding(8.dp)
+            )
+            IconButton(onClick = {
+                onIncrement()
+            }) {
+                Icon(Icons.Default.Add, contentDescription = null)
             }
         }
     }
