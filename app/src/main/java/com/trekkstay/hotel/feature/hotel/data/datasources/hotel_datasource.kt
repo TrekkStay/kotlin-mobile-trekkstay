@@ -80,6 +80,8 @@ interface HotelRemoteDataSource {
     suspend fun hotelDetail(
         id:String
     ): Response<Hotel>
+    suspend fun viewHotelNear( coordinate: LatLng,  maxRange: Double): Response<List<Hotel>>
+
 }
 
 const val createHotelEndpoint = "hotel/create"
@@ -88,6 +90,8 @@ const val getHotelIdEndpoint = "hotel/my-hotel"
 const val viewHotelEndpoint = "hotel/filter"
 const val searchHotelEndpoint = "hotel/search"
 const val hotelDetailEndpoint = "hotel/"
+const val viewHotelNearEndpoint = "hotel/filter/near-me"
+
 
 
 class HotelRemoteDataSourceImpl(private val client: Client, private val context: Context) : HotelRemoteDataSource {
@@ -387,6 +391,34 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
         }
 
     }
+
+
+    override suspend fun viewHotelNear(
+        coordinate: LatLng, maxRange: Double): Response<List<Hotel>> {
+        return withContext(Dispatchers.IO) {
+
+            val request = RequestQuery(
+                method = RequestMethod.GET,
+                path = "http://52.163.61.213:8888/api/v1/$viewHotelNearEndpoint?lat=${coordinate.latitude}&lng=${coordinate.longitude}&max_distance=$maxRange",
+                requestBody = null,
+            )
+
+            val response = client.execute<List<Hotel>>(
+                request = request,
+                parser = { responseData ->
+                    if (responseData is String) {
+                        parseResponse(HotelModel.fromList(responseData))
+                    } else {
+                        null
+                    }
+                }
+            )
+            println(request)
+            println(response.message)
+            response
+        }
+
+    }
     private fun containsQueryParams(queryParams: String): Boolean {
         return queryParams.contains("?")
     }
@@ -421,6 +453,12 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
             is String -> responseData as? T
             is HotelListModel -> responseData.toEntity() as? T
             is HotelModel -> responseData.toEntity() as? T
+            is List<*> -> responseData.mapNotNull { item ->
+                when (item) {
+                    is HotelModel -> item.toEntity()
+                    else -> null
+                }
+            } as? T
             else -> null
         }
     }
