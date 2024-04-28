@@ -9,8 +9,12 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0e28aad0-fb93-4b2a-8e7f-6cb21cc02950" name="Changes" comment="feat: edit information screen for customer">
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/activities/customer_edit_info.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/activities/customer_edit_info.kt" afterDir="false" />
+    <list default="true" id="0e28aad0-fb93-4b2a-8e7f-6cb21cc02950" name="Changes" comment="chore: fix spelling in ui">
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/activities/hotel_reset_pw_screen.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/shared/text_dialog.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/activities/customer_reset_pw_screen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/activities/customer_reset_pw_screen.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -127,7 +131,7 @@
       <recent name="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/config/router" />
     </key>
   </component>
-  <component name="RunManager" selected="Compose Preview.CustomerEditInfoPreview">
+  <component name="RunManager" selected="Compose Preview.HotelResetPwPreview">
     <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
       <module name="hotel.app.main" />
       <option name="DEPLOY" value="true" />
@@ -533,7 +537,7 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="HotelBookingDetailPreview" type="ComposePreviewRunConfiguration" singleton="false" temporary="true">
+    <configuration name="HotelResetPwPreview" type="ComposePreviewRunConfiguration" singleton="false" temporary="true">
       <module name="hotel.app.main" />
       <option name="DEPLOY" value="true" />
       <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
@@ -544,7 +548,7 @@
       <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
       <option name="CLEAR_APP_STORAGE" value="false" />
       <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
-      <option name="ACTIVITY_EXTRA_FLAGS" value="--es composable com.trekkstay.hotel.feature.hotel.presentation.activities.Hotel_booking_detail_screenKt.HotelBookingDetailPreview" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="--es composable com.trekkstay.hotel.feature.authenticate.presentation.activities.Hotel_reset_pw_screenKt.HotelResetPwPreview" />
       <option name="MODE" value="specific_activity" />
       <option name="CLEAR_LOGCAT" value="false" />
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
@@ -596,7 +600,7 @@
       <option name="ACTIVITY_CLASS" value="androidx.compose.ui.tooling.PreviewActivity" />
       <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="true" />
       <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
-      <compose-preview-run-configuration composable-fqn="com.trekkstay.hotel.feature.hotel.presentation.activities.Hotel_booking_detail_screenKt.HotelBookingDetailPreview" />
+      <compose-preview-run-configuration composable-fqn="com.trekkstay.hotel.feature.authenticate.presentation.activities.Hotel_reset_pw_screenKt.HotelResetPwPreview" />
       <method v="2">
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
@@ -671,11 +675,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Compose Preview.HotelResetPwPreview" />
         <item itemvalue="Compose Preview.CustomerEditInfoPreview" />
         <item itemvalue="Compose Preview.CustomerResetPwPreview" />
         <item itemvalue="Compose Preview.BookingFormPreview" />
         <item itemvalue="Compose Preview.SortHotelPreview" />
-        <item itemvalue="Compose Preview.HotelBookingDetailPreview" />
       </list>
     </recent_temporary>
   </component>
@@ -1024,7 +1028,15 @@
       <option name="project" value="LOCAL" />
       <updated>1714291085998</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary="chore: fix spelling in ui">
+      <option name="closed" value="true" />
+      <created>1714291185733</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1714291185733</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -1052,7 +1064,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="feat: home screen for hotel" />
     <MESSAGE value="feat: reservation screen for hotel" />
     <MESSAGE value="feat: startup screen for app" />
     <MESSAGE value="feat: hotel detail screen" />
@@ -1077,6 +1088,7 @@
     <MESSAGE value="update: booking form screen" />
     <MESSAGE value="refactor: passfield for password fields in reset password screen" />
     <MESSAGE value="feat: edit information screen for customer" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: edit information screen for customer" />
+    <MESSAGE value="chore: fix spelling in ui" />
+    <option name="LAST_COMMIT_MESSAGE" value="chore: fix spelling in ui" />
   </component>
 </project>

@@ -7,13 +7,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -32,7 +29,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,6 +36,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.hotel.R
 import com.trekkstay.hotel.feature.authenticate.presentation.fragments.PassField
+import com.trekkstay.hotel.feature.shared.TextDialog
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
@@ -107,11 +104,11 @@ fun CustomerResetPwScreen(navController: NavHostController) {
         Button(
             onClick = {
                 if (oldPw.text.isEmpty() || newPw.text.isEmpty() || newRePw.text.isEmpty()) {
-                    dialogTitle = "Information Missing"
+                    dialogTitle = "Empty Fields"
                     dialogMessage = "Please input all the required information before changing password"
                     showDialog = true
                 } else if (newPw.text != newRePw.text) {
-                    dialogTitle = "Wrong Confirmation"
+                    dialogTitle = "Password Mismatch"
                     dialogMessage = "The new password and confirm password do not match"
                     showDialog = true
                 } else {
@@ -140,51 +137,12 @@ fun CustomerResetPwScreen(navController: NavHostController) {
         }
     }
     if (showDialog) {
-        Dialog(
+        TextDialog(
             title = dialogTitle,
             msg = dialogMessage,
             onDismiss = { showDialog = false },
         )
     }
-}
-
-@Composable
-fun Dialog(
-    title: String = "Dialog Title",
-    msg: String = "Dialog content goes here",
-    onDismiss: () -> Unit,
-) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        icon = {
-            Icon(
-                Icons.Filled.Warning,
-                contentDescription = null,
-                modifier = Modifier.size(25.dp)
-            )
-        },
-        title = {
-            Text(
-                text = title,
-                fontFamily = PoppinsFontFamily,
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                textAlign = TextAlign.Center
-            )
-        },
-        text = {
-            Text(
-                text = msg,
-                fontFamily = PoppinsFontFamily,
-                fontWeight = FontWeight.Medium,
-                fontSize = 14.sp,
-                textAlign = TextAlign.Center
-            )
-        },
-        iconContentColor = Color(0xFFC82222).copy(0.6f),
-        containerColor = Color.White,
-        confirmButton = {},
-    )
 }
 
 @Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")

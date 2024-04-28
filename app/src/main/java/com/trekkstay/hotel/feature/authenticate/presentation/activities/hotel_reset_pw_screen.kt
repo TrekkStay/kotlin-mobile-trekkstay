@@ -10,9 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -27,6 +25,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,16 +34,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.trekkstay.hotel.feature.hotel.presentation.fragments.InfoTextField
+import com.example.hotel.R
+import com.trekkstay.hotel.feature.authenticate.presentation.fragments.PassField
 import com.trekkstay.hotel.feature.shared.TextDialog
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
-import com.trekkstay.hotel.ui.theme.TrekkStayCyan
+import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 @Composable
-fun CustomerEditInfoScreen(navController: NavHostController) {
-    var fullName by remember { mutableStateOf(TextFieldValue()) }
-    var email by remember { mutableStateOf(TextFieldValue()) }
-    var phone by remember { mutableStateOf(TextFieldValue()) }
+fun HotelResetPwScreen(navController: NavHostController) {
+    var oldPw by remember { mutableStateOf(TextFieldValue()) }
+    var newPw by remember { mutableStateOf(TextFieldValue()) }
+    var newRePw by remember { mutableStateOf(TextFieldValue()) }
     var showDialog by remember { mutableStateOf(false) }
     var dialogTitle by remember { mutableStateOf("") }
     var dialogMessage by remember { mutableStateOf("") }
@@ -60,7 +61,7 @@ fun CustomerEditInfoScreen(navController: NavHostController) {
                 Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = null)
             }
             Text(
-                text = "Edit your information",
+                text = "Reset your password",
                 fontSize = 20.sp,
                 fontFamily = PoppinsFontFamily,
                 fontWeight = FontWeight.SemiBold,
@@ -74,35 +75,51 @@ fun CustomerEditInfoScreen(navController: NavHostController) {
                 .weight(1f)
                 .padding(horizontal = 25.dp, vertical = 20.dp)
         ) {
-            InfoTextField(
-                label = "Full Name",
-                text = fullName,
-                onValueChange = { fullName = it },
-                icon = Icons.Default.AccountCircle,
-                view = "customer"
+            PassField(
+                label = "Old Password",
+                value = oldPw,
+                onValueChange = { oldPw = it },
+                icon = Icons.Default.Lock,
+                view = "hotel"
             )
-            InfoTextField(
-                label = "Email Address",
-                text = email,
-                onValueChange = { email = it },
-                icon = Icons.Default.Email,
-                view = "customer"
+            PassField(
+                label = "New Password",
+                value = newPw,
+                onValueChange = { newPw = it },
+                icon = ImageVector.vectorResource(
+                    id = R.drawable.pw_ico
+                ),
+                view = "hotel"
             )
-            InfoTextField(
-                label = "Phone Number",
-                text = phone,
-                onValueChange = { phone = it },
-                icon = Icons.Default.Phone,
-                view = "customer",
-                type = "number"
+            PassField(
+                label = "New Confirm Password",
+                value = newRePw,
+                onValueChange = { newRePw = it },
+                icon = ImageVector.vectorResource(
+                    id = R.drawable.pw_ico
+                ),
+                view = "hotel"
             )
         }
         Button(
             onClick = {
+                if (oldPw.text.isEmpty() || newPw.text.isEmpty() || newRePw.text.isEmpty()) {
+                    dialogTitle = "Empty Fields"
+                    dialogMessage = "Please input all the required information before changing password"
+                    showDialog = true
+                } else if (newPw.text != newRePw.text) {
+                    dialogTitle = "Password Mismatch"
+                    dialogMessage = "The new password and confirm password do not match"
+                    showDialog = true
+                } else {
+                    dialogTitle = "Success"
+                    dialogMessage = "Password has been changed"
+                    showDialog = true
+                }
 
             },
             colors = ButtonDefaults.buttonColors(
-                containerColor = TrekkStayCyan,
+                containerColor = TrekkStayBlue,
                 contentColor = Color.White
             ),
             contentPadding = PaddingValues(horizontal = 80.dp, vertical = 15.dp),
@@ -112,7 +129,7 @@ fun CustomerEditInfoScreen(navController: NavHostController) {
             shape = RoundedCornerShape(10.dp)
         ) {
             Text(
-                text = "Update Information",
+                text = "Change Password",
                 fontSize = 18.sp,
                 fontFamily = PoppinsFontFamily,
                 fontWeight = FontWeight.SemiBold
@@ -130,6 +147,6 @@ fun CustomerEditInfoScreen(navController: NavHostController) {
 
 @Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
 @Composable
-private fun CustomerEditInfoPreview() {
-    CustomerEditInfoScreen(rememberNavController())
+private fun HotelResetPwPreview() {
+    HotelResetPwScreen(rememberNavController())
 }
