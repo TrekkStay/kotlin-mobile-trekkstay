@@ -30,6 +30,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -46,23 +48,66 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.hotel.R
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.DateRangeSelector
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.InfoTextField
+import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.CreateHotelAction
+import com.trekkstay.hotel.feature.hotel.presentation.states.media.MediaState
+import com.trekkstay.hotel.feature.hotel.presentation.states.media.UploadMediaAction
+import com.trekkstay.hotel.feature.hotel.presentation.states.media.UploadVideoAction
+import com.trekkstay.hotel.feature.reservation.domain.entities.GuestInfo
+import com.trekkstay.hotel.feature.reservation.presentation.states.CreateReservationAction
+import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationState
+import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationViewModel
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun BookingFormScreen() {
+fun BookingFormScreen(roomId:String,
+                      reservationViewModel: ReservationViewModel,
+                      navController: NavController
+) {
     var expandedDesc by remember { mutableStateOf(false) }
 
     var name by remember { mutableStateOf(TextFieldValue()) }
     var email by remember { mutableStateOf(TextFieldValue()) }
     var phone by remember { mutableStateOf(TextFieldValue()) }
-    var roomNum by remember { mutableStateOf(1) }
-    var adultNum by remember { mutableStateOf(1) }
-    var childNum by remember { mutableStateOf(0) }
+    var roomNum by remember { mutableIntStateOf(1) }
+    var adultNum by remember { mutableIntStateOf(1) }
+    var childNum by remember { mutableIntStateOf(0) }
+    var selectedDateRange by remember { mutableStateOf<Pair<Long, Long>?>(null) }
+    fun formatDateRange(startDateMillis: Long, endDateMillis: Long): Pair<String, String> {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val startDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(startDateMillis), ZoneId.systemDefault())
+        val endDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(endDateMillis), ZoneId.systemDefault())
+        val formattedStartDate = startDate.format(formatter)
+        val formattedEndDate = endDate.format(formatter)
+        return Pair(formattedStartDate, formattedEndDate)
+    }
+
+    val reservationState by reservationViewModel.state.observeAsState()
+
+    when (reservationState){
+        is ReservationState.SuccessCreateReservation -> {
+            println((reservationState as ReservationState.SuccessCreateReservation).reservation)
+
+        }
+        is ReservationState.InvalidCreateReservation -> {
+            println((reservationState as ReservationState.InvalidCreateReservation).message)
+        }
+        is ReservationState.CreateReservationCalling -> {
+        }
+
+        else ->{
+
+        }
+    }
 
     Box(
         modifier = Modifier.padding(bottom = 70.dp)
@@ -143,7 +188,8 @@ fun BookingFormScreen() {
                     if (childNum > 0) childNum--
                 })
                 DateRangeSelector(type = "book",
-                    ) {
+                    ) {dateRange ->
+                    selectedDateRange = dateRange
                 }
             }
         }
@@ -158,8 +204,18 @@ fun BookingFormScreen() {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Button(
-                    onClick = {
-                        // Handle button click
+                    onClick = {val (formattedCheckInDate, formattedCheckOutDate) = formatDateRange(selectedDateRange!!.first,
+                        selectedDateRange!!.second
+                    )
+
+                        val reservationAction = CreateReservationAction(
+                            roomId= roomId,
+                            checkIn = formattedCheckInDate,
+                            checkOut = formattedCheckOutDate,
+                            quantity = roomNum,
+                            guestInfo = GuestInfo(name= name.text, contact = email.text,adult = adultNum,children=childNum)
+                        )
+                        reservationViewModel.processAction(reservationAction)
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = TrekkStayCyan),
                     modifier = Modifier
@@ -235,11 +291,4 @@ private fun GuestInfoRow(
             }
         }
     }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
-@Composable
-fun BookingFormPreview() {
-    BookingFormScreen()
 }

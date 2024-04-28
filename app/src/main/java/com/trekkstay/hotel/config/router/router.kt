@@ -23,6 +23,7 @@ import com.trekkstay.hotel.feature.authenticate.presentation.activities.HotelPro
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.HotelResetPwScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.StartupScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.BookingDetailScreen
+import com.trekkstay.hotel.feature.hotel.presentation.activities.BookingFormScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateEmpScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateHotelScreen
@@ -43,6 +44,7 @@ import com.trekkstay.hotel.feature.notification.presentation.activities.HotelNot
 import com.trekkstay.hotel.feature.qr_scanner.QRScannerScreen
 import com.trekkstay.hotel.feature.reservation.presentation.activities.CustomerReservationScreen
 import com.trekkstay.hotel.feature.reservation.presentation.activities.HotelReservationScreen
+import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationViewModel
 
 object AppRouter {
     private var navController: NavHostController? = null
@@ -53,6 +55,7 @@ object AppRouter {
     private lateinit var locationViewModel: LocationViewModel
     private lateinit var mediaViewModel: MediaViewModel
     private lateinit var searchViewModel: SearchViewModel
+    private lateinit var reservationViewModel: ReservationViewModel
     private lateinit var activity: ComponentActivity
 
     fun initialize(
@@ -63,6 +66,7 @@ object AppRouter {
         locationViewModel: LocationViewModel,
         mediaViewModel: MediaViewModel,
         searchViewModel: SearchViewModel,
+        reservationViewModel: ReservationViewModel,
         activity: ComponentActivity,
         navController: NavHostController
     ) {
@@ -73,6 +77,7 @@ object AppRouter {
         this.locationViewModel = locationViewModel
         this.mediaViewModel = mediaViewModel
         this.searchViewModel = searchViewModel
+        this.reservationViewModel = reservationViewModel
         this.activity = activity
         this.navController = navController
     }
@@ -99,7 +104,8 @@ object AppRouter {
                 EmpRegisterScreen(empAuthViewModel, navController = navController)
             }
             composable("customer_main") {
-                CustomerMainScreen(hotelViewModel, roomViewModel,searchViewModel)
+                CustomerMainScreen(hotelViewModel, roomViewModel,searchViewModel,
+                    reservationViewModel)
             }
             composable("hotel_main") {
                 HotelScreen(
@@ -117,7 +123,7 @@ object AppRouter {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CustomerRouter(hotelViewModel: HotelViewModel,roomViewModel: RoomViewModel,searchViewModel: SearchViewModel,navController: NavHostController) {
+fun CustomerRouter(hotelViewModel: HotelViewModel,roomViewModel: RoomViewModel,searchViewModel: SearchViewModel,reservationViewModel: ReservationViewModel,navController: NavHostController) {
     NavHost(
         navController = navController,
         startDestination = "customer_home"
@@ -144,9 +150,22 @@ fun CustomerRouter(hotelViewModel: HotelViewModel,roomViewModel: RoomViewModel,s
                 RoomDetailScreen(navController, roomViewModel,id)
             }
         }
+        composable(route = "booking_form/{roomId}") { backStackEntry ->
+            val id = backStackEntry.arguments?.getString("roomId")
+
+            if (id != null) {
+                BookingFormScreen( id,
+                    reservationViewModel,
+                     navController
+                )
+            }
+        }
         // Reservation
         composable(route = "customer_reservations") {
-            CustomerReservationScreen()
+                CustomerReservationScreen(
+                    reservationViewModel,
+                    navController = navController
+                )
         }
         // Notifications
         composable(route = "customer_notifications") {

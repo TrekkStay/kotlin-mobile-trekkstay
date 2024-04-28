@@ -36,14 +36,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.trekkstay.hotel.feature.reservation.presentation.fragments.CustomerReservationCard
 import com.trekkstay.hotel.feature.reservation.presentation.fragments.ReservationTabIndicator
+import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationViewModel
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 import kotlinx.coroutines.launch
 
 @Composable
-fun CustomerReservationScreen() {
+fun CustomerReservationScreen(reservationViewModel: ReservationViewModel,navController: NavController) {
     Column (
         modifier = Modifier.padding(top = 15.dp)
     ) {
@@ -152,10 +154,4 @@ fun CustomerReservationTabsRow() {
             }
         }
     }
-}
-
-@Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
-@Composable
-fun MyAppPreview() {
-    CustomerReservationScreen()
 }

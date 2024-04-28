@@ -11,18 +11,20 @@ import com.trekkstay.hotel.feature.customer.presentation.fragments.CustomerBotNa
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.room.RoomViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.search.SearchViewModel
+import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CustomerMainScreen(
     hotelViewModel: HotelViewModel,
     roomViewModel: RoomViewModel,
-    searchViewModel: SearchViewModel
+    searchViewModel: SearchViewModel,
+    reservationViewModel: ReservationViewModel
 ) {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = { CustomerBotNav(navController = navController) }
     ) { _ ->
-        CustomerRouter(hotelViewModel,roomViewModel,searchViewModel,navController)
+        CustomerRouter(hotelViewModel,roomViewModel,searchViewModel,reservationViewModel,navController)
     }
 }

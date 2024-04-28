@@ -15,6 +15,7 @@ import com.trekkstay.hotel.feature.hotel.presentation.states.location.LocationVi
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.MediaViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.room.RoomViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.search.SearchViewModel
+import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationViewModel
 import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
@@ -26,6 +27,7 @@ class MainActivity : ComponentActivity() {
     private val locationViewModel: LocationViewModel by inject()
     private val mediaViewModel: MediaViewModel by inject()
     private val searchViewModel: SearchViewModel by inject()
+    private val reservationViewModel: ReservationViewModel by inject()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +44,7 @@ class MainActivity : ComponentActivity() {
                 locationViewModel,
                 mediaViewModel,
                 searchViewModel,
+                reservationViewModel,
                 this,
                 navController
             )

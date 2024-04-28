@@ -91,7 +91,7 @@ fun RoomDetailScreen(
                 ) {
                     Spacer(modifier = Modifier.height(10.dp))
                     (roomState as RoomState.SuccessViewRoom).roomList.roomList.forEach { room ->
-                        RoomDetailCard(room)
+                        RoomDetailCard(room,navController)
                     }
                     Spacer(modifier = Modifier.height(10.dp))
                 }
