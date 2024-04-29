@@ -8,6 +8,8 @@ import androidx.navigation.compose.rememberNavController
 import com.trekkstay.hotel.config.router.CustomerRouter
 
 import com.trekkstay.hotel.feature.customer.presentation.fragments.CustomerBotNav
+import com.trekkstay.hotel.feature.hotel.presentation.states.attraction.AttractionViewModel
+import com.trekkstay.hotel.feature.hotel.presentation.states.attraction.ViewAttractionAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.room.RoomViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.search.SearchViewModel
@@ -19,12 +21,13 @@ fun CustomerMainScreen(
     hotelViewModel: HotelViewModel,
     roomViewModel: RoomViewModel,
     searchViewModel: SearchViewModel,
-    reservationViewModel: ReservationViewModel
+    reservationViewModel: ReservationViewModel,
+    attractionViewModel: AttractionViewModel
 ) {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = { CustomerBotNav(navController = navController) }
     ) { _ ->
-        CustomerRouter(hotelViewModel,roomViewModel,searchViewModel,reservationViewModel,navController)
+        CustomerRouter(hotelViewModel,roomViewModel,searchViewModel,reservationViewModel, navController, attractionViewModel)
     }
 }

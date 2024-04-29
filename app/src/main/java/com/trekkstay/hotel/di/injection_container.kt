@@ -13,6 +13,8 @@ import com.trekkstay.hotel.feature.authenticate.domain.usecases.RegisterUseCase
 import com.trekkstay.hotel.feature.authenticate.domain.usecases.ViewEmpUseCase
 import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthViewModel
 import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthViewModel
+import com.trekkstay.hotel.feature.hotel.data.datasources.AttractionRemoteDataSource
+import com.trekkstay.hotel.feature.hotel.data.datasources.AttractionRemoteDataSourceImpl
 import com.trekkstay.hotel.feature.hotel.data.datasources.HotelRemoteDataSource
 import com.trekkstay.hotel.feature.hotel.data.datasources.HotelRemoteDataSourceImpl
 import com.trekkstay.hotel.feature.hotel.data.datasources.LocationRemoteDataSource
@@ -23,11 +25,13 @@ import com.trekkstay.hotel.feature.hotel.data.datasources.RoomRemoteDataSource
 import com.trekkstay.hotel.feature.hotel.data.datasources.RoomRemoteDataSourceImpl
 import com.trekkstay.hotel.feature.hotel.data.datasources.SearchRemoteDataSource
 import com.trekkstay.hotel.feature.hotel.data.datasources.SearchRemoteDataSourceImpl
+import com.trekkstay.hotel.feature.hotel.data.repositories.AttractionRepoImpl
 import com.trekkstay.hotel.feature.hotel.data.repositories.HotelRepoImpl
 import com.trekkstay.hotel.feature.hotel.data.repositories.LocationRepoImpl
 import com.trekkstay.hotel.feature.hotel.data.repositories.MediaRepoImpl
 import com.trekkstay.hotel.feature.hotel.data.repositories.RoomRepoImpl
 import com.trekkstay.hotel.feature.hotel.data.repositories.SearchRepoImpl
+import com.trekkstay.hotel.feature.hotel.domain.repositories.AttractionRepo
 import com.trekkstay.hotel.feature.hotel.domain.repositories.HotelRepo
 import com.trekkstay.hotel.feature.hotel.domain.repositories.LocationRepo
 import com.trekkstay.hotel.feature.hotel.domain.repositories.MediaRepo
@@ -44,6 +48,7 @@ import com.trekkstay.hotel.feature.hotel.domain.usecases.media.UploadMediaUseCas
 import com.trekkstay.hotel.feature.hotel.domain.usecases.room.CreateRoomUseCase
 import com.trekkstay.hotel.feature.hotel.domain.usecases.room.ViewRoomUseCase
 import com.trekkstay.hotel.feature.hotel.domain.usecases.search.ViewDestinationUseCase
+import com.trekkstay.hotel.feature.hotel.presentation.states.attraction.AttractionViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.location.LocationViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.MediaViewModel
@@ -108,6 +113,10 @@ val appModule = module {
     single <ReservationRemoteDataSource>{ ReservationRemoteDataSourceImpl(get(),get()) }
     single <ReservationRepo>{ ReservationRepoImpl(get()) }
 
+    single { AttractionViewModel(get()) }
+//    single { CreateReservationUseCase(get()) }
+    single <AttractionRemoteDataSource>{ AttractionRemoteDataSourceImpl(get(),get()) }
+    single <AttractionRepo>{ AttractionRepoImpl(get()) }
 
     single { Client(get()) }
     single { OkHttpClient() }

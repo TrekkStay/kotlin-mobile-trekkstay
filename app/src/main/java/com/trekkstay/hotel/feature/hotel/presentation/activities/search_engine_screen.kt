@@ -35,11 +35,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.trekkstay.hotel.feature.hotel.domain.entities.AttractionList
 import com.trekkstay.hotel.feature.hotel.domain.entities.Destination
 import com.trekkstay.hotel.feature.hotel.domain.entities.Hotel
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.CustomerRoomOptSelector
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.DateRangeSelector
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.DestinationSearchBar
+import com.trekkstay.hotel.feature.hotel.presentation.states.attraction.AttractionViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.search.SearchHotelAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.search.SearchState
 import com.trekkstay.hotel.feature.hotel.presentation.states.search.SearchViewModel
@@ -51,7 +53,11 @@ import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun SearchEngineScreen(searchViewModel: SearchViewModel,navController: NavHostController) {
+fun SearchEngineScreen(
+    searchViewModel: SearchViewModel,
+    navController: NavHostController,
+    attractionViewModel: AttractionViewModel
+) {
 
     var selectedDestination by remember { mutableStateOf<Destination?>(null) }
     var selectedDateRange by remember { mutableStateOf<Pair<Long, Long>?>(null) }
@@ -66,12 +72,15 @@ fun SearchEngineScreen(searchViewModel: SearchViewModel,navController: NavHostCo
 
     fun formatDateRange(startDateMillis: Long, endDateMillis: Long): Pair<String, String> {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        val startDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(startDateMillis), ZoneId.systemDefault())
-        val endDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(endDateMillis), ZoneId.systemDefault())
+        val startDate =
+            LocalDateTime.ofInstant(Instant.ofEpochMilli(startDateMillis), ZoneId.systemDefault())
+        val endDate =
+            LocalDateTime.ofInstant(Instant.ofEpochMilli(endDateMillis), ZoneId.systemDefault())
         val formattedStartDate = startDate.format(formatter)
         val formattedEndDate = endDate.format(formatter)
         return Pair(formattedStartDate, formattedEndDate)
     }
+
     val searchState by searchViewModel.state.observeAsState()
     when (searchState) {
         is SearchState.SuccessSearchHotel -> {
@@ -79,115 +88,126 @@ fun SearchEngineScreen(searchViewModel: SearchViewModel,navController: NavHostCo
             showResult = true
             searchedHotel = (searchState as SearchState.SuccessSearchHotel).list.hotelList
         }
+
         is SearchState.InvalidSearchHotel -> {
             println((searchState as SearchState.InvalidSearchHotel).message)
         }
+
         is SearchState.SearchHotelCalling -> {
             println("checking")
         }
+
         else -> {}
     }
 
 
-        Scaffold(
-        ) { innerPadding ->
-            if(showResult && searchedHotel.isNotEmpty()){
-                val (formattedCheckInDate, formattedCheckOutDate) = formatDateRange(selectedDateRange!!.first,
-                    selectedDateRange!!.second
-                )
-                SearchResultScreen(hotels = searchedHotel, location = selectedDestination!!.name,numGuess = adultNumber+childNumber, checkIn = formattedCheckInDate, checkOut = formattedCheckOutDate) {
-                    showResult = false
-                }
+    Scaffold(
+    ) { innerPadding ->
+        if (showResult && searchedHotel.isNotEmpty()) {
+            val (formattedCheckInDate, formattedCheckOutDate) = formatDateRange(
+                selectedDateRange!!.first,
+                selectedDateRange!!.second
+            )
+            SearchResultScreen(
+                hotels = searchedHotel,
+                location = selectedDestination!!.name,
+                locationCode = selectedDestination!!.code,
+                numGuess = adultNumber + childNumber,
+                checkIn = formattedCheckInDate,
+                checkOut = formattedCheckOutDate,
+                attractionViewModel = attractionViewModel
+            ) {
+                showResult = false
             }
-            else {
-                Column(
-                    modifier = Modifier
-                        .padding(innerPadding)
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState())
+        } else {
+            Column(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        IconButton(onClick = {
-                            navController.popBackStack()
-                        }) {
-                            Icon(
-                                Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                                contentDescription = "backFromSearch"
-                            )
-                        }
-                        Text(
-                            text = "Search Hotel",
-                            fontFamily = PoppinsFontFamily,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 20.sp
+                    IconButton(onClick = {
+                        navController.popBackStack()
+                    }) {
+                        Icon(
+                            Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                            contentDescription = "backFromSearch"
                         )
                     }
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(20.dp),
-                        modifier = Modifier
-                            .padding(20.dp)
-                            .clip(RoundedCornerShape(20.dp))
-                            .background(Color(0xFFE4E4E4).copy(0.5f))
-                            .padding(20.dp)
-                    ) {
-                        DestinationSearchBar(searchViewModel,
-                            onDestinationSelected = {
-                                selectedDestination = it
-                            }
-                        )
-                        DateRangeSelector(type = "search")
-                        { dateRange ->
-                            selectedDateRange = dateRange
+                    Text(
+                        text = "Search Hotel",
+                        fontFamily = PoppinsFontFamily,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    )
+                }
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(20.dp),
+                    modifier = Modifier
+                        .padding(20.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(Color(0xFFE4E4E4).copy(0.5f))
+                        .padding(20.dp)
+                ) {
+                    DestinationSearchBar(searchViewModel,
+                        onDestinationSelected = {
+                            selectedDestination = it
                         }
-                        CustomerRoomOptSelector(
-                            onRoomNumberSelected = { roomNumber = it },
-                            onAdultNumberSelected = { adultNumber = it },
-                            onChildNumberSelected = { childNumber = it })
-                        Row {
-                            Box(
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(10.dp))
-                                    .background(Color(0xFF238C98).copy(0.24f))
-                                    .size(240.dp, 30.dp)
-                                    .clickable {
-                                        if (selectedDestination != null) {
-                                            val (formattedCheckInDate, formattedCheckOutDate) = formatDateRange(selectedDateRange!!.first,
-                                                selectedDateRange!!.second
+                    )
+                    DateRangeSelector(type = "search")
+                    { dateRange ->
+                        selectedDateRange = dateRange
+                    }
+                    CustomerRoomOptSelector(
+                        onRoomNumberSelected = { roomNumber = it },
+                        onAdultNumberSelected = { adultNumber = it },
+                        onChildNumberSelected = { childNumber = it })
+                    Row {
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(10.dp))
+                                .background(Color(0xFF238C98).copy(0.24f))
+                                .size(240.dp, 30.dp)
+                                .clickable {
+                                    if (selectedDestination != null) {
+                                        val (formattedCheckInDate, formattedCheckOutDate) = formatDateRange(
+                                            selectedDateRange!!.first,
+                                            selectedDateRange!!.second
+                                        )
+                                        val action =
+                                            SearchHotelAction(
+                                                locationCode = selectedDestination!!.code,
+                                                limit = 40,
+                                                page = 1,
+                                                numOfRoom = roomNumber,
+                                                adults = adultNumber,
+                                                children = childNumber,
+                                                checkInDate = formattedCheckInDate,
+                                                checkOutDate = formattedCheckOutDate,
                                             )
-                                            val action =
-                                                SearchHotelAction(
-                                                    locationCode = selectedDestination!!.code,
-                                                    limit = 40,
-                                                    page = 1,
-                                                    numOfRoom = roomNumber,
-                                                    adults = adultNumber,
-                                                    children = childNumber,
-                                                    checkInDate =formattedCheckInDate,
-                                                    checkOutDate = formattedCheckOutDate,
-                                                )
-                                            searchViewModel.processAction(action)
+                                        searchViewModel.processAction(action)
 
-                                        }
                                     }
-                            ) {
-                                Text(
-                                    text = "Search",
-                                    fontWeight = FontWeight.Bold,
-                                    fontFamily = PoppinsFontFamily,
-                                    color = Color(0xFF238C98).copy(0.9f),
-                                    fontSize = 16.sp,
-                                    modifier = Modifier.align(Alignment.Center)
-                                )
-                            }
+                                }
+                        ) {
+                            Text(
+                                text = "Search",
+                                fontWeight = FontWeight.Bold,
+                                fontFamily = PoppinsFontFamily,
+                                color = Color(0xFF238C98).copy(0.9f),
+                                fontSize = 16.sp,
+                                modifier = Modifier.align(Alignment.Center)
+                            )
                         }
                     }
                 }
             }
         }
-
+    }
 
 
 }
