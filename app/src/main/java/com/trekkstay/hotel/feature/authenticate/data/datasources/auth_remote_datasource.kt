@@ -78,7 +78,6 @@ class AuthRemoteDataSourceImpl(private val client: Client,private val context: C
             val requestBodyJson = JSONObject().apply {
                 put("full_name", name)
                 put("email", email)
-                put("phone", "0949222222")
                 put("password", pass)
             }
 
