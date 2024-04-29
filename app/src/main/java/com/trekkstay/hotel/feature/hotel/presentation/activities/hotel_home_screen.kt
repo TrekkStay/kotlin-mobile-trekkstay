@@ -34,12 +34,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.hotel.R
+import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
 import com.trekkstay.hotel.ui.theme.NunitoFontFamily
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 @Composable
-fun HotelHomeScreen(navController: NavHostController) {
+fun HotelHomeScreen(hotelViewModel: HotelViewModel,navController: NavHostController) {
     val ownerName = "Bao Pham"
     val bookingNum = 125
     val roomNum = 125
@@ -209,8 +210,3 @@ private fun HotelHomeCard(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
-@Composable
-fun HotelHomeOwnerPreview() {
-    HotelHomeScreen(rememberNavController())
-}

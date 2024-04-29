@@ -92,7 +92,7 @@ object AppRouter {
     fun Navigation() {
         val navController = navController ?: rememberNavController()
 
-        NavHost(navController = navController, startDestination = "start-up") {
+        NavHost(navController = navController, startDestination = "hotel_main") {
             composable("start-up") {
                 StartupScreen(navController = navController)
             }
@@ -237,7 +237,7 @@ fun HotelRouter(
             HotelProfileScreen(navController)
         }
         composable("hotel_create") {
-            UpdateHotelScreen(hotelViewModel, locationViewModel, mediaViewModel, navController)
+            CreateHotelScreen(hotelViewModel, locationViewModel, mediaViewModel, navController)
         }
         composable(route = "hotel_detail/{hotelId}") { backStackEntry ->
 
