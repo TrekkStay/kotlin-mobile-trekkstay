@@ -9,14 +9,13 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0e28aad0-fb93-4b2a-8e7f-6cb21cc02950" name="Changes" comment="update: add validation and ux for create employee screen">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/presentation/activities/customer_review_screen.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/note_ico.xml" afterDir="false" />
+    <list default="true" id="0e28aad0-fb93-4b2a-8e7f-6cb21cc02950" name="Changes" comment="chore: connect route to hotel reset password screen">
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/deploymentTargetDropDown.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deploymentTargetDropDown.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/reservation/presentation/fragments/customer_reservation_card.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/reservation/presentation/fragments/customer_reservation_card.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/config/router/router.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/config/router/router.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/data/datasources/hotel_datasource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/data/datasources/hotel_datasource.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/presentation/activities/create_hotel_screen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/presentation/activities/create_hotel_screen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/presentation/activities/hotel_home_screen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/presentation/activities/hotel_home_screen.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,7 +25,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[/Users/simongin/.android/avd/Pixel_4_XL.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[R58M33KCAEX]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -133,7 +132,7 @@
       <recent name="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/config/router" />
     </key>
   </component>
-  <component name="RunManager" selected="Compose Preview.ReviewRatingPreview">
+  <component name="RunManager" selected="Android App.app">
     <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
       <module name="hotel.app.main" />
       <option name="DEPLOY" value="true" />
@@ -607,7 +606,7 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ReviewRatingPreview" type="ComposePreviewRunConfiguration" singleton="false" temporary="true">
+    <configuration name="SortHotelPreview" type="ComposePreviewRunConfiguration" singleton="false" temporary="true">
       <module name="hotel.app.main" />
       <option name="DEPLOY" value="true" />
       <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
@@ -618,7 +617,7 @@
       <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
       <option name="CLEAR_APP_STORAGE" value="false" />
       <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
-      <option name="ACTIVITY_EXTRA_FLAGS" value="--es composable com.trekkstay.hotel.feature.hotel.presentation.activities.Customer_review_screenKt.ReviewRatingPreview" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="--es composable com.trekkstay.hotel.feature.hotel.presentation.fragments.Customer_sort_hotelKt.SortHotelPreview" />
       <option name="MODE" value="specific_activity" />
       <option name="CLEAR_LOGCAT" value="false" />
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
@@ -670,18 +669,18 @@
       <option name="ACTIVITY_CLASS" value="androidx.compose.ui.tooling.PreviewActivity" />
       <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="true" />
       <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
-      <compose-preview-run-configuration composable-fqn="com.trekkstay.hotel.feature.hotel.presentation.activities.Customer_review_screenKt.ReviewRatingPreview" />
+      <compose-preview-run-configuration composable-fqn="com.trekkstay.hotel.feature.hotel.presentation.fragments.Customer_sort_hotelKt.SortHotelPreview" />
       <method v="2">
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Compose Preview.ReviewRatingPreview" />
         <item itemvalue="Compose Preview.HotelResetPwPreview" />
         <item itemvalue="Compose Preview.CustomerEditInfoPreview" />
         <item itemvalue="Compose Preview.CustomerResetPwPreview" />
         <item itemvalue="Compose Preview.BookingFormPreview" />
+        <item itemvalue="Compose Preview.SortHotelPreview" />
       </list>
     </recent_temporary>
   </component>
@@ -1054,15 +1053,7 @@
       <option name="project" value="LOCAL" />
       <updated>1714292991246</updated>
     </task>
-    <task id="LOCAL-00046" summary="update: add validation and ux for create employee screen">
-      <option name="closed" value="true" />
-      <created>1714370924197</created>
-      <option name="number" value="00046" />
-      <option name="presentableId" value="LOCAL-00046" />
-      <option name="project" value="LOCAL" />
-      <updated>1714370924197</updated>
-    </task>
-    <option name="localTasksCounter" value="47" />
+    <option name="localTasksCounter" value="46" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -1090,6 +1081,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="feat: hotel detail screen" />
     <MESSAGE value="update: hotel detail screen" />
     <MESSAGE value="update: image slider for hotel detail screen" />
     <MESSAGE value="feat: init room detail screen" />
@@ -1114,7 +1106,6 @@
     <MESSAGE value="chore: fix spelling in ui" />
     <MESSAGE value="feat: reset password screen for hotel side" />
     <MESSAGE value="chore: connect route to hotel reset password screen" />
-    <MESSAGE value="update: add validation and ux for create employee screen" />
-    <option name="LAST_COMMIT_MESSAGE" value="update: add validation and ux for create employee screen" />
+    <option name="LAST_COMMIT_MESSAGE" value="chore: connect route to hotel reset password screen" />
   </component>
 </project>

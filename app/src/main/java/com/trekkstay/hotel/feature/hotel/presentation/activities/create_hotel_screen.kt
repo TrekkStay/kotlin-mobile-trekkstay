@@ -208,6 +208,7 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
     when (mediaState){
         is MediaState.SuccessUploadVideo -> {
             if(!hasUploadedVideo) {
+                println("ok")
                 val action = CreateHotelAction(
                     name = hotelName.text,
                     description = hotelDescription.text,

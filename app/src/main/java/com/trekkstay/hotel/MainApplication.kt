@@ -10,6 +10,7 @@ import com.trekkstay.hotel.di.startKoinDependencyInjection
 import com.trekkstay.hotel.config.router.AppRouter
 import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthViewModel
 import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthViewModel
+import com.trekkstay.hotel.feature.hotel.presentation.states.attraction.AttractionViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.location.LocationViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.MediaViewModel
@@ -27,6 +28,7 @@ class MainActivity : ComponentActivity() {
     private val locationViewModel: LocationViewModel by inject()
     private val mediaViewModel: MediaViewModel by inject()
     private val searchViewModel: SearchViewModel by inject()
+    private val attractionViewModel: AttractionViewModel by inject()
     private val reservationViewModel: ReservationViewModel by inject()
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -46,8 +48,9 @@ class MainActivity : ComponentActivity() {
                 searchViewModel,
                 reservationViewModel,
                 this,
-                navController
-            )
+                attractionViewModel,
+                navController,
+                )
             AppRouter.Navigation()
         }
     }

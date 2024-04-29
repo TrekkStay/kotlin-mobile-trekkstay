@@ -24,7 +24,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -38,11 +40,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hotel.R
+import com.trekkstay.hotel.core.storage.LocalStore
+import com.trekkstay.hotel.feature.hotel.domain.entities.Attraction
 import com.trekkstay.hotel.feature.hotel.domain.entities.Hotel
+import com.trekkstay.hotel.feature.hotel.domain.entities.Location
 import com.trekkstay.hotel.feature.hotel.domain.entities.MarkerInfo
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.CustomerFilterHotel
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.CustomerSortHotel
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.HotelSearchResultCard
+import com.trekkstay.hotel.feature.hotel.presentation.states.attraction.AttractionState
+import com.trekkstay.hotel.feature.hotel.presentation.states.attraction.AttractionViewModel
+import com.trekkstay.hotel.feature.hotel.presentation.states.attraction.ViewAttractionAction
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 import java.time.LocalDate
@@ -53,19 +61,51 @@ import java.time.format.DateTimeFormatter
 fun SearchResultScreen(
     hotels: List<Hotel>,
     location: String,
+    locationCode: String,
     checkIn: String,
     checkOut: String,
     numGuess: Int,
+    attractionViewModel: AttractionViewModel,
     onBackPress: () -> Unit
+
 ) {
     var sortCriteria by remember { mutableStateOf("") }
-    val neighborList = listOf(
-        "Ben Thanh Market",
-        "Nguyen Hue Street",
-        "Xuan Huong Lake",
-        "Love Valley",
-        "Langbiang Mountain"
+    var attractionList : List<Attraction> = emptyList()
+
+    val neighborList = mutableListOf(
+        "Testing",
     )
+
+    val attractionState by attractionViewModel.state.observeAsState()
+    var myAttraction = ""
+
+    when (attractionState) {
+        is AttractionState.SuccessAttractionList -> {
+            attractionList = (attractionState as AttractionState.SuccessAttractionList).attractionList.attractionList
+            myAttraction = attractionList[0].name
+            for (item in attractionList){
+                neighborList.add(item.name)
+            }
+        }
+
+        is AttractionState.InvalidAttractionList -> {
+
+        }
+
+        is AttractionState.Idle -> {
+
+        }
+
+        else -> {
+
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        val action = ViewAttractionAction(locationCode)
+        attractionViewModel.processAction(action)
+    }
+
     var filteredNeighborhood by remember { mutableStateOf("") }
     var filteredRatings by remember { mutableStateOf(listOf<Int>()) }
     var showResult by remember { mutableStateOf(false) }
@@ -76,20 +116,21 @@ fun SearchResultScreen(
         val date = LocalDate.parse(inputDate, inputFormatter)
         return date.format(outputFormatter)
     }
-    if(showResult){
+    if (showResult) {
         val markerList = hotels.map { hotel ->
             val latLng = hotel.coordinates
             val price = hotel.room.firstOrNull()?.originalPrice ?: 0.0
             val name = hotel.name
-            MarkerInfo(latLng, price.toDouble(),
-                name)
+            MarkerInfo(
+                latLng, price.toDouble(),
+                name
+            )
         }
-        MapWithMarkers(markerList = markerList){
+        MapWithMarkers(markerList = markerList) {
             showResult = false
         }
 
-    }
-    else {
+    } else {
         Column(
             modifier = Modifier
                 .padding(top = 15.dp, bottom = 70.dp)
