@@ -34,6 +34,7 @@ import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelHomeScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelRoomManageScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.RoomDetailScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.SearchEngineScreen
+import com.trekkstay.hotel.feature.hotel.presentation.activities.UpdateHotelScreen
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.location.LocationViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.MediaViewModel
@@ -87,7 +88,7 @@ object AppRouter {
     fun Navigation() {
         val navController = navController ?: rememberNavController()
 
-        NavHost(navController = navController, startDestination = "start-up") {
+        NavHost(navController = navController, startDestination = "customer_main") {
             composable("start-up") {
                 StartupScreen(navController = navController)
             }
@@ -213,7 +214,7 @@ fun HotelRouter(empAuthViewModel: EmpAuthViewModel,hotelViewModel: HotelViewMode
             HotelProfileScreen(navController)
         }
         composable("hotel_create"){
-            CreateHotelScreen(hotelViewModel,locationViewModel, mediaViewModel,navController)
+            UpdateHotelScreen(hotelViewModel,locationViewModel, mediaViewModel,navController)
         }
         composable(route = "hotel_detail/{hotelId}") { backStackEntry ->
 

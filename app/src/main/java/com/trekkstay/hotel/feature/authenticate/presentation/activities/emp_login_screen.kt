@@ -55,11 +55,11 @@ fun EmpLoginScreen(viewModel: EmpAuthViewModel, navController: NavHostController
                 showDialog = true
                 LocalStore.saveKey(
                     context, "name",
-                    (authState as AuthState.SuccessLogin).res.name
+                    (authState as EmpAuthState.SuccessEmpLogin).res.name
                 )
                 LocalStore.saveKey(
                     context, "email",
-                    (authState as AuthState.SuccessLogin).res.email
+                    (authState as EmpAuthState.SuccessEmpLogin).res.email
                 )
                 LocalStore.saveKey(
                     context, "jwtKey",

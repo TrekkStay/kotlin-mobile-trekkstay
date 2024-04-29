@@ -4,6 +4,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import android.view.ViewGroup
 import android.webkit.MimeTypeMap
 import android.widget.FrameLayout
@@ -40,6 +41,7 @@ import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Info
@@ -56,11 +58,17 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MenuItemColors
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
@@ -90,6 +98,7 @@ import com.trekkstay.hotel.feature.hotel.presentation.states.media.MediaState
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.MediaViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.UploadMediaAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.UploadVideoAction
+import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 import java.io.FileOutputStream
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -117,6 +126,9 @@ fun UpdateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
         "Parking Area",
         "Spa",
         "Pool")
+
+    var myName by remember { mutableStateOf("") }
+
 
     fun getFileName(context: Context, uri: Uri): String? {
         var fileName: String? = null
@@ -294,43 +306,6 @@ fun UpdateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
         }
     }
 
-    when (hotelState) {
-        is HotelState.SuccessHotelDetail -> {
-            val hotel = (hotelState as HotelState.SuccessHotelDetail).hotel
-            hotelName = TextFieldValue(hotel.name)
-            hotelEmail = TextFieldValue(hotel.email)
-            hotelPhone = TextFieldValue(hotel.phone)
-            hotelDescription = TextFieldValue(hotel.description)
-            addressDetail = TextFieldValue(hotel.addressDetail)
-
-            val cheapRoomPrice = if (hotel.room.isNotEmpty()) {
-                hotel.room.first().originalPrice
-            } else {
-                1
-            }.toString()
-            val hotelImgList = if (hotel.images.media.isEmpty()) {
-                arrayOf(
-                    "https://www.usatoday.com/gcdn/-mm-/05b227ad5b8ad4e9dcb53af4f31d7fbdb7fa901b/c=0-64-2119-1259/local/-/media/USATODAY/USATODAY/2014/08/13/1407953244000-177513283.jpg?width=1320&height=746&fit=crop&format=pjpg&auto=webp",
-                )
-
-            } else {
-                hotel.images.media.toTypedArray()
-            }
-            val hotelVideoList = hotel.videos.media.toTypedArray()
-
-
-
-        }
-        is HotelState.InvalidHotelDetail -> {
-
-        }
-        is HotelState.HotelDetailCalling -> {
-
-        }
-        else -> {
-
-        }
-    }
 
     if (showDialog) {
         when (hotelState) {
@@ -371,14 +346,52 @@ fun UpdateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
         }
     }
 
-
-
     LaunchedEffect(Unit) {
         val action = ViewProvinceAction
         locationViewModel.processAction(action)
         val action1 = HotelDetailAction(LocalStore.getKey(context, "hotelId", ""))
         hotelViewModel.processAction(action1)
     }
+
+    when (hotelState) {
+        is HotelState.SuccessHotelDetail -> {
+            val hotel = (hotelState as HotelState.SuccessHotelDetail).hotel
+            hotelName = TextFieldValue(hotel.name)
+            myName = hotel.name
+            hotelEmail = TextFieldValue(hotel.email)
+            hotelPhone = TextFieldValue(hotel.phone)
+            hotelDescription = TextFieldValue(hotel.description)
+            addressDetail = TextFieldValue(hotel.addressDetail)
+
+            val cheapRoomPrice = if (hotel.room.isNotEmpty()) {
+                hotel.room.first().originalPrice
+            } else {
+                1
+            }.toString()
+            val hotelImgList = if (hotel.images.media.isEmpty()) {
+                arrayOf(
+                    "https://www.usatoday.com/gcdn/-mm-/05b227ad5b8ad4e9dcb53af4f31d7fbdb7fa901b/c=0-64-2119-1259/local/-/media/USATODAY/USATODAY/2014/08/13/1407953244000-177513283.jpg?width=1320&height=746&fit=crop&format=pjpg&auto=webp",
+                )
+
+            } else {
+                hotel.images.media.toTypedArray()
+            }
+            val hotelVideoList = hotel.videos.media.toTypedArray()
+
+        }
+        is HotelState.InvalidHotelDetail -> {
+
+        }
+        is HotelState.HotelDetailCalling -> {
+
+        }
+        else -> {
+
+        }
+    }
+
+    var initialTextValue = remember { TextFieldValue(myName) } // Provide initial value here
+
 
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
@@ -420,12 +433,32 @@ fun UpdateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                     modifier = Modifier.padding(horizontal = 25.dp, vertical = 20.dp)
                 ) {
-                    InfoTextField(
+//                    InfoTextField(
+//                        label = "Hotel Name",
+//                        text = TextFieldValue(hotelName.text),
+//                        onValueChange = { hotelName = it },
+//                        icon = ImageVector.vectorResource(R.drawable.add_home_ico),
+//                    )
+
+
+                    UpdateTextField(
                         label = "Hotel Name",
-                        text = hotelName,
-                        onValueChange = { hotelName = it },
+                        initValue = myName,
+                        onValueChange = { myName = it
+                            Log.d("TextField", "New value: $myName") // Add a log statement for debugging
+                        },
                         icon = ImageVector.vectorResource(R.drawable.add_home_ico),
+
                     )
+
+                    OutlinedTextField(
+                        value = hotelName,
+                        onValueChange = { newValue ->
+                            hotelName = newValue
+//                            Log.d("TextField", "New value: $newValue") // Add a log statement for debugging
+                        }
+                    )
+
                     InfoTextField(
                         label = "Hotel Email",
                         text = hotelEmail,
@@ -662,6 +695,53 @@ fun UpdateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
             }
         }
     }
+}
+
+@Composable
+fun UpdateTextField(
+    label: String,
+    initValue: String,
+    onValueChange: (String) -> Unit,
+    view: String = "hotel",
+    icon: ImageVector
+) {
+    var textFieldValue by remember { mutableStateOf(TextFieldValue(initValue)) }
+    var boxColor = (if (view == "hotel") TrekkStayBlue else if (view == "customer") TrekkStayCyan else Color.White)
+
+    OutlinedTextField(
+        value = textFieldValue,
+        onValueChange = {
+            textFieldValue = it
+            onValueChange(it.text)
+        },
+        label = {
+            Text(
+                label,
+                fontFamily = PoppinsFontFamily,
+                fontWeight = FontWeight.Medium,
+                color = Color.Black.copy(0.6f)
+            )
+        },
+        modifier = Modifier.fillMaxWidth(),
+        leadingIcon = {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = Color.Black
+            )
+        },
+        textStyle = TextStyle(
+            fontFamily = PoppinsFontFamily,
+            fontSize = 14.sp
+        ),
+        shape = RoundedCornerShape(12.dp),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = boxColor,
+            unfocusedBorderColor = boxColor,
+            cursorColor = boxColor,
+        ),
+        keyboardOptions = KeyboardOptions.Default.copy(autoCorrectEnabled = false)
+    )
 }
 
 
