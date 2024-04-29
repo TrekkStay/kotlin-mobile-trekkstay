@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -77,11 +78,38 @@ fun CreateEmpScreen(empAuthViewModel: EmpAuthViewModel,navController: NavHostCon
 
 
     val authState by empAuthViewModel.authState.observeAsState()
-    when (authState) {
-        is EmpAuthState.SuccessEmpCreate -> {}
-        is EmpAuthState.InvalidEmpCreate -> {}
-        is EmpAuthState.EmpCreateCalling -> {}
-        else -> {
+    var showDialog by remember { mutableStateOf(true) }
+    if (showDialog) {
+        when (authState) {
+            is EmpAuthState.SuccessEmpCreate -> {
+                showDialog = true
+                AlertDialog(
+                    onDismissRequest = {},
+                    title = { Text("Create employee Successful") },
+                    text = { Text("You have successfully created employee.") },
+                    confirmButton = {
+                        Button(onClick = { showDialog = false }) {
+                            Text("OK")
+                        }
+                    }
+                )
+            }
+            is EmpAuthState.InvalidEmpCreate -> {
+                showDialog = true
+                AlertDialog(
+                    onDismissRequest = {},
+                    title = { Text("Create Failed") },
+                    text = { Text((authState as EmpAuthState.InvalidEmpCreate).message) },
+                    confirmButton = {
+                        Button(onClick = { showDialog = false }) {
+                            Text("OK")
+                        }
+                    }
+                )
+            }
+            is EmpAuthState.EmpCreateCalling -> {}
+            else -> {
+            }
         }
     }
 
@@ -154,6 +182,8 @@ fun CreateEmpScreen(empAuthViewModel: EmpAuthViewModel,navController: NavHostCon
         }
         Button(
             onClick = {
+
+                showDialog = true
                 val action =EmpCreateAction(
                     empFullName.text,
                     empEmail.text,
