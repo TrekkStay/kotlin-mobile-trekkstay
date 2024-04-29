@@ -192,7 +192,7 @@ fun HotelRouter(empAuthViewModel: EmpAuthViewModel,hotelViewModel: HotelViewMode
         startDestination = "hotel_home"
     ) {
         composable(route = "hotel_home") {
-            HotelHomeScreen(hotelViewModel= hotelViewModel,navController = navController)
+            HotelHomeScreen(navController)
         }
         composable(route = "booking_detail"){
             BookingDetailScreen(navController = navController)
