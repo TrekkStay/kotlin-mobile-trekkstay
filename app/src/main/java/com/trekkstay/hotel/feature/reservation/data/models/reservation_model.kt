@@ -32,6 +32,7 @@ data class ReservationModel(
         }
 
         fun fromMap(map: DataMap): ReservationModel {
+            println()
             return ReservationModel(
                 id = map["id"] as String,
                 roomId = map["room_id"] as String,

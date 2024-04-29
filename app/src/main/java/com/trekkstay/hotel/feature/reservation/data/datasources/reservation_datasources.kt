@@ -52,7 +52,7 @@ class ReservationRemoteDataSourceImpl(private val client: Client,private val con
 
             val jwtKey = LocalStore.getKey(context, "jwtKey", "")
             val request = RequestQuery(
-                method = RequestMethod.GET,
+                method = RequestMethod.POST,
                 path = "http://52.163.61.213:8888/api/v1/$createReservationEndpoint",
                 headers = mapOf("Authorization" to "Bearer $jwtKey"),
                 requestBody = requestBodyJson.toString()
