@@ -40,6 +40,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.trekkstay.hotel.feature.shared.Utils.formatPrice
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
@@ -52,11 +53,7 @@ fun CustomerReservationCard(
     type: String,
     price: Double
 ) {
-    val formattedPrice = if (price % 1 == 0.0) {
-        price.toInt().toString()
-    } else {
-        price.toString()
-    }
+    val formattedPrice = formatPrice(price)
 
     var isBotSheetVisible by remember { mutableStateOf(false) }
     val botSheetState = rememberModalBottomSheetState()
