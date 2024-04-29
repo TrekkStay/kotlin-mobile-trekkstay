@@ -59,6 +59,36 @@ fun HotelTabsRow(hotelViewModel: HotelViewModel, navController: NavHostControlle
     val fusedLocationClient: FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
     var userLocation by remember{ mutableStateOf(LatLng(0.0,0.0))}
     var viewLocationCheck by remember{ mutableStateOf(true)}
+    val locationPermissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+        if (isGranted) {
+            getLocation(fusedLocationClient, context) { location ->
+                location?.let { LatLng(it.latitude, it.longitude) }
+                    ?.let {
+                        userLocation = it
+                        val action = ViewHotelNearAction(coordinate = userLocation, maxRange = 200.0)
+                        hotelViewModel.processAction(action)
+                    }
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        if (viewLocationCheck) {
+            if (checkLocationPermission(context)) {
+                getLocation(fusedLocationClient, context) { location ->
+                    location?.let { LatLng(it.latitude, it.longitude) }
+                        ?.let {
+                            userLocation = it
+                            val action = ViewHotelNearAction(coordinate = userLocation, maxRange = 200.0)
+                            hotelViewModel.processAction(action)
+                        }
+                }
+            } else {
+                locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+            }
+            viewLocationCheck = false
+        }
+    }
 
 
     val hotelTabs = arrayOf("Nearby", "Recommended", "Popular", "Most Searched")
@@ -292,23 +322,11 @@ fun HotelTabsRow(hotelViewModel: HotelViewModel, navController: NavHostControlle
         else -> {
         }
     }
-    LaunchedEffect(Unit){
-        if(viewLocationCheck) {
-            getLocation(fusedLocationClient, context) { location ->
-                location?.let { LatLng(it.latitude, it.longitude) }
-                    ?.let {
-                        userLocation = it
-                        val action = ViewHotelNearAction(coordinate = userLocation, maxRange = 200.0)
-                        hotelViewModel.processAction(action)
-                    }
-            }
-
-            viewLocationCheck = false
-        }
-    }
 }
 
-
+fun checkLocationPermission(context: Context): Boolean {
+    return ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+}
 @SuppressLint("MissingPermission")
 fun getLocation(fusedLocationClient: FusedLocationProviderClient, context: Context, callback: (Location?) -> Unit) {
 
