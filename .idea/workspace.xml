@@ -10,54 +10,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0e28aad0-fb93-4b2a-8e7f-6cb21cc02950" name="Changes" comment="chore: connect route to hotel reset password screen">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/activities/customer_edit_info.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/activities/customer_reset_pw_screen.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/activities/hotel_reset_pw_screen.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/fragments/pass_field.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/domain/usecases/hotel/view_hotel_near_usecase.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/reservation/data/datasources/reservation_datasources.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/reservation/data/models/guest_info_model.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/reservation/data/models/reservation_model.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/reservation/data/models/reservation_room_model.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/reservation/data/repositories/reservation_repo_impl.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/reservation/domain/entities/guest_info.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/reservation/domain/entities/reservation.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/reservation/domain/entities/reservation_room.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/reservation/domain/repositories/reservation_repo.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/reservation/domain/usecases/create_reservation_usecase.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/reservation/presentation/states/reservation_action.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/reservation/presentation/states/reservation_state.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/reservation/presentation/states/reservation_viewmodel.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/shared/text_dialog.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/pw_ico.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/deploymentTargetDropDown.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deploymentTargetDropDown.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/MainApplication.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/MainApplication.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/config/router/router.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/config/router/router.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/di/injection_container.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/di/injection_container.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/activities/customer_profile_screen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/activities/customer_profile_screen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/activities/emp_login_screen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/activities/emp_login_screen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/activities/hotel_profile_screen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/activities/hotel_profile_screen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/activities/login_screen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/activities/login_screen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/customer/presentation/activities/customer_main_screen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/customer/presentation/activities/customer_main_screen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/customer/presentation/fragments/hotel_tabs_row.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/customer/presentation/fragments/hotel_tabs_row.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/data/datasources/hotel_datasource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/data/datasources/hotel_datasource.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/data/models/hotel_list_model.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/data/models/hotel_list_model.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/data/models/hotel_model.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/data/models/hotel_model.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/data/models/room_model.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/data/models/room_model.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/data/repositories/hotel_repo_impl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/data/repositories/hotel_repo_impl.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/domain/repositories/hotel_repo.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/domain/repositories/hotel_repo.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/presentation/activities/booking_form_screen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/presentation/activities/booking_form_screen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/presentation/activities/room_detail_screen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/presentation/activities/room_detail_screen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/presentation/fragments/info_text_field.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/presentation/fragments/info_text_field.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/presentation/fragments/room_detail_card.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/presentation/fragments/room_detail_card.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/presentation/states/hotel/hotel_action.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/presentation/states/hotel/hotel_action.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/presentation/states/hotel/hotel_state.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/presentation/states/hotel/hotel_state.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/presentation/states/hotel/hotel_viewmodel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/hotel/presentation/states/hotel/hotel_viewmodel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/reservation/presentation/activities/customer_reservation_screen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/reservation/presentation/activities/customer_reservation_screen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/activities/emp_register_screen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/activities/emp_register_screen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/activities/register_screen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/authenticate/presentation/activities/register_screen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/shared/text_dialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/trekkstay/hotel/feature/shared/text_dialog.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,7 +25,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[C:\Users\HP-PC\.android\avd\Pixel_7_Pro_API_30.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[/Users/simongin/.android/avd/Pixel_4_XL.avd]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -153,7 +111,7 @@
     "cidr.known.project.marker": "true",
     "com.android.tools.idea.streaming.zoom.toolbar.visible": "false",
     "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "Merging main",
+    "git-widget-placeholder": "main",
     "last_directory_selection": "E:/YEAR3_HK2/MOBILE/trekkstay/app/src/main/res/drawable",
     "last_opened_file_path": "E:/kotlin-mobile-trekkstay",
     "run.code.analysis.last.selected.profile": "pProject Default",
