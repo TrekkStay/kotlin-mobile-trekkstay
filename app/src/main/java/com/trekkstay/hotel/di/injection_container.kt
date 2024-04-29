@@ -49,6 +49,12 @@ import com.trekkstay.hotel.feature.hotel.presentation.states.location.LocationVi
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.MediaViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.room.RoomViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.search.SearchViewModel
+import com.trekkstay.hotel.feature.reservation.data.datasources.ReservationRemoteDataSource
+import com.trekkstay.hotel.feature.reservation.data.datasources.ReservationRemoteDataSourceImpl
+import com.trekkstay.hotel.feature.reservation.data.repositories.ReservationRepoImpl
+import com.trekkstay.hotel.feature.reservation.domain.repositories.ReservationRepo
+import com.trekkstay.hotel.feature.reservation.domain.usecases.CreateReservationUseCase
+import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationViewModel
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -96,6 +102,12 @@ val appModule = module {
     single { ViewWardUseCase(get()) }
     single <LocationRemoteDataSource>{ LocationRemoteDataSourceImpl(get()) }
     single <LocationRepo>{ LocationRepoImpl(get())}
+
+    single { ReservationViewModel(get()) }
+    single { CreateReservationUseCase(get()) }
+    single <ReservationRemoteDataSource>{ ReservationRemoteDataSourceImpl(get(),get()) }
+    single <ReservationRepo>{ ReservationRepoImpl(get()) }
+
 
     single { Client(get()) }
     single { OkHttpClient() }

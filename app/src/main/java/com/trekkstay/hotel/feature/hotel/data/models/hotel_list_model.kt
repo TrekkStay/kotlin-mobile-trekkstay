@@ -24,12 +24,15 @@ data class HotelListModel(
         }
 
         fun fromJson(source: String): HotelListModel {
+            println("ok 1")
             val type = object : TypeToken<Map<String, Any>>() {}.type
             val map: Map<String, Any> = Gson().fromJson(source, type)
 
             return fromMap(map)
         }
         private fun JSONObject.toMap(): Map<String, Any> {
+
+            println("ok 2")
             val map = mutableMapOf<String, Any>()
             val keysItr = keys()
 
@@ -42,9 +45,12 @@ data class HotelListModel(
             return map
         }
         private fun fromList(source: String): List<HotelModel>{
+
+            println("ok 3")
             val jsonArray = JSONArray(source)
             val list: MutableList<Map<String, Any>> = mutableListOf()
 
+            println("ok 4")
             for (i in 0 until jsonArray.length()) {
                 val jsonObject = jsonArray.getJSONObject(i)
                 val map = jsonObject.toMap()

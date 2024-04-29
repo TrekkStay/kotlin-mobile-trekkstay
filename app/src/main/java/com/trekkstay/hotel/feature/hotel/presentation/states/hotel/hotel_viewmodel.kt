@@ -122,6 +122,18 @@ class HotelViewModel(private val hotelRepo: HotelRepo) : ViewModel() {
                         { success->  _state.postValue(HotelState.SuccessHotelDetail(success)) }
                     )
                 }
+
+                is ViewHotelNearAction ->{
+                    _state.postValue(HotelState.ViewHotelNearCalling)
+                    val result = hotelRepo.viewHotelNear(
+                        action.coordinate,
+                        action.maxRange
+                    )
+                    result.fold(
+                        { failure -> _state.postValue(HotelState.InvalidViewHotelNear(failure.message)) },
+                        { success->  _state.postValue(HotelState.SuccessViewHotelNear(success)) }
+                    )
+                }
             }
         }
     }

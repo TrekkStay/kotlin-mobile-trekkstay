@@ -36,6 +36,7 @@ import androidx.navigation.NavHostController
 import com.example.hotel.R
 import com.trekkstay.hotel.core.storage.LocalStore
 import com.trekkstay.hotel.feature.authenticate.presentation.states.*
+import com.trekkstay.hotel.feature.shared.TextDialog
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 import com.trekkstay.hotel.ui.theme.black
 
@@ -53,6 +54,14 @@ fun LoginScreen(viewModel: AuthViewModel, navController: NavHostController) {
             is AuthState.SuccessLogin -> {
                 showDialog = true
                 LocalStore.saveKey(
+                    context, "name",
+                    (authState as AuthState.SuccessLogin).res.name
+                )
+                LocalStore.saveKey(
+                    context, "email",
+                    (authState as AuthState.SuccessLogin).res.email
+                )
+                LocalStore.saveKey(
                     context, "jwtKey",
                     (authState as AuthState.SuccessLogin).res.jwtToken
                 )
@@ -61,16 +70,10 @@ fun LoginScreen(viewModel: AuthViewModel, navController: NavHostController) {
 
             is AuthState.InvalidLogin -> {
                 showDialog = true
-                AlertDialog(
-                    onDismissRequest = { showDialog = false },
-                    title = { Text("Login Failed") },
-                    text = { Text((authState as AuthState.InvalidLogin).message) },
-                    confirmButton = {},
-                    dismissButton = {
-                        Button(onClick = { showDialog = false }) {
-                            Text("OK")
-                        }
-                    }
+                TextDialog(
+                    title = "Login Failed",
+                    msg = "Wrong email or password. Please try again!!!",
+                    onDismiss = { showDialog = false }
                 )
             }
 

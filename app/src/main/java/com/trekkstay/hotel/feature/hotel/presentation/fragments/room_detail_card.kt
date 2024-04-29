@@ -43,6 +43,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.hotel.R
 import com.trekkstay.hotel.feature.hotel.domain.entities.Room
@@ -53,7 +54,8 @@ import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun RoomDetailCard(
-    room: Room
+    room: Room,
+    navController: NavController
 ) {
     val roomImgList = if(room.image.media.isEmpty()) {
         arrayOf(
@@ -227,6 +229,7 @@ fun RoomDetailCard(
             }
             Button(
                 onClick = {
+                    navController.navigate("booking_form/${room.id}")
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF238C98)),
                 modifier = Modifier

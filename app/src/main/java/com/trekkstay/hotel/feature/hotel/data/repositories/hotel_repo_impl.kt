@@ -172,4 +172,15 @@ class HotelRepoImpl(private val remoteDataSource: HotelRemoteDataSource) : Hotel
         }
 
     }
+
+    override suspend fun viewHotelNear(
+        coordinate: LatLng,  maxRange: Double): ResultFuture<List<Hotel>>{
+        return when (val response = remoteDataSource.viewHotelNear(coordinate,maxRange))
+        {
+            is Response.Success -> response.data!!.right()
+            is Response.Invalid -> ApiInvalid(response.message ?: "Unknown error", response.status ?: "-1").left()
+            is Response.Failure -> throw ApiException(response.message ?: "Unknown error", response.status ?: "-1")
+        }
+
+    }
 }

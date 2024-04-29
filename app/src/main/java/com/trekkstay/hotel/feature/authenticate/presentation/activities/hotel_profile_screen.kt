@@ -92,7 +92,9 @@ fun HotelProfileScreen(navController: NavHostController) {
                 "Promotion Management",
                 ImageVector.vectorResource(R.drawable.discount_ico), type = "hotel"
             )
-            ProfileNavButton("Change Password", ImageVector.vectorResource(R.drawable.key_ico), type = "hotel")
+            ProfileNavButton("Change Password", ImageVector.vectorResource(R.drawable.key_ico), type = "hotel") {
+                navController.navigate("hotel_reset_pw")
+            }
             ProfileNavButton("Sign out", Icons.AutoMirrored.Filled.ExitToApp, type = "hotel", onClick = {
                 LocalStore.removeAllKeys(context)
                 AppRouter.navigateTo("start-up")

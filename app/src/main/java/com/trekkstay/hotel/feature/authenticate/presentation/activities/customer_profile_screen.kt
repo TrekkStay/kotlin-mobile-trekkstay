@@ -19,20 +19,20 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.hotel.R
 import com.trekkstay.hotel.config.router.AppRouter
 import com.trekkstay.hotel.core.storage.LocalStore
 import com.trekkstay.hotel.feature.authenticate.presentation.fragments.ProfileNavButton
-import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthState
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @Composable
 fun CustomerProfileScreen(navController: NavHostController) {
-
     val context = LocalContext.current
     Column (
         modifier = Modifier.padding(top = 25.dp)
@@ -58,8 +58,12 @@ fun CustomerProfileScreen(navController: NavHostController) {
                 "Change Password",
                 ImageVector.vectorResource(R.drawable.key_ico),
                 type = "customer"
-            )
-            ProfileNavButton("Edit Information", Icons.Default.AccountBox, type = "customer")
+            ) {
+                navController.navigate("customer_reset_pw")
+            }
+            ProfileNavButton("Edit Information", Icons.Default.AccountBox, type = "customer") {
+                navController.navigate("customer_edit_info")
+            }
             ProfileNavButton("Sign out", Icons.AutoMirrored.Filled.ExitToApp, type = "customer",
                 onClick = {
                     LocalStore.removeAllKeys(context)

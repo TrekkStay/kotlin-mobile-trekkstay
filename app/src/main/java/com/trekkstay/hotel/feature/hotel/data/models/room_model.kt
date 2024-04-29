@@ -23,7 +23,6 @@ data class RoomModel(
 ) {
     companion object {
 
-
         private fun JSONObject.toMap(): Map<String, Any> {
             val map = mutableMapOf<String, Any>()
             val keysItr = keys()

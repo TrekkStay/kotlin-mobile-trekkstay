@@ -5,9 +5,7 @@ import com.trekkstay.hotel.core.typedef.DataMap
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
-import com.trekkstay.hotel.feature.hotel.data.models.HotelRoomModel.Companion.fromList
 import com.trekkstay.hotel.feature.hotel.domain.entities.Hotel
-import com.trekkstay.hotel.feature.hotel.domain.entities.HotelRoom
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -51,6 +49,18 @@ data class HotelModel(
             return fromMap(map)
         }
 
+        fun fromList(source: String): List<HotelModel>{
+            val jsonArray = JSONArray(source)
+            val list: MutableList<Map<String, Any>> = mutableListOf()
+
+            for (i in 0 until jsonArray.length()) {
+                val jsonObject = jsonArray.getJSONObject(i)
+                val map = jsonObject.toMap()
+                list.add(map)
+            }
+
+            return list.map {fromMap(it) }
+        }
 
         fun fromMap(map: DataMap): HotelModel {
             val type = object : TypeToken<Map<String, Any>>() {}.type
@@ -66,7 +76,7 @@ data class HotelModel(
                 addressDetail = map["address_detail"] as? String ?: "",
                 description = map["description"] as? String ?: "",
                 status = map["status"] as? String ?: "",
-                hotelRoom = fromList(map["rooms"].toString()),
+                hotelRoom = HotelRoomModel.fromList(map["rooms"].toString()),
                 province = LocationModel.fromJson(map["province"].toString()),
                 district = LocationModel.fromJson(map["district"].toString()),
                 ward = LocationModel.fromJson(map["ward"].toString()),

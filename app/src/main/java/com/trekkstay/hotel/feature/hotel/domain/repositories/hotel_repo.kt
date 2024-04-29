@@ -71,4 +71,5 @@ interface HotelRepo {
 
     suspend fun searchHotel( locationCode: String?,  priceOrder: String?, checkInDate: String?, checkOutDate: String?, adults: Int?, children: Int?, numOfRoom: Int?, limit: Int?, page: Int?
     ): ResultFuture<HotelList>
+    suspend fun viewHotelNear( coordinate: LatLng,  maxRange: Double): ResultFuture<List<Hotel>>
 }
