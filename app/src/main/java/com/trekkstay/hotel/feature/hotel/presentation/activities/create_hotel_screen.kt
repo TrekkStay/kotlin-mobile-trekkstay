@@ -310,7 +310,6 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
                 )
             }
             is HotelState.InvalidCreateHotel -> {
-                println()
                 showDialog = true
                 AlertDialog(
                     onDismissRequest = { showDialog = false },

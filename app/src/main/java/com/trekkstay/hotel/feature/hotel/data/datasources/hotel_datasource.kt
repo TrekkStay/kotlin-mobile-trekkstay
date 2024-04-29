@@ -175,9 +175,6 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
             val response = client.execute<Unit>(
                 request = request,
             )
-            println(request.toString())
-            println(response.status)
-            println(response.message)
             response
         }
     }
