@@ -22,7 +22,6 @@ import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -33,8 +32,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -55,7 +52,7 @@ import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthState
 import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthViewModel
 import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpCreateAction
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.InfoTextField
-import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelState
+import com.trekkstay.hotel.feature.shared.TextDialog
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
@@ -76,35 +73,26 @@ fun CreateEmpScreen(empAuthViewModel: EmpAuthViewModel,navController: NavHostCon
         }
     }
 
-
     val authState by empAuthViewModel.authState.observeAsState()
     var showDialog by remember { mutableStateOf(true) }
     if (showDialog) {
         when (authState) {
             is EmpAuthState.SuccessEmpCreate -> {
                 showDialog = true
-                AlertDialog(
-                    onDismissRequest = {},
-                    title = { Text("Create employee Successful") },
-                    text = { Text("You have successfully created employee.") },
-                    confirmButton = {
-                        Button(onClick = { showDialog = false }) {
-                            Text("OK")
-                        }
-                    }
+                TextDialog(
+                    title = "Registration Successful",
+                    msg = "You have successfully registered.",
+                    type = "success",
+                    onDismiss = {showDialog = false},
                 )
+                navController.navigate("hotel_emp_list")
             }
             is EmpAuthState.InvalidEmpCreate -> {
                 showDialog = true
-                AlertDialog(
-                    onDismissRequest = {},
-                    title = { Text("Create Failed") },
-                    text = { Text((authState as EmpAuthState.InvalidEmpCreate).message) },
-                    confirmButton = {
-                        Button(onClick = { showDialog = false }) {
-                            Text("OK")
-                        }
-                    }
+                TextDialog(
+                    title = "Employee Creation Failed",
+                    msg = "Employee already exists. Please try again with another email or phone.",
+                    onDismiss = {showDialog = false},
                 )
             }
             is EmpAuthState.EmpCreateCalling -> {}
@@ -176,6 +164,9 @@ fun CreateEmpScreen(empAuthViewModel: EmpAuthViewModel,navController: NavHostCon
                 DropDownMenu(
                     title = "Contract",
                     itemList = contractList,
+                    onItemSelected = {
+                        selectedItem = it
+                    },
                     leadingIcon = ImageVector.vectorResource(R.drawable.contract_ico)
                 )
             }
@@ -219,6 +210,7 @@ fun CreateEmpScreen(empAuthViewModel: EmpAuthViewModel,navController: NavHostCon
 private fun DropDownMenu(
     title: String,
     itemList: Array<String>,
+    onItemSelected: (String) -> Unit,
     leadingIcon: ImageVector? = null
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -272,6 +264,7 @@ private fun DropDownMenu(
                     onClick = {
                         selectedText = item
                         expanded = false
+                        onItemSelected(item)
                     }
                 )
             }
