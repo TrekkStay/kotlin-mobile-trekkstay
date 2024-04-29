@@ -32,7 +32,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -47,18 +50,40 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.hotel.R
+import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthState
 import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthViewModel
+import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpCreateAction
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.InfoTextField
+import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelState
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 @Composable
 fun CreateEmpScreen(empAuthViewModel: EmpAuthViewModel,navController: NavHostController) {
-    var empFullname by remember { mutableStateOf(TextFieldValue()) }
+    var empFullName by remember { mutableStateOf(TextFieldValue()) }
     var empEmail by remember { mutableStateOf(TextFieldValue()) }
     var empPhone by remember { mutableStateOf(TextFieldValue()) }
     val contractList = arrayOf("Full-time", "Part-time", "Internship")
+    var selectedItem by remember { mutableStateOf(contractList.first()) }
     var empBaseSalary by remember { mutableStateOf(TextFieldValue()) }
+    fun mapSelectionToApiValue(selectedItem: String): String {
+        return when (selectedItem.lowercase()) {
+            "full-time" -> "FULL_TIME"
+            "part-time" -> "PART_TIME"
+            "internship" -> "INTERNSHIP"
+            else -> ""
+        }
+    }
+
+
+    val authState by empAuthViewModel.authState.observeAsState()
+    when (authState) {
+        is EmpAuthState.SuccessEmpCreate -> {}
+        is EmpAuthState.InvalidEmpCreate -> {}
+        is EmpAuthState.EmpCreateCalling -> {}
+        else -> {
+        }
+    }
 
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
@@ -96,8 +121,8 @@ fun CreateEmpScreen(empAuthViewModel: EmpAuthViewModel,navController: NavHostCon
             ) {
                 InfoTextField(
                     label = "Full Name",
-                    text = empFullname,
-                    onValueChange = { empFullname = it },
+                    text = empFullName,
+                    onValueChange = { empFullName = it },
                     icon = Icons.Default.AccountBox,
                 )
                 InfoTextField(
@@ -128,7 +153,17 @@ fun CreateEmpScreen(empAuthViewModel: EmpAuthViewModel,navController: NavHostCon
             }
         }
         Button(
-            onClick = {},
+            onClick = {
+                val action =EmpCreateAction(
+                    empFullName.text,
+                    empEmail.text,
+                    empPhone.text,
+                    mapSelectionToApiValue(selectedItem),
+                    empBaseSalary.text.toInt(),
+
+                )
+                empAuthViewModel.processAction(action)
+            },
             colors = ButtonDefaults.buttonColors(
                 containerColor = TrekkStayBlue,
                 contentColor = Color.White

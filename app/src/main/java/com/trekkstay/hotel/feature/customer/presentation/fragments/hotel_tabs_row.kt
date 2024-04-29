@@ -69,7 +69,6 @@ fun HotelTabsRow(hotelViewModel: HotelViewModel, navController: NavHostControlle
                         hotelViewModel.processAction(action)
                     }
             }
-        } else {
         }
     }
 
