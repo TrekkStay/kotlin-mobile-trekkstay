@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
@@ -36,55 +37,64 @@ import com.example.hotel.R
 import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthState
 import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthViewModel
 import com.trekkstay.hotel.feature.authenticate.presentation.states.RegisterAction
+import com.trekkstay.hotel.feature.shared.TextDialog
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 import com.trekkstay.hotel.ui.theme.black
 
 
 @Composable
-fun RegisterScreen(viewModel: AuthViewModel,navController: NavHostController) {
+fun RegisterScreen(viewModel: AuthViewModel, navController: NavHostController) {
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val authState by viewModel.authState.observeAsState()
     var showDialog by remember { mutableStateOf(true) }
+    var showValidateDialog by remember { mutableStateOf(false) }
+    var dialogTitle by remember { mutableStateOf("") }
+    var dialogMessage by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
     if (showDialog) {
-    when (authState) {
-        is AuthState.SuccessRegister -> {
-            showDialog = true
-                AlertDialog(
-                    onDismissRequest = {},
-                    title = { Text("Registration Successful") },
-                    text = { Text("You have successfully registered.") },
-                    confirmButton = {
-                        Button(onClick = { showDialog = false }) {
-                            Text("OK")
-                        }
-                    }
+        when (authState) {
+            is AuthState.SuccessRegister -> {
+                showDialog = true
+                TextDialog(
+                    title = "Registration Successful",
+                    msg = "You have successfully registered.",
+                    type = "success",
+                    onDismiss = { showDialog = false },
+                )
+                name = ""
+                email = ""
+                password = ""
+                LocalFocusManager.current.clearFocus()
+            }
+
+            is AuthState.InvalidRegister -> {
+                showDialog = true
+                TextDialog(
+                    title = "Registration Failed",
+                    msg = "Email already taken. Please try again with another email or try logging in with that email instead.",
+                    onDismiss = { showDialog = false },
                 )
 
-        }
-        is AuthState.InvalidRegister -> {
-            showDialog = true
-                AlertDialog(
-                    onDismissRequest = {},
-                    title = { Text("Registration Failed") },
-                    text = { Text((authState as AuthState.InvalidRegister).message) },
-                    confirmButton = {
-                        Button(onClick = { showDialog = false }) {
-                            Text("OK")
-                        }
-                    }
-                )
+            }
 
-        }
-        is AuthState.RegisterCalling -> {
-            // You can show a progress dialog or a loading indicator here
-        }
-        else -> {
-            // Handle other states
+            is AuthState.RegisterCalling -> {
+                // You can show a progress dialog or a loading indicator here
+            }
+
+            else -> {
+                // Handle other states
+            }
         }
     }
+
+    if (showValidateDialog) {
+        TextDialog(
+            title = dialogTitle,
+            msg = dialogMessage,
+            onDismiss = { showValidateDialog = false },
+        )
     }
 
     Surface(color = Color.White) {
@@ -129,7 +139,7 @@ fun RegisterScreen(viewModel: AuthViewModel,navController: NavHostController) {
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
-                label = { Text("Username") },
+                label = { Text("Full Name") },
                 modifier = Modifier.fillMaxWidth(),
                 leadingIcon = {
                     Icon(
@@ -177,7 +187,8 @@ fun RegisterScreen(viewModel: AuthViewModel,navController: NavHostController) {
                 },
                 trailingIcon = {
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                        var passVisibleIco = (if (passwordVisible) R.drawable.eye_off_ico else R.drawable.eye_ico)
+                        var passVisibleIco =
+                            (if (passwordVisible) R.drawable.eye_off_ico else R.drawable.eye_ico)
                         Icon(ImageVector.vectorResource(passVisibleIco), contentDescription = null)
                     }
                 },
@@ -194,9 +205,23 @@ fun RegisterScreen(viewModel: AuthViewModel,navController: NavHostController) {
 
             Button(
                 onClick = {
-                    showDialog = true
-                    val action = RegisterAction(name, email, password)
-                    viewModel.processAction(action)
+                    if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
+                        dialogTitle = "Empty Fields"
+                        dialogMessage = "Please input all the required information before continuing"
+                        showValidateDialog = true
+                    } else if (!email.matches(Regex("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}\$"))) {
+                        dialogTitle = "Invalid Email Address"
+                        dialogMessage = "Please input a valid email address"
+                        showValidateDialog = true
+                    } else if (!password.matches(Regex("^(?=.*[0-9])(?=.*[!@#\\\$%^&*+=])(?=.*[A-Z])(?=.*[a-z]).{8,}\$"))) {
+                        dialogTitle = "Invalid Password"
+                        dialogMessage = "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one special character"
+                        showValidateDialog = true
+                    } else {
+                        showDialog = true
+                        val action = RegisterAction(name, email, password)
+                        viewModel.processAction(action)
+                    }
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF238C98)),
                 modifier = Modifier
@@ -211,9 +236,9 @@ fun RegisterScreen(viewModel: AuthViewModel,navController: NavHostController) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
-            )  {
+            ) {
                 HorizontalDivider(
-                    modifier = Modifier.weight(0.25f,fill = false),
+                    modifier = Modifier.weight(0.25f, fill = false),
                     thickness = 1.dp,
                     color = black,
                 )
@@ -226,7 +251,7 @@ fun RegisterScreen(viewModel: AuthViewModel,navController: NavHostController) {
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 HorizontalDivider(
-                    modifier = Modifier.weight(0.25f,fill = false),
+                    modifier = Modifier.weight(0.25f, fill = false),
                     thickness = 1.dp,
                     color = Color(0xFF333333)
                 )

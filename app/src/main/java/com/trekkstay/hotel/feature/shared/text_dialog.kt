@@ -2,6 +2,7 @@ package com.trekkstay.hotel.feature.shared
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
@@ -19,16 +20,25 @@ import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 fun TextDialog(
     title: String = "Dialog Title",
     msg: String = "Dialog content goes here",
+    type: String = "warning",
     onDismiss: () -> Unit,
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
         icon = {
-            Icon(
-                Icons.Filled.Warning,
-                contentDescription = null,
-                modifier = Modifier.size(25.dp)
-            )
+            if (type == "success") {
+                Icon(
+                    Icons.Filled.CheckCircle,
+                    contentDescription = null,
+                    modifier = Modifier.size(25.dp)
+                )
+            } else {
+                Icon(
+                    Icons.Filled.Warning,
+                    contentDescription = null,
+                    modifier = Modifier.size(25.dp)
+                )
+            }
         },
         title = {
             Text(
@@ -48,7 +58,7 @@ fun TextDialog(
                 textAlign = TextAlign.Center
             )
         },
-        iconContentColor = Color(0xFFC82222).copy(0.6f),
+        iconContentColor = if (type == "success") Color(0xFF0FA958) else Color(0xFFC82222).copy(0.6f),
         containerColor = Color.White,
         confirmButton = {},
     )

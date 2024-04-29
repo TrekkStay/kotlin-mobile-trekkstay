@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -23,9 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,16 +36,15 @@ import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthState
 import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthViewModel
 import com.trekkstay.hotel.feature.authenticate.presentation.states.ViewEmpAction
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.HotelEmpCard
-import com.trekkstay.hotel.feature.hotel.presentation.states.media.MediaState
-import com.trekkstay.hotel.feature.hotel.presentation.states.media.UploadVideoAction
-import com.trekkstay.hotel.feature.hotel.presentation.states.room.CreateRoomAction
-import com.trekkstay.hotel.feature.hotel.presentation.states.room.GetHotelRoomAction
-import com.trekkstay.hotel.feature.hotel.presentation.states.room.RoomState
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 @Composable
-fun HotelEmpListScreen(empAuthViewModel: EmpAuthViewModel, navController: NavHostController,context: Context) {
+fun HotelEmpListScreen(
+    empAuthViewModel: EmpAuthViewModel,
+    navController: NavHostController,
+    context: Context
+) {
     val empAuthState by empAuthViewModel.authState.observeAsState()
     LaunchedEffect(Unit) {
         val hotelId = LocalStore.getKey(context, "hotelId", "")
@@ -57,69 +54,93 @@ fun HotelEmpListScreen(empAuthViewModel: EmpAuthViewModel, navController: NavHos
 
     when (empAuthState) {
         is EmpAuthState.SuccessViewEmp -> {
-    Scaffold(
-        modifier = Modifier.padding(bottom = 70.dp),
-        floatingActionButton = {
-            FloatingActionButton(
-                modifier = Modifier.padding(10.dp),
-                shape = RoundedCornerShape(30.dp),
-                contentColor = TrekkStayBlue,
-                containerColor = Color(0xFF89CFF3),
-                onClick = {
-                    navController.navigate("hotel_emp_create")
-                },
-            ) {
-                Icon(Icons.Filled.Add, "Floating action button.")
-            }
-        }
-    ) { _ ->
-        Column(
-            modifier = Modifier.verticalScroll(rememberScrollState())
-        ) {
-            Spacer(modifier = Modifier.height(20.dp))
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(onClick = {
-                    navController.navigate("hotel_profile")
-                }) {
-                    Icon(
-                        Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                        contentDescription = "backFromRoomManage"
-                    )
+            Scaffold(
+                modifier = Modifier.padding(bottom = 70.dp),
+                floatingActionButton = {
+                    FloatingActionButton(
+                        modifier = Modifier.padding(10.dp),
+                        shape = RoundedCornerShape(30.dp),
+                        contentColor = TrekkStayBlue,
+                        containerColor = Color(0xFF89CFF3),
+                        onClick = {
+                            navController.navigate("hotel_emp_create")
+                        },
+                    ) {
+                        Icon(Icons.Filled.Add, "Floating action button.")
+                    }
                 }
-                Text(
-                    text = "Your employees",
-                    fontFamily = PoppinsFontFamily,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 20.sp
-                )
-            }
-
+            ) { _ ->
+                Column {
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        IconButton(onClick = {
+                            navController.navigate("hotel_profile")
+                        }) {
+                            Icon(
+                                Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                                contentDescription = "backFromRoomManage"
+                            )
+                        }
+                        Text(
+                            text = "Your employees",
+                            fontFamily = PoppinsFontFamily,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 20.sp
+                        )
+                    }
+                    if ((empAuthState as EmpAuthState.SuccessViewEmp).res.empList.isEmpty()) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center,
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            Text(
+                                text = "Your hotel does not have any staff yet.",
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                fontFamily = PoppinsFontFamily,
+                                color = Color.Gray
+                            )
+                            Spacer(modifier = Modifier.height(10.dp))
+                            Text(
+                                text = "Tap the + button to add a new staff.",
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                fontFamily = PoppinsFontFamily,
+                                color = Color.Gray
+                            )
+                        }
+                    } else {
                         Column(
                             verticalArrangement = Arrangement.spacedBy(10.dp),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 15.dp, vertical = 10.dp)
+                                .verticalScroll(rememberScrollState())
                         ) {
                             (empAuthState as EmpAuthState.SuccessViewEmp).res.empList.forEach { emp ->
                                 HotelEmpCard(emp)
                             }
                         }
                     }
-
                 }
             }
+        }
+
         is EmpAuthState.InvalidViewEmp -> {
             // Handle invalid view employee state
         }
+
         is EmpAuthState.ViewEmpCalling -> {
             // Handle view employee calling state
         }
+
         else -> {
             // Handle other states
         }
-        }
+    }
 
 
 }

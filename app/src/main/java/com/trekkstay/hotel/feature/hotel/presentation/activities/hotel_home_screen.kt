@@ -1,11 +1,9 @@
 package com.trekkstay.hotel.feature.hotel.presentation.activities
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,50 +11,46 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import coil.compose.AsyncImage
-import com.trekkstay.hotel.feature.customer.presentation.fragments.DestinationCard
-import com.trekkstay.hotel.feature.customer.presentation.fragments.HotelTabsRow
-import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
+import com.example.hotel.R
 import com.trekkstay.hotel.ui.theme.NunitoFontFamily
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 @Composable
-fun HotelHomeScreen(hotelViewModel: HotelViewModel,navController: NavHostController) {
+fun HotelHomeScreen(navController: NavHostController) {
+    val ownerName = "Bao Pham"
+    val bookingNum = 125
+    val roomNum = 125
+    val staffNum = 200
     Column(
+        verticalArrangement = Arrangement.spacedBy(15.dp),
         modifier = Modifier
-            .padding(bottom = 70.dp)
+            .padding(top = 15.dp, bottom = 70.dp)
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        Spacer(modifier = Modifier.height(15.dp))
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.Bottom,
@@ -99,123 +93,124 @@ fun HotelHomeScreen(hotelViewModel: HotelViewModel,navController: NavHostControl
                 }
             }
         }
-        Spacer(modifier = Modifier.height(15.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(20.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 25.dp)
+        ) {
+            Icon(
+                Icons.Default.AccountCircle,
+                contentDescription = null,
+                tint = TrekkStayBlue,
+                modifier = Modifier
+                    .size(64.dp)
+            )
+            Text(
+                text = "Welcome back, $ownerName!",
+                fontSize = 16.sp,
+                fontFamily = PoppinsFontFamily,
+                fontWeight = FontWeight.Medium
+            )
+        }
         Column(
             verticalArrangement = Arrangement.spacedBy(15.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 10.dp, end = 10.dp)
-                .border(1.dp, Color(0xFFE3E3E4), RoundedCornerShape(20.dp))
-                .padding(15.dp),
+            modifier = Modifier.padding(horizontal = 10.dp)
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(20.dp),
-                modifier = Modifier.fillMaxWidth()
+            HotelHomeCard(
+                title = "Today's Reservations",
+                value = "$bookingNum bookings",
+                color = Color(0x0085FF).copy(alpha = 0.55f),
+                icon = ImageVector.vectorResource(R.drawable.box_ico)
             ) {
-                AsyncImage(
-                    model = "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/880ae3c6-0414-481b-aead-5968a48a560d/dfuky40-bbfeb6ac-8675-4cf7-a0b0-4bdbbc0299d4.png/v1/fill/w_512,h_512,q_80,strp/a_i__art___pretty_girl_by_draxionmufara_dfuky40-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NTEyIiwicGF0aCI6IlwvZlwvODgwYWUzYzYtMDQxNC00ODFiLWFlYWQtNTk2OGE0OGE1NjBkXC9kZnVreTQwLWJiZmViNmFjLTg2NzUtNGNmNy1hMGIwLTRiZGJiYzAyOTlkNC5wbmciLCJ3aWR0aCI6Ijw9NTEyIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.CYceDA6vX83Rkq_rhdV3Q4ObSpHylffYnDMvoY6i2x8",
-                    contentDescription = "User Avatar",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .size(64.dp)
-                        .clip(CircleShape)
-                )
-                Text(
-                    text = "Hello User",
-                    fontSize = 16.sp,
-                    fontFamily = PoppinsFontFamily,
-                    fontWeight = FontWeight.Medium
-                )
+                navController.navigate("hotel_reservations")
             }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+            HotelHomeCard(
+                title = "Hotel's Rooms",
+                value = "$roomNum rooms",
+                color = Color(0xFF41B06E).copy(alpha = 0.55f),
+                icon = ImageVector.vectorResource(R.drawable.bed_ico)
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .size(300.dp, 45.dp)
-                        .background(
-                            Color(0xFFC4C4C4).copy(alpha = 0.65f),
-                            RoundedCornerShape(15.dp)
-                        )
-                        .padding(10.dp)
-                        .clickable {
-                            navController.navigate("customer_search_engine") {
-                                popUpTo(navController.graph.findStartDestination().id)
-                                launchSingleTop = true
-                            }
-                        }
-                ) {
-                    Text(
-                        text = "Search For Hotels",
-                        color = Color(0xFF303030).copy(alpha = 0.24f),
-                        fontSize = 16.sp,
-                        fontFamily = PoppinsFontFamily,
-                        fontWeight = FontWeight.Medium
-                    )
-                    Icon(Icons.Default.Search, contentDescription = null)
-                }
-                IconButton(
-                    modifier = Modifier.border(2.dp, Color(0xFFB8B8B9).copy(alpha = 0.42f)),
-                    onClick = { /*TODO*/ }) {
-                    Icon(
-                        Icons.Default.Menu,
-                        contentDescription = null,
-                        tint = TrekkStayBlue
-                    )
-                }
+                navController.navigate("hotel_room_manage")
+            }
+            HotelHomeCard(
+                title = "Hotel's Staffs",
+                value = "$staffNum employees",
+                color = Color(0x7365C7).copy(alpha = 0.55f),
+                icon = ImageVector.vectorResource(R.drawable.people_ico)
+            ) {
+                navController.navigate("hotel_emp_list")
             }
         }
-        Spacer(modifier = Modifier.height(10.dp))
-        HotelTabsRow(hotelViewModel = hotelViewModel,navController)
-        Text(
-            text = "See all",
-            textAlign = TextAlign.End,
-            color = TrekkStayBlue,
-            fontSize = 18.sp,
-            fontFamily = PoppinsFontFamily,
-            fontWeight = FontWeight.Medium,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(end = 10.dp)
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        Text(
-            text = "Explore",
-            fontFamily = PoppinsFontFamily,
-            fontWeight = FontWeight.Bold,
-            fontSize = 20.sp,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 10.dp)
-        )
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-            contentPadding = PaddingValues(10.dp)
-        ) {
-            items(3) {
-                DestinationCard(
-                    name = "Da Lat",
-                    hotelNum = 186,
-                    imgUrl = "https://www.usatoday.com/gcdn/-mm-/05b227ad5b8ad4e9dcb53af4f31d7fbdb7fa901b/c=0-64-2119-1259/local/-/media/USATODAY/USATODAY/2014/08/13/1407953244000-177513283.jpg?width=1320&height=746&fit=crop&format=pjpg&auto=webp"
-                )
-            }
-        }
-        Text(
-            text = "See all",
-            textAlign = TextAlign.End,
-            color = TrekkStayBlue,
-            fontSize = 18.sp,
-            fontFamily = PoppinsFontFamily,
-            fontWeight = FontWeight.Medium,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(end = 10.dp)
-        )
-        Spacer(modifier = Modifier.height(10.dp))
     }
+}
+
+@Composable
+private fun HotelHomeCard(
+    title: String,
+    value: String,
+    color: Color,
+    icon: ImageVector,
+    navigate: () -> Unit = {}
+) {
+    Column(
+        verticalArrangement = Arrangement.SpaceAround,
+        modifier = Modifier
+            .background(color, shape = RoundedCornerShape(10.dp))
+            .padding(horizontal = 15.dp, vertical = 20.dp)
+            .clickable {
+                navigate()
+            }
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                icon,
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier.size(30.dp)
+            )
+            Text(
+                title,
+                fontSize = 24.sp,
+                fontFamily = PoppinsFontFamily,
+                fontWeight = FontWeight.Medium,
+                color = Color.White,
+            )
+        }
+        Spacer(modifier = Modifier.height(10.dp))
+        Text(
+            value,
+            fontWeight = FontWeight.SemiBold,
+            fontFamily = PoppinsFontFamily,
+            color = Color.Black,
+        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                "View More",
+                fontWeight = FontWeight.SemiBold,
+                fontFamily = PoppinsFontFamily,
+                color = Color.Black,
+                modifier = Modifier.padding(10.dp, 0.dp)
+            )
+            Icon(
+                painter = painterResource(id = R.drawable.more),
+                tint = Color.White,
+                contentDescription = null
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
+@Composable
+fun HotelHomeOwnerPreview() {
+    HotelHomeScreen(rememberNavController())
 }

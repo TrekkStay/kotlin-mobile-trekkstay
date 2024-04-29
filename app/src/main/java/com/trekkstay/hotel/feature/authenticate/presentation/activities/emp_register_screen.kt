@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
@@ -36,9 +37,9 @@ import com.example.hotel.R
 import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthState
 import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthViewModel
 import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpRegisterAction
+import com.trekkstay.hotel.feature.shared.TextDialog
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 import com.trekkstay.hotel.ui.theme.black
-
 
 @Composable
 fun EmpRegisterScreen(viewModel: EmpAuthViewModel, navController: NavHostController) {
@@ -47,36 +48,32 @@ fun EmpRegisterScreen(viewModel: EmpAuthViewModel, navController: NavHostControl
     var password by remember { mutableStateOf("") }
     val authState by viewModel.authState.observeAsState()
     var showDialog by remember { mutableStateOf(true) }
+    var showValidateDialog by remember { mutableStateOf(false) }
+    var dialogTitle by remember { mutableStateOf("") }
+    var dialogMessage by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
     if (showDialog) {
         when (authState) {
             is EmpAuthState.SuccessEmpRegister -> {
                 showDialog = true
-                AlertDialog(
-                    onDismissRequest = {},
-                    title = { Text("Registration Successful") },
-                    text = { Text("You have successfully registered.") },
-                    confirmButton = {
-                        Button(onClick = { showDialog = false }) {
-                            Text("OK")
-                        }
-                    }
+                TextDialog(
+                    title = "Registration Successful",
+                    msg = "You have successfully registered.",
+                    type = "success",
+                    onDismiss = {showDialog = false},
                 )
-
+                name = ""
+                email = ""
+                password = ""
+                LocalFocusManager.current.clearFocus()
             }
             is EmpAuthState.InvalidEmpRegister -> {
                 showDialog = true
-                AlertDialog(
-                    onDismissRequest = {},
-                    title = { Text("Registration Failed") },
-                    text = { Text((authState as EmpAuthState.InvalidEmpRegister).message) },
-                    confirmButton = {
-                        Button(onClick = { showDialog = false }) {
-                            Text("OK")
-                        }
-                    }
+                TextDialog(
+                    title = "Registration Failed",
+                    msg = "Email already taken. Please try again with another email or try logging in with that email instead.",
+                    onDismiss = {showDialog = false},
                 )
-
             }
             is EmpAuthState.EmpRegisterCalling -> {
                 // You can show a progress dialog or a loading indicator here
@@ -85,6 +82,14 @@ fun EmpRegisterScreen(viewModel: EmpAuthViewModel, navController: NavHostControl
                 // Handle other states
             }
         }
+    }
+
+    if (showValidateDialog) {
+        TextDialog(
+            title = dialogTitle,
+            msg = dialogMessage,
+            onDismiss = { showValidateDialog = false },
+        )
     }
 
     Surface(color = Color.White) {
@@ -129,7 +134,7 @@ fun EmpRegisterScreen(viewModel: EmpAuthViewModel, navController: NavHostControl
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
-                label = { Text("Username") },
+                label = { Text("Full Name") },
                 modifier = Modifier.fillMaxWidth(),
                 leadingIcon = {
                     Icon(
@@ -191,12 +196,25 @@ fun EmpRegisterScreen(viewModel: EmpAuthViewModel, navController: NavHostControl
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             )
             Spacer(modifier = Modifier.height(32.dp))
-
             Button(
                 onClick = {
-                    showDialog = true
-                    val action = EmpRegisterAction(name, email, password)
-                    viewModel.processAction(action)
+                    if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
+                        dialogTitle = "Empty Fields"
+                        dialogMessage = "Please input all the required information before continuing"
+                        showValidateDialog = true
+                    } else if (!email.matches(Regex("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}\$"))) {
+                        dialogTitle = "Invalid Email Address"
+                        dialogMessage = "Please input a valid email address"
+                        showValidateDialog = true
+                    } else if (!password.matches(Regex("^(?=.*[0-9])(?=.*[!@#\\\$%^&*+=])(?=.*[A-Z])(?=.*[a-z]).{8,}\$"))) {
+                        dialogTitle = "Invalid Password"
+                        dialogMessage = "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one special character"
+                        showValidateDialog = true
+                    } else {
+                        showDialog = true
+                        val action = EmpRegisterAction(name, email, password)
+                        viewModel.processAction(action)
+                    }
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF007EF2)),
                 modifier = Modifier

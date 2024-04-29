@@ -136,7 +136,7 @@ fun HotelBookingDetailScreen(navController: NavController) {
                     .fillMaxWidth()
             ) {
                 Text(
-                    text = "Status",
+                    text = "Payment Status",
                     fontFamily = PoppinsFontFamily,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 12.sp,
