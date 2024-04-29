@@ -324,7 +324,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:$PROJECT_DIR$/../../../../../../Android/sdk/icons/material/materialicons/edit_note/baseline_edit_note_24.xml" />
+                                      <entry key="url" value="file:$PROJECT_DIR$/../../../../../../Android/sdk/icons/material/materialicons/mode_comment/baseline_mode_comment_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -334,7 +334,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="note_ico" />
+                            <entry key="outputName" value="cmt_ico" />
                           </map>
                         </option>
                       </PersistentState>

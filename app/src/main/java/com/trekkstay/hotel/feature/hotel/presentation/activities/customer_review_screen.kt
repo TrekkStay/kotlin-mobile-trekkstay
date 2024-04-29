@@ -55,6 +55,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.hotel.R
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.InfoTextField
+import com.trekkstay.hotel.feature.shared.Utils.labelizeRating
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
@@ -323,7 +324,6 @@ private fun RatingRow(
     onStarSelected: (Int) -> Unit
 ) {
     var ratingText by remember { mutableStateOf("") }
-    val ratingTextList = listOf("Terrible", "Bad", "Okay", "Good", "Excellent")
     Column (
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -342,7 +342,7 @@ private fun RatingRow(
                         .size(50.dp)
                         .clickable {
                             onStarSelected(it + 1)
-                            ratingText = ratingTextList[it]
+                            ratingText = labelizeRating(it + 1)
                         },
                     tint = if (isStarSelected) Color(0xFFFFC107) else Color.Gray
                 )
