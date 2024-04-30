@@ -47,7 +47,6 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Place
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -88,11 +87,17 @@ import com.trekkstay.hotel.feature.hotel.presentation.states.media.MediaState
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.MediaViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.UploadMediaAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.UploadVideoAction
+import com.trekkstay.hotel.feature.shared.TextDialog
 import java.io.FileOutputStream
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: LocationViewModel, mediaViewModel: MediaViewModel,navController: NavHostController) {
+fun CreateHotelScreen(
+    hotelViewModel: HotelViewModel,
+    locationViewModel: LocationViewModel,
+    mediaViewModel: MediaViewModel,
+    navController: NavHostController
+) {
     val context = LocalContext.current
     val contentResolver = context.contentResolver
     var hotelName by remember { mutableStateOf(TextFieldValue()) }
@@ -102,30 +107,34 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
     var hotelDescription by remember { mutableStateOf(TextFieldValue()) }
     var checkInTime by remember { mutableStateOf("") }
     var checkOutTime by remember { mutableStateOf("") }
-    var selectedLatLng by remember { mutableStateOf(LatLng(0.0,0.0)) }
+    var selectedLatLng by remember { mutableStateOf(LatLng(0.0, 0.0)) }
     val timeList = arrayOf("12:00", "12:30", "13:00", "13:30", "14:00")
     var selectedFacilities by remember { mutableStateOf(listOf<String>()) }
-    val facilities = listOf("Airport Transfer",
-    "Conference Room",
-    "Fitness Center",
-    "Food",
-    "Free Wifi",
-    "Laundry",
-    "Motorbike Rental",
-    "Parking Area",
-    "Spa",
-    "Pool")
+    val facilities = listOf(
+        "Airport Transfer",
+        "Conference Room",
+        "Fitness Center",
+        "Food",
+        "Free Wifi",
+        "Laundry",
+        "Motorbike Rental",
+        "Parking Area",
+        "Spa",
+        "Pool"
+    )
 
-     fun getFileName(context: Context, uri: Uri): String? {
+    fun getFileName(context: Context, uri: Uri): String? {
         var fileName: String? = null
         val projection = arrayOf(MediaStore.MediaColumns.DISPLAY_NAME)
         context.contentResolver.query(uri, projection, null, null, null)?.use { cursor ->
             if (cursor.moveToFirst()) {
-                fileName = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME))
+                fileName =
+                    cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME))
             }
         }
         return fileName
     }
+
     fun queryFile(context: Context, uri: Uri): File {
         val fileName = getFileName(context, uri) ?: "image_file"
         val inputStream = context.contentResolver.openInputStream(uri)
@@ -137,6 +146,7 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
         }
         return outputFile
     }
+
     fun queryVideo(context: Context, uri: Uri): File {
         val fileName = getFileName(context, uri) ?: "video_file"
         val inputStream = context.contentResolver.openInputStream(uri)
@@ -148,36 +158,34 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
         }
         return outputFile
     }
+
     fun getFileExtension(uri: Uri, contentResolver: ContentResolver): String {
         val mimeTypeMap = MimeTypeMap.getSingleton()
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri)) ?: ""
     }
 
-
-
     var selectedProvince by remember { mutableStateOf<Location?>(null) }
     var selectedDistrict by remember { mutableStateOf<Location?>(null) }
     var selectedWard by remember { mutableStateOf<Location?>(null) }
-    var provinceList : List<Location> = emptyList()
-    var districtList : List<Location> = emptyList()
-    var wardList : List<Location> = emptyList()
+    var provinceList: List<Location> = emptyList()
+    var districtList: List<Location> = emptyList()
+    var wardList: List<Location> = emptyList()
     var selectedImageUris by remember { mutableStateOf<List<Uri?>>(emptyList()) }
     var selectedVideoUris by remember { mutableStateOf<List<Uri?>>(emptyList()) }
-    var selectedFile by remember{ mutableStateOf<List<File>>(emptyList())}
-    var selectedExtension by remember{ mutableStateOf<List<String>>(emptyList())}
-    var selectedVideoFile by remember{ mutableStateOf<List<File>>(emptyList())}
-    var selectedVideoExtension by remember{ mutableStateOf<List<String>>(emptyList())}
-    var imageUrls by remember{ mutableStateOf<List<String>>(emptyList())}
+    var selectedFile by remember { mutableStateOf<List<File>>(emptyList()) }
+    var selectedExtension by remember { mutableStateOf<List<String>>(emptyList()) }
+    var selectedVideoFile by remember { mutableStateOf<List<File>>(emptyList()) }
+    var selectedVideoExtension by remember { mutableStateOf<List<String>>(emptyList()) }
+    var imageUrls by remember { mutableStateOf<List<String>>(emptyList()) }
     val photosPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickMultipleVisualMedia()
     ) { uris ->
         selectedImageUris = uris
 
-         selectedFile = uris.map { uri ->
-            queryFile(context,uri)
+        selectedFile = uris.map { uri ->
+            queryFile(context, uri)
         }
-         selectedExtension = uris.map{
-                uri ->
+        selectedExtension = uris.map { uri ->
             getFileExtension(uri, contentResolver)
         }
 
@@ -188,26 +196,24 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
         selectedVideoUris = uris
 
         selectedVideoFile = uris.map { uri ->
-            queryVideo(context,uri)
+            queryVideo(context, uri)
         }
-        selectedVideoExtension = uris.map{
-                uri ->
+        selectedVideoExtension = uris.map { uri ->
             getFileExtension(uri, contentResolver)
         }
 
     }
 
-
     val hotelState by hotelViewModel.state.observeAsState()
     val locationState by locationViewModel.state.observeAsState()
     val mediaState by mediaViewModel.state.observeAsState()
     var showDialog by remember { mutableStateOf(true) }
-    var showMap by remember {mutableStateOf(false)}
+    var showMap by remember { mutableStateOf(false) }
     var hasUploadedVideo by remember { mutableStateOf(false) }
 
-    when (mediaState){
+    when (mediaState) {
         is MediaState.SuccessUploadVideo -> {
-            if(!hasUploadedVideo) {
+            if (!hasUploadedVideo) {
                 println("ok")
                 val action = CreateHotelAction(
                     name = hotelName.text,
@@ -236,16 +242,19 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
                 )
 
                 hotelViewModel.processAction(action)
-                hasUploadedVideo=true
+                hasUploadedVideo = true
             }
         }
+
         is MediaState.InvalidUploadVideo -> {
 
         }
+
         is MediaState.UploadVideoCalling -> {
         }
+
         is MediaState.SuccessUploadMedia -> {
-            imageUrls =  (mediaState as MediaState.SuccessUploadMedia).media.media
+            imageUrls = (mediaState as MediaState.SuccessUploadMedia).media.media
             val mediaAction = UploadVideoAction(
                 selectedVideoFile,
                 selectedVideoExtension,
@@ -253,41 +262,55 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
             mediaViewModel.processAction(mediaAction)
 
         }
+
         is MediaState.InvalidUploadMedia -> {
 
         }
+
         is MediaState.UploadMediaCalling -> {
         }
-        else ->{
+
+        else -> {
 
         }
     }
     when (locationState) {
         is LocationState.SuccessViewProvince -> {
-            provinceList = (locationState as LocationState.SuccessViewProvince).locationList.locationList
+            provinceList =
+                (locationState as LocationState.SuccessViewProvince).locationList.locationList
         }
+
         is LocationState.InvalidViewProvince -> {
 
         }
+
         is LocationState.ViewProvinceCalling -> {
         }
+
         is LocationState.SuccessViewDistrict -> {
-            districtList = (locationState as LocationState.SuccessViewDistrict).locationList.locationList
+            districtList =
+                (locationState as LocationState.SuccessViewDistrict).locationList.locationList
 
         }
+
         is LocationState.InvalidViewDistrict -> {
 
         }
+
         is LocationState.ViewDistrictCalling -> {
         }
+
         is LocationState.SuccessViewWard -> {
             wardList = (locationState as LocationState.SuccessViewWard).locationList.locationList
         }
+
         is LocationState.InvalidViewWard -> {
 
         }
+
         is LocationState.ViewWardCalling -> {
         }
+
         else -> {
             // Handle other states
         }
@@ -297,42 +320,47 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
         when (hotelState) {
             is HotelState.SuccessCreateHotel -> {
                 showDialog = true
-                AlertDialog(
-                    onDismissRequest = { showDialog = false },
-                    title = { Text("Create hotel success") },
-                    text = { Text("Create hotel $hotelName successful") },
-                    confirmButton = {},
-                    dismissButton = {
-                        Button(onClick = { showDialog = false }) {
-                            Text("OK")
-                        }
-                    }
-                )
+                TextDialog(
+                    title = "Successfully Created",
+                    msg = "Create hotel $hotelName successful",
+                    type = "success"
+                ) {
+                    showDialog = false
+                }
+                navController.navigate("hotel_profile")
             }
+
             is HotelState.InvalidCreateHotel -> {
                 showDialog = true
-                AlertDialog(
-                    onDismissRequest = { showDialog = false },
-                    title = { Text("Create hotel fail") },
-                    text = { Text((hotelState as HotelState.InvalidCreateHotel).message) },
-                    confirmButton = {},
-                    dismissButton = {
-                        Button(onClick = { showDialog = false }) {
-                            Text("OK")
-                        }
-                    }
-                )
+                TextDialog(
+                    title = "Fail Creating Hotel",
+                    msg = "Something went wrong!!! Please try again later",
+                ) {
+                    showDialog = false
+                }
             }
+
             is HotelState.CreateHotelCalling -> {
                 // You can show a progress dialog or a loading indicator here
             }
+
             else -> {
                 // Handle other states
             }
         }
     }
 
+    var showValidateDialog by remember { mutableStateOf(false) }
+    var dialogTitle by remember { mutableStateOf("") }
+    var dialogMessage by remember { mutableStateOf("") }
 
+    if (showValidateDialog) {
+        TextDialog(
+            title = dialogTitle,
+            msg = dialogMessage,
+            onDismiss = { showValidateDialog = false },
+        )
+    }
 
     LaunchedEffect(Unit) {
         val action = ViewProvinceAction
@@ -345,12 +373,14 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
             .fillMaxHeight()
             .padding(bottom = 75.dp)
     ) {
-        if(showMap) {
-            GGMap(onMapClicked = {latLng ->
-                selectedLatLng= latLng
-                showMap =false
-            },)
-        }else{
+        if (showMap) {
+            GGMap(
+                onMapClicked = { latLng ->
+                    selectedLatLng = latLng
+                    showMap = false
+                },
+            )
+        } else {
             Column(
                 modifier = Modifier
                     .weight(1f)
@@ -417,7 +447,11 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
                         )
                     }
                     HotelActionRow(
-                        label = if (selectedLatLng == LatLng(0.0, 0.0)) "Hotel Location" else "${selectedLatLng.latitude}:${selectedLatLng.longitude}",
+                        label = if (selectedLatLng == LatLng(
+                                0.0,
+                                0.0
+                            )
+                        ) "Hotel Location" else "${selectedLatLng.latitude}:${selectedLatLng.longitude}",
                         leadingIcon = Icons.Default.Place,
                         trailingIcon = ImageVector.vectorResource(R.drawable.map_ico),
                         clickHandler = {
@@ -441,7 +475,7 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
                             selectedDistrict = it
                             selectedWard = null
                             wardList = emptyList()
-                            val action = ViewWardAction( it.code)
+                            val action = ViewWardAction(it.code)
                             locationViewModel.processAction(action)
                         })
                         DropDownMenu(
@@ -593,13 +627,34 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
                 }
                 Button(
                     onClick = {
-                        showDialog = true
-                        hasUploadedVideo=false
-                        val mediaAction = UploadMediaAction(
-                            selectedFile,
-                            selectedExtension,
-                        )
-                        mediaViewModel.processAction(mediaAction)
+                        if (hotelName.text.isEmpty() ||
+                            hotelEmail.text.isEmpty() ||
+                            hotelPhone.text.isEmpty() ||
+                            checkInTime.isEmpty() ||
+                            checkOutTime.isEmpty() ||
+                            selectedLatLng == LatLng(0.0, 0.0) ||
+                            selectedProvince == null ||
+                            selectedDistrict == null ||
+                            selectedWard == null ||
+                            addressDetail.text.isEmpty() ||
+                            selectedImageUris.isEmpty() ||
+                            selectedVideoUris.isEmpty() ||
+                            hotelDescription.text.isEmpty() ||
+                            selectedFacilities.isEmpty())
+                        {
+                            dialogTitle = "Empty Fields"
+                            dialogMessage =
+                                "Please input all the required information before creating your hotel"
+                            showValidateDialog = true
+                        } else {
+                            showDialog = true
+                            hasUploadedVideo = false
+                            val mediaAction = UploadMediaAction(
+                                selectedFile,
+                                selectedExtension,
+                            )
+                            mediaViewModel.processAction(mediaAction)
+                        }
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = TrekkStayBlue,
@@ -618,6 +673,7 @@ fun CreateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: Location
                         fontWeight = FontWeight.SemiBold
                     )
                 }
+                Spacer(modifier = Modifier.height(10.dp))
             }
         }
     }
@@ -740,7 +796,9 @@ private fun DropDownMenu(
         ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = Modifier.width(180.dp).background(Color.White)
+            modifier = Modifier
+                .width(180.dp)
+                .background(Color.White)
         ) {
             itemList.forEach { item ->
                 DropdownMenuItem(

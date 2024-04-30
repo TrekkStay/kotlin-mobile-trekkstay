@@ -45,17 +45,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.hotel.R
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.DateRangeSelector
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.InfoTextField
-import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.CreateHotelAction
-import com.trekkstay.hotel.feature.hotel.presentation.states.media.MediaState
-import com.trekkstay.hotel.feature.hotel.presentation.states.media.UploadMediaAction
-import com.trekkstay.hotel.feature.hotel.presentation.states.media.UploadVideoAction
 import com.trekkstay.hotel.feature.reservation.domain.entities.GuestInfo
 import com.trekkstay.hotel.feature.reservation.presentation.states.CreateReservationAction
 import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationState
@@ -188,7 +183,7 @@ fun BookingFormScreen(roomId:String,
                     if (childNum > 0) childNum--
                 })
                 DateRangeSelector(type = "book",
-                    ) {dateRange ->
+                ) {dateRange ->
                     selectedDateRange = dateRange
                 }
             }
