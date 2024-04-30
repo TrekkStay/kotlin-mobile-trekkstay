@@ -92,7 +92,7 @@ object AppRouter {
     fun Navigation() {
         val navController = navController ?: rememberNavController()
 
-        NavHost(navController = navController, startDestination = "hotel_main") {
+        NavHost(navController = navController, startDestination = "customer_main") {
             composable("start-up") {
                 StartupScreen(navController = navController)
             }

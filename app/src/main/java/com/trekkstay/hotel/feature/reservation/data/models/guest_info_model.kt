@@ -33,8 +33,8 @@ data class GuestInfoModel(
 
                 name = map["full_name"] as String,
                 contact = map["contact"] as String,
-                adults = map["adults"] as Int,
-                children = map["children"] as Int,
+                adults = (map["adults"] as Double).toInt(),
+                children = (map["children"] as Double).toInt()
 
                 )
         }
