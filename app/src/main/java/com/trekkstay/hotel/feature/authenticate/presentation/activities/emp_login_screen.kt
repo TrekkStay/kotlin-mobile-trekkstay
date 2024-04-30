@@ -69,7 +69,13 @@ fun EmpLoginScreen(viewModel: EmpAuthViewModel, navController: NavHostController
                     context, "hotelId",
                     (authState as EmpAuthState.SuccessEmpLogin).res.hotelId
                 )
-                navController.navigate("hotel_main")
+                navController.navigate("hotel_main") {
+                    popUpTo(navController.graph.startDestinationId) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
             }
 
             is EmpAuthState.InvalidEmpLogin -> {
