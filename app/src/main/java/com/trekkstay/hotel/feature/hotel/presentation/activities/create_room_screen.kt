@@ -31,7 +31,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -65,24 +64,21 @@ import com.example.hotel.R
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.ui.PlayerView
-import com.trekkstay.hotel.feature.hotel.domain.entities.Location
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.FacilityChip
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.HotelActionRow
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.HotelRoomOptSelector
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.InfoTextField
-import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.CreateHotelAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.GetHotelIdAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelState
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
-import com.trekkstay.hotel.feature.hotel.presentation.states.location.ViewProvinceAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.MediaState
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.MediaViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.UploadMediaAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.UploadVideoAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.room.CreateRoomAction
-import com.trekkstay.hotel.feature.hotel.presentation.states.room.GetHotelRoomAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.room.RoomState
 import com.trekkstay.hotel.feature.hotel.presentation.states.room.RoomViewModel
+import com.trekkstay.hotel.feature.shared.TextDialog
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 import java.io.File
@@ -101,8 +97,8 @@ fun CreateRoomScreen(hotelViewModel: HotelViewModel, roomViewModel: RoomViewMode
     var price by remember { mutableStateOf(TextFieldValue()) }
     var view by remember { mutableStateOf(TextFieldValue()) }
     var roomSize by remember { mutableStateOf(TextFieldValue()) }
-    var selectedBedNum by remember { mutableIntStateOf(0) }
-    var selectedAdultNumber by remember { mutableIntStateOf(0) }
+    var selectedBedNum by remember { mutableIntStateOf(1) }
+    var selectedAdultNumber by remember { mutableIntStateOf(1) }
     var selectedChildNumber by remember { mutableIntStateOf(0) }
     var selectedFacilities by remember { mutableStateOf(listOf<String>()) }
     val facilities = listOf(
@@ -252,34 +248,23 @@ fun CreateRoomScreen(hotelViewModel: HotelViewModel, roomViewModel: RoomViewMode
         when (roomState) {
             is RoomState.SuccessCreateRoom -> {
                 showDialog = true
-                AlertDialog(
-                    onDismissRequest = { showDialog = false },
-                    title = { Text("Create room success") },
-                    text = { Text("Create room successful") },
-                    confirmButton = {},
-                    dismissButton = {
-                        Button(onClick = {
-                            showDialog = false
-                            navController.navigate("hotel_room_manage")
-                        }) {
-                            Text("OK")
-                        }
-                    }
-                )
+                TextDialog(
+                    title = "Successfully Created",
+                    msg = "A room has been added to your hotel successfully.",
+                    type = "success"
+                ) {
+                    showDialog = false
+                }
+                navController.navigate("hotel_room_manage")
             }
             is RoomState.InvalidCreateRoom -> {
                 showDialog = true
-                AlertDialog(
-                    onDismissRequest = { showDialog = false },
-                    title = { Text("Create room fail") },
-                    text = { Text((roomState as RoomState.InvalidCreateRoom).message) },
-                    confirmButton = {},
-                    dismissButton = {
-                        Button(onClick = { showDialog = false }) {
-                            Text("OK")
-                        }
-                    }
-                )
+                TextDialog(
+                    title = "Fail Creating Room",
+                    msg = "Something went wrong!!! Please try again later",
+                ) {
+                    showDialog = false
+                }
             }
             is RoomState.CreateRoomCalling -> {
                 // You can show a progress dialog or a loading indicator here
@@ -288,6 +273,18 @@ fun CreateRoomScreen(hotelViewModel: HotelViewModel, roomViewModel: RoomViewMode
                 // Handle other states
             }
         }
+    }
+
+    var showValidateDialog by remember { mutableStateOf(false) }
+    var dialogTitle by remember { mutableStateOf("") }
+    var dialogMessage by remember { mutableStateOf("") }
+
+    if (showValidateDialog) {
+        TextDialog(
+            title = dialogTitle,
+            msg = dialogMessage,
+            onDismiss = { showValidateDialog = false },
+        )
     }
 
     val hotelState by hotelViewModel.state.observeAsState()
@@ -526,13 +523,30 @@ fun CreateRoomScreen(hotelViewModel: HotelViewModel, roomViewModel: RoomViewMode
             }
             Button(
                 onClick = {
-                    hasUploadedVideo = false
-                    showDialog = true
-                    val mediaAction = UploadMediaAction(
-                        selectedFile,
-                        selectedExtension,
-                    )
-                    mediaViewModel.processAction(mediaAction)
+                    if (roomType.text.isEmpty() ||
+                        description.text.isEmpty() ||
+                        quantity.text.isEmpty() ||
+                        discountRate.text.isEmpty() ||
+                        price.text.isEmpty() ||
+                        view.text.isEmpty() ||
+                        roomSize.text.isEmpty() ||
+                        selectedImageUris.isEmpty() ||
+                        selectedVideoUris.isEmpty() ||
+                        selectedFacilities.isEmpty())
+                    {
+                        dialogTitle = "Empty Fields"
+                        dialogMessage =
+                            "Please input all the required information before creating your hotel"
+                        showValidateDialog = true
+                    } else {
+                        hasUploadedVideo = false
+                        showDialog = true
+                        val mediaAction = UploadMediaAction(
+                            selectedFile,
+                            selectedExtension,
+                        )
+                        mediaViewModel.processAction(mediaAction)
+                    }
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = TrekkStayBlue,
