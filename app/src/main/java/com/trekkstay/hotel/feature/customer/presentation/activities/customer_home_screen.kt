@@ -8,44 +8,37 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.layout.ContentScale
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import coil.compose.AsyncImage
+import com.trekkstay.hotel.core.storage.LocalStore
 import com.trekkstay.hotel.feature.customer.presentation.fragments.DestinationCard
 import com.trekkstay.hotel.feature.customer.presentation.fragments.HotelTabsRow
-import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelState
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
-import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.ViewHotelAction
 import com.trekkstay.hotel.ui.theme.NunitoFontFamily
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @Composable
 fun CustomerHomeScreen(hotelViewModel: HotelViewModel,navController: NavHostController) {
-
-
+    val userName = LocalStore.getKey(LocalContext.current,"name","User")
     Column(
         modifier = Modifier
             .padding(bottom = 70.dp)
@@ -109,16 +102,15 @@ fun CustomerHomeScreen(hotelViewModel: HotelViewModel,navController: NavHostCont
                 horizontalArrangement = Arrangement.spacedBy(20.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                AsyncImage(
-                    model = "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/880ae3c6-0414-481b-aead-5968a48a560d/dfuky40-bbfeb6ac-8675-4cf7-a0b0-4bdbbc0299d4.png/v1/fill/w_512,h_512,q_80,strp/a_i__art___pretty_girl_by_draxionmufara_dfuky40-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NTEyIiwicGF0aCI6IlwvZlwvODgwYWUzYzYtMDQxNC00ODFiLWFlYWQtNTk2OGE0OGE1NjBkXC9kZnVreTQwLWJiZmViNmFjLTg2NzUtNGNmNy1hMGIwLTRiZGJiYzAyOTlkNC5wbmciLCJ3aWR0aCI6Ijw9NTEyIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.CYceDA6vX83Rkq_rhdV3Q4ObSpHylffYnDMvoY6i2x8",
+                Icon(
+                    Icons.Default.AccountCircle,
                     contentDescription = "User Avatar",
-                    contentScale = ContentScale.Crop,
+                    tint = TrekkStayCyan,
                     modifier = Modifier
                         .size(64.dp)
-                        .clip(CircleShape)
                 )
                 Text(
-                    text = "Hello User",
+                    text = "Hello $userName!",
                     fontSize = 16.sp,
                     fontFamily = PoppinsFontFamily,
                     fontWeight = FontWeight.Medium

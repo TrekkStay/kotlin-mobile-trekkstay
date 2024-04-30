@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -34,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.hotel.R
+import com.trekkstay.hotel.core.storage.LocalStore
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
 import com.trekkstay.hotel.ui.theme.NunitoFontFamily
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
@@ -41,7 +43,7 @@ import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 @Composable
 fun HotelHomeScreen(hotelViewModel: HotelViewModel,navController: NavHostController) {
-    val ownerName = "Bao Pham"
+    val ownerName = LocalStore.getKey(LocalContext.current,"name","User")
     val bookingNum = 125
     val roomNum = 125
     val staffNum = 200
@@ -96,7 +98,7 @@ fun HotelHomeScreen(hotelViewModel: HotelViewModel,navController: NavHostControl
         }
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(20.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 25.dp)
