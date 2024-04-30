@@ -87,6 +87,18 @@ fun LoginScreen(viewModel: AuthViewModel, navController: NavHostController) {
         }
     }
 
+    var showValidateDialog by remember { mutableStateOf(false) }
+    var dialogTitle by remember { mutableStateOf("") }
+    var dialogMessage by remember { mutableStateOf("") }
+
+    if (showValidateDialog) {
+        TextDialog(
+            title = dialogTitle,
+            msg = dialogMessage,
+            onDismiss = { showValidateDialog = false },
+        )
+    }
+
     Surface(color = Color.White) {
         Column(
             modifier = Modifier
@@ -186,9 +198,15 @@ fun LoginScreen(viewModel: AuthViewModel, navController: NavHostController) {
             Spacer(modifier = Modifier.height(32.dp))
             Button(
                 onClick = {
-                    showDialog = true
-                    val action = LoginAction(email, password)
-                    viewModel.processAction(action)
+                    if (email.isEmpty() || password.isEmpty()) {
+                        dialogTitle = "Empty Fields"
+                        dialogMessage = "Please fill all fields before logging in"
+                        showValidateDialog = true
+                    } else {
+                        showDialog = true
+                        val action = LoginAction(email, password)
+                        viewModel.processAction(action)
+                    }
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF238C98)),
                 modifier = Modifier

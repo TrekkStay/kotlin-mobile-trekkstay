@@ -5,20 +5,33 @@
       <entry key="CustomerEditInfoPreview">
         <State />
       </entry>
-      <entry key="CustomerResetPwPreview">
-        <State />
-      </entry>
       <entry key="DetailReviewListPreview">
         <State />
       </entry>
       <entry key="HotelResetPwPreview">
         <State />
       </entry>
+      <entry key="MomoPreview">
+        <State />
+      </entry>
       <entry key="ReviewRatingPreview">
         <State />
       </entry>
       <entry key="app">
-        <State />
+        <State>
+          <runningDeviceTargetSelectedWithDropDown>
+            <Target>
+              <type value="RUNNING_DEVICE_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="SERIAL_NUMBER" />
+                  <value value="9A291FFBA00813" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </runningDeviceTargetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-04-30T06:06:44.246234Z" />
+        </State>
       </entry>
     </value>
   </component>
