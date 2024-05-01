@@ -30,25 +30,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.hotel.R
-import com.trekkstay.hotel.feature.hotel.presentation.fragments.RoomDetailCard
+import coil.compose.rememberAsyncImagePainter
+import com.trekkstay.hotel.feature.hotel.presentation.fragments.RoomReservationCard
 import com.trekkstay.hotel.feature.reservation.domain.entities.Reservation
-import com.trekkstay.hotel.feature.reservation.presentation.states.ListReservationAction
 import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationState
 import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationViewModel
 import com.trekkstay.hotel.feature.reservation.presentation.states.ViewDetailReservationAction
-import com.trekkstay.hotel.feature.shared.Utils.formatPrice
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
@@ -58,13 +53,39 @@ fun BookingDetailScreen(
     navController: NavController,
     reservationViewModel: ReservationViewModel
 ) {
-    val hotelName = "Estabeez Hotel"
-    val bookingID = "004Wf32QR"
-    val customerName = "Bao Pham"
-    val customerEmail = "vCqg6@example.com"
-    val customerPhone = "+84 123 456 789"
-    val roomNum = 1
-    val totalPrice = 1000.0
+    var hotelName by remember {
+        mutableStateOf("")
+    }
+    var bookingID by remember {
+        mutableStateOf("")
+    }
+    var customerName by remember {
+        mutableStateOf("")
+    }
+    var customerEmail by remember {
+        mutableStateOf("")
+    }
+    var customerPhone by remember {
+        mutableStateOf("")
+    }
+    var roomNum by remember {
+        mutableStateOf(0)
+    }
+    var totalPrice by remember {
+        mutableStateOf(1000)
+    }
+    var imgUrl by remember {
+        mutableStateOf("")
+    }
+
+    var checkIn by remember {
+        mutableStateOf("")
+    }
+
+    var checkOut by remember {
+        mutableStateOf("")
+    }
+
 
     var reservationDetail by remember {
         mutableStateOf<Reservation?>(null)
@@ -77,6 +98,16 @@ fun BookingDetailScreen(
                 (reservationState as ReservationState.SuccessViewDetailReservation).reservation
             println(">>>>>>>>>>>>>>>>> detail")
             println(reservationDetail)
+            hotelName = reservationDetail!!.room.hotelName
+            bookingID = reservationDetail!!.id
+            customerName = reservationDetail!!.guestInfo.name
+            customerEmail = reservationDetail!!.guestInfo.contact
+            customerPhone = reservationDetail!!.guestInfo.contact
+            totalPrice = reservationDetail!!.room.bookingPrice
+            imgUrl = reservationDetail!!.qrCodeUrl
+            checkIn = reservationDetail!!.checkIn
+            checkOut = reservationDetail!!.checkOut
+            roomNum = reservationDetail!!.quantity.toInt()
         }
 
         is ReservationState.InvalidViewDetailReservation -> {
@@ -138,7 +169,7 @@ fun BookingDetailScreen(
                 textAlign = TextAlign.Center
             )
             Image(
-                painter = painterResource(id = R.drawable.qr_scanner),
+                painter = rememberAsyncImagePainter(imgUrl),
                 modifier = Modifier
                     .size(200.dp),
                 contentDescription = "QR"
@@ -168,14 +199,14 @@ fun BookingDetailScreen(
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    BookDateCol(label = "Check In", date = "Apr 17")
+                    BookDateCol(label = "Check In", date = checkIn)
                     Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null)
-                    BookDateCol(label = "Check Out", date = "Apr 20")
+                    BookDateCol(label = "Check Out", date = checkOut)
                 }
                 BookingInfoRow("Number of rooms", "$roomNum")
-                BookingInfoRow("Total", "$ ${formatPrice(totalPrice)}")
+                BookingInfoRow("Total", "$ $totalPrice")
             }
-            //RoomDetailCard(room = room)
+            reservationDetail?.let { RoomReservationCard(it) }
         }
     }
 }

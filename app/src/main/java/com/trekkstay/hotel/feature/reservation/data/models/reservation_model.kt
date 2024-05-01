@@ -4,10 +4,6 @@ import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 import com.trekkstay.hotel.core.typedef.DataMap
-import com.trekkstay.hotel.feature.hotel.data.models.LocationModel
-import com.trekkstay.hotel.feature.hotel.data.models.RoomModel
-import com.trekkstay.hotel.feature.hotel.data.models.toEntity
-import com.trekkstay.hotel.feature.hotel.domain.entities.Location
 import com.trekkstay.hotel.feature.reservation.domain.entities.Reservation
 
 data class ReservationModel(
@@ -20,7 +16,7 @@ data class ReservationModel(
     @SerializedName("check_in") val checkIn: String,
     @SerializedName("check_out") val checkOut: String,
     @SerializedName("status") val status: String,
-//    @SerializedName("guess_info") val guestInfo: GuestInfoModel,
+    @SerializedName("guess_info") val guestInfo: GuestInfoModel,
     @SerializedName("room") val room: ReservationRoomModel,
 ) {
     companion object {
@@ -46,9 +42,9 @@ data class ReservationModel(
                 checkIn = map["check_in_date"] as String,
                 checkOut = map["check_out_date"] as String,
                 status = map["status"] as String,
-//                guestInfo = GuestInfoModel.fromJson(map["guest_info"].toString()),
+                guestInfo = GuestInfoModel.fromJson(map["guest_info"].toString()),
                 room = ReservationRoomModel.fromJson(map["room"].toString()),
-                )
+            )
         }
     }
 }
@@ -65,7 +61,7 @@ fun ReservationModel.toEntity(): Reservation {
         checkIn,
         checkOut,
         status,
-//        guestInfo.toEntity(),
+        guestInfo.toEntity(),
         room.toEntity()
     )
 }

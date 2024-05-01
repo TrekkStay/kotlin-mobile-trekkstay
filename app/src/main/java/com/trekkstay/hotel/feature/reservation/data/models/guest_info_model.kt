@@ -22,12 +22,43 @@ data class GuestInfoModel(
             )
         }
 
+        fun parseInputString(input: String): Map<String, Any> {
+            val map = mutableMapOf<String, Any>()
+
+            val regex = Regex("""(\w+)\s*=\s*(\{[^{}]*\}|\[.*\]|[^,{}]+)""")
+            regex.findAll(input).forEach { matchResult ->
+                val key = matchResult.groupValues[1]
+                val value = parseValue(matchResult.groupValues[2])
+                map[key] = value
+            }
+
+            return map
+        }
+
+        fun parseValue(value: String): Any {
+            return when {
+                value.startsWith("{") && value.endsWith("}") -> parseInputString(
+                    value.drop(1).dropLast(1)
+                )
+
+                value.startsWith("[") && value.endsWith("]") -> {
+                    val elements = value.drop(1).dropLast(1).split(",").map { it.trim() }
+                    elements.map { parseValue(it) }
+                }
+
+                else -> value
+            }
+        }
+
         fun fromJson(source: String): GuestInfoModel {
             val type = object : TypeToken<Map<String, Any>>() {}.type
-            val map: Map<String, Any> = Gson().fromJson(source, type)
-            println("Guest source >>>>>>>>>>")
-            println(map)
-            return fromMap(map)
+            try {
+                val map: Map<String, Any> = Gson().fromJson(source, type)
+                return fromMap(map)
+            } catch (e: Exception) {
+                val map: Map<String, Any> = ReservationRoomModel.parseInputString(source)
+                return fromMap(map)
+            }
         }
 
         fun fromMap(map: DataMap): GuestInfoModel {
@@ -43,7 +74,6 @@ data class GuestInfoModel(
     }
 }
 
-
 fun GuestInfoModel.toEntity(): GuestInfo {
-    return GuestInfo(name,contact,adults,children)
+    return GuestInfo(name, contact, adults, children)
 }
