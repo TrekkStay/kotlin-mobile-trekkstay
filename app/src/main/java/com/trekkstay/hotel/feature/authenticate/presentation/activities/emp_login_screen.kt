@@ -1,7 +1,15 @@
 package com.trekkstay.hotel.feature.authenticate.presentation.activities
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
@@ -9,8 +17,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -35,7 +52,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.hotel.R
 import com.trekkstay.hotel.core.storage.LocalStore
-import com.trekkstay.hotel.feature.authenticate.presentation.states.*
+import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthState
+import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthViewModel
+import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpLoginAction
 import com.trekkstay.hotel.feature.shared.TextDialog
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 import com.trekkstay.hotel.ui.theme.black
@@ -48,6 +67,14 @@ fun EmpLoginScreen(viewModel: EmpAuthViewModel, navController: NavHostController
     val context = LocalContext.current
     var showDialog by remember { mutableStateOf(true) }
     var passwordVisible by remember { mutableStateOf(false) }
+
+    var isLoggedIn by remember {
+        mutableStateOf(false)
+    }
+
+    LaunchedEffect(Unit) {
+        isLoggedIn = false
+    }
 
     if (showDialog) {
         when (authState) {
@@ -69,12 +96,15 @@ fun EmpLoginScreen(viewModel: EmpAuthViewModel, navController: NavHostController
                     context, "hotelId",
                     (authState as EmpAuthState.SuccessEmpLogin).res.hotelId
                 )
-                navController.navigate("hotel_main") {
-                    popUpTo(navController.graph.startDestinationId) {
-                        saveState = true
+
+                if (isLoggedIn) {
+                    navController.navigate("hotel_main") {
+                        popUpTo(navController.graph.startDestinationId) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
                     }
-                    launchSingleTop = true
-                    restoreState = true
                 }
             }
 
@@ -201,7 +231,9 @@ fun EmpLoginScreen(viewModel: EmpAuthViewModel, navController: NavHostController
                 color = TrekkStayBlue,
                 fontSize = 15.sp,
                 textDecoration = TextDecoration.Underline,
-                modifier = Modifier.fillMaxWidth().clickable { /*TODO*/ }
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { /*TODO*/ }
             )
             Spacer(modifier = Modifier.height(32.dp))
             Button(
@@ -212,6 +244,7 @@ fun EmpLoginScreen(viewModel: EmpAuthViewModel, navController: NavHostController
                         showValidateDialog = true
                     } else {
                         showDialog = true
+                        isLoggedIn = true
                         val action = EmpLoginAction(email, password)
                         viewModel.processAction(action)
                     }

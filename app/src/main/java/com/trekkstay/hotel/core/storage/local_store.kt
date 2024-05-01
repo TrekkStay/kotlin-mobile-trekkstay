@@ -22,6 +22,9 @@ object LocalStore {
         val editor = sharedPreferences.edit()
         editor.clear()
         editor.apply()
+
+        println(">>>>>>>>>>>>> check local after rm")
+        println(getKey(context, "name", "User"))
     }
 
     fun removeKey(context: Context, key: String) {
