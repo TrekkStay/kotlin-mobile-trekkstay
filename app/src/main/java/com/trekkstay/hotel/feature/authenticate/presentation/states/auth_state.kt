@@ -13,6 +13,10 @@ sealed class AuthState {
     data class InvalidRegister(val message: String) : AuthState()
     object SuccessRegister : AuthState()
 
+    object ChangePasswordCalling : AuthState()
+    data class InvalidChangePassword(val message: String) : AuthState()
+    object SuccessChangePassword : AuthState()
+
 
     data class AuthenticateError(val message: String) : AuthState()
 }

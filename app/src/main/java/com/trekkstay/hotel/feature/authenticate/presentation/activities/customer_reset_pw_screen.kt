@@ -19,6 +19,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -29,25 +30,56 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.hotel.R
 import com.trekkstay.hotel.feature.authenticate.presentation.fragments.PassField
+import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthState
+import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthViewModel
+import com.trekkstay.hotel.feature.authenticate.presentation.states.ChangePasswordAction
 import com.trekkstay.hotel.feature.shared.TextDialog
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @Composable
-fun CustomerResetPwScreen(navController: NavHostController) {
+fun CustomerResetPwScreen(navController: NavHostController, authViewModel: AuthViewModel) {
     var oldPw by remember { mutableStateOf(TextFieldValue()) }
     var newPw by remember { mutableStateOf(TextFieldValue()) }
     var newRePw by remember { mutableStateOf(TextFieldValue()) }
     var showDialog by remember { mutableStateOf(false) }
     var dialogTitle by remember { mutableStateOf("") }
     var dialogMessage by remember { mutableStateOf("") }
+
+    val authState by authViewModel.authState.observeAsState()
+    when (authState) {
+        is AuthState.SuccessChangePassword -> {
+            TextDialog(
+                title = "Change Password Successfully!",
+                msg = "",
+                type = "success",
+                onDismiss = { showDialog = true }
+            )
+            navController.popBackStack()
+
+        }
+
+        is AuthState.InvalidChangePassword -> {
+            TextDialog(
+                title = "Change Password Failed!",
+                msg = (authState as AuthState.InvalidChangePassword).message,
+                onDismiss = { showDialog = false }
+            )
+            println((authState as AuthState.InvalidChangePassword).message)
+        }
+
+        is AuthState.ChangePasswordCalling -> {
+            println("checking")
+        }
+
+        else -> {}
+    }
+
     Column(
         modifier = Modifier.padding(top = 25.dp, bottom = 80.dp)
     ) {
@@ -105,16 +137,17 @@ fun CustomerResetPwScreen(navController: NavHostController) {
             onClick = {
                 if (oldPw.text.isEmpty() || newPw.text.isEmpty() || newRePw.text.isEmpty()) {
                     dialogTitle = "Empty Fields"
-                    dialogMessage = "Please input all the required information before changing password"
+                    dialogMessage =
+                        "Please input all the required information before changing password"
                     showDialog = true
                 } else if (newPw.text != newRePw.text) {
                     dialogTitle = "Password Mismatch"
                     dialogMessage = "The new password and confirm password do not match"
                     showDialog = true
                 } else {
-                    dialogTitle = "Success"
-                    dialogMessage = "Password has been changed"
-                    showDialog = true
+                    val action = ChangePasswordAction(oldPw.text, newPw.text, newRePw.text)
+                    authViewModel.processAction(action)
+
                 }
 
             },
@@ -143,10 +176,4 @@ fun CustomerResetPwScreen(navController: NavHostController) {
             onDismiss = { showDialog = false },
         )
     }
-}
-
-@Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
-@Composable
-private fun CustomerResetPwPreview() {
-    CustomerResetPwScreen(rememberNavController())
 }

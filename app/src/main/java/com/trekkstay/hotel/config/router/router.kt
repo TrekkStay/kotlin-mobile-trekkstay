@@ -111,7 +111,7 @@ object AppRouter {
             composable("customer_main") {
                 CustomerMainScreen(
                     hotelViewModel, roomViewModel, searchViewModel,
-                    reservationViewModel, attractionViewModel
+                    reservationViewModel, attractionViewModel, authViewModel
                 )
             }
             composable("hotel_main") {
@@ -137,7 +137,8 @@ fun CustomerRouter(
     searchViewModel: SearchViewModel,
     reservationViewModel: ReservationViewModel,
     navController: NavHostController,
-    attractionViewModel: AttractionViewModel
+    attractionViewModel: AttractionViewModel,
+    authViewModel: AuthViewModel
 ) {
     NavHost(
         navController = navController,
@@ -204,7 +205,7 @@ fun CustomerRouter(
             CustomerProfileScreen(navController = navController)
         }
         composable(route = "customer_reset_pw") {
-            CustomerResetPwScreen(navController = navController)
+            CustomerResetPwScreen(navController = navController, authViewModel = authViewModel)
         }
         composable(route = "customer_edit_info") {
             CustomerEditInfoScreen(navController = navController)

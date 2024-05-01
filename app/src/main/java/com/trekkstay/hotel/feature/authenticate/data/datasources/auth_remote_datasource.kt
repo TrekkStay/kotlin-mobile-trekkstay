@@ -6,7 +6,6 @@ import com.trekkstay.hotel.core.network.method.RequestMethod
 import com.trekkstay.hotel.core.network.request.RequestQuery
 import com.trekkstay.hotel.core.network.response.Response
 import com.trekkstay.hotel.core.storage.LocalStore
-import com.trekkstay.hotel.env.Env
 import com.trekkstay.hotel.feature.authenticate.data.models.EmployeeModel
 import com.trekkstay.hotel.feature.authenticate.data.models.HotelEmpListModel
 import com.trekkstay.hotel.feature.authenticate.data.models.LoginResModel
@@ -26,9 +25,16 @@ interface AuthRemoteDataSource {
     suspend fun register(email: String, name: String, pass: String): Response<Unit>
     suspend fun empLogin(email: String, pass: String): Response<Employee>
     suspend fun empRegister(email: String, name: String, pass: String): Response<Unit>
-    suspend fun empCreate(email: String, name: String, phone:String,contract:String,salary:Int): Response<Unit>
+    suspend fun empCreate(
+        email: String,
+        name: String,
+        phone: String,
+        contract: String,
+        salary: Int
+    ): Response<Unit>
 
-    suspend fun viewEmp(hotelId:String): Response<HotelEmpList>
+    suspend fun changePassword(oldPw: String, newPw: String, newRePw: String): Response<Unit>
+    suspend fun viewEmp(hotelId: String): Response<HotelEmpList>
 
 }
 
@@ -38,10 +44,11 @@ const val empLoginEndpoint = "hotel-emp/login"
 const val empRegisterEndpoint = "hotel-emp/create-owner"
 const val empCreateEndpoint = "hotel-emp/create-emp"
 const val viewEmpEndpoint = "hotel-emp/filter"
+const val changePasswordEndpoint = "user/change-password"
 
 
-
-class AuthRemoteDataSourceImpl(private val client: Client,private val context: Context) : AuthRemoteDataSource {
+class AuthRemoteDataSourceImpl(private val client: Client, private val context: Context) :
+    AuthRemoteDataSource {
 
     override suspend fun login(email: String, pass: String): Response<LoginRes> {
         return withContext(Dispatchers.IO) {
@@ -147,7 +154,13 @@ class AuthRemoteDataSourceImpl(private val client: Client,private val context: C
         }
     }
 
-    override suspend fun empCreate(email: String, name: String, phone:String,contract:String,salary:Int): Response<Unit> {
+    override suspend fun empCreate(
+        email: String,
+        name: String,
+        phone: String,
+        contract: String,
+        salary: Int
+    ): Response<Unit> {
         return withContext(Dispatchers.IO) {
             val jwtKey = LocalStore.getKey(context, "jwtKey", "")
             val requestBodyJson = JSONObject().apply {
@@ -179,6 +192,7 @@ class AuthRemoteDataSourceImpl(private val client: Client,private val context: C
 
             val jwtKey = LocalStore.getKey(context, "jwtKey", "")
 
+
             val request = RequestQuery(
                 method = RequestMethod.POST,
                 path = "http://52.163.61.213:8888/api/v1/$viewEmpEndpoint?hotel_id=$hotelId",
@@ -197,6 +211,33 @@ class AuthRemoteDataSourceImpl(private val client: Client,private val context: C
                 }
 
 
+            )
+            response
+        }
+    }
+
+    override suspend fun changePassword(
+        oldPw: String,
+        newPw: String,
+        newRePw: String
+    ): Response<Unit> {
+        return withContext(Dispatchers.IO) {
+
+            val jwtKey = LocalStore.getKey(context, "jwtKey", "")
+            val requestBodyJson = JSONObject().apply {
+                put("old_pwd", oldPw)
+                put("new_pwd", newPw)
+            }
+
+            val request = RequestQuery(
+                method = RequestMethod.POST,
+                path = "http://52.163.61.213:8888/api/v1/$changePasswordEndpoint",
+                headers = mapOf("Authorization" to "Bearer $jwtKey"),
+                requestBody = requestBodyJson.toString()
+            )
+
+            val response = client.execute<Unit>(
+                request = request
             )
             response
         }

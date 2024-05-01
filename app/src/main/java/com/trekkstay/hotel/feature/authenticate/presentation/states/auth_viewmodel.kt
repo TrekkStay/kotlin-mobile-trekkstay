@@ -19,15 +19,25 @@ class AuthViewModel(private val authRepo: AuthRepo) : ViewModel() {
                     val result = authRepo.login(action.email, action.pass)
                     result.fold(
                         { failure -> _authState.postValue(AuthState.InvalidLogin(failure.message)) },
-                        { jwtKey->  _authState.postValue(AuthState.SuccessLogin(jwtKey)) }
+                        { jwtKey -> _authState.postValue(AuthState.SuccessLogin(jwtKey)) }
                     )
                 }
+
                 is RegisterAction -> {
                     _authState.postValue(AuthState.RegisterCalling)
                     val result = authRepo.register(action.email, action.name, action.pass)
                     result.fold(
                         { failure -> _authState.postValue(AuthState.InvalidRegister(failure.message)) },
                         { _authState.postValue(AuthState.SuccessRegister) }
+                    )
+                }
+
+                is ChangePasswordAction -> {
+                    _authState.postValue(AuthState.ChangePasswordCalling)
+                    val result = authRepo.changePassword(action.oldPw, action.newPw, action.newRePw)
+                    result.fold(
+                        { failure -> _authState.postValue(AuthState.InvalidChangePassword(failure.message)) },
+                        { _authState.postValue(AuthState.SuccessChangePassword) }
                     )
                 }
             }
