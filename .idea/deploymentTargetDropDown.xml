@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="deploymentTargetDropDown">
+    <value>
+      <entry key="CustomerEditInfoPreview">
+        <State />
+      </entry>
+      <entry key="DetailReviewListPreview">
+        <State />
+      </entry>
+      <entry key="HotelResetPwPreview">
+        <State />
+      </entry>
+      <entry key="MomoPreview">
+        <State />
+      </entry>
+      <entry key="ReviewRatingPreview">
+        <State />
+      </entry>
+      <entry key="app">
+        <State>
+          <runningDeviceTargetSelectedWithDropDown>
+            <Target>
+              <type value="RUNNING_DEVICE_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="SERIAL_NUMBER" />
+                  <value value="9A291FFBA00813" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </runningDeviceTargetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-05-01T02:38:24.776687100Z" />
+        </State>
+      </entry>
+    </value>
+  </component>
+</project>
