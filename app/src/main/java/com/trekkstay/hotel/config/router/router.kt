@@ -13,28 +13,28 @@ import com.trekkstay.hotel.feature.authenticate.presentation.activities.Customer
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.CustomerResetPwScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.EmpLoginScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.EmpRegisterScreen
+import com.trekkstay.hotel.feature.authenticate.presentation.activities.HotelProfileScreen
+import com.trekkstay.hotel.feature.authenticate.presentation.activities.HotelResetPwScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.LoginScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.RegisterScreen
+import com.trekkstay.hotel.feature.authenticate.presentation.activities.StartupScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthViewModel
 import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthViewModel
 import com.trekkstay.hotel.feature.customer.presentation.activities.CustomerHomeScreen
 import com.trekkstay.hotel.feature.customer.presentation.activities.CustomerMainScreen
-import com.trekkstay.hotel.feature.authenticate.presentation.activities.HotelProfileScreen
-import com.trekkstay.hotel.feature.authenticate.presentation.activities.HotelResetPwScreen
-import com.trekkstay.hotel.feature.authenticate.presentation.activities.StartupScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.BookingDetailScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.BookingFormScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateEmpScreen
-import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateHotelScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateRoomScreen
-import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelEmpListScreen
+import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelBookingDetailScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelDetailScreen
+import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelEmpListScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelHomeScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelRoomManageScreen
+import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.RoomDetailScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.SearchEngineScreen
-import com.trekkstay.hotel.feature.hotel.presentation.activities.UpdateHotelScreen
 import com.trekkstay.hotel.feature.hotel.presentation.states.attraction.AttractionViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.location.LocationViewModel
@@ -92,7 +92,7 @@ object AppRouter {
     fun Navigation() {
         val navController = navController ?: rememberNavController()
 
-        NavHost(navController = navController, startDestination = "customer_main") {
+        NavHost(navController = navController, startDestination = "start-up") {
             composable("start-up") {
                 StartupScreen(navController = navController)
             }
@@ -117,7 +117,7 @@ object AppRouter {
             composable("hotel_main") {
                 HotelScreen(
                     empAuthViewModel, hotelViewModel, roomViewModel, locationViewModel,
-                    mediaViewModel,  activity, reservationViewModel
+                    mediaViewModel, activity, reservationViewModel
                 )
             }
         }
@@ -188,7 +188,11 @@ fun CustomerRouter(
 
             if (id != null) {
 //                RoomDetailScreen(navController, roomViewModel, id)
-                BookingDetailScreen(id, navController = navController, reservationViewModel = reservationViewModel)
+                BookingDetailScreen(
+                    id,
+                    navController = navController,
+                    reservationViewModel = reservationViewModel
+                )
             }
         }
         // Notifications
@@ -231,11 +235,15 @@ fun HotelRouter(
             val id = backStackEntry.arguments?.getString("reservationId")
 
             if (id != null) {
-                BookingDetailScreen(id, navController = navController, reservationViewModel = reservationViewModel)
+                HotelBookingDetailScreen(
+                    id,
+                    navController = navController,
+                    reservationViewModel = reservationViewModel
+                )
             }
         }
         composable(route = "hotel_reservations") {
-            HotelReservationScreen()
+            HotelReservationScreen(reservationViewModel, navController)
         }
         composable(route = "hotel_notifications") {
             HotelNotificationScreen()

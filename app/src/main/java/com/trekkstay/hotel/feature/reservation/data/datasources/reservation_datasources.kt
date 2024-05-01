@@ -1,9 +1,6 @@
 package com.trekkstay.hotel.feature.reservation.data.datasources
 
 import android.content.Context
-import android.util.Log
-import com.trekkstay.hotel.feature.reservation.domain.entities.GuestInfo
-import com.trekkstay.hotel.feature.reservation.domain.entities.Reservation
 import com.trekkstay.hotel.core.network.client.Client
 import com.trekkstay.hotel.core.network.method.RequestMethod
 import com.trekkstay.hotel.core.network.request.RequestQuery
@@ -12,6 +9,8 @@ import com.trekkstay.hotel.core.storage.LocalStore
 import com.trekkstay.hotel.feature.reservation.data.models.ReservationListModel
 import com.trekkstay.hotel.feature.reservation.data.models.ReservationModel
 import com.trekkstay.hotel.feature.reservation.data.models.toEntity
+import com.trekkstay.hotel.feature.reservation.domain.entities.GuestInfo
+import com.trekkstay.hotel.feature.reservation.domain.entities.Reservation
 import com.trekkstay.hotel.feature.reservation.domain.entities.ReservationList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -34,7 +33,7 @@ interface ReservationRemoteDataSource {
 
     suspend fun viewDetailReservation(
         reservationId: String
-    ) : Response<Reservation>
+    ): Response<Reservation>
 }
 
 const val createReservationEndpoint = "reservation/create"
@@ -98,7 +97,7 @@ class ReservationRemoteDataSourceImpl(private val client: Client, private val co
             val jwtKey = LocalStore.getKey(context, "jwtKey", "")
             val request = RequestQuery(
                 method = RequestMethod.GET,
-                path = "http://52.163.61.213:8888/api/v1/$listReservationEndpoint?status=$status",
+                path = "http://52.163.61.213:8888/api/v1/$listReservationEndpoint?hotel_id=$hotelId&status=$status",
                 headers = mapOf("Authorization" to "Bearer $jwtKey"),
                 requestBody = null
             )

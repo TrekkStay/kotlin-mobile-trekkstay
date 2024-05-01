@@ -35,19 +35,25 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.hotel.R
+import com.trekkstay.hotel.feature.reservation.domain.entities.Reservation
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 @Composable
 fun HotelReservationCard(
+    reservationId: String,
     roomImg: String,
     customerId: String,
     customerName: String,
     roomType: String,
-    price: Double = 100.0,
+    checkIn: String,
+    checkOut: String,
+    price: Double,
     type: String,
+    navController: NavController
 ) {
     val formattedPrice = if (price % 1 == 0.0) {
         price.toInt().toString()
@@ -106,7 +112,7 @@ fun HotelReservationCard(
                     color = Color(0xFF303030).copy(0.65f)
                 )
                 Text(
-                    "22/01/23 - 25/01/23",
+                    "$checkIn to $checkOut",
                     fontFamily = PoppinsFontFamily,
                     fontWeight = FontWeight.Medium,
                     fontSize = 13.sp,
@@ -115,7 +121,7 @@ fun HotelReservationCard(
             }
             Spacer(modifier = Modifier.weight(1f))
             when (type) {
-                "Today" -> {
+                "Upcoming" -> {
                     Icon(
                         ImageVector.vectorResource(R.drawable.filled_circle_ico),
                         contentDescription = "type icon",
@@ -147,7 +153,7 @@ fun HotelReservationCard(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (type == "Today" || type == "Completed") {
+                if (type == "Upcoming" || type == "Completed") {
                 Text(
                     "$$formattedPrice",
                     fontSize = 18.sp,
@@ -160,7 +166,9 @@ fun HotelReservationCard(
                         containerColor = TrekkStayBlue,
                         contentColor = Color.White
                     ),
-                    onClick = { }
+                    onClick = {
+                        navController.navigate("hotel_reservation_detail/${reservationId}")
+                    }
                 ) {
                     Text(
                         "View Booking",
@@ -179,22 +187,6 @@ fun HotelReservationCard(
                     color = Color(0xFFC82222).copy(0.8f),
                     modifier = Modifier.fillMaxWidth()
                 )
-            }
-        }
-    }
-}
-
-@Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
-@Composable
-fun HotelReservationCardPreview() {
-    Box(Modifier.fillMaxSize()) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(20.dp),
-            contentPadding = PaddingValues(top = 25.dp, start = 5.dp, end = 5.dp)
-        ) {
-            items(5) {
-                HotelReservationCard(customerId = "#1247716412174", customerName = "Bao Pham Hong Gia", roomType = "Deluxe Room", roomImg = "https://www.usatoday.com/gcdn/-mm-/05b227ad5b8ad4e9dcb53af4f31d7fbdb7fa901b/c=0-64-2119-1259/local/-/media/USATODAY/USATODAY/2014/08/13/1407953244000-177513283.jpg?width=1320&height=746&fit=crop&format=pjpg&auto=webp", type = "Cancelled")
             }
         }
     }
