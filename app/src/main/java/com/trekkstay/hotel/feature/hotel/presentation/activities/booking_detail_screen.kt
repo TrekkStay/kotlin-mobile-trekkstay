@@ -53,39 +53,15 @@ fun BookingDetailScreen(
     navController: NavController,
     reservationViewModel: ReservationViewModel
 ) {
-    var hotelName by remember {
-        mutableStateOf("")
-    }
-    var bookingID by remember {
-        mutableStateOf("")
-    }
-    var customerName by remember {
-        mutableStateOf("")
-    }
-    var customerEmail by remember {
-        mutableStateOf("")
-    }
-    var customerPhone by remember {
-        mutableStateOf("")
-    }
-    var roomNum by remember {
-        mutableStateOf(0)
-    }
-    var totalPrice by remember {
-        mutableStateOf(1000)
-    }
-    var imgUrl by remember {
-        mutableStateOf("")
-    }
-
-    var checkIn by remember {
-        mutableStateOf("")
-    }
-
-    var checkOut by remember {
-        mutableStateOf("")
-    }
-
+    var hotelName by remember { mutableStateOf("") }
+    var bookingID by remember { mutableStateOf("") }
+    var customerName by remember { mutableStateOf("") }
+    var customerContact by remember { mutableStateOf("") }
+    var roomNum by remember { mutableStateOf(0) }
+    var totalPrice by remember { mutableStateOf(1000) }
+    var imgUrl by remember { mutableStateOf("") }
+    var checkIn by remember { mutableStateOf("") }
+    var checkOut by remember { mutableStateOf("") }
 
     var reservationDetail by remember {
         mutableStateOf<Reservation?>(null)
@@ -93,16 +69,12 @@ fun BookingDetailScreen(
     val reservationState by reservationViewModel.state.observeAsState()
     when (reservationState) {
         is ReservationState.SuccessViewDetailReservation -> {
-            println("okkkkkkkkkkkkk")
             reservationDetail =
                 (reservationState as ReservationState.SuccessViewDetailReservation).reservation
-            println(">>>>>>>>>>>>>>>>> detail")
-            println(reservationDetail)
             hotelName = reservationDetail!!.room.hotelName
             bookingID = reservationDetail!!.id
             customerName = reservationDetail!!.guestInfo.name
-            customerEmail = reservationDetail!!.guestInfo.contact
-            customerPhone = reservationDetail!!.guestInfo.contact
+            customerContact = reservationDetail!!.guestInfo.contact
             totalPrice = reservationDetail!!.room.bookingPrice
             imgUrl = reservationDetail!!.qrCodeUrl
             checkIn = reservationDetail!!.checkIn
@@ -114,18 +86,14 @@ fun BookingDetailScreen(
             println((reservationState as ReservationState.InvalidListReservation).message)
         }
 
-        is ReservationState.ViewDetailReservationCalling -> {
-            println("checking")
-        }
+        is ReservationState.ViewDetailReservationCalling -> { }
 
         else -> {}
     }
 
     LaunchedEffect(Unit) {
-        println(">>>>>>>>>>>> detail boooking")
         val action = ViewDetailReservationAction(idReservation)
         reservationViewModel.processAction(action)
-
     }
 
     Column(
@@ -154,7 +122,7 @@ fun BookingDetailScreen(
             )
         }
         Column(
-            verticalArrangement = Arrangement.spacedBy(30.dp),
+            verticalArrangement = Arrangement.spacedBy(15.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
@@ -171,7 +139,7 @@ fun BookingDetailScreen(
             Image(
                 painter = rememberAsyncImagePainter(imgUrl),
                 modifier = Modifier
-                    .size(200.dp),
+                    .size(195.dp),
                 contentDescription = "QR"
             )
             Text(
@@ -192,8 +160,7 @@ fun BookingDetailScreen(
                     .padding(vertical = 20.dp, horizontal = 30.dp)
             ) {
                 BookingInfoRow("Name", customerName)
-                BookingInfoRow("Email", customerEmail)
-                BookingInfoRow("Phone", customerPhone)
+                BookingInfoRow("Contact", customerContact)
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceEvenly,
@@ -203,8 +170,8 @@ fun BookingDetailScreen(
                     Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null)
                     BookDateCol(label = "Check Out", date = checkOut)
                 }
-                BookingInfoRow("Number of rooms", "$roomNum")
-                BookingInfoRow("Total", "$ $totalPrice")
+                BookingInfoRow("Number of rooms", "$roomNum",150)
+                BookingInfoRow("Total", "$ $totalPrice",150)
             }
             reservationDetail?.let { RoomReservationCard(it) }
         }
@@ -214,7 +181,8 @@ fun BookingDetailScreen(
 @Composable
 private fun BookingInfoRow(
     label: String,
-    value: String
+    value: String,
+    width: Int = 120
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -228,7 +196,7 @@ private fun BookingInfoRow(
             fontWeight = FontWeight.SemiBold,
             fontSize = 12.sp,
             color = Color.Gray,
-            modifier = Modifier.width(140.dp)
+            modifier = Modifier.width(width.dp)
         )
         Text(
             text = value,

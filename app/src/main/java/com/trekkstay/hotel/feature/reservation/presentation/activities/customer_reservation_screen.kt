@@ -5,12 +5,15 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,6 +31,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -55,7 +59,7 @@ fun CustomerReservationScreen(
     navController: NavController
 ) {
     var countCallingAPI by remember {
-        mutableStateOf(0)
+        mutableIntStateOf(0)
     }
     val hotelTabs = arrayOf("Upcoming", "Completed", "Cancelled")
     val scope = rememberCoroutineScope()
@@ -76,11 +80,7 @@ fun CustomerReservationScreen(
     val reservationState by reservationViewModel.state.observeAsState()
     when (reservationState) {
         is ReservationState.SuccessListReservation -> {
-            println("okkkkkkkkkkkkk")
-            val reservationHotel =
-                (reservationState as ReservationState.SuccessListReservation).reservation.reservationList
-
-            println(reservationHotel)
+            val reservationHotel = (reservationState as ReservationState.SuccessListReservation).reservation.reservationList
 
             if (countCallingAPI == 0) {
                 reservationHotel1 = reservationHotel
@@ -103,9 +103,7 @@ fun CustomerReservationScreen(
             println((reservationState as ReservationState.InvalidListReservation).message)
         }
 
-        is ReservationState.ListReservationCalling -> {
-            println("checking")
-        }
+        is ReservationState.ListReservationCalling -> { }
 
         else -> {}
     }
@@ -118,7 +116,7 @@ fun CustomerReservationScreen(
 
 
     Column(
-        modifier = Modifier.padding(top = 15.dp)
+        modifier = Modifier.padding(top = 15.dp, bottom = 70.dp)
     ) {
         Row(
             modifier = Modifier
@@ -134,7 +132,7 @@ fun CustomerReservationScreen(
                 color = TrekkStayCyan,
                 fontSize = 20.sp
             )
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { }) {
                 Icon(
                     Icons.Default.Search,
                     contentDescription = null,
@@ -144,19 +142,17 @@ fun CustomerReservationScreen(
         }
         Spacer(modifier = Modifier.height(5.dp))
         HorizontalDivider(color = Color(0xFFE4E4E4), thickness = 2.dp)
-
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 10.dp, start = 10.dp, end = 10.dp)
+                .padding(top = 10.dp)
         ) {
             TabRow(
                 divider = {},
                 selectedTabIndex = selectedTabIndex.value,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp),
                 indicator = @Composable { tabPositions: List<TabPosition> ->
                     ReservationTabIndicator(tabPositions, pagerState, "customer")
-
                 }
 
             ) {
@@ -182,10 +178,8 @@ fun CustomerReservationScreen(
                             )
                         }
                     )
-
                 }
             }
-
             HorizontalPager(
                 modifier = Modifier.fillMaxSize(),
                 state = pagerState,
@@ -197,24 +191,31 @@ fun CustomerReservationScreen(
                     else -> "Unknown"
                 }
                 Box(Modifier.fillMaxSize()) {
-                    Column(
+                    LazyColumn(
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.spacedBy(20.dp),
+                        contentPadding = PaddingValues(15.dp)
                     ) {
-                        if (page == 0) {
-                            reservationHotel1.forEach { item ->
+                        itemsIndexed(
+                            when (page) {
+                                0 -> reservationHotel1
+                                1 -> reservationHotel2
+                                2 -> reservationHotel3
+                                else -> emptyList() // Handle other cases if needed
+                            }
+                        ) { index, item ->
+                            if (page == 0) {
                                 CustomerReservationCard(
                                     reservationId = item.id,
-                                    hotelImg = "",
-                                    hotelName = "",
-                                    destination = "",
+                                    hotelImg = item.room.images.media[0] ?: "",
+                                    hotelName = item.room.hotelName ?: "",
+                                    destination = item.room.location ?: "",
                                     type = reservationType,
-                                    price = 0.0,
-                                    navController
+                                    checkIn = item.checkIn,
+                                    checkOut = item.checkOut,
+                                    navController = navController
                                 )
-                            }
-                        } else if (page == 1) {
-                            reservationHotel2.forEach { item ->
+                            } else if (page == 1) {
                                 CustomerReservationCard(
                                     reservationId = item.id,
                                     hotelImg = item.room.images.media[0] ?: "",
@@ -222,20 +223,16 @@ fun CustomerReservationScreen(
                                     destination = item.room.location ?: "",
                                     type = reservationType,
                                     price = item.room.bookingPrice.toDouble() ?: 0.0,
-                                    navController
+                                    navController = navController
                                 )
-                            }
-                        } else if (page == 2) {
-                            reservationHotel3.forEach { item ->
+                            } else if (page == 2) {
                                 CustomerReservationCard(
                                     reservationId = item.id,
-
                                     hotelImg = item.room.images.media[0] ?: "",
                                     hotelName = item.room.hotelName ?: "",
                                     destination = item.room.location ?: "",
                                     type = reservationType,
-                                    price = item.room.bookingPrice.toDouble() ?: 0.0,
-                                    navController
+                                    navController = navController
                                 )
                             }
                         }
