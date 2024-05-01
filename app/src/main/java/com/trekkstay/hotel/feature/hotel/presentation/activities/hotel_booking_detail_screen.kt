@@ -25,40 +25,116 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MenuItemColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.hotel.R
-import com.trekkstay.hotel.feature.hotel.presentation.fragments.HotelRoomCard
-import com.trekkstay.hotel.feature.shared.Utils.formatPrice
+import coil.compose.rememberAsyncImagePainter
+import com.trekkstay.hotel.feature.reservation.domain.entities.Reservation
+import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationState
+import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationViewModel
+import com.trekkstay.hotel.feature.reservation.presentation.states.ViewDetailReservationAction
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 @Composable
-fun HotelBookingDetailScreen(navController: NavController) {
-    val bookingID = "004Wf32QR"
-    val customerName = "Bao Pham"
-    val customerEmail = "vCqg6@example.com"
-    val customerPhone = "+84 123 456 789"
-    val roomNum = 1
-    val totalPrice = 1000.0
+fun HotelBookingDetailScreen(
+    idReservation: String,
+    reservationViewModel: ReservationViewModel,
+    navController: NavController
+) {
     val statusList = arrayOf("Failed", "Pending", "Success")
     var selectedStatus by remember { mutableStateOf("Pending") }
+
+
+    var hotelName by remember {
+        mutableStateOf("")
+    }
+    var bookingID by remember {
+        mutableStateOf("")
+    }
+    var customerName by remember {
+        mutableStateOf("")
+    }
+    var customerEmail by remember {
+        mutableStateOf("")
+    }
+    var customerPhone by remember {
+        mutableStateOf("")
+    }
+    var roomNum by remember {
+        mutableStateOf(0)
+    }
+    var totalPrice by remember {
+        mutableStateOf(1000)
+    }
+    var imgUrl by remember {
+        mutableStateOf("")
+    }
+
+    var checkIn by remember {
+        mutableStateOf("")
+    }
+
+    var checkOut by remember {
+        mutableStateOf("")
+    }
+
+
+    var reservationDetail by remember {
+        mutableStateOf<Reservation?>(null)
+    }
+    val reservationState by reservationViewModel.state.observeAsState()
+    when (reservationState) {
+        is ReservationState.SuccessViewDetailReservation -> {
+            println("okkkkkkkkkkkkk")
+            reservationDetail =
+                (reservationState as ReservationState.SuccessViewDetailReservation).reservation
+            println(">>>>>>>>>>>>>>>>> detail")
+            println(reservationDetail)
+            hotelName = reservationDetail!!.room.hotelName
+            bookingID = reservationDetail!!.id
+            customerName = reservationDetail!!.guestInfo.name
+            customerEmail = reservationDetail!!.guestInfo.contact
+            customerPhone = reservationDetail!!.guestInfo.contact
+            totalPrice = reservationDetail!!.room.bookingPrice
+            imgUrl = reservationDetail!!.qrCodeUrl
+            checkIn = reservationDetail!!.checkIn
+            checkOut = reservationDetail!!.checkOut
+            roomNum = reservationDetail!!.quantity.toInt()
+        }
+
+        is ReservationState.InvalidViewDetailReservation -> {
+            println((reservationState as ReservationState.InvalidListReservation).message)
+        }
+
+        is ReservationState.ViewDetailReservationCalling -> {
+            println("checking")
+        }
+
+        else -> {}
+    }
+
+    LaunchedEffect(Unit) {
+        println(">>>>>>>>>>>> detail boooking")
+        val action = ViewDetailReservationAction(idReservation)
+        reservationViewModel.processAction(action)
+
+    }
+
     Column(
         modifier = Modifier
             .padding(top = 25.dp, bottom = 80.dp)
@@ -92,12 +168,12 @@ fun HotelBookingDetailScreen(navController: NavController) {
                 .border(1.dp, Color(0xFFC4C4C4), shape = RoundedCornerShape(20.dp))
                 .padding(vertical = 20.dp, horizontal = 30.dp)
         ) {
-            Column (
+            Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.padding(vertical = 10.dp)
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.qr_scanner),
+                    painter = rememberAsyncImagePainter(imgUrl),
                     modifier = Modifier
                         .size(200.dp),
                     contentDescription = "QR"
@@ -123,12 +199,12 @@ fun HotelBookingDetailScreen(navController: NavController) {
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                BookDateCol(label = "Check In", date = "Apr 17")
+                BookDateCol(label = "Check In", date = checkIn)
                 Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null)
-                BookDateCol(label = "Check Out", date = "Apr 20")
+                BookDateCol(label = "Check Out", date = checkOut)
             }
             BookingInfoRow("Number of rooms", "$roomNum")
-            BookingInfoRow("Total", "$ ${formatPrice(totalPrice)}")
+            BookingInfoRow("Total", "$ $totalPrice")
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -283,9 +359,3 @@ private fun DropDownMenu(
     }
 }
 
-
-@Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
-@Composable
-fun HotelBookingDetailPreview() {
-    HotelBookingDetailScreen(rememberNavController())
-}

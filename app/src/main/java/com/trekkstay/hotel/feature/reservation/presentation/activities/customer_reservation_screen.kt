@@ -205,11 +205,13 @@ fun CustomerReservationScreen(
                             reservationHotel1.forEach { item ->
                                 CustomerReservationCard(
                                     reservationId = item.id,
-                                    hotelImg = "",
-                                    hotelName = "",
-                                    destination = "",
+                                    hotelImg = item.room.images.media[0] ?: "",
+                                    hotelName = item.room.hotelName ?: "",
+                                    destination = item.room.location ?: "",
+                                    checkIn = item.checkIn,
+                                    checkOut = item.checkOut,
                                     type = reservationType,
-                                    price = 0.0,
+                                    price = item.room.bookingPrice.toDouble() ?: 0.0,
                                     navController
                                 )
                             }
@@ -220,6 +222,8 @@ fun CustomerReservationScreen(
                                     hotelImg = item.room.images.media[0] ?: "",
                                     hotelName = item.room.hotelName ?: "",
                                     destination = item.room.location ?: "",
+                                    checkIn = item.checkIn,
+                                    checkOut = item.checkOut,
                                     type = reservationType,
                                     price = item.room.bookingPrice.toDouble() ?: 0.0,
                                     navController
@@ -229,10 +233,11 @@ fun CustomerReservationScreen(
                             reservationHotel3.forEach { item ->
                                 CustomerReservationCard(
                                     reservationId = item.id,
-
                                     hotelImg = item.room.images.media[0] ?: "",
                                     hotelName = item.room.hotelName ?: "",
                                     destination = item.room.location ?: "",
+                                    checkIn = item.checkIn,
+                                    checkOut = item.checkOut,
                                     type = reservationType,
                                     price = item.room.bookingPrice.toDouble() ?: 0.0,
                                     navController

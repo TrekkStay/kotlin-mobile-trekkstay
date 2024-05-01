@@ -2,7 +2,6 @@ package com.trekkstay.hotel.feature.reservation.presentation.fragments
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -53,6 +52,8 @@ fun CustomerReservationCard(
     hotelImg: String,
     hotelName: String,
     destination: String,
+    checkIn: String,
+    checkOut: String,
     type: String,
     price: Double,
     navController: NavController
@@ -109,7 +110,7 @@ fun CustomerReservationCard(
                 when (type) {
                     "Upcoming" -> {
                         Text(
-                            "22/01/23 - 25/01/23",
+                            "$checkIn to $checkOut",
                             fontFamily = PoppinsFontFamily,
                             fontWeight = FontWeight.Bold,
                             fontSize = 12.sp,
@@ -211,7 +212,9 @@ fun CustomerReservationCard(
                         ) {
                             Column(
                                 verticalArrangement = Arrangement.spacedBy(20.dp),
-                                modifier = Modifier.fillMaxWidth().padding(top = 5.dp, bottom = 70.dp)
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 5.dp, bottom = 70.dp)
                             ) {
                                 Text(
                                     "Cancel Booking",
@@ -222,9 +225,13 @@ fun CustomerReservationCard(
                                     textAlign = TextAlign.Center,
                                     modifier = Modifier.fillMaxWidth()
                                 )
-                                HorizontalDivider(thickness = 2.dp, color = Color(0xFFC4C4C4).copy(0.2f), modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 20.dp))
+                                HorizontalDivider(
+                                    thickness = 2.dp,
+                                    color = Color(0xFFC4C4C4).copy(0.2f),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 20.dp)
+                                )
                                 Text(
                                     "Are you sure you want to cancel this hotel booking?",
                                     fontFamily = PoppinsFontFamily,
@@ -251,7 +258,10 @@ fun CustomerReservationCard(
                                             containerColor = TrekkStayCyan,
                                             contentColor = Color.White
                                         ),
-                                        contentPadding = PaddingValues(horizontal = 30.dp, vertical = 15.dp),
+                                        contentPadding = PaddingValues(
+                                            horizontal = 30.dp,
+                                            vertical = 15.dp
+                                        ),
                                         shape = RoundedCornerShape(10.dp)
                                     ) {
                                         Text(
