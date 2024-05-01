@@ -133,9 +133,13 @@ fun CustomerHomeScreen(hotelViewModel: HotelViewModel,navController: NavHostCont
                         .padding(10.dp)
                         .clickable {
                             navController.navigate("customer_search_engine") {
-                                popUpTo(navController.graph.findStartDestination().id)
+                                popUpTo(navController.graph.startDestinationId) {
+                                    saveState = true
+                                }
                                 launchSingleTop = true
+                                restoreState = true
                             }
+
                         }
                 ) {
                     Text(

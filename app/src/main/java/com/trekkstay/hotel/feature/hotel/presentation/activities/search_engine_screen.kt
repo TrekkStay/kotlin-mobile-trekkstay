@@ -21,6 +21,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
@@ -62,15 +63,22 @@ fun SearchEngineScreen(
     var selectedDestination by remember { mutableStateOf<Destination?>(null) }
     var selectedDateRange by remember { mutableStateOf<Pair<Long, Long>?>(null) }
     var roomNumber by remember { mutableIntStateOf(1) }
-    var adultNumber by remember { mutableIntStateOf(1) }
-    var childNumber by remember { mutableIntStateOf(0) }
+    var adultNumber by remember { mutableIntStateOf(2) }
+    var childNumber by remember { mutableIntStateOf(1) }
     var showResult by remember { mutableStateOf(false) }
 
     var searchedHotel by remember {
         mutableStateOf(listOf<Hotel>())
     }
 
+    LaunchedEffect(Unit) {
+        showResult = false
+        println("LAUNCH EFFECT WORK")
+    }
+
     fun formatDateRange(startDateMillis: Long, endDateMillis: Long): Pair<String, String> {
+        println(">>>>>>>>>>>>>>>>>>>>>> date")
+        println(startDateMillis)
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val startDate =
             LocalDateTime.ofInstant(Instant.ofEpochMilli(startDateMillis), ZoneId.systemDefault())
@@ -105,13 +113,13 @@ fun SearchEngineScreen(
     ) { innerPadding ->
         if (showResult && searchedHotel.isNotEmpty()) {
             val (formattedCheckInDate, formattedCheckOutDate) = formatDateRange(
-                selectedDateRange!!.first,
-                selectedDateRange!!.second
+                selectedDateRange?.first ?: 1716422400000,
+                selectedDateRange?.second ?: 176422400000
             )
             SearchResultScreen(
                 hotels = searchedHotel,
-                location = selectedDestination!!.name,
-                locationCode = selectedDestination!!.code,
+                location = selectedDestination?.name ?: "Ho Chi Minh",
+                locationCode = selectedDestination?.code ?: "79",
                 numGuess = adultNumber + childNumber,
                 checkIn = formattedCheckInDate,
                 checkOut = formattedCheckOutDate,

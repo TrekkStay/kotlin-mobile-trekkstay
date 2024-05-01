@@ -38,8 +38,8 @@ fun CustomerRoomOptSelector(
 ) {
     var isBotSheetVisible by remember { mutableStateOf(false) }
     var roomNumber by remember { mutableIntStateOf(1) }
-    var adultNumber by remember { mutableIntStateOf(1) }
-    var childNumber by remember { mutableIntStateOf(0) }
+    var adultNumber by remember { mutableIntStateOf(2) }
+    var childNumber by remember { mutableIntStateOf(1) }
     val botSheetState = rememberModalBottomSheetState()
 
     Row(
