@@ -32,9 +32,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.trekkstay.hotel.core.storage.LocalStore
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 import java.time.Instant
@@ -54,7 +56,7 @@ fun DateRangeSelector(
     var isBotSheetVisible by remember { mutableStateOf(false) }
     val state = rememberDateRangePickerState(initialSelectedStartDateMillis = startDate, initialSelectedEndDateMillis = endDate)
     val botSheetState = rememberModalBottomSheetState()
-
+    val context = LocalContext.current
     Column(
         verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
@@ -113,6 +115,18 @@ fun DateRangeSelector(
     LaunchedEffect(state.selectedStartDateMillis, state.selectedEndDateMillis) {
         if (state.selectedStartDateMillis != null && state.selectedEndDateMillis != null) {
             onDateRangeSelected(Pair(state.selectedStartDateMillis!!, state.selectedEndDateMillis!!))
+            if (type == "search") {
+                LocalStore.saveKey(
+                    context,
+                    "search_start_date",
+                    state.selectedStartDateMillis.toString()
+                )
+                LocalStore.saveKey(
+                    context,
+                    "search_end_date",
+                    state.selectedEndDateMillis.toString()
+                )
+            }
             isBotSheetVisible = false
         }
     }

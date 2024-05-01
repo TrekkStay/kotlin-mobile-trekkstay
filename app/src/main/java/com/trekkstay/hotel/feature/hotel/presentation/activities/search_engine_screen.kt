@@ -32,10 +32,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.trekkstay.hotel.core.storage.LocalStore
 import com.trekkstay.hotel.feature.hotel.domain.entities.Destination
 import com.trekkstay.hotel.feature.hotel.domain.entities.Hotel
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.CustomerRoomOptSelector
@@ -58,6 +60,7 @@ fun SearchEngineScreen(
     navController: NavHostController,
     attractionViewModel: AttractionViewModel
 ) {
+    val context = LocalContext.current
     var selectedDestination by remember { mutableStateOf<Destination?>(null) }
     var selectedDateRange by remember { mutableStateOf<Pair<Long, Long>?>(Pair(System.currentTimeMillis(), System.currentTimeMillis() + 86400000)) }
     var roomNumber by remember { mutableIntStateOf(1) }
@@ -170,9 +173,30 @@ fun SearchEngineScreen(
                         }
                     }
                     CustomerRoomOptSelector(
-                        onRoomNumberSelected = { roomNumber = it },
-                        onAdultNumberSelected = { adultNumber = it },
-                        onChildNumberSelected = { childNumber = it })
+                        onRoomNumberSelected = {
+                            roomNumber = it
+                            LocalStore.saveKey(
+                                context,
+                                "search_room_num",
+                                it.toString()
+                            )
+                        },
+                        onAdultNumberSelected = {
+                            adultNumber = it
+                            LocalStore.saveKey(
+                                context,
+                                "search_adult_num",
+                                it.toString()
+                            )
+                        },
+                        onChildNumberSelected = {
+                            childNumber = it
+                            LocalStore.saveKey(
+                                context,
+                                "search_child_num",
+                                it.toString()
+                            )
+                        })
                     Row {
                         Box(
                             modifier = Modifier

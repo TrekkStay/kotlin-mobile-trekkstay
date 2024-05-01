@@ -39,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -49,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.hotel.R
+import com.trekkstay.hotel.core.storage.LocalStore
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.DateRangeSelector
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.InfoTextField
 import com.trekkstay.hotel.feature.reservation.domain.entities.GuestInfo
@@ -69,14 +71,24 @@ fun BookingFormScreen(roomId:String,
                       navController: NavController
 ) {
     var expandedDesc by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    val userName = LocalStore.getKey(context,"name","")
+    val userEmail = LocalStore.getKey(context,"email","")
+    val searchStartDate = LocalStore.getKey(context,"search_start_date",System.currentTimeMillis().toString()).toLong()
+    val searchEndDate = LocalStore.getKey(context,"search_end_date",(System.currentTimeMillis() + 86400000).toString()).toLong()
+    val searchRoomNum = LocalStore.getKey(context,"search_room_num","1").toInt()
+    val searchAdultNum = LocalStore.getKey(context,"search_adult_num","2").toInt()
+    val searchChildNum = LocalStore.getKey(context,"search_child_num","1").toInt()
 
-    var name by remember { mutableStateOf(TextFieldValue()) }
-    var email by remember { mutableStateOf(TextFieldValue()) }
+    var name by remember { mutableStateOf(TextFieldValue(userName)) }
+    var email by remember { mutableStateOf(TextFieldValue(userEmail)) }
     var phone by remember { mutableStateOf(TextFieldValue()) }
-    var roomNum by remember { mutableIntStateOf(1) }
-    var adultNum by remember { mutableIntStateOf(1) }
-    var childNum by remember { mutableIntStateOf(0) }
-    var selectedDateRange by remember { mutableStateOf<Pair<Long, Long>?>(Pair(System.currentTimeMillis(), System.currentTimeMillis() + 86400000)) }
+    var roomNum by remember { mutableIntStateOf(searchRoomNum) }
+    var adultNum by remember { mutableIntStateOf(searchAdultNum) }
+    var childNum by remember { mutableIntStateOf(searchChildNum) }
+
+
+    var selectedDateRange by remember { mutableStateOf<Pair<Long, Long>?>(Pair(searchStartDate, searchEndDate)) }
     fun formatDateRange(startDateMillis: Long, endDateMillis: Long): Pair<String, String> {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val startDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(startDateMillis), ZoneId.systemDefault())
@@ -119,7 +131,11 @@ fun BookingFormScreen(roomId:String,
                     .fillMaxWidth()
                     .padding(horizontal = 15.dp, vertical = 20.dp)
             ) {
-                Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = null)
+                IconButton(onClick = {
+                    navController.popBackStack()
+                }) {
+                    Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = null)
+                }
                 Text(
                     text = "Booking Form",
                     fontFamily = PoppinsFontFamily,
@@ -188,12 +204,13 @@ fun BookingFormScreen(roomId:String,
                         selectedDateRange = dateRange
                     }
                 }
+                Spacer(modifier = Modifier.height(20.dp))
             }
         }
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(vertical = 40.dp, horizontal = 50.dp),
+                .padding(vertical = 20.dp, horizontal = 50.dp),
             contentAlignment = Alignment.BottomCenter
         ) {
             Row(
