@@ -2,11 +2,13 @@ package com.trekkstay.hotel.feature.authenticate.presentation.activities
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -45,7 +47,9 @@ import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @Composable
 fun StartupScreen(navController: NavHostController) {
-    Column {
+    Column (
+        modifier = Modifier.fillMaxSize().background(Color.White)
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
