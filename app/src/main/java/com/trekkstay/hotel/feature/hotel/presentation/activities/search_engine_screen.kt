@@ -32,11 +32,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.trekkstay.hotel.feature.hotel.domain.entities.AttractionList
+import com.trekkstay.hotel.core.storage.LocalStore
 import com.trekkstay.hotel.feature.hotel.domain.entities.Destination
 import com.trekkstay.hotel.feature.hotel.domain.entities.Hotel
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.CustomerRoomOptSelector
@@ -59,9 +60,9 @@ fun SearchEngineScreen(
     navController: NavHostController,
     attractionViewModel: AttractionViewModel
 ) {
-
+    val context = LocalContext.current
     var selectedDestination by remember { mutableStateOf<Destination?>(null) }
-    var selectedDateRange by remember { mutableStateOf<Pair<Long, Long>?>(null) }
+    var selectedDateRange by remember { mutableStateOf<Pair<Long, Long>?>(Pair(System.currentTimeMillis(), System.currentTimeMillis() + 86400000)) }
     var roomNumber by remember { mutableIntStateOf(1) }
     var adultNumber by remember { mutableIntStateOf(2) }
     var childNumber by remember { mutableIntStateOf(1) }
@@ -73,12 +74,9 @@ fun SearchEngineScreen(
 
     LaunchedEffect(Unit) {
         showResult = false
-        println("LAUNCH EFFECT WORK")
     }
 
     fun formatDateRange(startDateMillis: Long, endDateMillis: Long): Pair<String, String> {
-        println(">>>>>>>>>>>>>>>>>>>>>> date")
-        println(startDateMillis)
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val startDate =
             LocalDateTime.ofInstant(Instant.ofEpochMilli(startDateMillis), ZoneId.systemDefault())
@@ -123,10 +121,12 @@ fun SearchEngineScreen(
                 numGuess = adultNumber + childNumber,
                 checkIn = formattedCheckInDate,
                 checkOut = formattedCheckOutDate,
-                attractionViewModel = attractionViewModel
-            ) {
-                showResult = false
-            }
+                attractionViewModel = attractionViewModel,
+                navController = navController,
+                onBackPress = {
+                    showResult = false
+                }
+            )
         } else {
             Column(
                 modifier = Modifier
@@ -166,14 +166,37 @@ fun SearchEngineScreen(
                             selectedDestination = it
                         }
                     )
-                    DateRangeSelector(type = "search")
-                    { dateRange ->
-                        selectedDateRange = dateRange
+                    selectedDateRange?.first?.let {
+                        DateRangeSelector(type = "search", startDate = it, endDate = selectedDateRange!!.second)
+                        { dateRange ->
+                            selectedDateRange = dateRange
+                        }
                     }
                     CustomerRoomOptSelector(
-                        onRoomNumberSelected = { roomNumber = it },
-                        onAdultNumberSelected = { adultNumber = it },
-                        onChildNumberSelected = { childNumber = it })
+                        onRoomNumberSelected = {
+                            roomNumber = it
+                            LocalStore.saveKey(
+                                context,
+                                "search_room_num",
+                                it.toString()
+                            )
+                        },
+                        onAdultNumberSelected = {
+                            adultNumber = it
+                            LocalStore.saveKey(
+                                context,
+                                "search_adult_num",
+                                it.toString()
+                            )
+                        },
+                        onChildNumberSelected = {
+                            childNumber = it
+                            LocalStore.saveKey(
+                                context,
+                                "search_child_num",
+                                it.toString()
+                            )
+                        })
                     Row {
                         Box(
                             modifier = Modifier

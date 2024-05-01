@@ -39,11 +39,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.hotel.R
-import com.trekkstay.hotel.core.storage.LocalStore
 import com.trekkstay.hotel.feature.hotel.domain.entities.Attraction
 import com.trekkstay.hotel.feature.hotel.domain.entities.Hotel
-import com.trekkstay.hotel.feature.hotel.domain.entities.Location
 import com.trekkstay.hotel.feature.hotel.domain.entities.MarkerInfo
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.CustomerFilterHotel
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.CustomerSortHotel
@@ -66,8 +65,8 @@ fun SearchResultScreen(
     checkOut: String,
     numGuess: Int,
     attractionViewModel: AttractionViewModel,
-    onBackPress: () -> Unit
-
+    onBackPress: () -> Unit,
+    navController: NavController
 ) {
     var sortCriteria by remember { mutableStateOf("") }
     var attractionList : List<Attraction> = emptyList()
@@ -217,7 +216,7 @@ fun SearchResultScreen(
                 contentPadding = PaddingValues(15.dp),
             ) {
                 items(hotels.size) {
-                    HotelSearchResultCard(hotels[it])
+                    HotelSearchResultCard(hotels[it],navController)
                 }
             }
         }

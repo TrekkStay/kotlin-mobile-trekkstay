@@ -2,6 +2,7 @@ package com.trekkstay.hotel.feature.hotel.presentation.fragments
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,6 +36,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.trekkstay.hotel.feature.hotel.domain.entities.Hotel
 import com.trekkstay.hotel.feature.shared.Utils.formatPrice
@@ -42,8 +44,7 @@ import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @Composable
-fun HotelSearchResultCard(hotel: Hotel) {
-
+fun HotelSearchResultCard(hotel: Hotel, navController: NavController) {
     val hotelRating = "7.2"
     val originalPrice = if(hotel.room.isNotEmpty())hotel.room.first().originalPrice else 0
     val discountRate = if(hotel.room.isNotEmpty())hotel.room.first().discountRate else 0
@@ -56,6 +57,11 @@ fun HotelSearchResultCard(hotel: Hotel) {
             .background(Color.White, shape = RoundedCornerShape(10.dp))
             .border(1.5.dp, TrekkStayCyan, shape = RoundedCornerShape(10.dp))
             .padding(vertical = 15.dp)
+            .clickable {
+                navController.navigate("hotel_detail/${hotel.id}") {
+                    launchSingleTop = true
+                }
+            }
     ) {
         AsyncImage(
             model = if(hotel.images.media.isNotEmpty())hotel.images.media.first() else {
