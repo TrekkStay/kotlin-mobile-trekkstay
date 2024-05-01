@@ -27,10 +27,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.trekkstay.hotel.feature.hotel.domain.entities.Destination
-import com.trekkstay.hotel.feature.hotel.domain.entities.Location
-import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelState
-import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
-import com.trekkstay.hotel.feature.hotel.presentation.states.location.ViewProvinceAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.search.SearchState
 import com.trekkstay.hotel.feature.hotel.presentation.states.search.SearchViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.search.ViewDestinationAction
@@ -38,8 +34,9 @@ import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DestinationSearchBar(searchViewModel: SearchViewModel,
-                         onDestinationSelected: (Destination) -> Unit
+fun DestinationSearchBar(
+    searchViewModel: SearchViewModel,
+    onDestinationSelected: (Destination) -> Unit
 ) {
 
     var destinationArr by remember {
@@ -51,12 +48,16 @@ fun DestinationSearchBar(searchViewModel: SearchViewModel,
     val searchState by searchViewModel.state.observeAsState()
     when (searchState) {
         is SearchState.SuccessViewDestination -> {
-            destinationArr = (searchState as SearchState.SuccessViewDestination).destinations.destinationList
+            destinationArr =
+                (searchState as SearchState.SuccessViewDestination).destinations.destinationList
         }
+
         is SearchState.InvalidViewDestination -> {
         }
+
         is SearchState.ViewDestinationCalling -> {
         }
+
         else -> {}
     }
 
@@ -67,6 +68,7 @@ fun DestinationSearchBar(searchViewModel: SearchViewModel,
 
     ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = !expanded }) {
         TextField(
+            readOnly = true,
             value = selectedDestination, onValueChange = {
                 selectedDestination = it
             },

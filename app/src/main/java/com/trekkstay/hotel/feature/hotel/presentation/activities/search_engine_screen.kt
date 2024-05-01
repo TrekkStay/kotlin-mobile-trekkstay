@@ -36,7 +36,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.trekkstay.hotel.feature.hotel.domain.entities.AttractionList
 import com.trekkstay.hotel.feature.hotel.domain.entities.Destination
 import com.trekkstay.hotel.feature.hotel.domain.entities.Hotel
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.CustomerRoomOptSelector
@@ -59,9 +58,8 @@ fun SearchEngineScreen(
     navController: NavHostController,
     attractionViewModel: AttractionViewModel
 ) {
-
     var selectedDestination by remember { mutableStateOf<Destination?>(null) }
-    var selectedDateRange by remember { mutableStateOf<Pair<Long, Long>?>(null) }
+    var selectedDateRange by remember { mutableStateOf<Pair<Long, Long>?>(Pair(System.currentTimeMillis(), System.currentTimeMillis() + 86400000)) }
     var roomNumber by remember { mutableIntStateOf(1) }
     var adultNumber by remember { mutableIntStateOf(2) }
     var childNumber by remember { mutableIntStateOf(1) }
@@ -73,12 +71,9 @@ fun SearchEngineScreen(
 
     LaunchedEffect(Unit) {
         showResult = false
-        println("LAUNCH EFFECT WORK")
     }
 
     fun formatDateRange(startDateMillis: Long, endDateMillis: Long): Pair<String, String> {
-        println(">>>>>>>>>>>>>>>>>>>>>> date")
-        println(startDateMillis)
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val startDate =
             LocalDateTime.ofInstant(Instant.ofEpochMilli(startDateMillis), ZoneId.systemDefault())
@@ -123,10 +118,12 @@ fun SearchEngineScreen(
                 numGuess = adultNumber + childNumber,
                 checkIn = formattedCheckInDate,
                 checkOut = formattedCheckOutDate,
-                attractionViewModel = attractionViewModel
-            ) {
-                showResult = false
-            }
+                attractionViewModel = attractionViewModel,
+                navController = navController,
+                onBackPress = {
+                    showResult = false
+                }
+            )
         } else {
             Column(
                 modifier = Modifier
@@ -166,9 +163,11 @@ fun SearchEngineScreen(
                             selectedDestination = it
                         }
                     )
-                    DateRangeSelector(type = "search")
-                    { dateRange ->
-                        selectedDateRange = dateRange
+                    selectedDateRange?.first?.let {
+                        DateRangeSelector(type = "search", startDate = it, endDate = selectedDateRange!!.second)
+                        { dateRange ->
+                            selectedDateRange = dateRange
+                        }
                     }
                     CustomerRoomOptSelector(
                         onRoomNumberSelected = { roomNumber = it },

@@ -47,10 +47,12 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun DateRangeSelector(
     type: String,
+    startDate: Long,
+    endDate: Long,
     onDateRangeSelected: (Pair<Long, Long>) -> Unit
 ) {
     var isBotSheetVisible by remember { mutableStateOf(false) }
-    val state = rememberDateRangePickerState()
+    val state = rememberDateRangePickerState(initialSelectedStartDateMillis = startDate, initialSelectedEndDateMillis = endDate)
     val botSheetState = rememberModalBottomSheetState()
 
     Column(

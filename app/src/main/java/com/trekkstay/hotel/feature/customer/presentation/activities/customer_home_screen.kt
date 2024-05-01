@@ -26,7 +26,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.trekkstay.hotel.core.storage.LocalStore
 import com.trekkstay.hotel.feature.customer.presentation.fragments.DestinationCard
@@ -211,9 +210,3 @@ fun CustomerHomeScreen(hotelViewModel: HotelViewModel,navController: NavHostCont
         Spacer(modifier = Modifier.height(10.dp))
     }
 }
-
-//@Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
-//@Composable
-//fun MyAppPreview() {
-//    CustomerHomeScreen()
-//}

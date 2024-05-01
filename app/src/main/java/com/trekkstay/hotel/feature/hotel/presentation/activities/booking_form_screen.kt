@@ -76,7 +76,7 @@ fun BookingFormScreen(roomId:String,
     var roomNum by remember { mutableIntStateOf(1) }
     var adultNum by remember { mutableIntStateOf(1) }
     var childNum by remember { mutableIntStateOf(0) }
-    var selectedDateRange by remember { mutableStateOf<Pair<Long, Long>?>(null) }
+    var selectedDateRange by remember { mutableStateOf<Pair<Long, Long>?>(Pair(System.currentTimeMillis(), System.currentTimeMillis() + 86400000)) }
     fun formatDateRange(startDateMillis: Long, endDateMillis: Long): Pair<String, String> {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val startDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(startDateMillis), ZoneId.systemDefault())
@@ -182,9 +182,11 @@ fun BookingFormScreen(roomId:String,
                 }, onDecrement = {
                     if (childNum > 0) childNum--
                 })
-                DateRangeSelector(type = "book",
-                    ) {dateRange ->
-                    selectedDateRange = dateRange
+                selectedDateRange?.first?.let {
+                    DateRangeSelector(type = "book", startDate = it, endDate = selectedDateRange!!.second)
+                    { dateRange ->
+                        selectedDateRange = dateRange
+                    }
                 }
             }
         }
