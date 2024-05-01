@@ -12,10 +12,12 @@ import com.trekkstay.hotel.feature.reservation.domain.entities.ReservationRoom
 
 data class ReservationRoomModel(
     @SerializedName("hotel_id") val hotelId: String,
+    @SerializedName("hotel_name") val hotelName: String,
+    @SerializedName("location") val location: String,
     @SerializedName("type") val type: String,
     @SerializedName("original_price") val originalPrice: Int,
     @SerializedName("booking_price") val bookingPrice: Int,
-    @SerializedName("images") val images:MediaModel,
+    @SerializedName("images") val images: MediaModel,
 ) {
     companion object {
 
@@ -27,12 +29,13 @@ data class ReservationRoomModel(
 
         fun fromMap(map: DataMap): ReservationRoomModel {
             return ReservationRoomModel(
-
                 hotelId = map["hotel_id"] as String,
+                hotelName = map["hotel_name"] as String,
+                location = map["location"] as String,
                 type = map["type"] as String,
-                originalPrice = map["original_price"] as Int,
-                bookingPrice = map["booking_price"] as Int,
-                images = MediaModel.fromJson(map["videos"].toString()),
+                originalPrice = (map["original_price"] as Double).toInt(),
+                bookingPrice = (map["booking_price"] as Double).toInt(),
+                images = MediaModel.fromJson(Gson().toJson(map["images"])),
 
                 )
         }
@@ -41,5 +44,13 @@ data class ReservationRoomModel(
 
 
 fun ReservationRoomModel.toEntity(): ReservationRoom {
-    return ReservationRoom(hotelId,type,originalPrice,bookingPrice,images.toEntity())
+    return ReservationRoom(
+        hotelId,
+        hotelName,
+        location,
+        type,
+        originalPrice,
+        bookingPrice,
+        images.toEntity()
+    )
 }

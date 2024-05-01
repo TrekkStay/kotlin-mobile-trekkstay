@@ -15,8 +15,8 @@ data class ReservationModel(
     @SerializedName("room_id") val roomId: String,
     @SerializedName("user_id") val userId: String,
     @SerializedName("qr_code_url") val qrCodeUrl: String,
-    @SerializedName("quantity") val quantity:Int,
-    @SerializedName("total_price") val totalPrice:Double,
+    @SerializedName("quantity") val quantity: Double,
+    @SerializedName("total_price") val totalPrice: Double,
     @SerializedName("check_in") val checkIn: String,
     @SerializedName("check_out") val checkOut: String,
     @SerializedName("status") val status: String,
@@ -32,26 +32,37 @@ data class ReservationModel(
         }
 
         fun fromMap(map: DataMap): ReservationModel {
-            println()
             return ReservationModel(
                 id = map["id"] as String,
                 roomId = map["room_id"] as String,
                 userId = map["user_id"] as String,
                 qrCodeUrl = map["qr_code_url"] as String? ?: "",
-                quantity = map["quantity"] as Int,
-                totalPrice = map["total_price"] as Double,
+                quantity = (map["quantity"] as String).toDouble(),
+                totalPrice = (map["total_price"] as String).toDouble(),
                 checkIn = map["check_in_date"] as String,
                 checkOut = map["check_out_date"] as String,
                 status = map["status"] as String,
                 guestInfo = GuestInfoModel.fromJson(map["guest_info"].toString()),
                 room = ReservationRoomModel.fromJson(map["room"].toString()),
 
-            )
+                )
         }
     }
 }
 
 
 fun ReservationModel.toEntity(): Reservation {
-    return Reservation(id,roomId,userId,qrCodeUrl,quantity,totalPrice,checkIn,checkOut,status,guestInfo.toEntity(),room.toEntity() )
+    return Reservation(
+        id,
+        roomId,
+        userId,
+        qrCodeUrl,
+        quantity,
+        totalPrice,
+        checkIn,
+        checkOut,
+        status,
+        guestInfo.toEntity(),
+        room.toEntity()
+    )
 }
