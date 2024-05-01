@@ -15,21 +15,56 @@ class ReservationViewModel(private val reservationRepo: ReservationRepo) : ViewM
         viewModelScope.launch {
             when (action) {
 
-                is CreateReservationAction ->{
+                is CreateReservationAction -> {
                     _state.postValue(ReservationState.CreateReservationCalling)
-                    val result = reservationRepo.createReservation(action.roomId,action.checkIn,action.checkOut, action.quantity,action.guestInfo)
+                    val result = reservationRepo.createReservation(
+                        action.roomId,
+                        action.checkIn,
+                        action.checkOut,
+                        action.quantity,
+                        action.guestInfo
+                    )
                     result.fold(
-                        { failure -> _state.postValue(ReservationState.InvalidCreateReservation(failure.message)) },
-                        { success->  _state.postValue(ReservationState.SuccessCreateReservation(success)) }
+                        { failure ->
+                            _state.postValue(
+                                ReservationState.InvalidCreateReservation(
+                                    failure.message
+                                )
+                            )
+                        },
+                        { success ->
+                            _state.postValue(
+                                ReservationState.SuccessCreateReservation(
+                                    success
+                                )
+                            )
+                        }
                     )
                 }
 
                 is ListReservationAction -> {
                     _state.postValue(ReservationState.ListReservationCalling)
-                    val result = reservationRepo.listReservation(action.hotelId, action.status, action.dayPicked)
+                    val result = reservationRepo.listReservation(
+                        action.hotelId,
+                        action.status,
+                        action.dayPicked
+                    )
                     result.fold(
-                        { failure -> _state.postValue(ReservationState.InvalidListReservation(failure.message)) },
-                        { success->  _state.postValue(ReservationState.SuccessListReservation(success)) }
+                        { failure ->
+                            _state.postValue(
+                                ReservationState.InvalidListReservation(
+                                    failure.message
+                                )
+                            )
+                        },
+                        { success ->
+                            _state.postValue(
+                                ReservationState.SuccessListReservation(
+                                    action.status,
+                                    success
+                                )
+                            )
+                        }
                     )
                 }
 
@@ -37,8 +72,20 @@ class ReservationViewModel(private val reservationRepo: ReservationRepo) : ViewM
                     _state.postValue(ReservationState.ViewDetailReservationCalling)
                     val result = reservationRepo.viewDetailReservation(action.reservationId)
                     result.fold(
-                        { failure -> _state.postValue(ReservationState.InvalidViewDetailReservation(failure.message)) },
-                        { success->  _state.postValue(ReservationState.SuccessViewDetailReservation(success)) }
+                        { failure ->
+                            _state.postValue(
+                                ReservationState.InvalidViewDetailReservation(
+                                    failure.message
+                                )
+                            )
+                        },
+                        { success ->
+                            _state.postValue(
+                                ReservationState.SuccessViewDetailReservation(
+                                    success
+                                )
+                            )
+                        }
                     )
                 }
             }

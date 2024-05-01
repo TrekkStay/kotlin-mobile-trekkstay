@@ -26,7 +26,7 @@ interface ReservationRemoteDataSource {
     ): Response<Reservation>
 
     suspend fun listReservation(
-        hotelId: String,
+        hotelId: String?,
         status: String,
         dayPicked: String
     ): Response<ReservationList>
@@ -89,18 +89,27 @@ class ReservationRemoteDataSourceImpl(private val client: Client, private val co
     }
 
     override suspend fun listReservation(
-        hotelId: String,
+        hotelId: String?,
         status: String,
         dayPicked: String
     ): Response<ReservationList> {
         return withContext(Dispatchers.IO) {
             val jwtKey = LocalStore.getKey(context, "jwtKey", "")
+            var path =
+                "http://52.163.61.213:8888/api/v1/$listReservationEndpoint?hotel_id=$hotelId&status=$status"
+
+            if (hotelId == null) {
+                path =
+                    "http://52.163.61.213:8888/api/v1/$listReservationEndpoint?status=$status"
+            }
             val request = RequestQuery(
                 method = RequestMethod.GET,
-                path = "http://52.163.61.213:8888/api/v1/$listReservationEndpoint?hotel_id=$hotelId&status=$status",
+                path = path,
                 headers = mapOf("Authorization" to "Bearer $jwtKey"),
                 requestBody = null
             )
+
+            println(request)
 
             val response = client.execute<ReservationList>(
                 request = request,

@@ -53,5 +53,5 @@ data class ReservationListModel(
 
 fun ReservationListModel.toEntity(): ReservationList {
     val reservation = reservationList.map { it.toEntity() }
-    return ReservationList(reservation)
+    return ReservationList("", reservation)
 }

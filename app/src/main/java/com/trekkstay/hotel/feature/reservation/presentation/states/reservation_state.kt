@@ -1,6 +1,5 @@
 package com.trekkstay.hotel.feature.reservation.presentation.states
 
-import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelState
 import com.trekkstay.hotel.feature.reservation.domain.entities.Reservation
 import com.trekkstay.hotel.feature.reservation.domain.entities.ReservationList
 
@@ -11,7 +10,8 @@ sealed class ReservationState {
 
     object ListReservationCalling : ReservationState()
     data class InvalidListReservation(val message: String) : ReservationState()
-    data class SuccessListReservation(val reservation: ReservationList) : ReservationState()
+    data class SuccessListReservation(val sendState: String, val reservation: ReservationList) :
+        ReservationState()
 
     object ViewDetailReservationCalling : ReservationState()
     data class InvalidViewDetailReservation(val message: String) : ReservationState()

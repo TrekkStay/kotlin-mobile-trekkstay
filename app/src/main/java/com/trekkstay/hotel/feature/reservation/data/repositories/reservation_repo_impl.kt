@@ -1,10 +1,10 @@
 package com.trekkstay.hotel.feature.reservation.data.repositories
 
+import arrow.core.left
+import arrow.core.right
 import com.trekkstay.hotel.core.errors.ApiException
 import com.trekkstay.hotel.core.errors.ApiInvalid
 import com.trekkstay.hotel.core.network.response.Response
-import arrow.core.right
-import arrow.core.left
 import com.trekkstay.hotel.core.typedef.ResultFuture
 import com.trekkstay.hotel.feature.reservation.data.datasources.ReservationRemoteDataSource
 import com.trekkstay.hotel.feature.reservation.domain.entities.GuestInfo
@@ -40,7 +40,7 @@ class ReservationRepoImpl(private val remoteDataSource: ReservationRemoteDataSou
     }
 
     override suspend fun listReservation(
-        hotelId: String,
+        hotelId: String?,
         status: String,
         dayPicked: String
     ): ResultFuture<ReservationList> {

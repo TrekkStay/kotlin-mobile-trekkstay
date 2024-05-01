@@ -87,24 +87,33 @@ fun HotelReservationScreen(
     val reservationState by reservationViewModel.state.observeAsState()
     when (reservationState) {
         is ReservationState.SuccessListReservation -> {
-            println("okkkkkkkkkkkkk")
             val reservationHotel =
                 (reservationState as ReservationState.SuccessListReservation).reservation.reservationList
 
-            if (countCallingAPI == 0) {
+            println(reservationHotel)
+            if ((reservationState as ReservationState.SuccessListReservation).sendState == "UPCOMING") {
                 reservationHotel1 = reservationHotel
-                countCallingAPI++;
-                val action2 = ListReservationAction(hotelId, "COMPLETED", "")
-                reservationViewModel.processAction(action2)
-            } else if (countCallingAPI == 1) {
+            } else if ((reservationState as ReservationState.SuccessListReservation).sendState == "COMPLETED") {
                 reservationHotel2 = reservationHotel
-                countCallingAPI++;
-                val action3 = ListReservationAction(hotelId, "CANCELLED", "")
-                reservationViewModel.processAction(action3)
-            } else if (countCallingAPI == 2) {
-                countCallingAPI++;
+            } else if ((reservationState as ReservationState.SuccessListReservation).sendState == "CANCELLED") {
                 reservationHotel3 = reservationHotel
             }
+
+//                    reservationViewModel.processAction(action2)
+//                if (countCallingAPI == 0 && !reservationHotel.isEmpty()) {
+//                    reservationHotel1 = reservationHotel
+//                    countCallingAPI++;
+//                    val action2 = ListReservationAction(hotelId, "COMPLETED", "")
+//                    reservationViewModel.processAction(action2)
+//                } else if (countCallingAPI == 1) {
+//                    reservationHotel2 = reservationHotel
+//                    countCallingAPI++;
+//                    val action3 = ListReservationAction(hotelId, "CANCELLED", "")
+//                    reservationViewModel.processAction(action3)
+//                } else if (countCallingAPI == 2) {
+//                    countCallingAPI++;
+//                    reservationHotel3 = reservationHotel
+//                }
 
         }
 
@@ -123,6 +132,12 @@ fun HotelReservationScreen(
         countCallingAPI = 0
         val action1 = ListReservationAction(hotelId, "UPCOMING", "")
         reservationViewModel.processAction(action1)
+
+        val action2 = ListReservationAction(hotelId, "COMPLETED", "")
+        reservationViewModel.processAction(action2)
+
+        val action3 = ListReservationAction(hotelId, "CANCELLED", "")
+        reservationViewModel.processAction(action3)
     }
 
     Column(

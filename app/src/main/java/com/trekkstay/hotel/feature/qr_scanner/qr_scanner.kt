@@ -40,7 +40,7 @@ fun QRScannerScreen(navController: NavController,activity: ComponentActivity) {
             Toast.makeText(activity, "Cancelled", Toast.LENGTH_SHORT).show()
         } else {
             textResult.value = result.contents
-            navController.navigate("booking_detail")
+            navController.navigate("hotel_reservation_detail/${textResult.value}")
         }
     }
 

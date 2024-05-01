@@ -82,21 +82,19 @@ fun CustomerReservationScreen(
 
             println(reservationHotel)
 
-            if (countCallingAPI == 0) {
+            if ((reservationState as ReservationState.SuccessListReservation).sendState == "UPCOMING") {
                 reservationHotel1 = reservationHotel
-                countCallingAPI++;
-                val action2 = ListReservationAction("", "COMPLETED", "")
+
+                val action2 = ListReservationAction(null, "COMPLETED", "")
                 reservationViewModel.processAction(action2)
-            } else if (countCallingAPI == 1) {
+            } else if ((reservationState as ReservationState.SuccessListReservation).sendState == "COMPLETED") {
                 reservationHotel2 = reservationHotel
-                countCallingAPI++;
-                val action3 = ListReservationAction("", "CANCELLED", "")
+
+                val action3 = ListReservationAction(null, "CANCELLED", "")
                 reservationViewModel.processAction(action3)
-            } else if (countCallingAPI == 2) {
-                countCallingAPI++;
+            } else if ((reservationState as ReservationState.SuccessListReservation).sendState == "CANCELLED") {
                 reservationHotel3 = reservationHotel
             }
-
         }
 
         is ReservationState.InvalidListReservation -> {
@@ -112,7 +110,7 @@ fun CustomerReservationScreen(
 
     LaunchedEffect(Unit) {
         countCallingAPI = 0
-        val action1 = ListReservationAction("", "UPCOMING", "")
+        val action1 = ListReservationAction(null, "UPCOMING", "")
         reservationViewModel.processAction(action1)
     }
 

@@ -1,4 +1,5 @@
 package com.trekkstay.hotel.feature.reservation.domain.repositories
+
 import com.trekkstay.hotel.core.typedef.ResultFuture
 import com.trekkstay.hotel.feature.reservation.domain.entities.GuestInfo
 import com.trekkstay.hotel.feature.reservation.domain.entities.Reservation
@@ -14,12 +15,12 @@ interface ReservationRepo {
     ): ResultFuture<Reservation>
 
     suspend fun listReservation(
-        hotelId: String,
-        status:String,
+        hotelId: String?,
+        status: String,
         dayPicked: String
     ): ResultFuture<ReservationList>
 
-    suspend fun  viewDetailReservation(
+    suspend fun viewDetailReservation(
         reservationId: String
-    ) : ResultFuture<Reservation>
+    ): ResultFuture<Reservation>
 }
