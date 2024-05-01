@@ -2,6 +2,7 @@ package com.trekkstay.hotel.feature.reservation.presentation.fragments
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -39,6 +40,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.trekkstay.hotel.feature.shared.Utils.formatPrice
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
@@ -47,11 +49,13 @@ import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomerReservationCard(
+    reservationId: String,
     hotelImg: String,
     hotelName: String,
     destination: String,
     type: String,
-    price: Double
+    price: Double,
+    navController: NavController
 ) {
     val formattedPrice = formatPrice(price)
 
@@ -67,6 +71,7 @@ fun CustomerReservationCard(
             .shadow(5.dp, shape = RoundedCornerShape(10.dp))
             .background(Color.White, shape = RoundedCornerShape(10.dp))
             .padding(5.dp)
+
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(5.dp),
@@ -185,7 +190,9 @@ fun CustomerReservationCard(
                             containerColor = TrekkStayCyan,
                             contentColor = Color.White
                         ),
-                        onClick = { }
+                        onClick = {
+                            navController.navigate("reservation_detail/${reservationId}")
+                        }
                     ) {
                         Text(
                             "View Booking",

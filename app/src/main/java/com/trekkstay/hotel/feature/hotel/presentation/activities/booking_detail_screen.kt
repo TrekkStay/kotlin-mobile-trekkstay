@@ -21,6 +21,12 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,12 +43,21 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.hotel.R
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.RoomDetailCard
+import com.trekkstay.hotel.feature.reservation.domain.entities.Reservation
+import com.trekkstay.hotel.feature.reservation.presentation.states.ListReservationAction
+import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationState
+import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationViewModel
+import com.trekkstay.hotel.feature.reservation.presentation.states.ViewDetailReservationAction
 import com.trekkstay.hotel.feature.shared.Utils.formatPrice
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @Composable
-fun BookingDetailScreen(navController: NavController) {
+fun BookingDetailScreen(
+    idReservation: String,
+    navController: NavController,
+    reservationViewModel: ReservationViewModel
+) {
     val hotelName = "Estabeez Hotel"
     val bookingID = "004Wf32QR"
     val customerName = "Bao Pham"
@@ -50,6 +65,38 @@ fun BookingDetailScreen(navController: NavController) {
     val customerPhone = "+84 123 456 789"
     val roomNum = 1
     val totalPrice = 1000.0
+
+    var reservationDetail by remember {
+        mutableStateOf<Reservation?>(null)
+    }
+    val reservationState by reservationViewModel.state.observeAsState()
+    when (reservationState) {
+        is ReservationState.SuccessViewDetailReservation -> {
+            println("okkkkkkkkkkkkk")
+            reservationDetail =
+                (reservationState as ReservationState.SuccessViewDetailReservation).reservation
+            println(">>>>>>>>>>>>>>>>> detail")
+            println(reservationDetail)
+        }
+
+        is ReservationState.InvalidViewDetailReservation -> {
+            println((reservationState as ReservationState.InvalidListReservation).message)
+        }
+
+        is ReservationState.ViewDetailReservationCalling -> {
+            println("checking")
+        }
+
+        else -> {}
+    }
+
+    LaunchedEffect(Unit) {
+        println(">>>>>>>>>>>> detail boooking")
+        val action = ViewDetailReservationAction(idReservation)
+        reservationViewModel.processAction(action)
+
+    }
+
     Column(
         modifier = Modifier
             .padding(top = 25.dp, bottom = 80.dp)
@@ -192,8 +239,3 @@ private fun BookDateCol(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
-@Composable
-fun BookingDetailPreview() {
-    BookingDetailScreen(rememberNavController())
-}

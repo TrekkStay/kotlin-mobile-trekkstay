@@ -20,14 +20,18 @@ data class ReservationModel(
     @SerializedName("check_in") val checkIn: String,
     @SerializedName("check_out") val checkOut: String,
     @SerializedName("status") val status: String,
-    @SerializedName("guess_info") val guestInfo: GuestInfoModel,
+//    @SerializedName("guess_info") val guestInfo: GuestInfoModel,
     @SerializedName("room") val room: ReservationRoomModel,
 ) {
     companion object {
 
         fun fromJson(source: String): ReservationModel {
+            println("Source Reservation: >>>>>>")
+            println(source)
             val type = object : TypeToken<Map<String, Any>>() {}.type
             val map: Map<String, Any> = Gson().fromJson(source, type)
+            println("Map Reservation")
+            println(map)
             return fromMap(map)
         }
 
@@ -37,14 +41,13 @@ data class ReservationModel(
                 roomId = map["room_id"] as String,
                 userId = map["user_id"] as String,
                 qrCodeUrl = map["qr_code_url"] as String? ?: "",
-                quantity = (map["quantity"] as String).toDouble(),
-                totalPrice = (map["total_price"] as String).toDouble(),
+                quantity = (map["quantity"].toString()).toDouble(),
+                totalPrice = (map["total_price"].toString()).toDouble(),
                 checkIn = map["check_in_date"] as String,
                 checkOut = map["check_out_date"] as String,
                 status = map["status"] as String,
-                guestInfo = GuestInfoModel.fromJson(map["guest_info"].toString()),
+//                guestInfo = GuestInfoModel.fromJson(map["guest_info"].toString()),
                 room = ReservationRoomModel.fromJson(map["room"].toString()),
-
                 )
         }
     }
@@ -62,7 +65,7 @@ fun ReservationModel.toEntity(): Reservation {
         checkIn,
         checkOut,
         status,
-        guestInfo.toEntity(),
+//        guestInfo.toEntity(),
         room.toEntity()
     )
 }

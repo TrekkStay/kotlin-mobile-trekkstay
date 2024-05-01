@@ -32,6 +32,15 @@ class ReservationViewModel(private val reservationRepo: ReservationRepo) : ViewM
                         { success->  _state.postValue(ReservationState.SuccessListReservation(success)) }
                     )
                 }
+
+                is ViewDetailReservationAction -> {
+                    _state.postValue(ReservationState.ViewDetailReservationCalling)
+                    val result = reservationRepo.viewDetailReservation(action.reservationId)
+                    result.fold(
+                        { failure -> _state.postValue(ReservationState.InvalidViewDetailReservation(failure.message)) },
+                        { success->  _state.postValue(ReservationState.SuccessViewDetailReservation(success)) }
+                    )
+                }
             }
         }
     }

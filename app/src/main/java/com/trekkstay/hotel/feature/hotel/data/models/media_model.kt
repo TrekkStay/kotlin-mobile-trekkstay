@@ -27,7 +27,7 @@ data class MediaModel(
 
         private fun fromMap(map: DataMap): MediaModel {
             return MediaModel(
-                media = map["urls"] as? List<String> ?: emptyList()
+                media = (map["urls"] as? List<String>)?.toList() ?: emptyList()
             )
         }
     }

@@ -22,8 +22,6 @@ data class ReservationListModel(
                 val value = getString(key)
                 map[key] = value
             }
-            println(">>>>>>>>>>>>>>> reservation map : ")
-            println(map)
             return map
         }
 

@@ -13,6 +13,6 @@ data class Reservation(
     val checkIn:String,
     val checkOut:String,
     val status: String,
-    val guestInfo: GuestInfo,
+//    val guestInfo: GuestInfo,
     val room: ReservationRoom,
 )

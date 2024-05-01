@@ -31,6 +31,10 @@ interface ReservationRemoteDataSource {
         status: String,
         dayPicked: String
     ): Response<ReservationList>
+
+    suspend fun viewDetailReservation(
+        reservationId: String
+    ) : Response<Reservation>
 }
 
 const val createReservationEndpoint = "reservation/create"
@@ -109,6 +113,31 @@ class ReservationRemoteDataSourceImpl(private val client: Client, private val co
                     }
                 }
             )
+            response
+        }
+    }
+
+    override suspend fun viewDetailReservation(reservationId: String): Response<Reservation> {
+        return withContext(Dispatchers.IO) {
+            val jwtKey = LocalStore.getKey(context, "jwtKey", "")
+            val request = RequestQuery(
+                method = RequestMethod.GET,
+                path = "http://52.163.61.213:8888/api/v1/reservation/$reservationId",
+                headers = mapOf("Authorization" to "Bearer $jwtKey"),
+                requestBody = null
+            )
+
+            val response = client.execute<Reservation>(
+                request = request,
+                parser = { responseData ->
+                    if (responseData is String) {
+                        parseResponse(ReservationModel.fromJson(responseData))
+                    } else {
+                        null
+                    }
+                }
+            )
+
             response
         }
     }

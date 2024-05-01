@@ -59,5 +59,22 @@ class ReservationRepoImpl(private val remoteDataSource: ReservationRemoteDataSou
             )
         }
     }
+
+    override suspend fun viewDetailReservation(reservationId: String): ResultFuture<Reservation> {
+        return when (val response = remoteDataSource.viewDetailReservation(
+            reservationId
+        )) {
+            is Response.Success -> response.data!!.right()
+            is Response.Invalid -> ApiInvalid(
+                response.message ?: "Unknown error",
+                response.status ?: "-1"
+            ).left()
+
+            is Response.Failure -> throw ApiException(
+                response.message ?: "Unknown error",
+                response.status ?: "-1"
+            )
+        }
+    }
 }
 

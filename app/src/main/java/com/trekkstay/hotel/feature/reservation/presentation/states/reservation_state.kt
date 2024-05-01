@@ -12,4 +12,8 @@ sealed class ReservationState {
     object ListReservationCalling : ReservationState()
     data class InvalidListReservation(val message: String) : ReservationState()
     data class SuccessListReservation(val reservation: ReservationList) : ReservationState()
+
+    object ViewDetailReservationCalling : ReservationState()
+    data class InvalidViewDetailReservation(val message: String) : ReservationState()
+    data class SuccessViewDetailReservation(val reservation: Reservation) : ReservationState()
 }

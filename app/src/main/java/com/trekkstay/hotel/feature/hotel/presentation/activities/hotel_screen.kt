@@ -13,14 +13,15 @@ import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewMode
 import com.trekkstay.hotel.feature.hotel.presentation.states.location.LocationViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.MediaViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.room.RoomViewModel
+import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HotelScreen(empAuthViewModel:EmpAuthViewModel,hotelViewModel: HotelViewModel,roomViewModel: RoomViewModel,locationViewModel: LocationViewModel,mediaViewModel: MediaViewModel,activity: ComponentActivity) {
+fun HotelScreen(empAuthViewModel:EmpAuthViewModel,hotelViewModel: HotelViewModel,roomViewModel: RoomViewModel,locationViewModel: LocationViewModel,mediaViewModel: MediaViewModel,activity: ComponentActivity, reservationViewModel: ReservationViewModel) {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = { HotelBotNav(navController = navController) }
     ) { _ ->
-        HotelRouter(empAuthViewModel,hotelViewModel,roomViewModel,locationViewModel,mediaViewModel,navController,activity)
+        HotelRouter(empAuthViewModel,hotelViewModel,roomViewModel,locationViewModel,mediaViewModel,navController, reservationViewModel, activity)
     }
 }

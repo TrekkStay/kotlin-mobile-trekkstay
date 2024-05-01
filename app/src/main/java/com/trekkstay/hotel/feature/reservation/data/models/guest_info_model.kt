@@ -25,16 +25,18 @@ data class GuestInfoModel(
         fun fromJson(source: String): GuestInfoModel {
             val type = object : TypeToken<Map<String, Any>>() {}.type
             val map: Map<String, Any> = Gson().fromJson(source, type)
+            println("Guest source >>>>>>>>>>")
+            println(map)
             return fromMap(map)
         }
 
         fun fromMap(map: DataMap): GuestInfoModel {
-            return GuestInfoModel(
 
+            return GuestInfoModel(
                 name = map["full_name"] as String,
                 contact = map["contact"] as String,
-                adults = (map["adults"] as Double).toInt(),
-                children = (map["children"] as Double).toInt()
+                adults = (map["adults"].toString().toDouble()).toInt(),
+                children = (map["children"].toString().toDouble()).toInt()
 
             )
         }

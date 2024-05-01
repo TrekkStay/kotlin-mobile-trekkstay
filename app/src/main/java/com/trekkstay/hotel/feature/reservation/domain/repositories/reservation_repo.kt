@@ -18,4 +18,8 @@ interface ReservationRepo {
         status:String,
         dayPicked: String
     ): ResultFuture<ReservationList>
+
+    suspend fun  viewDetailReservation(
+        reservationId: String
+    ) : ResultFuture<Reservation>
 }

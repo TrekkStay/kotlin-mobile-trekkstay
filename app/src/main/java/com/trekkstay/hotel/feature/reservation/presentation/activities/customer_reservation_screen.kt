@@ -89,6 +89,8 @@ fun CustomerReservationScreen(
             val reservationHotel =
                 (reservationState as ReservationState.SuccessListReservation).reservation.reservationList
 
+            println(reservationHotel)
+
             if (countCallingAPI == 0) {
                 reservationHotel1 = reservationHotel
                 countCallingAPI++;
@@ -116,12 +118,6 @@ fun CustomerReservationScreen(
 
         else -> {}
     }
-
-    println(">>>>>>>>>>>>>>>>>>>>>>Q")
-    println(reservationHotel1)
-    println(reservationHotel2)
-    println(reservationHotel3)
-
 
     LaunchedEffect(Unit) {
         countCallingAPI = 0
@@ -169,8 +165,6 @@ fun CustomerReservationScreen(
                 modifier = Modifier.fillMaxWidth(),
                 indicator = @Composable { tabPositions: List<TabPosition> ->
                     ReservationTabIndicator(tabPositions, pagerState, "customer")
-//                    val action = ListReservationAction("", hotelTabs[selectedTabIndex.value], "")
-//                    reservationViewModel.processAction(action)
 
                 }
 
@@ -219,36 +213,42 @@ fun CustomerReservationScreen(
                         if (page == 0) {
                             reservationHotel1.forEach { item ->
                                 CustomerReservationCard(
-                                    hotelImg = item.room.images.media[0] ?: "",
-                                    hotelName = item.room.hotelName ?: "",
-                                    destination = item.room.location ?: "",
+                                    reservationId = item.id,
+                                    hotelImg =  "",
+                                    hotelName =  "",
+                                    destination = "",
                                     type = reservationType,
-                                    price = item.room.bookingPrice.toDouble() ?: 0.0
+                                    price = 0.0,
+                                    navController
                                 )
                             }
                         }
-                        else if (page == 1) {
-                            reservationHotel2.forEach { item ->
-                                CustomerReservationCard(
-                                    hotelImg = item.room.images.media[0] ?: "",
-                                    hotelName = item.room.hotelName ?: "",
-                                    destination = item.room.location ?: "",
-                                    type = reservationType,
-                                    price = item.room.bookingPrice.toDouble() ?: 0.0
-                                )
-                            }
-                        }
-                        else if (page == 2) {
-                            reservationHotel3.forEach { item ->
-                                CustomerReservationCard(
-                                    hotelImg = item.room.images.media[0] ?: "",
-                                    hotelName = item.room.hotelName ?: "",
-                                    destination = item.room.location ?: "",
-                                    type = reservationType,
-                                    price = item.room.bookingPrice.toDouble() ?: 0.0
-                                )
-                            }
-                        }
+//                        } else if (page == 1) {
+//                            reservationHotel2.forEach { item ->
+//                                CustomerReservationCard(
+//                                    reservationId = item.id,
+//                                    hotelImg = item.room.images.media[0] ?: "",
+//                                    hotelName = item.room.hotelName ?: "",
+//                                    destination = item.room.location ?: "",
+//                                    type = reservationType,
+//                                    price = item.room.bookingPrice.toDouble() ?: 0.0,
+//                                    navController
+//                                )
+//                            }
+//                        } else if (page == 2) {
+//                            reservationHotel3.forEach { item ->
+//                                CustomerReservationCard(
+//                                    reservationId = item.id,
+//
+//                                    hotelImg = item.room.images.media[0] ?: "",
+//                                    hotelName = item.room.hotelName ?: "",
+//                                    destination = item.room.location ?: "",
+//                                    type = reservationType,
+//                                    price = item.room.bookingPrice.toDouble() ?: 0.0,
+//                                    navController
+//                                )
+//                            }
+//                        }
                     }
                 }
             }

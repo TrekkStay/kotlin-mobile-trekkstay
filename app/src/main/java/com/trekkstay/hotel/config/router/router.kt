@@ -117,7 +117,7 @@ object AppRouter {
             composable("hotel_main") {
                 HotelScreen(
                     empAuthViewModel, hotelViewModel, roomViewModel, locationViewModel,
-                    mediaViewModel, activity
+                    mediaViewModel,  activity, reservationViewModel
                 )
             }
         }
@@ -183,6 +183,14 @@ fun CustomerRouter(
                 navController = navController
             )
         }
+        composable(route = "reservation_detail/{reservationId}") { backStackEntry ->
+            val id = backStackEntry.arguments?.getString("reservationId")
+
+            if (id != null) {
+//                RoomDetailScreen(navController, roomViewModel, id)
+                BookingDetailScreen(id, navController = navController, reservationViewModel = reservationViewModel)
+            }
+        }
         // Notifications
         composable(route = "customer_notifications") {
             CustomerNotificationScreen()
@@ -209,6 +217,7 @@ fun HotelRouter(
     locationViewModel: LocationViewModel,
     mediaViewModel: MediaViewModel,
     navController: NavHostController,
+    reservationViewModel: ReservationViewModel,
     activity: ComponentActivity
 ) {
     NavHost(
@@ -218,8 +227,12 @@ fun HotelRouter(
         composable(route = "hotel_home") {
             HotelHomeScreen(hotelViewModel = hotelViewModel, navController = navController)
         }
-        composable(route = "booking_detail") {
-            BookingDetailScreen(navController = navController)
+        composable(route = "hotel_reservation_detail/{reservationId}") { backStackEntry ->
+            val id = backStackEntry.arguments?.getString("reservationId")
+
+            if (id != null) {
+                BookingDetailScreen(id, navController = navController, reservationViewModel = reservationViewModel)
+            }
         }
         composable(route = "hotel_reservations") {
             HotelReservationScreen()

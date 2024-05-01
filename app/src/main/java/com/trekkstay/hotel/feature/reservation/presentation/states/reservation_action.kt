@@ -1,16 +1,18 @@
 package com.trekkstay.hotel.feature.reservation.presentation.states
 
 import com.trekkstay.hotel.feature.reservation.domain.entities.GuestInfo
+import com.trekkstay.hotel.feature.reservation.domain.entities.Reservation
 import java.util.Date
 
 
 sealed class ReservationAction
 
-data class CreateReservationAction(val roomId: String,
-                                   val checkIn: String,
-                                   val checkOut: String,
-                                   val quantity: Int,
-                                   val guestInfo: GuestInfo
+data class CreateReservationAction(
+    val roomId: String,
+    val checkIn: String,
+    val checkOut: String,
+    val quantity: Int,
+    val guestInfo: GuestInfo
 ) : ReservationAction()
 
 data class ListReservationAction(
@@ -18,3 +20,5 @@ data class ListReservationAction(
     val status: String,
     val dayPicked: String
 ) : ReservationAction()
+
+data class ViewDetailReservationAction(val reservationId: String) : ReservationAction()
