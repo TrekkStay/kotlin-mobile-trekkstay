@@ -2,6 +2,7 @@ package com.trekkstay.hotel.feature.reservation.presentation.fragments
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -35,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -44,6 +46,8 @@ import coil.compose.AsyncImage
 import com.trekkstay.hotel.feature.shared.Utils.formatPrice
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,10 +56,10 @@ fun CustomerReservationCard(
     hotelImg: String,
     hotelName: String,
     destination: String,
-    checkIn: String,
-    checkOut: String,
     type: String,
-    price: Double,
+    price: Double = 0.0,
+    checkIn: String = "",
+    checkOut: String = "",
     navController: NavController
 ) {
     val formattedPrice = formatPrice(price)
@@ -71,11 +75,11 @@ fun CustomerReservationCard(
             .size(150.dp)
             .shadow(5.dp, shape = RoundedCornerShape(10.dp))
             .background(Color.White, shape = RoundedCornerShape(10.dp))
-            .padding(5.dp)
+            .padding(10.dp)
 
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(5.dp),
+            horizontalArrangement = Arrangement.spacedBy(15.dp),
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
@@ -84,15 +88,17 @@ fun CustomerReservationCard(
             AsyncImage(
                 model = hotelImg,
                 contentDescription = "Reservation's hotel image",
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(170.dp, 80.dp)
+                    .size(165.dp, 90.dp)
                     .clip(RoundedCornerShape(12.dp))
+                    .border(1.dp, Color.LightGray, shape = RoundedCornerShape(12.dp))
             )
             Column(
                 verticalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
                     .fillMaxHeight()
-                    .padding(top = 5.dp, bottom = 5.dp)
+                    .padding(vertical = 5.dp)
             ) {
                 Text(
                     hotelName,
@@ -110,14 +116,13 @@ fun CustomerReservationCard(
                 when (type) {
                     "Upcoming" -> {
                         Text(
-                            "$checkIn to $checkOut",
+                            "${formatDate(checkIn)} - ${formatDate(checkOut)}",
                             fontFamily = PoppinsFontFamily,
                             fontWeight = FontWeight.Bold,
                             fontSize = 12.sp,
                             color = TrekkStayCyan
                         )
                     }
-
                     "Completed" -> {
                         Text(
                             text = "$$formattedPrice",
@@ -126,7 +131,6 @@ fun CustomerReservationCard(
                             fontWeight = FontWeight.Medium
                         )
                     }
-
                     "Cancelled" -> {
                         Text(
                             "Cancelled & refunded",
@@ -148,7 +152,6 @@ fun CustomerReservationCard(
                         tint = Color(0xFF0FA958)
                     )
                 }
-
                 "Cancelled" -> {
                     Icon(
                         Icons.Default.Warning,
@@ -162,8 +165,8 @@ fun CustomerReservationCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .size(70.dp)
-                .padding(start = 10.dp, end = 10.dp),
+                .size(120.dp)
+                .padding(horizontal = 10.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -212,9 +215,7 @@ fun CustomerReservationCard(
                         ) {
                             Column(
                                 verticalArrangement = Arrangement.spacedBy(20.dp),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 5.dp, bottom = 70.dp)
+                                modifier = Modifier.fillMaxWidth().padding(top = 5.dp, bottom = 70.dp)
                             ) {
                                 Text(
                                     "Cancel Booking",
@@ -309,4 +310,11 @@ fun CustomerReservationCard(
             }
         }
     }
+}
+
+fun formatDate(inputDate: String): String {
+    val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    val outputFormat = SimpleDateFormat("dd/MM/yy", Locale.getDefault())
+    val date = inputFormat.parse(inputDate)
+    return outputFormat.format(date)
 }

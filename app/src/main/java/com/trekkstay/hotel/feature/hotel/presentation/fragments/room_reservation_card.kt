@@ -9,17 +9,16 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -51,7 +50,6 @@ fun RoomReservationCard(
     } else {
         reservation.room.images.media.toTypedArray()
     }
-    var expandedDesc by remember { mutableStateOf(false) }
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
@@ -65,25 +63,55 @@ fun RoomReservationCard(
                 .fillMaxWidth()
                 .size(135.dp)
                 .clip(RoundedCornerShape(10.dp))
+                .border(1.dp, Color.Gray, shape = RoundedCornerShape(10.dp))
         ) {
-            AsyncImage(
-                model = roomImgList.first(),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .size(135.dp)
-            )
+            HorizontalPager(state = rememberPagerState(pageCount = { roomImgList.size })) {
+                Box() {
+                    AsyncImage(
+                        model = roomImgList[it],
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .size(135.dp)
+                    )
+                    Text(
+                        "${it + 1}/${roomImgList.size}",
+                        fontSize = 14.sp,
+                        fontFamily = PoppinsFontFamily,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.White,
+                        modifier = Modifier
+                            .offset(x = -5.dp, y = -5.dp)
+                            .background(TrekkStayCyan, RoundedCornerShape(15.dp))
+                            .padding(vertical = 5.dp, horizontal = 10.dp)
+                            .align(Alignment.BottomEnd)
+                    )
+                }
+            }
         }
-        Text(
-            text = reservation.room.type,
-            fontSize = 15.sp,
-            fontFamily = PoppinsFontFamily,
-            fontWeight = FontWeight.Medium,
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(80.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 10.dp)
-        )
+        ) {
+            Text(
+                text = "Room Type",
+                fontSize = 15.sp,
+                fontFamily = PoppinsFontFamily,
+                fontWeight = FontWeight.Medium,
+                color = Color.Gray
+            )
+            Text(
+                text = reservation.room.type,
+                fontSize = 18.sp,
+                fontFamily = PoppinsFontFamily,
+                fontWeight = FontWeight.Bold,
+            )
+        }
         HorizontalDivider(color = Color(0xFFB8B8B9), thickness = 2.dp)
         FlowRow(
             verticalArrangement = Arrangement.spacedBy(15.dp),

@@ -21,8 +21,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -82,7 +80,6 @@ fun BookingFormScreen(roomId:String,
 
     var name by remember { mutableStateOf(TextFieldValue(userName)) }
     var email by remember { mutableStateOf(TextFieldValue(userEmail)) }
-    var phone by remember { mutableStateOf(TextFieldValue()) }
     var roomNum by remember { mutableIntStateOf(searchRoomNum) }
     var adultNum by remember { mutableIntStateOf(searchAdultNum) }
     var childNum by remember { mutableIntStateOf(searchChildNum) }
@@ -108,12 +105,9 @@ fun BookingFormScreen(roomId:String,
         is ReservationState.InvalidCreateReservation -> {
             println((reservationState as ReservationState.InvalidCreateReservation).message)
         }
-        is ReservationState.CreateReservationCalling -> {
-        }
+        is ReservationState.CreateReservationCalling -> { }
 
-        else ->{
-
-        }
+        else ->{ }
     }
 
     Box(
@@ -169,19 +163,11 @@ fun BookingFormScreen(roomId:String,
                     view = "customer"
                 )
                 InfoTextField(
-                    label = "Email Address",
+                    label = "Contact",
                     text = email,
                     onValueChange = { email = it },
-                    icon = Icons.Default.Email,
+                    icon = ImageVector.vectorResource(R.drawable.contact_ico),
                     view = "customer"
-                )
-                InfoTextField(
-                    label = "Phone Number",
-                    text = phone,
-                    onValueChange = { phone = it },
-                    icon = Icons.Default.Phone,
-                    view = "customer",
-                    type = "number"
                 )
                 GuestInfoRow(title = "Room Number", count = roomNum, icon = ImageVector.vectorResource(R.drawable.bed_ico),onIncrement = {
                     roomNum++
