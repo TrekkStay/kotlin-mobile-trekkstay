@@ -67,7 +67,7 @@ class ReservationRemoteDataSourceImpl(private val client: Client, private val co
             val jwtKey = LocalStore.getKey(context, "jwtKey", "")
             val request = RequestQuery(
                 method = RequestMethod.POST,
-                path = "http://52.163.61.213:8888/api/v1/$createReservationEndpoint",
+                path = "http://175.41.168.200:8888/api/v1/$createReservationEndpoint",
                 headers = mapOf("Authorization" to "Bearer $jwtKey"),
                 requestBody = requestBodyJson.toString()
             )
@@ -96,11 +96,11 @@ class ReservationRemoteDataSourceImpl(private val client: Client, private val co
         return withContext(Dispatchers.IO) {
             val jwtKey = LocalStore.getKey(context, "jwtKey", "")
             var path =
-                "http://52.163.61.213:8888/api/v1/$listReservationEndpoint?hotel_id=$hotelId&status=$status"
+                "http://175.41.168.200:8888/api/v1/$listReservationEndpoint?hotel_id=$hotelId&status=$status"
 
             if (hotelId == null) {
                 path =
-                    "http://52.163.61.213:8888/api/v1/$listReservationEndpoint?status=$status"
+                    "http://175.41.168.200:8888/api/v1/$listReservationEndpoint?status=$status"
             }
             val request = RequestQuery(
                 method = RequestMethod.GET,
@@ -130,7 +130,7 @@ class ReservationRemoteDataSourceImpl(private val client: Client, private val co
             val jwtKey = LocalStore.getKey(context, "jwtKey", "")
             val request = RequestQuery(
                 method = RequestMethod.GET,
-                path = "http://52.163.61.213:8888/api/v1/reservation/$reservationId",
+                path = "http://175.41.168.200:8888/api/v1/reservation/$reservationId",
                 headers = mapOf("Authorization" to "Bearer $jwtKey"),
                 requestBody = null
             )

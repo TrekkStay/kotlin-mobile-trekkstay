@@ -24,7 +24,7 @@ class SearchRemoteDataSourceImpl(private val client: Client, private val context
             val jwtKey = LocalStore.getKey(context, "jwtKey", "")
             val request = RequestQuery(
                 method = RequestMethod.POST,
-                path = "http://52.163.61.213:8888/api/v1/$viewDestinationEndpoint",
+                path = "http://175.41.168.200:8888/api/v1/$viewDestinationEndpoint",
                 headers = mapOf("Authorization" to "Bearer $jwtKey"),
                 requestBody = null,
             )

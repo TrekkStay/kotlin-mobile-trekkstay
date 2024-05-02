@@ -28,7 +28,7 @@ class LocationRemoteDataSourceImpl(private val client: Client) : LocationRemoteD
 
             val request = RequestQuery(
                 method = RequestMethod.GET,
-                path = "http://52.163.61.213:8888/api/v1/$viewDistrictEndpoint?province_code=${code}",
+                path = "http://175.41.168.200:8888/api/v1/$viewDistrictEndpoint?province_code=${code}",
                 requestBody = null
             )
 
@@ -54,7 +54,7 @@ class LocationRemoteDataSourceImpl(private val client: Client) : LocationRemoteD
 
             val request = RequestQuery(
                 method = RequestMethod.GET,
-                path = "http://52.163.61.213:8888/api/v1/$viewProvinceEndpoint",
+                path = "http://175.41.168.200:8888/api/v1/$viewProvinceEndpoint",
                 requestBody = null
             )
 
@@ -79,7 +79,7 @@ class LocationRemoteDataSourceImpl(private val client: Client) : LocationRemoteD
 
             val request = RequestQuery(
                 method = RequestMethod.GET,
-                path = "http://52.163.61.213:8888/api/v1/$viewWardEndpoint?district_code=${code}",
+                path = "http://175.41.168.200:8888/api/v1/$viewWardEndpoint?district_code=${code}",
                 requestBody = null
             )
 

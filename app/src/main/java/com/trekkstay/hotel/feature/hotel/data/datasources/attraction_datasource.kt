@@ -28,7 +28,7 @@ class AttractionRemoteDataSourceImpl(private val client: Client, private val con
         return withContext(Dispatchers.IO){
             val request = RequestQuery(
                 method = RequestMethod.GET,
-                path = "http://52.163.61.213:8888/api/v1/$attractionListEndpoint?location_code=$id",
+                path = "http://175.41.168.200:8888/api/v1/$attractionListEndpoint?location_code=$id",
                 requestBody = null,
             )
             val response =  client.execute<AttractionList>(

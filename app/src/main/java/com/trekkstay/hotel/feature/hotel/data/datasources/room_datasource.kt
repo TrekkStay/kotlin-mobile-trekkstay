@@ -130,7 +130,7 @@ class RoomRemoteDataSourceImpl(private val client: Client, private val context: 
 
             val request = RequestQuery(
                 method = RequestMethod.POST,
-                path = "http://52.163.61.213:8888/api/v1/$createRoomEndpoint",
+                path = "http://175.41.168.200:8888/api/v1/$createRoomEndpoint",
                 headers = mapOf("Authorization" to "Bearer $jwtKey"),
                 requestBody = requestBody.toString()
             )
@@ -145,7 +145,7 @@ class RoomRemoteDataSourceImpl(private val client: Client, private val context: 
         return withContext(Dispatchers.IO) {
             val request = RequestQuery(
                 method = RequestMethod.POST,
-                path = "http://52.163.61.213:8888/api/v1/$viewRoomEndpoint?hotel_id=$hotelId",
+                path = "http://175.41.168.200:8888/api/v1/$viewRoomEndpoint?hotel_id=$hotelId",
                 requestBody = null,
             )
 
@@ -166,7 +166,7 @@ class RoomRemoteDataSourceImpl(private val client: Client, private val context: 
             val jwtKey = LocalStore.getKey(context, "jwtKey", "")
             val request = RequestQuery(
                 method = RequestMethod.POST,
-                path = "http://52.163.61.213:8888/api/v1/$getHotelRoomEndpoint",
+                path = "http://175.41.168.200:8888/api/v1/$getHotelRoomEndpoint",
                 headers = mapOf("Authorization" to "Bearer $jwtKey"),
                 requestBody = null,
             )
@@ -192,7 +192,7 @@ class RoomRemoteDataSourceImpl(private val client: Client, private val context: 
         return withContext(Dispatchers.IO) {
             val request = RequestQuery(
                 method = RequestMethod.GET,
-                path = "http://52.163.61.213:8888/api/v1/$roomDetailEndpoint$id",
+                path = "http://175.41.168.200:8888/api/v1/$roomDetailEndpoint$id",
                 requestBody = null,
             )
 

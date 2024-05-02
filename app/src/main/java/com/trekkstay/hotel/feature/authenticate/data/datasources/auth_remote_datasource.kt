@@ -60,7 +60,7 @@ class AuthRemoteDataSourceImpl(private val client: Client, private val context: 
 
             val request = RequestQuery(
                 method = RequestMethod.POST,
-                path = "http://52.163.61.213:8888/api/v1/$loginEndpoint",
+                path = "http://175.41.168.200:8888/api/v1/$loginEndpoint",
                 requestBody = requestBodyJson.toString()
             )
 
@@ -90,7 +90,7 @@ class AuthRemoteDataSourceImpl(private val client: Client, private val context: 
 
             val request = RequestQuery(
                 method = RequestMethod.POST,
-                path = "http://52.163.61.213:8888/api/v1/$registerEndpoint",
+                path = "http://175.41.168.200:8888/api/v1/$registerEndpoint",
                 requestBody = requestBodyJson.toString()
             )
 
@@ -111,7 +111,7 @@ class AuthRemoteDataSourceImpl(private val client: Client, private val context: 
 
             val request = RequestQuery(
                 method = RequestMethod.POST,
-                path = "http://52.163.61.213:8888/api/v1/$empLoginEndpoint",
+                path = "http://175.41.168.200:8888/api/v1/$empLoginEndpoint",
                 requestBody = requestBodyJson.toString()
             )
 
@@ -142,7 +142,7 @@ class AuthRemoteDataSourceImpl(private val client: Client, private val context: 
 
             val request = RequestQuery(
                 method = RequestMethod.POST,
-                path = "http://52.163.61.213:8888/api/v1/$empRegisterEndpoint",
+                path = "http://175.41.168.200:8888/api/v1/$empRegisterEndpoint",
                 requestBody = requestBodyJson.toString()
             )
 
@@ -173,7 +173,7 @@ class AuthRemoteDataSourceImpl(private val client: Client, private val context: 
 
             val request = RequestQuery(
                 method = RequestMethod.POST,
-                path = "http://52.163.61.213:8888/api/v1/$empCreateEndpoint",
+                path = "http://175.41.168.200:8888/api/v1/$empCreateEndpoint",
                 headers = mapOf("Authorization" to "Bearer $jwtKey"),
                 requestBody = requestBodyJson.toString()
             )
@@ -195,7 +195,7 @@ class AuthRemoteDataSourceImpl(private val client: Client, private val context: 
 
             val request = RequestQuery(
                 method = RequestMethod.POST,
-                path = "http://52.163.61.213:8888/api/v1/$viewEmpEndpoint?hotel_id=$hotelId",
+                path = "http://175.41.168.200:8888/api/v1/$viewEmpEndpoint?hotel_id=$hotelId",
                 headers = mapOf("Authorization" to "Bearer $jwtKey"),
                 requestBody = null
             )
@@ -231,7 +231,7 @@ class AuthRemoteDataSourceImpl(private val client: Client, private val context: 
 
             val request = RequestQuery(
                 method = RequestMethod.POST,
-                path = "http://52.163.61.213:8888/api/v1/$changePasswordEndpoint",
+                path = "http://175.41.168.200:8888/api/v1/$changePasswordEndpoint",
                 headers = mapOf("Authorization" to "Bearer $jwtKey"),
                 requestBody = requestBodyJson.toString()
             )

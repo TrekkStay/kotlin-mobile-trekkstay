@@ -167,7 +167,7 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
             val jwtKey = LocalStore.getKey(context, "jwtKey", "")
             val request = RequestQuery(
                 method = RequestMethod.POST,
-                path = "http://52.163.61.213:8888/api/v1/$createHotelEndpoint",
+                path = "http://175.41.168.200:8888/api/v1/$createHotelEndpoint",
                 headers = mapOf("Authorization" to "Bearer $jwtKey"),
                 requestBody = requestBodyJson.toString()
             )
@@ -252,7 +252,7 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
             val jwtKey = LocalStore.getKey(context, "jwtKey", "")
             val request = RequestQuery(
                 method = RequestMethod.POST,
-                path = "http://52.163.61.213:8888/api/v1/${updateHotelEndpoint}",
+                path = "http://175.41.168.200:8888/api/v1/${updateHotelEndpoint}",
                 headers = mapOf("Authorization" to "Bearer $jwtKey"),
                 requestBody = requestBodyJson.toString()
             )
@@ -270,7 +270,7 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
             val jwtKey = LocalStore.getKey(context, "jwtKey", "")
             val request = RequestQuery(
                 method = RequestMethod.GET,
-                path = "http://52.163.61.213:8888/api/v1/$getHotelIdEndpoint",
+                path = "http://175.41.168.200:8888/api/v1/$getHotelIdEndpoint",
                 headers = mapOf("Authorization" to "Bearer $jwtKey"),
                 requestBody = null,
             )
@@ -316,7 +316,7 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
             }
             val request = RequestQuery(
                 method = RequestMethod.GET,
-                path = "http://52.163.61.213:8888/api/v1/$queryParams",
+                path = "http://175.41.168.200:8888/api/v1/$queryParams",
                 requestBody = null,
             )
 
@@ -373,7 +373,7 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
             }
             val request = RequestQuery(
                 method = RequestMethod.GET,
-                path = "http://52.163.61.213:8888/api/v1/$queryParams",
+                path = "http://175.41.168.200:8888/api/v1/$queryParams",
                 requestBody = null,
             )
 
@@ -399,7 +399,7 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
 
             val request = RequestQuery(
                 method = RequestMethod.GET,
-                path = "http://52.163.61.213:8888/api/v1/$viewHotelNearEndpoint?lat=${coordinate.latitude}&lng=${coordinate.longitude}&max_distance=$maxRange",
+                path = "http://175.41.168.200:8888/api/v1/$viewHotelNearEndpoint?lat=${coordinate.latitude}&lng=${coordinate.longitude}&max_distance=$maxRange",
                 requestBody = null,
             )
 
@@ -428,7 +428,7 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
         return withContext(Dispatchers.IO) {
             val request = RequestQuery(
                 method = RequestMethod.GET,
-                path = "http://52.163.61.213:8888/api/v1/$hotelDetailEndpoint$id",
+                path = "http://175.41.168.200:8888/api/v1/$hotelDetailEndpoint$id",
                 requestBody = null,
             )
 

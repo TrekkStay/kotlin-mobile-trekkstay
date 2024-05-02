@@ -52,7 +52,7 @@ class MediaRemoteDataSourceImpl(private val engine: OkHttpClient) : MediaRemoteD
             }
             val requestBody = requestBodyBuilder.build()
             val request = Request.Builder()
-                .url("http://52.163.61.213:8888/api/v1/$uploadMediaEndpoint")
+                .url("http://175.41.168.200:8888/api/v1/$uploadMediaEndpoint")
                 .post(requestBody)
                 .addHeader("accept", "application/json")
                 .build()
