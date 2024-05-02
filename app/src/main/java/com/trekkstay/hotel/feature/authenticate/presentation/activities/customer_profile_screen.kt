@@ -1,8 +1,10 @@
 package com.trekkstay.hotel.feature.authenticate.presentation.activities
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -35,7 +37,7 @@ import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 fun CustomerProfileScreen(navController: NavHostController) {
     val context = LocalContext.current
     Column (
-        modifier = Modifier.padding(top = 25.dp)
+        modifier = Modifier.fillMaxSize().background(Color.White).padding(top = 25.dp)
     ) {
         Text(
             text = "My account",
@@ -54,15 +56,27 @@ fun CustomerProfileScreen(navController: NavHostController) {
             modifier = Modifier.padding(horizontal = 25.dp, vertical = 20.dp)
         ) {
             ProfileNavButton("My Favourite", Icons.Default.Favorite, type = "customer")
+            ProfileNavButton("Edit Information", Icons.Default.AccountBox, type = "customer") {
+                navController.navigate("customer_edit_info") {
+                    popUpTo("customer_profile") {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }
             ProfileNavButton(
                 "Change Password",
                 ImageVector.vectorResource(R.drawable.key_ico),
                 type = "customer"
             ) {
-                navController.navigate("customer_reset_pw")
-            }
-            ProfileNavButton("Edit Information", Icons.Default.AccountBox, type = "customer") {
-                navController.navigate("customer_edit_info")
+                navController.navigate("customer_reset_pw") {
+                    popUpTo("customer_profile") {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
             }
             ProfileNavButton("Sign out", Icons.AutoMirrored.Filled.ExitToApp, type = "customer",
                 onClick = {

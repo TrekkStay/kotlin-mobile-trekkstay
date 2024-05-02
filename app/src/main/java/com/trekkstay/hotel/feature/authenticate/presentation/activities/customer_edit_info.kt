@@ -1,5 +1,6 @@
 package com.trekkstay.hotel.feature.authenticate.presentation.activities
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
@@ -48,7 +50,9 @@ fun CustomerEditInfoScreen(navController: NavHostController) {
     var dialogTitle by remember { mutableStateOf("") }
     var dialogMessage by remember { mutableStateOf("") }
     Column(
-        modifier = Modifier.padding(top = 25.dp, bottom = 80.dp)
+        modifier = Modifier
+            .background(Color.White)
+            .padding(top = 25.dp, bottom = 80.dp)
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -69,11 +73,18 @@ fun CustomerEditInfoScreen(navController: NavHostController) {
         Spacer(modifier = Modifier.height(10.dp))
         HorizontalDivider(color = Color(0xFFE4E4E4), thickness = 2.dp)
         Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(20.dp),
             modifier = Modifier
                 .weight(1f)
                 .padding(horizontal = 25.dp, vertical = 20.dp)
         ) {
+            Icon(
+                Icons.Default.AccountCircle,
+                contentDescription = null,
+                tint = TrekkStayCyan,
+                modifier = Modifier.size(150.dp)
+            )
             InfoTextField(
                 label = "Full Name",
                 text = fullName,

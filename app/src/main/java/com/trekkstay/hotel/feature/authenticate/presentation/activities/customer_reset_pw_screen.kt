@@ -48,36 +48,45 @@ fun CustomerResetPwScreen(navController: NavHostController, authViewModel: AuthV
     var newPw by remember { mutableStateOf(TextFieldValue()) }
     var newRePw by remember { mutableStateOf(TextFieldValue()) }
     var showDialog by remember { mutableStateOf(false) }
+    var showValidateDialog by remember { mutableStateOf(false) }
     var dialogTitle by remember { mutableStateOf("") }
     var dialogMessage by remember { mutableStateOf("") }
 
     val authState by authViewModel.authState.observeAsState()
-    when (authState) {
-        is AuthState.SuccessChangePassword -> {
-            TextDialog(
-                title = "Change Password Successfully!",
-                msg = "",
-                type = "success",
-                onDismiss = { showDialog = true }
-            )
-            navController.popBackStack()
+    if (showDialog) {
+        when (authState) {
+            is AuthState.SuccessChangePassword -> {
+                TextDialog(
+                    title = "Password Changed",
+                    msg = "You have successfully changed your password",
+                    type = "success",
+                    onDismiss = {
+                        showDialog = false
+                        navController.navigate("customer_profile") {
+                            launchSingleTop = true
+                        }
+                    }
+                )
 
+            }
+            is AuthState.InvalidChangePassword -> {
+                TextDialog(
+                    title = "Change Password Failed!",
+                    msg = (authState as AuthState.InvalidChangePassword).message,
+                    onDismiss = { showDialog = false }
+                )
+            }
+            is AuthState.ChangePasswordCalling -> { }
+            else -> {}
         }
+    }
 
-        is AuthState.InvalidChangePassword -> {
-            TextDialog(
-                title = "Change Password Failed!",
-                msg = (authState as AuthState.InvalidChangePassword).message,
-                onDismiss = { showDialog = false }
-            )
-            println((authState as AuthState.InvalidChangePassword).message)
-        }
-
-        is AuthState.ChangePasswordCalling -> {
-            println("checking")
-        }
-
-        else -> {}
+    if (showValidateDialog) {
+        TextDialog(
+            title = dialogTitle,
+            msg = dialogMessage,
+            onDismiss = { showValidateDialog = false },
+        )
     }
 
     Column(
@@ -139,15 +148,15 @@ fun CustomerResetPwScreen(navController: NavHostController, authViewModel: AuthV
                     dialogTitle = "Empty Fields"
                     dialogMessage =
                         "Please input all the required information before changing password"
-                    showDialog = true
+                    showValidateDialog = true
                 } else if (newPw.text != newRePw.text) {
                     dialogTitle = "Password Mismatch"
                     dialogMessage = "The new password and confirm password do not match"
-                    showDialog = true
+                    showValidateDialog = true
                 } else {
+                    showDialog = true
                     val action = ChangePasswordAction(oldPw.text, newPw.text, newRePw.text)
                     authViewModel.processAction(action)
-
                 }
 
             },
@@ -168,12 +177,5 @@ fun CustomerResetPwScreen(navController: NavHostController, authViewModel: AuthV
                 fontWeight = FontWeight.SemiBold
             )
         }
-    }
-    if (showDialog) {
-        TextDialog(
-            title = dialogTitle,
-            msg = dialogMessage,
-            onDismiss = { showDialog = false },
-        )
     }
 }
