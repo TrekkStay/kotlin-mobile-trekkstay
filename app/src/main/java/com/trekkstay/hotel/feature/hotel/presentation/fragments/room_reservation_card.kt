@@ -29,6 +29,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -90,28 +91,16 @@ fun RoomReservationCard(
                 }
             }
         }
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(80.dp),
+        Text(
+            text = reservation.room.type,
+            fontSize = 18.sp,
+            textAlign = TextAlign.Center,
+            fontFamily = PoppinsFontFamily,
+            fontWeight = FontWeight.Bold,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 10.dp)
-        ) {
-            Text(
-                text = "Room Type",
-                fontSize = 15.sp,
-                fontFamily = PoppinsFontFamily,
-                fontWeight = FontWeight.Medium,
-                color = Color.Gray
-            )
-            Text(
-                text = reservation.room.type,
-                fontSize = 18.sp,
-                fontFamily = PoppinsFontFamily,
-                fontWeight = FontWeight.Bold,
-            )
-        }
+        )
         HorizontalDivider(color = Color(0xFFB8B8B9), thickness = 2.dp)
         FlowRow(
             verticalArrangement = Arrangement.spacedBy(15.dp),

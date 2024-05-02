@@ -58,16 +58,12 @@ fun CustomerReservationScreen(
     reservationViewModel: ReservationViewModel,
     navController: NavController
 ) {
-    var countCallingAPI by remember {
-        mutableIntStateOf(0)
-    }
     val hotelTabs = arrayOf("Upcoming", "Completed", "Cancelled")
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = { hotelTabs.size })
     val selectedTabIndex = remember {
         derivedStateOf { pagerState.currentPage }
     }
-
     var reservationHotel1 by remember {
         mutableStateOf(listOf<Reservation>())
     }
@@ -81,37 +77,29 @@ fun CustomerReservationScreen(
     when (reservationState) {
         is ReservationState.SuccessListReservation -> {
             val reservationHotel = (reservationState as ReservationState.SuccessListReservation).reservation.reservationList
-
             if ((reservationState as ReservationState.SuccessListReservation).sendState == "UPCOMING") {
                 reservationHotel1 = reservationHotel
-
-                val action2 = ListReservationAction(null, "COMPLETED", "")
-                reservationViewModel.processAction(action2)
             } else if ((reservationState as ReservationState.SuccessListReservation).sendState == "COMPLETED") {
                 reservationHotel2 = reservationHotel
-
-                val action3 = ListReservationAction(null, "CANCELLED", "")
-                reservationViewModel.processAction(action3)
             } else if ((reservationState as ReservationState.SuccessListReservation).sendState == "CANCELLED") {
                 reservationHotel3 = reservationHotel
             }
         }
-
-        is ReservationState.InvalidListReservation -> {
-            println((reservationState as ReservationState.InvalidListReservation).message)
-        }
-
+        is ReservationState.InvalidListReservation -> { }
         is ReservationState.ListReservationCalling -> { }
-
         else -> {}
     }
 
     LaunchedEffect(Unit) {
-        countCallingAPI = 0
         val action1 = ListReservationAction(null, "UPCOMING", "")
         reservationViewModel.processAction(action1)
-    }
 
+        val action2 = ListReservationAction(null, "COMPLETED", "")
+        reservationViewModel.processAction(action2)
+
+        val action3 = ListReservationAction(null, "CANCELLED", "")
+        reservationViewModel.processAction(action3)
+    }
 
     Column(
         modifier = Modifier.padding(top = 15.dp, bottom = 70.dp)
@@ -143,7 +131,7 @@ fun CustomerReservationScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 10.dp)
+                .padding(top = 20.dp)
         ) {
             TabRow(
                 divider = {},
@@ -152,7 +140,6 @@ fun CustomerReservationScreen(
                 indicator = @Composable { tabPositions: List<TabPosition> ->
                     ReservationTabIndicator(tabPositions, pagerState, "customer")
                 }
-
             ) {
                 hotelTabs.forEachIndexed { index, tab ->
                     Tab(
@@ -199,39 +186,43 @@ fun CustomerReservationScreen(
                                 0 -> reservationHotel1
                                 1 -> reservationHotel2
                                 2 -> reservationHotel3
-                                else -> emptyList() // Handle other cases if needed
+                                else -> emptyList()
                             }
-                        ) { index, item ->
-                            if (page == 0) {
-                                CustomerReservationCard(
-                                    reservationId = item.id,
-                                    hotelImg = item.room.images.media[0] ?: "",
-                                    hotelName = item.room.hotelName ?: "",
-                                    destination = item.room.location ?: "",
-                                    type = reservationType,
-                                    checkIn = item.checkIn,
-                                    checkOut = item.checkOut,
-                                    navController = navController
-                                )
-                            } else if (page == 1) {
-                                CustomerReservationCard(
-                                    reservationId = item.id,
-                                    hotelImg = item.room.images.media[0] ?: "",
-                                    hotelName = item.room.hotelName ?: "",
-                                    destination = item.room.location ?: "",
-                                    type = reservationType,
-                                    price = item.room.bookingPrice.toDouble() ?: 0.0,
-                                    navController = navController
-                                )
-                            } else if (page == 2) {
-                                CustomerReservationCard(
-                                    reservationId = item.id,
-                                    hotelImg = item.room.images.media[0] ?: "",
-                                    hotelName = item.room.hotelName ?: "",
-                                    destination = item.room.location ?: "",
-                                    type = reservationType,
-                                    navController = navController
-                                )
+                        ) {_, item ->
+                            when (page) {
+                                0 -> {
+                                    CustomerReservationCard(
+                                        reservationId = item.id,
+                                        hotelImg = item.room.images.media[0] ?: "",
+                                        hotelName = item.room.hotelName ?: "",
+                                        destination = item.room.location ?: "",
+                                        type = reservationType,
+                                        checkIn = item.checkIn,
+                                        checkOut = item.checkOut,
+                                        navController = navController
+                                    )
+                                }
+                                1 -> {
+                                    CustomerReservationCard(
+                                        reservationId = item.id,
+                                        hotelImg = item.room.images.media[0] ?: "",
+                                        hotelName = item.room.hotelName ?: "",
+                                        destination = item.room.location ?: "",
+                                        type = reservationType,
+                                        price = item.room.bookingPrice.toDouble() ?: 0.0,
+                                        navController = navController
+                                    )
+                                }
+                                2 -> {
+                                    CustomerReservationCard(
+                                        reservationId = item.id,
+                                        hotelImg = item.room.images.media[0] ?: "",
+                                        hotelName = item.room.hotelName ?: "",
+                                        destination = item.room.location ?: "",
+                                        type = reservationType,
+                                        navController = navController
+                                    )
+                                }
                             }
                         }
                     }

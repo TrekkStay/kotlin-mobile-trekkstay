@@ -5,12 +5,15 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -58,10 +61,6 @@ fun HotelReservationScreen(
 ) {
     val context = LocalContext.current
     val hotelId = LocalStore.getKey(context, "hotelId", "")
-
-    var countCallingAPI by remember {
-        mutableStateOf(0)
-    }
     val hotelTabs = arrayOf("Upcoming", "Completed", "Cancelled")
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = { hotelTabs.size })
@@ -90,7 +89,6 @@ fun HotelReservationScreen(
             val reservationHotel =
                 (reservationState as ReservationState.SuccessListReservation).reservation.reservationList
 
-            println(reservationHotel)
             if ((reservationState as ReservationState.SuccessListReservation).sendState == "UPCOMING") {
                 reservationHotel1 = reservationHotel
             } else if ((reservationState as ReservationState.SuccessListReservation).sendState == "COMPLETED") {
@@ -98,38 +96,13 @@ fun HotelReservationScreen(
             } else if ((reservationState as ReservationState.SuccessListReservation).sendState == "CANCELLED") {
                 reservationHotel3 = reservationHotel
             }
-
-//                    reservationViewModel.processAction(action2)
-//                if (countCallingAPI == 0 && !reservationHotel.isEmpty()) {
-//                    reservationHotel1 = reservationHotel
-//                    countCallingAPI++;
-//                    val action2 = ListReservationAction(hotelId, "COMPLETED", "")
-//                    reservationViewModel.processAction(action2)
-//                } else if (countCallingAPI == 1) {
-//                    reservationHotel2 = reservationHotel
-//                    countCallingAPI++;
-//                    val action3 = ListReservationAction(hotelId, "CANCELLED", "")
-//                    reservationViewModel.processAction(action3)
-//                } else if (countCallingAPI == 2) {
-//                    countCallingAPI++;
-//                    reservationHotel3 = reservationHotel
-//                }
-
         }
-
-        is ReservationState.InvalidListReservation -> {
-            println((reservationState as ReservationState.InvalidListReservation).message)
-        }
-
-        is ReservationState.ListReservationCalling -> {
-            println("checking")
-        }
-
-        else -> {}
+        is ReservationState.InvalidListReservation -> { }
+        is ReservationState.ListReservationCalling -> { }
+        else -> { }
     }
 
     LaunchedEffect(Unit) {
-        countCallingAPI = 0
         val action1 = ListReservationAction(hotelId, "UPCOMING", "")
         reservationViewModel.processAction(action1)
 
@@ -141,7 +114,7 @@ fun HotelReservationScreen(
     }
 
     Column(
-        modifier = Modifier.padding(top = 15.dp)
+        modifier = Modifier.padding(top = 15.dp, bottom = 70.dp)
     ) {
         Row(
             modifier = Modifier
@@ -167,16 +140,14 @@ fun HotelReservationScreen(
         }
         Spacer(modifier = Modifier.height(5.dp))
         HorizontalDivider(color = Color(0xFFE4E4E4), thickness = 2.dp)
-
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 10.dp, start = 10.dp, end = 10.dp)
         ) {
             TabRow(
                 divider = {},
                 selectedTabIndex = selectedTabIndex.value,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(top = 15.dp, bottom = 5.dp,start = 10.dp , end = 10.dp),
                 indicator = @Composable { tabPositions: List<TabPosition> ->
                     ReservationTabIndicator(tabPositions, pagerState, "hotel")
                 }
@@ -206,66 +177,67 @@ fun HotelReservationScreen(
 
                 }
             }
-
             HorizontalPager(
                 modifier = Modifier.fillMaxSize(),
                 state = pagerState,
             ) { page ->
-                val reservationType = when (page) {
-                    0 -> "Upcoming"
-                    1 -> "Completed"
-                    2 -> "Cancelled"
-                    else -> "Unknown"
-                }
                 Box(Modifier.fillMaxSize()) {
-                    Column(
+                    LazyColumn(
                         modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.spacedBy(20.dp),
+                        verticalArrangement = Arrangement.spacedBy(10.dp),
+                        contentPadding = PaddingValues(15.dp)
                     ) {
-                        if (page == 0) {
-                            reservationHotel1.forEach { item ->
-                                HotelReservationCard(
-                                    reservationId = item.id,
-                                    roomImg = item.room.images.media[0],
-                                    customerId = "#${item.userId}",
-                                    customerName = item.guestInfo.name,
-                                    roomType = item.room.type,
-                                    checkIn = item.checkIn,
-                                    checkOut = item.checkOut,
-                                    price = item.totalPrice,
-                                    type = "Upcoming",
-                                    navController
-                                )
+                        itemsIndexed(
+                            when (page) {
+                                0 -> reservationHotel1
+                                1 -> reservationHotel2
+                                2 -> reservationHotel3
+                                else -> emptyList()
                             }
-                        } else if (page == 1) {
-                            reservationHotel2.forEach { item ->
-                                HotelReservationCard(
-                                    reservationId = item.id,
-                                    roomImg = item.room.images.media[0],
-                                    customerId = "#${item.userId}",
-                                    customerName = item.guestInfo.name,
-                                    roomType = item.room.type,
-                                    checkIn = item.checkIn,
-                                    checkOut = item.checkOut,
-                                    price = item.totalPrice,
-                                    type = "Completed",
-                                    navController
-                                )
-                            }
-                        } else if (page == 2) {
-                            reservationHotel3.forEach { item ->
-                                HotelReservationCard(
-                                    reservationId = item.id,
-                                    roomImg = item.room.images.media[0],
-                                    customerId = "#${item.userId}",
-                                    customerName = item.guestInfo.name,
-                                    roomType = item.room.type,
-                                    checkIn = item.checkIn,
-                                    checkOut = item.checkOut,
-                                    price = item.totalPrice,
-                                    type = "Cancelled",
-                                    navController
-                                )
+                        ) {_, item ->
+                            when (page) {
+                                0 -> {
+                                    HotelReservationCard(
+                                        reservationId = item.id,
+                                        roomImg = item.room.images.media[0],
+                                        customerId = "#${item.userId}",
+                                        customerName = item.guestInfo.name,
+                                        roomType = item.room.type,
+                                        checkIn = item.checkIn,
+                                        checkOut = item.checkOut,
+                                        price = item.totalPrice,
+                                        type = "Upcoming",
+                                        navController
+                                    )
+                                }
+                                1 -> {
+                                    HotelReservationCard(
+                                        reservationId = item.id,
+                                        roomImg = item.room.images.media[0],
+                                        customerId = "#${item.userId}",
+                                        customerName = item.guestInfo.name,
+                                        roomType = item.room.type,
+                                        checkIn = item.checkIn,
+                                        checkOut = item.checkOut,
+                                        price = item.totalPrice,
+                                        type = "Completed",
+                                        navController
+                                    )
+                                }
+                                2 -> {
+                                    HotelReservationCard(
+                                        reservationId = item.id,
+                                        roomImg = item.room.images.media[0],
+                                        customerId = "#${item.userId}",
+                                        customerName = item.guestInfo.name,
+                                        roomType = item.room.type,
+                                        checkIn = item.checkIn,
+                                        checkOut = item.checkOut,
+                                        price = item.totalPrice,
+                                        type = "Cancelled",
+                                        navController
+                                    )
+                                }
                             }
                         }
                     }

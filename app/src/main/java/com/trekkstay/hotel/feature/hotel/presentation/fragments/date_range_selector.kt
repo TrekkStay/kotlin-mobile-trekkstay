@@ -107,8 +107,7 @@ fun DateRangeSelector(
                 },
                 sheetState = botSheetState
             ) {
-                DateRangePicker(
-                    state = state)
+                DateRangePicker(state = state)
             }
         }
     }
