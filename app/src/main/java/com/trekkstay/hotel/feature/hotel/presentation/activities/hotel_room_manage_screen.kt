@@ -26,11 +26,13 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import com.trekkstay.hotel.core.storage.LocalStore
 import com.trekkstay.hotel.feature.hotel.domain.entities.Room
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.HotelRoomCard
 import com.trekkstay.hotel.feature.hotel.presentation.states.room.GetHotelRoomAction
@@ -43,46 +45,26 @@ import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 @Composable
 fun HotelRoomManageScreen(roomViewModel: RoomViewModel, navController: NavHostController) {
     var roomList: List<Room> = emptyList()
-
     val roomState by roomViewModel.state.observeAsState()
+    val hotelId = LocalStore.getKey(LocalContext.current, "hotelId", "not created")
     LaunchedEffect(Unit) {
-        if (roomState !is RoomState.SuccessViewRoom) {
-            val action = GetHotelRoomAction
-            roomViewModel.processAction(action)
-        }
+        val action = GetHotelRoomAction
+        roomViewModel.processAction(action)
+
     }
     when (roomState) {
         is RoomState.SuccessGetHotelRoom -> {
-            val action = ViewRoomAction((roomState as RoomState.SuccessGetHotelRoom).id)
+            val action = ViewRoomAction(hotelId)
             roomViewModel.processAction(action)
         }
-
-        is RoomState.InvalidGetHotelRoom -> {
-
-
-        }
-
-        is RoomState.GetHotelRoomCalling -> {
-
-        }
-
         is RoomState.SuccessViewRoom -> {
             roomList = (roomState as RoomState.SuccessViewRoom).roomList.roomList
-
         }
-
-        is RoomState.InvalidViewRoom -> {
-
-
-        }
-
-        is RoomState.ViewRoomCalling -> {
-
-        }
-
-        else -> {
-            // Handle other states
-        }
+        is RoomState.InvalidGetHotelRoom -> { }
+        is RoomState.GetHotelRoomCalling -> { }
+        is RoomState.InvalidViewRoom -> { }
+        is RoomState.ViewRoomCalling -> { }
+        else -> { }
     }
 
     Scaffold(

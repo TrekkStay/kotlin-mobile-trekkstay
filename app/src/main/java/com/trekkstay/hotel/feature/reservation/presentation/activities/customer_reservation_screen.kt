@@ -1,5 +1,7 @@
 package com.trekkstay.hotel.feature.reservation.presentation.activities
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -53,6 +55,7 @@ import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 import kotlinx.coroutines.launch
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CustomerReservationScreen(
     reservationViewModel: ReservationViewModel,
@@ -208,6 +211,7 @@ fun CustomerReservationScreen(
                                         hotelImg = item.room.images.media[0] ?: "",
                                         hotelName = item.room.hotelName ?: "",
                                         destination = item.room.location ?: "",
+                                        checkIn = item.checkIn,
                                         type = reservationType,
                                         price = item.room.bookingPrice.toDouble() ?: 0.0,
                                         navController = navController
@@ -219,6 +223,7 @@ fun CustomerReservationScreen(
                                         hotelImg = item.room.images.media[0] ?: "",
                                         hotelName = item.room.hotelName ?: "",
                                         destination = item.room.location ?: "",
+                                        checkIn = item.checkIn,
                                         type = reservationType,
                                         navController = navController
                                     )

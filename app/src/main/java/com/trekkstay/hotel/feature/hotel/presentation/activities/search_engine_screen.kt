@@ -90,7 +90,6 @@ fun SearchEngineScreen(
     val searchState by searchViewModel.state.observeAsState()
     when (searchState) {
         is SearchState.SuccessSearchHotel -> {
-            println("ok")
             showResult = true
             searchedHotel = (searchState as SearchState.SuccessSearchHotel).list.hotelList
         }
@@ -98,12 +97,8 @@ fun SearchEngineScreen(
         is SearchState.InvalidSearchHotel -> {
             println((searchState as SearchState.InvalidSearchHotel).message)
         }
-
-        is SearchState.SearchHotelCalling -> {
-            println("checking")
-        }
-
-        else -> {}
+        is SearchState.SearchHotelCalling -> { }
+        else -> { }
     }
 
 

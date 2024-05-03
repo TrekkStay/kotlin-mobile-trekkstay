@@ -1,5 +1,7 @@
 package com.trekkstay.hotel.feature.reservation.presentation.fragments
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -43,12 +45,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.trekkstay.hotel.feature.shared.TextDialog
 import com.trekkstay.hotel.feature.shared.Utils.formatPrice
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 import java.util.Locale
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomerReservationCard(
@@ -63,10 +69,21 @@ fun CustomerReservationCard(
     navController: NavController
 ) {
     val formattedPrice = formatPrice(price)
-
     var isBotSheetVisible by remember { mutableStateOf(false) }
     val botSheetState = rememberModalBottomSheetState()
-
+    val currentDate = LocalDate.ofEpochDay(System.currentTimeMillis() / (1000 * 60 * 60 * 24))
+    val checkInDate = LocalDate.parse(checkIn)
+    val remainDays = ChronoUnit.DAYS.between(currentDate, checkInDate)
+    var showDialog by remember { mutableStateOf(false) }
+    var dialogTitle by remember { mutableStateOf("") }
+    var dialogMessage by remember { mutableStateOf("") }
+    if (showDialog) {
+        TextDialog(
+            title = dialogTitle,
+            msg = dialogMessage,
+            onDismiss = { showDialog = false },
+        )
+    }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween,
@@ -172,14 +189,22 @@ fun CustomerReservationCard(
         ) {
             when (type) {
                 "Upcoming" -> {
+                    val btnColor = if (remainDays < 3) Color(0xFFCDE8E5) else TrekkStayCyan
                     OutlinedButton(
-                        border = BorderStroke(2.dp, TrekkStayCyan),
+                        border = BorderStroke(2.dp, btnColor),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color.White,
-                            contentColor = TrekkStayCyan
+                            contentColor = btnColor
                         ),
                         onClick = {
-                            isBotSheetVisible = true
+                            if (remainDays < 3) {
+                                dialogTitle = "Booking Cancellation Denied"
+                                dialogMessage =
+                                    "Sorry, you cannot cancel your reservation now. It's less than 2 days before your check-in date."
+                                showDialog = true
+                            } else {
+                                isBotSheetVisible = true
+                            }
                         }
                     ) {
                         Text(
@@ -205,7 +230,6 @@ fun CustomerReservationCard(
                             fontSize = 13.sp
                         )
                     }
-
                     if (isBotSheetVisible) {
                         ModalBottomSheet(
                             onDismissRequest = {
@@ -215,7 +239,9 @@ fun CustomerReservationCard(
                         ) {
                             Column(
                                 verticalArrangement = Arrangement.spacedBy(20.dp),
-                                modifier = Modifier.fillMaxWidth().padding(top = 5.dp, bottom = 70.dp)
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 5.dp, bottom = 70.dp)
                             ) {
                                 Text(
                                     "Cancel Booking",

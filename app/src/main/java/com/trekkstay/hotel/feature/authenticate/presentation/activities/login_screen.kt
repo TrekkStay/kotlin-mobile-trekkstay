@@ -75,7 +75,6 @@ fun LoginScreen(viewModel: AuthViewModel, navController: NavHostController) {
         isLoggedIn = false
     }
 
-
     if (showDialog) {
         when (authState) {
             is AuthState.SuccessLogin -> {
@@ -104,7 +103,6 @@ fun LoginScreen(viewModel: AuthViewModel, navController: NavHostController) {
                     }
                 }
             }
-
             is AuthState.InvalidLogin -> {
                 showDialog = true
                 TextDialog(
@@ -113,14 +111,8 @@ fun LoginScreen(viewModel: AuthViewModel, navController: NavHostController) {
                     onDismiss = { showDialog = false }
                 )
             }
-
-            is AuthState.LoginCalling -> {
-                // You can show a progress dialog or a loading indicator here
-            }
-
-            else -> {
-                // Handle other states
-            }
+            is AuthState.LoginCalling -> { }
+            else -> { }
         }
     }
 

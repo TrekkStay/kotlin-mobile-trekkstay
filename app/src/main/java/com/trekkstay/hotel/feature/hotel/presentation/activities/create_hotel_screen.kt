@@ -246,12 +246,9 @@ fun CreateHotelScreen(
             }
         }
 
-        is MediaState.InvalidUploadVideo -> {
+        is MediaState.InvalidUploadVideo -> { }
 
-        }
-
-        is MediaState.UploadVideoCalling -> {
-        }
+        is MediaState.UploadVideoCalling -> { }
 
         is MediaState.SuccessUploadMedia -> {
             imageUrls = (mediaState as MediaState.SuccessUploadMedia).media.media
@@ -260,19 +257,10 @@ fun CreateHotelScreen(
                 selectedVideoExtension,
             )
             mediaViewModel.processAction(mediaAction)
-
         }
-
-        is MediaState.InvalidUploadMedia -> {
-
-        }
-
-        is MediaState.UploadMediaCalling -> {
-        }
-
-        else -> {
-
-        }
+        is MediaState.InvalidUploadMedia -> { }
+        is MediaState.UploadMediaCalling -> { }
+        else -> { }
     }
     when (locationState) {
         is LocationState.SuccessViewProvince -> {
@@ -280,40 +268,25 @@ fun CreateHotelScreen(
                 (locationState as LocationState.SuccessViewProvince).locationList.locationList
         }
 
-        is LocationState.InvalidViewProvince -> {
+        is LocationState.InvalidViewProvince -> { }
 
-        }
-
-        is LocationState.ViewProvinceCalling -> {
-        }
+        is LocationState.ViewProvinceCalling -> { }
 
         is LocationState.SuccessViewDistrict -> {
             districtList =
                 (locationState as LocationState.SuccessViewDistrict).locationList.locationList
 
         }
-
-        is LocationState.InvalidViewDistrict -> {
-
-        }
-
-        is LocationState.ViewDistrictCalling -> {
-        }
-
         is LocationState.SuccessViewWard -> {
             wardList = (locationState as LocationState.SuccessViewWard).locationList.locationList
         }
 
-        is LocationState.InvalidViewWard -> {
+        is LocationState.InvalidViewDistrict -> { }
+        is LocationState.ViewDistrictCalling -> { }
 
-        }
-
-        is LocationState.ViewWardCalling -> {
-        }
-
-        else -> {
-            // Handle other states
-        }
+        is LocationState.InvalidViewWard -> { }
+        is LocationState.ViewWardCalling -> { }
+        else -> { }
     }
 
     if (showDialog) {
@@ -322,14 +295,13 @@ fun CreateHotelScreen(
                 showDialog = true
                 TextDialog(
                     title = "Successfully Created",
-                    msg = "Create hotel $hotelName successful",
+                    msg = "Create your hotel successful",
                     type = "success"
                 ) {
                     showDialog = false
                 }
                 navController.navigate("hotel_profile")
             }
-
             is HotelState.InvalidCreateHotel -> {
                 showDialog = true
                 TextDialog(
@@ -339,14 +311,8 @@ fun CreateHotelScreen(
                     showDialog = false
                 }
             }
-
-            is HotelState.CreateHotelCalling -> {
-                // You can show a progress dialog or a loading indicator here
-            }
-
-            else -> {
-                // Handle other states
-            }
+            is HotelState.CreateHotelCalling -> { }
+            else -> { }
         }
     }
 
