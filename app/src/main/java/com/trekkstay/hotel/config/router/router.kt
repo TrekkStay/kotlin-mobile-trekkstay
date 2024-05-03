@@ -4,10 +4,12 @@ import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.trekkstay.hotel.core.storage.LocalStore
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.CustomerEditInfoScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.CustomerProfileScreen
 import com.trekkstay.hotel.feature.authenticate.presentation.activities.CustomerResetPwScreen
@@ -92,8 +94,9 @@ object AppRouter {
     @Composable
     fun Navigation() {
         val navController = navController ?: rememberNavController()
-
-        NavHost(navController = navController, startDestination = "start-up") {
+        val userType = LocalStore.getKey(LocalContext.current, "userType","notLoggedIn")
+        val startDes = if (userType == "customer") "customer_main" else if (userType == "hotel") "hotel_main" else "start-up"
+        NavHost(navController = navController, startDestination = startDes) {
             composable("start-up") {
                 StartupScreen(navController = navController)
             }

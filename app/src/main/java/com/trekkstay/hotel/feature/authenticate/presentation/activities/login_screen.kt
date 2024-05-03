@@ -91,6 +91,10 @@ fun LoginScreen(viewModel: AuthViewModel, navController: NavHostController) {
                     context, "jwtKey",
                     (authState as AuthState.SuccessLogin).res.jwtToken
                 )
+                LocalStore.saveKey(
+                    context, "userType",
+                    "customer"
+                )
 
                 if (isLoggedIn) {
                     navController.navigate("customer_main")

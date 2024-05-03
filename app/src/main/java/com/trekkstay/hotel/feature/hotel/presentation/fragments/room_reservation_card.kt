@@ -37,13 +37,16 @@ import coil.compose.AsyncImage
 import com.example.hotel.R
 import com.trekkstay.hotel.feature.reservation.domain.entities.Reservation
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
+import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun RoomReservationCard(
     reservation: Reservation,
+    type: String = "customer"
 ) {
+    val cardColor = if (type == "hotel") TrekkStayBlue else TrekkStayCyan
     val roomImgList = if (reservation.room.images.media.isEmpty()) {
         arrayOf(
             "https://www.usatoday.com/gcdn/-mm-/05b227ad5b8ad4e9dcb53af4f31d7fbdb7fa901b/c=0-64-2119-1259/local/-/media/USATODAY/USATODAY/2014/08/13/1407953244000-177513283.jpg?width=1320&height=746&fit=crop&format=pjpg&auto=webp",
@@ -56,7 +59,7 @@ fun RoomReservationCard(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.White, shape = RoundedCornerShape(10.dp))
-            .border(2.dp, TrekkStayCyan, shape = RoundedCornerShape(10.dp))
+            .border(2.dp, cardColor, shape = RoundedCornerShape(10.dp))
             .padding(15.dp)
     ) {
         Box(
@@ -84,7 +87,7 @@ fun RoomReservationCard(
                         color = Color.White,
                         modifier = Modifier
                             .offset(x = -5.dp, y = -5.dp)
-                            .background(TrekkStayCyan, RoundedCornerShape(15.dp))
+                            .background(cardColor, RoundedCornerShape(15.dp))
                             .padding(vertical = 5.dp, horizontal = 10.dp)
                             .align(Alignment.BottomEnd)
                     )
@@ -112,12 +115,14 @@ fun RoomReservationCard(
             RoomInfoRow(
                 icon = ImageVector.vectorResource(R.drawable.people_ico),
                 label = "Adults",
-                value = "${reservation.guestInfo.adult}"
+                value = "${reservation.guestInfo.adult}",
+                type = type
             )
             RoomInfoRow(
                 icon = ImageVector.vectorResource(R.drawable.child_ico),
                 label = "Children",
-                value = "${reservation.guestInfo.children}"
+                value = "${reservation.guestInfo.children}",
+                type = type
             )
         }
     }
@@ -127,8 +132,10 @@ fun RoomReservationCard(
 private fun RoomInfoRow(
     icon: ImageVector,
     label: String,
-    value: String
+    value: String,
+    type: String = "customer"
 ) {
+    val cardColor = if (type == "hotel") TrekkStayBlue else TrekkStayCyan
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(5.dp)
@@ -136,7 +143,7 @@ private fun RoomInfoRow(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = TrekkStayCyan
+            tint = cardColor
         )
         Text(
             buildAnnotatedString {
