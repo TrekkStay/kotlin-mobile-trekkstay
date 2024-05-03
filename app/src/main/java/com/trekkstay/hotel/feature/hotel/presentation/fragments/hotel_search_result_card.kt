@@ -164,6 +164,15 @@ fun HotelSearchResultCard(hotel: Hotel, navController: NavController) {
                 .padding(horizontal = 15.dp)
         ) {
             Text(
+                if(hotel.neighbourhood!= null){"${if(hotel.neighbourhood.distance<1.0){"${(hotel.neighbourhood.distance*1000.0).toInt()} m"}else{"${String.format("%.1f", hotel.neighbourhood.distance)} km"}} to ${hotel.neighbourhood.name}"} else {
+                    ""
+                },
+                color = TrekkStayCyan,
+                fontFamily = PoppinsFontFamily,
+                fontSize = 12.sp
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Text(
                 "$ ${formatPrice(originalPrice.toDouble())}",
                 fontFamily = PoppinsFontFamily,
                 fontSize = 12.sp,

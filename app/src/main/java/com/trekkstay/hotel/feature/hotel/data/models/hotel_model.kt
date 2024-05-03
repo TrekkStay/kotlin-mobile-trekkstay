@@ -87,10 +87,7 @@ data class HotelModel(
                 images = MediaModel.fromJson(map["images"].toString()),
                 neighbourhood = if(map["attraction"]!= null) {NeighbourhoodModel.fromJson(map["attraction"].toString())}else{ null},
                 )
-
-
         }
-
     }
 }
 

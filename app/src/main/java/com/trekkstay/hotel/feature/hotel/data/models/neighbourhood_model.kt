@@ -28,7 +28,7 @@ data class NeighbourhoodModel(
         fun fromMap(map: DataMap): NeighbourhoodModel {
             return NeighbourhoodModel(
                 name = map["name"] as String,
-                distance = map["lng"] as Double,
+                distance = map["distance"] as Double,
 
                 )
         }
