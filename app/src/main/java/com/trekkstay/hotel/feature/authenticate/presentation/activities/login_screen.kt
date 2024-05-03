@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.hotel.R
+import com.trekkstay.hotel.config.router.AppRouter
 import com.trekkstay.hotel.core.storage.LocalStore
 import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthState
 import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthViewModel
@@ -97,14 +98,7 @@ fun LoginScreen(viewModel: AuthViewModel, navController: NavHostController) {
                 )
 
                 if (isLoggedIn) {
-                    navController.navigate("customer_main")
-                    {
-                        popUpTo(navController.graph.startDestinationId) {
-                            saveState = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
+                    AppRouter.navigateTo("customer_main")
                 }
             }
             is AuthState.InvalidLogin -> {

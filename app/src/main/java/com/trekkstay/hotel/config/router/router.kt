@@ -3,7 +3,10 @@ package com.trekkstay.hotel.config.router
 import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -128,7 +131,9 @@ object AppRouter {
     }
 
     fun navigateTo(destination: String) {
-        navController?.navigate(destination)
+        navController?.navigate(destination) {
+            launchSingleTop = true
+        }
     }
 }
 
@@ -146,7 +151,8 @@ fun CustomerRouter(
 ) {
     NavHost(
         navController = navController,
-        startDestination = "customer_home"
+        startDestination = "customer_home",
+        modifier = Modifier.background(Color.White)
     ) {
         // Home Screen
         composable(route = "customer_home") {
