@@ -292,24 +292,3 @@ private fun CustomerRatingFilterChip(
         modifier = Modifier.height(30.dp)
     )
 }
-
-@Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
-@Composable
-fun FilterHotelPreview() {
-    val neighborList = listOf(
-        "Ben Thanh Market",
-        "Nguyen Hue Street",
-        "Xuan Huong Lake",
-        "Love Valley",
-        "Langbiang Mountain"
-    )
-    var filteredNeighborhood by remember { mutableStateOf("") }
-    var filteredRatings by remember { mutableStateOf(listOf<Int>()) }
-    CustomerFilterHotel(
-        neighborList,
-        filteredNeighborhood,
-        filteredRatings,
-        filterNeighborhood = { filteredNeighborhood = it },
-        filterRatings = { filteredRatings = it }
-    )
-}

@@ -3,14 +3,15 @@ package com.trekkstay.hotel.feature.hotel.domain.usecases.hotel
 
 
 import com.google.android.gms.maps.model.LatLng
+import com.trekkstay.hotel.core.typedef.ResultFuture
 import com.trekkstay.hotel.core.typedef.ResultVoid
 import com.trekkstay.hotel.core.usecase.UseCaseWithParams
 import com.trekkstay.hotel.feature.hotel.domain.repositories.HotelRepo
 
 class CreateHotelUseCase(private val repository: HotelRepo) :
-    UseCaseWithParams<Unit, CreateHotelUseCaseParams> {
+    UseCaseWithParams<String, CreateHotelUseCaseParams> {
 
-    override suspend fun call(params: CreateHotelUseCaseParams): ResultVoid {
+    override suspend fun call(params: CreateHotelUseCaseParams): ResultFuture<String> {
         return repository.createHotel(
             params.name,
             params.description,

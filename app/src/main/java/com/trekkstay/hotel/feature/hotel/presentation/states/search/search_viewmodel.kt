@@ -29,6 +29,9 @@ class SearchViewModel(private val searchRepo: SearchRepo,private  val hotelRepo:
                     _state.postValue(SearchState.SearchHotelCalling)
                     val result = hotelRepo.searchHotel(
                         action.locationCode,
+                        action.attractionLat,
+                        action.attractionLng,
+                        action.attractionName,
                         action.priceOrder,
                         action.checkInDate,
                         action.checkOutDate,

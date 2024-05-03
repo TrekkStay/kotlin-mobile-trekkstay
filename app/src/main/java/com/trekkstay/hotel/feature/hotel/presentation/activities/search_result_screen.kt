@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.hotel.R
+import com.google.android.gms.maps.model.LatLng
 import com.trekkstay.hotel.feature.hotel.domain.entities.Attraction
 import com.trekkstay.hotel.feature.hotel.domain.entities.Hotel
 import com.trekkstay.hotel.feature.hotel.domain.entities.MarkerInfo
@@ -66,14 +67,14 @@ fun SearchResultScreen(
     numGuess: Int,
     attractionViewModel: AttractionViewModel,
     onBackPress: () -> Unit,
+    onAttractionFilter: (Attraction)->Unit,
+    onSortChange: (String) ->Unit,
     navController: NavController
 ) {
     var sortCriteria by remember { mutableStateOf("") }
-    var attractionList : List<Attraction> = emptyList()
+    var attractionList by remember { mutableStateOf<List<Attraction>>(emptyList()) }
 
-    val neighborList = mutableListOf(
-        "Testing",
-    )
+    val neighborList = mutableListOf<String>()
 
     val attractionState by attractionViewModel.state.observeAsState()
     var myAttraction = ""
@@ -185,12 +186,24 @@ fun SearchResultScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 15.dp)
             ) {
-                CustomerSortHotel(sortCriteria, onSort = { sortCriteria = it })
+                CustomerSortHotel(sortCriteria, onSort = { sortCriteria = it
+                    if(it == "Price Increase")
+                        onSortChange("asc")
+                    else{
+                        onSortChange("desc")
+                    }
+                })
                 CustomerFilterHotel(
                     neighborList,
                     filteredNeighborhood,
                     filteredRatings,
-                    filterNeighborhood = { filteredNeighborhood = it },
+                    filterNeighborhood = { neighbourhood->
+                        filteredNeighborhood = neighbourhood
+                        val filteredAttractions = attractionList.filter { it.name == filteredNeighborhood }
+                        if (filteredAttractions.isNotEmpty()) {
+                            onAttractionFilter(filteredAttractions[0])
+                        }
+                                         },
                     filterRatings = { filteredRatings = it }
                 )
                 OutlinedButton(

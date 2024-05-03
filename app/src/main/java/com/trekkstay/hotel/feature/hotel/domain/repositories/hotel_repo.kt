@@ -31,7 +31,7 @@ interface HotelRepo {
         districtCode: String,
         wardCode: String,
         addressDetail: String
-    ): ResultVoid
+    ): ResultFuture<String>
 
     suspend fun updateHotel(
         name: String,
@@ -69,7 +69,7 @@ interface HotelRepo {
         id:String
     ): ResultFuture<Hotel>
 
-    suspend fun searchHotel( locationCode: String?,  priceOrder: String?, checkInDate: String?, checkOutDate: String?, adults: Int?, children: Int?, numOfRoom: Int?, limit: Int?, page: Int?
+    suspend fun searchHotel( locationCode: String?,  attractionLat: Double?, attractionLng: Double?, attractionName: String? ,priceOrder: String?, checkInDate: String?, checkOutDate: String?, adults: Int?, children: Int?, numOfRoom: Int?, limit: Int?, page: Int?
     ): ResultFuture<HotelList>
     suspend fun viewHotelNear( coordinate: LatLng,  maxRange: Double): ResultFuture<List<Hotel>>
 }

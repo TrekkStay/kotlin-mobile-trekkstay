@@ -43,7 +43,7 @@ interface HotelRemoteDataSource {
                             districtCode: String,
                             wardCode: String,
                             addressDetail: String,
-                            ): Response<Unit>
+                            ): Response<String>
 
     suspend fun updateHotel(name: String,
                             description: String,
@@ -75,7 +75,7 @@ interface HotelRemoteDataSource {
          name: String?, provinceCode: String?, districtCode: String?, wardCode: String?,  priceOrder: String?
     ): Response<HotelList>
     suspend fun searchHotel(
-        locationCode: String?,  priceOrder: String?, checkInDate: String?, checkOutDate: String?, adults: Int?, children: Int?, numOfRoom: Int?, limit: Int?, page: Int?
+        locationCode: String?, attractionLat: Double?, attractionLng: Double?, attractionName: String?, priceOrder: String?, checkInDate: String?, checkOutDate: String?, adults: Int?, children: Int?, numOfRoom: Int?, limit: Int?, page: Int?
     ): Response<HotelList>
     suspend fun hotelDetail(
         id:String
@@ -119,7 +119,7 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
                                      districtCode: String,
                                      wardCode: String,
                                      addressDetail: String,
-                                     ): Response<Unit> {
+                                     ): Response<String> {
         return withContext(Dispatchers.IO) {
             val facilitiesJson = JSONObject().apply {
                 put("airport_transfer", airportTransfer)
@@ -172,8 +172,15 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
                 requestBody = requestBodyJson.toString()
             )
 
-            val response = client.execute<Unit>(
+            val response = client.execute<String>(
                 request = request,
+                parser = { responseData ->
+                    if (responseData is String) {
+                        parseResponse(responseData)
+                    } else {
+                        null
+                    }
+                }
             )
             response
         }
@@ -337,7 +344,7 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
 
 
     override suspend fun searchHotel(
-        locationCode: String?,  priceOrder: String?, checkInDate: String?, checkOutDate: String?, adults: Int?, children: Int?, numOfRoom: Int?, limit: Int?, page: Int?): Response<HotelList> {
+        locationCode: String?, attractionLat: Double?, attractionLng: Double?, attractionName: String?, priceOrder: String?, checkInDate: String?, checkOutDate: String?, adults: Int?, children: Int?, numOfRoom: Int?, limit: Int?, page: Int?): Response<HotelList> {
         return withContext(Dispatchers.IO) {
 
             val queryParams = buildString {
@@ -345,6 +352,15 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
 
                 if (locationCode != null) {
                     append("?location_code=$locationCode")
+                }
+                if (attractionLat != null) {
+                    append(if (containsQueryParams(this.toString())) "&attraction_lat=$attractionLat" else "?attraction_lat=$attractionLat")
+                }
+                if (attractionLng != null) {
+                    append(if (containsQueryParams(this.toString())) "&attraction_lng=$attractionLng" else "?attraction_lng=$attractionLng")
+                }
+                if (attractionName != null) {
+                    append(if (containsQueryParams(this.toString())) "&attraction_name=$attractionName" else "?attraction_name$attractionName")
                 }
                 if (priceOrder != null) {
                     append(if (containsQueryParams(this.toString())) "&price_order=$priceOrder" else "?price_order=$priceOrder")
@@ -413,8 +429,6 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
                     }
                 }
             )
-            println(request)
-            println(response.message)
             response
         }
 

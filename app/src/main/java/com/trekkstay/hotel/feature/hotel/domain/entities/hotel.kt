@@ -22,4 +22,5 @@ data class Hotel(
     val coordinates: LatLng,
     val videos: Media,
     val images: Media,
+    val neighbourhood: Neighbourhood? = null,
     )

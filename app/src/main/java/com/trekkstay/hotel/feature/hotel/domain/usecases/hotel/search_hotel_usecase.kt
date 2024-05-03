@@ -9,7 +9,7 @@ class SearchHotelUseCase(private val repository: HotelRepo) :
     UseCaseWithParams<HotelList,SearchHotelUseCaseParams> {
 
     override suspend fun call(params: SearchHotelUseCaseParams): ResultFuture<HotelList> {
-        return repository.searchHotel(params.locationCode,params.priceOrder,params.checkInDate,params.checkOutDate,params.adults,params.children,params.numOfRoom,params.limit,params.page)
+        return repository.searchHotel(params.locationCode,params.attractionLat,params.attractionLng,params.attractionName,params.priceOrder,params.checkInDate,params.checkOutDate,params.adults,params.children,params.numOfRoom,params.limit,params.page)
     }
 }
-data class SearchHotelUseCaseParams(val locationCode: String?, val priceOrder: String?,val checkInDate: String?,val checkOutDate: String?,val adults: Int?,val children: Int?,val numOfRoom: Int?,val limit: Int?,val page: Int?)
+data class SearchHotelUseCaseParams(val locationCode: String?,val attractionLat: Double?,val attractionLng: Double?,val attractionName: String?, val priceOrder: String?,val checkInDate: String?,val checkOutDate: String?,val adults: Int?,val children: Int?,val numOfRoom: Int?,val limit: Int?,val page: Int?,)

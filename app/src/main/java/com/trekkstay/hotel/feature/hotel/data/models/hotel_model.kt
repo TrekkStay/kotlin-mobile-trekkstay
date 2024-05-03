@@ -28,6 +28,7 @@ data class HotelModel(
     @SerializedName("coordinates") val coordinates: LatLng,
     @SerializedName("videos") val videos: MediaModel,
     @SerializedName("images") val images: MediaModel,
+    @SerializedName("neighbourhood") val neighbourhood: NeighbourhoodModel?,
 ) {
     companion object {
 
@@ -83,7 +84,8 @@ data class HotelModel(
                 facilities = HotelFacilitiesModel.fromJson(map["facilities"].toString()),
                 coordinates = LatLng((coordinates["lat"] as? Double )?: 0.0, (coordinates["lng"] as? Double ) ?: 0.0),
                 videos = MediaModel.fromJson(map["videos"].toString()),
-                images = MediaModel.fromJson(map["images"].toString())
+                images = MediaModel.fromJson(map["images"].toString()),
+                neighbourhood = if(map["attraction"]!= null) {NeighbourhoodModel.fromJson(map["attraction"].toString())}else{ null},
                 )
 
 
@@ -112,6 +114,7 @@ fun HotelModel.toEntity(): Hotel {
         facilities = facilities.toEntity(),
         coordinates = coordinates,
         videos = videos.toEntity(),
-        images = images.toEntity()
+        images = images.toEntity(),
+        neighbourhood = neighbourhood?.toEntity(),
     )
 }

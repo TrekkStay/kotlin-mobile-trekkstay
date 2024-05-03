@@ -70,6 +70,8 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.ui.PlayerView
 import java.io.File
 import com.google.android.gms.maps.model.LatLng
+import com.trekkstay.hotel.core.storage.LocalStore
+import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthState
 import com.trekkstay.hotel.feature.gg_map.GGMap
 import com.trekkstay.hotel.feature.hotel.domain.entities.Location
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.FacilityChip
@@ -292,6 +294,11 @@ fun CreateHotelScreen(
     if (showDialog) {
         when (hotelState) {
             is HotelState.SuccessCreateHotel -> {
+
+                LocalStore.saveKey(
+                    context, "hotelId",
+                    (hotelState as HotelState.SuccessCreateHotel).id
+                )
                 showDialog = true
                 TextDialog(
                     title = "Successfully Created",

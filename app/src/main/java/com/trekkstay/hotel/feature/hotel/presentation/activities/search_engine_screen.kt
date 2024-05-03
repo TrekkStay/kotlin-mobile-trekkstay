@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.trekkstay.hotel.core.storage.LocalStore
+import com.trekkstay.hotel.feature.hotel.domain.entities.Attraction
 import com.trekkstay.hotel.feature.hotel.domain.entities.Destination
 import com.trekkstay.hotel.feature.hotel.domain.entities.Hotel
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.CustomerRoomOptSelector
@@ -66,6 +67,8 @@ fun SearchEngineScreen(
     var roomNumber by remember { mutableIntStateOf(1) }
     var adultNumber by remember { mutableIntStateOf(2) }
     var childNumber by remember { mutableIntStateOf(1) }
+    var filteredAttraction by remember {mutableStateOf<Attraction?>(null)}
+    var sortPrice by remember {mutableStateOf<String>("asc")}
     var showResult by remember { mutableStateOf(false) }
 
     var searchedHotel by remember {
@@ -120,6 +123,66 @@ fun SearchEngineScreen(
                 navController = navController,
                 onBackPress = {
                     showResult = false
+                },
+                onAttractionFilter = {
+                    attraction->
+                    filteredAttraction = attraction
+                    if (selectedDestination != null) {
+                        val action =
+                            SearchHotelAction(
+                                locationCode = selectedDestination!!.code,
+                                attractionLat = attraction.lat.toDouble(),
+                                attractionLng = attraction.lng.toDouble(),
+                                attractionName = attraction.name,
+                                priceOrder = sortPrice,
+                                limit = 40,
+                                page = 1,
+                                numOfRoom = roomNumber,
+                                adults = adultNumber,
+                                children = childNumber,
+                                checkInDate = formattedCheckInDate,
+                                checkOutDate = formattedCheckOutDate,
+                            )
+                        searchViewModel.processAction(action)
+
+                    }
+                },
+                onSortChange ={
+                        sort-> sortPrice = sort
+                    if (filteredAttraction != null) {
+                        val action =
+                            SearchHotelAction(
+                                locationCode = selectedDestination!!.code,
+                                attractionLat = filteredAttraction!!.lat.toDouble(),
+                                attractionLng = filteredAttraction!!.lng.toDouble(),
+                                attractionName = filteredAttraction!!.name,
+                                priceOrder = sortPrice,
+                                limit = 40,
+                                page = 1,
+                                numOfRoom = roomNumber,
+                                adults = adultNumber,
+                                children = childNumber,
+                                checkInDate = formattedCheckInDate,
+                                checkOutDate = formattedCheckOutDate,
+                            )
+                        searchViewModel.processAction(action)
+
+                    }
+                    else{
+                        val action =
+                            SearchHotelAction(
+                                locationCode = selectedDestination!!.code,
+                                priceOrder = sortPrice,
+                                limit = 40,
+                                page = 1,
+                                numOfRoom = roomNumber,
+                                adults = adultNumber,
+                                children = childNumber,
+                                checkInDate = formattedCheckInDate,
+                                checkOutDate = formattedCheckOutDate,
+                            )
+                        searchViewModel.processAction(action)
+                    }
                 }
             )
         } else {
@@ -200,6 +263,7 @@ fun SearchEngineScreen(
                                 .size(240.dp, 30.dp)
                                 .clickable {
                                     if (selectedDestination != null) {
+                                        filteredAttraction = null
                                         val (formattedCheckInDate, formattedCheckOutDate) = formatDateRange(
                                             selectedDateRange!!.first,
                                             selectedDateRange!!.second
@@ -207,6 +271,7 @@ fun SearchEngineScreen(
                                         val action =
                                             SearchHotelAction(
                                                 locationCode = selectedDestination!!.code,
+                                                priceOrder = sortPrice,
                                                 limit = 40,
                                                 page = 1,
                                                 numOfRoom = roomNumber,

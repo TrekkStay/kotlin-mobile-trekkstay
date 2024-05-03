@@ -7,7 +7,7 @@ import com.trekkstay.hotel.feature.hotel.domain.entities.LocationList
 sealed class HotelState {
     object CreateHotelCalling : HotelState()
     data class InvalidCreateHotel(val message: String) : HotelState()
-    object SuccessCreateHotel : HotelState()
+    data class SuccessCreateHotel(val id:String) : HotelState()
 
     object GetHotelIdCalling : HotelState()
     data class InvalidGetHotelId(val message: String) : HotelState()
