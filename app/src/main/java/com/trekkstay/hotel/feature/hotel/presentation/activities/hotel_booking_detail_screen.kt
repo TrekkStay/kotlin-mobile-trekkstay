@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
@@ -28,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -43,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.trekkstay.hotel.feature.hotel.presentation.fragments.RoomReservationCard
 import com.trekkstay.hotel.feature.reservation.domain.entities.Reservation
 import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationState
 import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationViewModel
@@ -58,41 +62,15 @@ fun HotelBookingDetailScreen(
 ) {
     val statusList = arrayOf("Failed", "Pending", "Success")
     var selectedStatus by remember { mutableStateOf("Pending") }
-
-
-    var hotelName by remember {
-        mutableStateOf("")
-    }
-    var bookingID by remember {
-        mutableStateOf("")
-    }
-    var customerName by remember {
-        mutableStateOf("")
-    }
-    var customerEmail by remember {
-        mutableStateOf("")
-    }
-    var customerPhone by remember {
-        mutableStateOf("")
-    }
-    var roomNum by remember {
-        mutableStateOf(0)
-    }
-    var totalPrice by remember {
-        mutableStateOf(1000)
-    }
-    var imgUrl by remember {
-        mutableStateOf("")
-    }
-
-    var checkIn by remember {
-        mutableStateOf("")
-    }
-
-    var checkOut by remember {
-        mutableStateOf("")
-    }
-
+    var bookingID by remember { mutableStateOf("") }
+    var customerName by remember { mutableStateOf("") }
+    var customerEmail by remember { mutableStateOf("") }
+    var customerPhone by remember { mutableStateOf("") }
+    var roomNum by remember { mutableIntStateOf(0) }
+    var totalPrice by remember { mutableIntStateOf(1000) }
+    var imgUrl by remember { mutableStateOf("") }
+    var checkIn by remember { mutableStateOf("") }
+    var checkOut by remember { mutableStateOf("") }
 
     var reservationDetail by remember {
         mutableStateOf<Reservation?>(null)
@@ -100,12 +78,8 @@ fun HotelBookingDetailScreen(
     val reservationState by reservationViewModel.state.observeAsState()
     when (reservationState) {
         is ReservationState.SuccessViewDetailReservation -> {
-            println("okkkkkkkkkkkkk")
             reservationDetail =
                 (reservationState as ReservationState.SuccessViewDetailReservation).reservation
-            println(">>>>>>>>>>>>>>>>> detail")
-            println(reservationDetail)
-            hotelName = reservationDetail!!.room.hotelName
             bookingID = reservationDetail!!.id
             customerName = reservationDetail!!.guestInfo.name
             customerEmail = reservationDetail!!.guestInfo.contact
@@ -129,22 +103,20 @@ fun HotelBookingDetailScreen(
     }
 
     LaunchedEffect(Unit) {
-        println(">>>>>>>>>>>> detail boooking")
         val action = ViewDetailReservationAction(idReservation)
         reservationViewModel.processAction(action)
-
     }
 
     Column(
         modifier = Modifier
-            .padding(top = 25.dp, bottom = 80.dp)
+            .padding(bottom = 80.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp)
+                .padding(20.dp)
         ) {
             Icon(
                 Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = null,
@@ -160,72 +132,75 @@ fun HotelBookingDetailScreen(
                 textAlign = TextAlign.Center
             )
         }
-        Column(
-            verticalArrangement = Arrangement.spacedBy(15.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .padding(20.dp)
-                .border(1.dp, Color(0xFFC4C4C4), shape = RoundedCornerShape(20.dp))
-                .padding(vertical = 20.dp, horizontal = 30.dp)
+        Column (
+            modifier = Modifier.verticalScroll(rememberScrollState())
         ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.padding(vertical = 10.dp)
-            ) {
-                Image(
-                    painter = rememberAsyncImagePainter(imgUrl),
-                    modifier = Modifier
-                        .size(200.dp),
-                    contentDescription = "QR"
-                )
-                Spacer(modifier = Modifier.height(5.dp))
-                Text(
-                    buildAnnotatedString {
-                        withStyle(style = SpanStyle(color = Color.Gray)) {
-                            append("Booking ID: ")
-                        }
-                        append(bookingID)
-                    },
-                    fontFamily = PoppinsFontFamily,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium
-                )
-            }
-            BookingInfoRow("Name", customerName)
-            BookingInfoRow("Email", customerEmail)
-            BookingInfoRow("Phone", customerPhone)
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                BookDateCol(label = "Check In", date = checkIn)
-                Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null)
-                BookDateCol(label = "Check Out", date = checkOut)
-            }
-            BookingInfoRow("Number of rooms", "$roomNum")
-            BookingInfoRow("Total", "$ $totalPrice")
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
+            Column (
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
             ) {
-                Text(
-                    text = "Payment Status",
-                    fontFamily = PoppinsFontFamily,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 12.sp,
-                    color = Color.Gray,
-                    modifier = Modifier.width(140.dp)
-                )
-                DropDownMenu(
-                    title = selectedStatus,
-                    itemList = statusList,
-                    onItemSelected = { selectedStatus = it })
+                reservationDetail?.let { RoomReservationCard(it,type = "hotel") }
             }
-            //Thêm hotel room card rồi navigate
-            //HotelRoomCard(room = , navController = )
+            Column(
+                verticalArrangement = Arrangement.spacedBy(15.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .padding(20.dp)
+                    .border(1.dp, Color(0xFFC4C4C4), shape = RoundedCornerShape(20.dp))
+                    .padding(vertical = 20.dp, horizontal = 30.dp)
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.padding(vertical = 10.dp)
+                ) {
+                    Text(
+                        buildAnnotatedString {
+                            withStyle(style = SpanStyle(color = Color.Gray)) {
+                                append("Booking ID: ")
+                            }
+                            append(bookingID)
+                        },
+                        fontFamily = PoppinsFontFamily,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+                BookingInfoRow("Name", customerName)
+                BookingInfoRow("Email", customerEmail)
+                BookingInfoRow("Phone", customerPhone)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    BookDateCol(label = "Check In", date = checkIn)
+                    Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null)
+                    BookDateCol(label = "Check Out", date = checkOut)
+                }
+                BookingInfoRow("Number of rooms", "$roomNum")
+                BookingInfoRow("Total", "$ $totalPrice")
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Text(
+                        text = "Payment Status",
+                        fontFamily = PoppinsFontFamily,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 12.sp,
+                        color = Color.Gray,
+                        modifier = Modifier.width(140.dp)
+                    )
+                    DropDownMenu(
+                        title = selectedStatus,
+                        itemList = statusList,
+                        onItemSelected = { selectedStatus = it })
+                }
+            }
         }
     }
 }

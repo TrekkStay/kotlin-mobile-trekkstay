@@ -52,6 +52,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.hotel.R
 import com.trekkstay.hotel.core.storage.LocalStore
+import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthState
 import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthState
 import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthViewModel
 import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpLoginAction
@@ -95,6 +96,10 @@ fun EmpLoginScreen(viewModel: EmpAuthViewModel, navController: NavHostController
                 LocalStore.saveKey(
                     context, "hotelId",
                     (authState as EmpAuthState.SuccessEmpLogin).res.hotelId
+                )
+                LocalStore.saveKey(
+                    context, "userType",
+                    "hotel"
                 )
 
                 if (isLoggedIn) {
