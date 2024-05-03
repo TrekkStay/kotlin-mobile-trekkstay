@@ -47,9 +47,6 @@ import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 @Composable
 fun CustomerHomeScreen(hotelViewModel: HotelViewModel, navController: NavHostController) {
     val userName = LocalStore.getKey(LocalContext.current, "name", "User")
-
-    println(">>>>>>>>>>>>> check local")
-    println(LocalStore.getKey(LocalContext.current, "name", "User"))
     Column(
         modifier = Modifier
             .padding(bottom = 70.dp)

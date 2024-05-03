@@ -27,6 +27,7 @@ import com.trekkstay.hotel.feature.hotel.presentation.activities.BookingFormScre
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateEmpScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateHotelScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateRoomScreen
+import com.trekkstay.hotel.feature.hotel.presentation.activities.EditHotelScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelBookingDetailScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelDetailScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelEmpListScreen
@@ -260,6 +261,9 @@ fun HotelRouter(
         }
         composable("hotel_create") {
             CreateHotelScreen(hotelViewModel, locationViewModel, mediaViewModel, navController)
+        }
+        composable("hotel_edit") {
+            EditHotelScreen(hotelViewModel, locationViewModel, mediaViewModel, navController)
         }
         composable(route = "hotel_detail/{hotelId}") { backStackEntry ->
 

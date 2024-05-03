@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -36,6 +36,8 @@ import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 @Composable
 fun HotelProfileScreen(navController: NavHostController) {
     val context = LocalContext.current
+    val hotelId = LocalStore.getKey(context, "hotelId", "not created")
+    println("hotelId: $hotelId")
     Column {
         Spacer(modifier = Modifier.height(25.dp))
         Text(
@@ -59,39 +61,52 @@ fun HotelProfileScreen(navController: NavHostController) {
             verticalArrangement = Arrangement.spacedBy(20.dp),
             modifier = Modifier.padding(horizontal = 25.dp, vertical = 20.dp)
         ) {
-            ProfileNavButton(
-                "Edit My Hotel Information",
-                Icons.Default.Info,
-                type = "hotel",
-                onClick = {
-                    navController.navigate("hotel_create") {
+            if (hotelId == "") {
+                ProfileNavButton(
+                    "Create Your Hotel",
+                    ImageVector.vectorResource(R.drawable.add_hotel_ico),
+                    type = "hotel",
+                    onClick = {
+                        navController.navigate("hotel_create") {
+                            popUpTo(navController.graph.findStartDestination().id)
+                            launchSingleTop = true
+                        }
+                    })
+            } else {
+                ProfileNavButton(
+                    "Edit Your Hotel",
+                    Icons.Default.Edit,
+                    type = "hotel",
+                    onClick = {
+                        navController.navigate("hotel_edit") {
+                            popUpTo(navController.graph.findStartDestination().id)
+                            launchSingleTop = true
+                        }
+                    })
+                ProfileNavButton(
+                    "Room Management",
+                    ImageVector.vectorResource(R.drawable.bed_ico),
+                    type = "hotel",
+                    onClick = {
+                        navController.navigate("hotel_room_manage") {
+                            popUpTo(navController.graph.findStartDestination().id)
+                            launchSingleTop = true
+                        }
+                    })
+                ProfileNavButton("Staff Management", Icons.Default.AccountBox, type = "hotel", onClick = {
+                    navController.navigate("hotel_emp_list") {
                         popUpTo(navController.graph.findStartDestination().id)
-                        launchSingleTop = true
                     }
                 })
-            ProfileNavButton(
-                "Room Management",
-                ImageVector.vectorResource(R.drawable.bed_ico),
-                type = "hotel",
-                onClick = {
-                    navController.navigate("hotel_room_manage") {
-                        popUpTo(navController.graph.findStartDestination().id)
-                        launchSingleTop = true
-                    }
-                })
-            ProfileNavButton("Staff Management", Icons.Default.AccountBox, type = "hotel", onClick = {
-                navController.navigate("hotel_emp_list") {
-                    popUpTo(navController.graph.findStartDestination().id)
-                }
-            })
-            ProfileNavButton(
-                "Statistic Report",
-                ImageVector.vectorResource(R.drawable.bar_chart_ico), type = "hotel"
-            )
-            ProfileNavButton(
-                "Promotion Management",
-                ImageVector.vectorResource(R.drawable.discount_ico), type = "hotel"
-            )
+                ProfileNavButton(
+                    "Statistic Report",
+                    ImageVector.vectorResource(R.drawable.bar_chart_ico), type = "hotel"
+                )
+                ProfileNavButton(
+                    "Promotion Management",
+                    ImageVector.vectorResource(R.drawable.discount_ico), type = "hotel"
+                )
+            }
             ProfileNavButton("Change Password", ImageVector.vectorResource(R.drawable.key_ico), type = "hotel") {
                 navController.navigate("hotel_reset_pw")
             }

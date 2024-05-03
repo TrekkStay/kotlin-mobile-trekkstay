@@ -60,15 +60,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MenuItemColors
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
@@ -103,7 +100,7 @@ import java.io.FileOutputStream
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun UpdateHotelScreen(hotelViewModel: HotelViewModel,locationViewModel: LocationViewModel, mediaViewModel: MediaViewModel,navController: NavHostController) {
+fun EditHotelScreen(hotelViewModel: HotelViewModel, locationViewModel: LocationViewModel, mediaViewModel: MediaViewModel, navController: NavHostController) {
     val context = LocalContext.current
     val contentResolver = context.contentResolver
     var hotelName by remember { mutableStateOf(TextFieldValue()) }
