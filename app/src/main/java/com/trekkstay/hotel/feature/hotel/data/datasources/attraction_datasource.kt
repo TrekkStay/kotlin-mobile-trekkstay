@@ -5,14 +5,12 @@ import com.trekkstay.hotel.core.network.client.Client
 import com.trekkstay.hotel.core.network.method.RequestMethod
 import com.trekkstay.hotel.core.network.request.RequestQuery
 import com.trekkstay.hotel.core.network.response.Response
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import com.trekkstay.hotel.feature.hotel.data.models.AttractionListModel
 import com.trekkstay.hotel.feature.hotel.data.models.AttractionModel
-import com.trekkstay.hotel.feature.hotel.data.models.HotelListModel
-import com.trekkstay.hotel.feature.hotel.data.models.HotelModel
 import com.trekkstay.hotel.feature.hotel.data.models.toEntity
 import com.trekkstay.hotel.feature.hotel.domain.entities.AttractionList
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 interface AttractionRemoteDataSource {
     suspend fun attractionList(

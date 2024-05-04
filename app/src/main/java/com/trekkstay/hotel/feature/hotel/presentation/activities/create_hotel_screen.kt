@@ -88,6 +88,7 @@ import com.trekkstay.hotel.feature.hotel.presentation.states.media.MediaState
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.MediaViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.UploadMediaAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.UploadVideoAction
+import com.trekkstay.hotel.feature.shared.AnimLoader
 import com.trekkstay.hotel.feature.shared.TextDialog
 import java.io.FileOutputStream
 
@@ -123,6 +124,7 @@ fun CreateHotelScreen(
         "Spa",
         "Pool"
     )
+    var loadingCreate by remember { mutableStateOf(false) }
 
     fun getFileName(context: Context, uri: Uri): String? {
         var fileName: String? = null
@@ -215,7 +217,6 @@ fun CreateHotelScreen(
     when (mediaState) {
         is MediaState.SuccessUploadVideo -> {
             if (!hasUploadedVideo) {
-                println("ok")
                 val action = CreateHotelAction(
                     name = hotelName.text,
                     description = hotelDescription.text,
@@ -247,9 +248,9 @@ fun CreateHotelScreen(
             }
         }
 
-        is MediaState.InvalidUploadVideo -> { }
+        is MediaState.InvalidUploadVideo -> {}
 
-        is MediaState.UploadVideoCalling -> { }
+        is MediaState.UploadVideoCalling -> {}
 
         is MediaState.SuccessUploadMedia -> {
             imageUrls = (mediaState as MediaState.SuccessUploadMedia).media.media
@@ -259,9 +260,10 @@ fun CreateHotelScreen(
             )
             mediaViewModel.processAction(mediaAction)
         }
-        is MediaState.InvalidUploadMedia -> { }
-        is MediaState.UploadMediaCalling -> { }
-        else -> { }
+
+        is MediaState.InvalidUploadMedia -> {}
+        is MediaState.UploadMediaCalling -> {}
+        else -> {}
     }
     when (locationState) {
         is LocationState.SuccessViewProvince -> {
@@ -269,35 +271,36 @@ fun CreateHotelScreen(
                 (locationState as LocationState.SuccessViewProvince).locationList.locationList
         }
 
-        is LocationState.InvalidViewProvince -> { }
+        is LocationState.InvalidViewProvince -> {}
 
-        is LocationState.ViewProvinceCalling -> { }
+        is LocationState.ViewProvinceCalling -> {}
 
         is LocationState.SuccessViewDistrict -> {
             districtList =
                 (locationState as LocationState.SuccessViewDistrict).locationList.locationList
 
         }
+
         is LocationState.SuccessViewWard -> {
             wardList = (locationState as LocationState.SuccessViewWard).locationList.locationList
         }
 
-        is LocationState.InvalidViewDistrict -> { }
-        is LocationState.ViewDistrictCalling -> { }
+        is LocationState.InvalidViewDistrict -> {}
+        is LocationState.ViewDistrictCalling -> {}
 
-        is LocationState.InvalidViewWard -> { }
-        is LocationState.ViewWardCalling -> { }
-        else -> { }
+        is LocationState.InvalidViewWard -> {}
+        is LocationState.ViewWardCalling -> {}
+        else -> {}
     }
 
     if (showDialog) {
         when (hotelState) {
             is HotelState.SuccessCreateHotel -> {
-
                 LocalStore.saveKey(
                     context, "hotelId",
                     (hotelState as HotelState.SuccessCreateHotel).id
                 )
+                loadingCreate = false
                 showDialog = true
                 TextDialog(
                     title = "Successfully Created",
@@ -308,7 +311,9 @@ fun CreateHotelScreen(
                 }
                 navController.navigate("hotel_profile")
             }
+
             is HotelState.InvalidCreateHotel -> {
+                loadingCreate = false
                 showDialog = true
                 TextDialog(
                     title = "Fail Creating Hotel",
@@ -317,8 +322,12 @@ fun CreateHotelScreen(
                     showDialog = false
                 }
             }
-            is HotelState.CreateHotelCalling -> { }
-            else -> { }
+
+            is HotelState.CreateHotelCalling -> {
+                loadingCreate = true
+            }
+
+            else -> {}
         }
     }
 
@@ -339,8 +348,7 @@ fun CreateHotelScreen(
         locationViewModel.processAction(action)
     }
 
-    Column(
-        verticalArrangement = Arrangement.SpaceBetween,
+    Box(
         modifier = Modifier
             .fillMaxHeight()
             .padding(bottom = 75.dp)
@@ -354,9 +362,7 @@ fun CreateHotelScreen(
             )
         } else {
             Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
+                modifier = Modifier.verticalScroll(rememberScrollState())
             ) {
                 Spacer(modifier = Modifier.height(25.dp))
                 Row(
@@ -612,13 +618,14 @@ fun CreateHotelScreen(
                             selectedImageUris.isEmpty() ||
                             selectedVideoUris.isEmpty() ||
                             hotelDescription.text.isEmpty() ||
-                            selectedFacilities.isEmpty())
-                        {
+                            selectedFacilities.isEmpty()
+                        ) {
                             dialogTitle = "Empty Fields"
                             dialogMessage =
                                 "Please input all the required information before creating your hotel"
                             showValidateDialog = true
                         } else {
+                            loadingCreate = true
                             showDialog = true
                             hasUploadedVideo = false
                             val mediaAction = UploadMediaAction(
@@ -646,6 +653,13 @@ fun CreateHotelScreen(
                     )
                 }
                 Spacer(modifier = Modifier.height(10.dp))
+            }
+            if (loadingCreate) {
+                Box(
+                    modifier = Modifier.fillMaxSize().background(Color.Black.copy(0.3f))
+                ) {
+                    AnimLoader(rawRes = R.raw.loading_anim, modifier = Modifier.align(Alignment.Center))
+                }
             }
         }
     }

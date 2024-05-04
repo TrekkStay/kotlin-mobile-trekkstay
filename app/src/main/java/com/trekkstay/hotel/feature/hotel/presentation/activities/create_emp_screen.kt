@@ -3,11 +3,13 @@ package com.trekkstay.hotel.feature.hotel.presentation.activities
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -57,7 +59,7 @@ import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 @Composable
-fun CreateEmpScreen(empAuthViewModel: EmpAuthViewModel,navController: NavHostController) {
+fun CreateEmpScreen(empAuthViewModel: EmpAuthViewModel, navController: NavHostController) {
     var empFullName by remember { mutableStateOf(TextFieldValue()) }
     var empEmail by remember { mutableStateOf(TextFieldValue()) }
     var empPhone by remember { mutableStateOf(TextFieldValue()) }
@@ -73,134 +75,163 @@ fun CreateEmpScreen(empAuthViewModel: EmpAuthViewModel,navController: NavHostCon
         }
     }
 
+    var loadingCreate by remember { mutableStateOf(false) }
     val authState by empAuthViewModel.authState.observeAsState()
     var showDialog by remember { mutableStateOf(true) }
     if (showDialog) {
         when (authState) {
             is EmpAuthState.SuccessEmpCreate -> {
+                loadingCreate = false
                 showDialog = true
                 TextDialog(
                     title = "Registration Successful",
                     msg = "You have successfully registered.",
                     type = "success",
-                    onDismiss = {showDialog = false},
+                    onDismiss = { showDialog = false },
                 )
                 navController.navigate("hotel_emp_list")
             }
+
             is EmpAuthState.InvalidEmpCreate -> {
+                loadingCreate = false
                 showDialog = true
                 TextDialog(
                     title = "Employee Creation Failed",
                     msg = "Employee already exists. Please try again with another email or phone.",
-                    onDismiss = {showDialog = false},
+                    onDismiss = { showDialog = false },
                 )
             }
-            is EmpAuthState.EmpCreateCalling -> {}
-            else -> {
+
+            is EmpAuthState.EmpCreateCalling -> {
+                loadingCreate = true
             }
+            else -> {}
         }
     }
 
-    Column(
-        verticalArrangement = Arrangement.SpaceBetween,
+    var showValidateDialog by remember { mutableStateOf(false) }
+    var dialogTitle by remember { mutableStateOf("") }
+    var dialogMessage by remember { mutableStateOf("") }
+
+    if (showValidateDialog) {
+        TextDialog(
+            title = dialogTitle,
+            msg = dialogMessage,
+            onDismiss = { showValidateDialog = false },
+        )
+    }
+
+    Box(
         modifier = Modifier
             .fillMaxHeight()
             .padding(bottom = 75.dp)
     ) {
         Column(
-            modifier = Modifier
-                .weight(1f)
-                .verticalScroll(rememberScrollState())
+            modifier = Modifier.fillMaxSize()
         ) {
-            Spacer(modifier = Modifier.height(25.dp))
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(onClick = {
-                    navController.navigate("hotel_emp_list")
-                }) {
-                    Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = null)
-                }
-                Text(
-                    text = "Create employee",
-                    fontSize = 20.sp,
-                    fontFamily = PoppinsFontFamily,
-                    fontWeight = FontWeight.SemiBold,
-                )
-            }
-            Spacer(modifier = Modifier.height(10.dp))
-            HorizontalDivider(color = Color(0xFFE4E4E4), thickness = 3.dp)
             Column(
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-                modifier = Modifier.padding(horizontal = 25.dp, vertical = 20.dp)
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
             ) {
-                InfoTextField(
-                    label = "Full Name",
-                    text = empFullName,
-                    onValueChange = { empFullName = it },
-                    icon = Icons.Default.AccountBox,
-                )
-                InfoTextField(
-                    label = "Email",
-                    text = empEmail,
-                    onValueChange = { empEmail = it },
-                    icon = Icons.Default.Email,
-                )
-                InfoTextField(
-                    label = "Phone",
-                    text = empPhone,
-                    onValueChange = { empPhone = it },
-                    icon = Icons.Default.Phone,
-                    type = "number"
-                )
-                InfoTextField(
-                    label = "Base Salary",
-                    text = empBaseSalary,
-                    onValueChange = { empBaseSalary = it },
-                    icon = ImageVector.vectorResource(R.drawable.money_circle_ico),
-                    type = "number"
-                )
-                DropDownMenu(
-                    title = "Contract",
-                    itemList = contractList,
-                    onItemSelected = {
-                        selectedItem = it
-                    },
-                    leadingIcon = ImageVector.vectorResource(R.drawable.contract_ico)
+                Spacer(modifier = Modifier.height(25.dp))
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    IconButton(onClick = {
+                        navController.navigate("hotel_emp_list")
+                    }) {
+                        Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = null)
+                    }
+                    Text(
+                        text = "Create employee",
+                        fontSize = 20.sp,
+                        fontFamily = PoppinsFontFamily,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+                HorizontalDivider(color = Color(0xFFE4E4E4), thickness = 3.dp)
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    modifier = Modifier.padding(horizontal = 25.dp, vertical = 20.dp)
+                ) {
+                    InfoTextField(
+                        label = "Full Name",
+                        text = empFullName,
+                        onValueChange = { empFullName = it },
+                        icon = Icons.Default.AccountBox,
+                    )
+                    InfoTextField(
+                        label = "Email",
+                        text = empEmail,
+                        onValueChange = { empEmail = it },
+                        icon = Icons.Default.Email,
+                    )
+                    InfoTextField(
+                        label = "Phone",
+                        text = empPhone,
+                        onValueChange = { empPhone = it },
+                        icon = Icons.Default.Phone,
+                        type = "number"
+                    )
+                    InfoTextField(
+                        label = "Base Salary",
+                        text = empBaseSalary,
+                        onValueChange = { empBaseSalary = it },
+                        icon = ImageVector.vectorResource(R.drawable.money_circle_ico),
+                        type = "number"
+                    )
+                    DropDownMenu(
+                        title = "Contract",
+                        itemList = contractList,
+                        onItemSelected = {
+                            selectedItem = it
+                        },
+                        leadingIcon = ImageVector.vectorResource(R.drawable.contract_ico)
+                    )
+                }
+            }
+            Button(
+                onClick = {
+                    if (empFullName.text.isEmpty() || empEmail.text.isEmpty() || empPhone.text.isEmpty() || empBaseSalary.text.isEmpty() || selectedItem.isEmpty()) {
+                        showDialog = true
+                        dialogTitle = "Empty Fields"
+                        dialogMessage =
+                            "Please input all the required information before creating your hotel"
+                        showValidateDialog = true
+                    } else {
+                        loadingCreate = true
+                        showDialog = true
+                        val action = EmpCreateAction(
+                            empFullName.text,
+                            empEmail.text,
+                            empPhone.text,
+                            mapSelectionToApiValue(selectedItem),
+                            empBaseSalary.text.toInt(),
+
+                            )
+                        empAuthViewModel.processAction(action)
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = TrekkStayBlue,
+                    contentColor = Color.White
+                ),
+                contentPadding = PaddingValues(horizontal = 100.dp, vertical = 15.dp),
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(5.dp),
+                shape = RoundedCornerShape(10.dp)
+            ) {
+                Text(
+                    text = "Save Employee",
+                    fontSize = 18.sp,
+                    fontFamily = PoppinsFontFamily,
+                    fontWeight = FontWeight.SemiBold
                 )
             }
-        }
-        Button(
-            onClick = {
-
-                showDialog = true
-                val action =EmpCreateAction(
-                    empFullName.text,
-                    empEmail.text,
-                    empPhone.text,
-                    mapSelectionToApiValue(selectedItem),
-                    empBaseSalary.text.toInt(),
-
-                )
-                empAuthViewModel.processAction(action)
-            },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = TrekkStayBlue,
-                contentColor = Color.White
-            ),
-            contentPadding = PaddingValues(horizontal = 100.dp, vertical = 15.dp),
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(5.dp),
-            shape = RoundedCornerShape(10.dp)
-        ) {
-            Text(
-                text = "Save Employee",
-                fontSize = 18.sp,
-                fontFamily = PoppinsFontFamily,
-                fontWeight = FontWeight.SemiBold
-            )
         }
     }
 }

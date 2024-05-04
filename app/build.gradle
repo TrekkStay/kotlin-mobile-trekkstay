@@ -48,6 +48,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.airbnb.android:lottie-compose:4.0.0'
     implementation 'com.github.momo-wallet:mobile-sdk:1.0.7'
     implementation 'androidx.core:core-ktx:1.13.1'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.7.0'

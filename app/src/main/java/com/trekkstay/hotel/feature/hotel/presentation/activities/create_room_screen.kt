@@ -13,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -20,6 +21,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -78,6 +80,7 @@ import com.trekkstay.hotel.feature.hotel.presentation.states.media.UploadVideoAc
 import com.trekkstay.hotel.feature.hotel.presentation.states.room.CreateRoomAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.room.RoomState
 import com.trekkstay.hotel.feature.hotel.presentation.states.room.RoomViewModel
+import com.trekkstay.hotel.feature.shared.AnimLoader
 import com.trekkstay.hotel.feature.shared.TextDialog
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
@@ -111,6 +114,7 @@ fun CreateRoomScreen(hotelViewModel: HotelViewModel, roomViewModel: RoomViewMode
     "Television",
     "Slippers",
     "Smoking")
+    var loadingCreate by remember { mutableStateOf(false) }
     fun getFileName(context: Context, uri: Uri): String? {
         var fileName: String? = null
         val projection = arrayOf(MediaStore.MediaColumns.DISPLAY_NAME)
@@ -247,6 +251,7 @@ fun CreateRoomScreen(hotelViewModel: HotelViewModel, roomViewModel: RoomViewMode
     if (showDialog) {
         when (roomState) {
             is RoomState.SuccessCreateRoom -> {
+                loadingCreate = false
                 showDialog = true
                 TextDialog(
                     title = "Successfully Created",
@@ -258,6 +263,7 @@ fun CreateRoomScreen(hotelViewModel: HotelViewModel, roomViewModel: RoomViewMode
                 navController.navigate("hotel_room_manage")
             }
             is RoomState.InvalidCreateRoom -> {
+                loadingCreate = false
                 showDialog = true
                 TextDialog(
                     title = "Fail Creating Room",
@@ -267,7 +273,7 @@ fun CreateRoomScreen(hotelViewModel: HotelViewModel, roomViewModel: RoomViewMode
                 }
             }
             is RoomState.CreateRoomCalling -> {
-                // You can show a progress dialog or a loading indicator here
+                loadingCreate = true
             }
             else -> {
                 // Handle other states
@@ -307,15 +313,12 @@ fun CreateRoomScreen(hotelViewModel: HotelViewModel, roomViewModel: RoomViewMode
     }
     
 
-    Column(
-        verticalArrangement = Arrangement.SpaceBetween,
+    Box(
         modifier = Modifier
             .fillMaxHeight().padding(bottom = 75.dp)
     ) {
         Column(
-            modifier = Modifier
-                .weight(1f)
-                .verticalScroll(rememberScrollState())
+            modifier = Modifier.verticalScroll(rememberScrollState())
         ) {
             Spacer(modifier = Modifier.height(25.dp))
             Row (
@@ -540,6 +543,7 @@ fun CreateRoomScreen(hotelViewModel: HotelViewModel, roomViewModel: RoomViewMode
                         showValidateDialog = true
                     } else {
                         hasUploadedVideo = false
+                        loadingCreate = true
                         showDialog = true
                         val mediaAction = UploadMediaAction(
                             selectedFile,
@@ -564,6 +568,13 @@ fun CreateRoomScreen(hotelViewModel: HotelViewModel, roomViewModel: RoomViewMode
                     fontFamily = PoppinsFontFamily,
                     fontWeight = FontWeight.SemiBold
                 )
+            }
+        }
+        if (loadingCreate) {
+            Box(
+                modifier = Modifier.fillMaxSize().background(Color.Black.copy(0.3f))
+            ) {
+                AnimLoader(rawRes = R.raw.loading_anim, modifier = Modifier.align(Alignment.Center))
             }
         }
     }
