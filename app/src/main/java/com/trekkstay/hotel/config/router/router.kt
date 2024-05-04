@@ -53,6 +53,7 @@ import com.trekkstay.hotel.feature.qr_scanner.QRScannerScreen
 import com.trekkstay.hotel.feature.reservation.presentation.activities.CustomerReservationScreen
 import com.trekkstay.hotel.feature.reservation.presentation.activities.HotelReservationScreen
 import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationViewModel
+import com.trekkstay.hotel.payment.MoMoPayment
 
 object AppRouter {
     private var navController: NavHostController? = null
@@ -118,7 +119,7 @@ object AppRouter {
             composable("customer_main") {
                 CustomerMainScreen(
                     hotelViewModel, roomViewModel, searchViewModel,
-                    reservationViewModel, attractionViewModel, authViewModel
+                    reservationViewModel, attractionViewModel, authViewModel, activity
                 )
             }
             composable("hotel_main") {
@@ -147,7 +148,8 @@ fun CustomerRouter(
     reservationViewModel: ReservationViewModel,
     navController: NavHostController,
     attractionViewModel: AttractionViewModel,
-    authViewModel: AuthViewModel
+    authViewModel: AuthViewModel,
+    activity: ComponentActivity
 ) {
     NavHost(
         navController = navController,

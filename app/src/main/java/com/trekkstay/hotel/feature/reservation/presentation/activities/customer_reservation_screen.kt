@@ -50,6 +50,7 @@ import com.trekkstay.hotel.feature.reservation.presentation.fragments.Reservatio
 import com.trekkstay.hotel.feature.reservation.presentation.states.ListReservationAction
 import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationState
 import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationViewModel
+import com.trekkstay.hotel.payment.MoMoPayment
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 import kotlinx.coroutines.launch
@@ -90,6 +91,7 @@ fun CustomerReservationScreen(
                     reservationHotel3 = reservationHotel
                 }
             }
+
         }
         is ReservationState.InvalidListReservation -> { }
         is ReservationState.ListReservationCalling -> { }
@@ -142,7 +144,9 @@ fun CustomerReservationScreen(
             TabRow(
                 divider = {},
                 selectedTabIndex = selectedTabIndex.value,
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp),
                 indicator = @Composable { tabPositions: List<TabPosition> ->
                     ReservationTabIndicator(tabPositions, pagerState, "customer")
                 }

@@ -1,6 +1,7 @@
 package com.trekkstay.hotel.feature.customer.presentation.activities
 
 import android.os.Build
+import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -22,7 +23,8 @@ fun CustomerMainScreen(
     searchViewModel: SearchViewModel,
     reservationViewModel: ReservationViewModel,
     attractionViewModel: AttractionViewModel,
-    authViewModel: AuthViewModel
+    authViewModel: AuthViewModel,
+    activity: ComponentActivity
 ) {
     val navController = rememberNavController()
     Scaffold(
@@ -35,7 +37,8 @@ fun CustomerMainScreen(
             reservationViewModel,
             navController,
             attractionViewModel,
-            authViewModel
+            authViewModel,
+            activity
         )
     }
 }
