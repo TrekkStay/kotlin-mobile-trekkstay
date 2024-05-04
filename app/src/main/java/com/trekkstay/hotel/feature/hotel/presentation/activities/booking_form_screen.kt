@@ -68,7 +68,6 @@ fun BookingFormScreen(roomId:String,
                       reservationViewModel: ReservationViewModel,
                       navController: NavController
 ) {
-    var expandedDesc by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val userName = LocalStore.getKey(context,"name","")
     val userEmail = LocalStore.getKey(context,"email","")
@@ -106,8 +105,7 @@ fun BookingFormScreen(roomId:String,
             println((reservationState as ReservationState.InvalidCreateReservation).message)
         }
         is ReservationState.CreateReservationCalling -> { }
-
-        else ->{ }
+        else -> { }
     }
 
     Box(
@@ -146,13 +144,12 @@ fun BookingFormScreen(roomId:String,
                     .padding(horizontal = 25.dp, vertical = 5.dp)
             ) {
                 Text(
-                    text = "Fill in the form with your information to process payment.",
+                    text = "Fill in the form with your information to process payment",
                     textAlign = TextAlign.Center,
                     fontFamily = PoppinsFontFamily,
                     color = Color.Gray,
                     fontWeight = FontWeight.Medium,
                     fontSize = 16.sp,
-                    maxLines = if (expandedDesc) Int.MAX_VALUE else 3,
                     overflow = TextOverflow.Ellipsis
                 )
                 InfoTextField(

@@ -2,7 +2,6 @@ package com.trekkstay.hotel.feature.hotel.presentation.states.hotel
 
 import com.trekkstay.hotel.feature.hotel.domain.entities.Hotel
 import com.trekkstay.hotel.feature.hotel.domain.entities.HotelList
-import com.trekkstay.hotel.feature.hotel.domain.entities.LocationList
 
 sealed class HotelState {
     object CreateHotelCalling : HotelState()

@@ -33,7 +33,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -80,12 +79,16 @@ fun CustomerReservationScreen(
     when (reservationState) {
         is ReservationState.SuccessListReservation -> {
             val reservationHotel = (reservationState as ReservationState.SuccessListReservation).reservation.reservationList
-            if ((reservationState as ReservationState.SuccessListReservation).sendState == "UPCOMING") {
-                reservationHotel1 = reservationHotel
-            } else if ((reservationState as ReservationState.SuccessListReservation).sendState == "COMPLETED") {
-                reservationHotel2 = reservationHotel
-            } else if ((reservationState as ReservationState.SuccessListReservation).sendState == "CANCELLED") {
-                reservationHotel3 = reservationHotel
+            when ((reservationState as ReservationState.SuccessListReservation).sendState) {
+                "UPCOMING" -> {
+                    reservationHotel1 = reservationHotel
+                }
+                "COMPLETED" -> {
+                    reservationHotel2 = reservationHotel
+                }
+                "CANCELLED" -> {
+                    reservationHotel3 = reservationHotel
+                }
             }
         }
         is ReservationState.InvalidListReservation -> { }
@@ -196,9 +199,9 @@ fun CustomerReservationScreen(
                                 0 -> {
                                     CustomerReservationCard(
                                         reservationId = item.id,
-                                        hotelImg = item.room.images.media[0] ?: "",
-                                        hotelName = item.room.hotelName ?: "",
-                                        destination = item.room.location ?: "",
+                                        hotelImg = item.room.images.media[0],
+                                        hotelName = item.room.hotelName,
+                                        destination = item.room.location,
                                         type = reservationType,
                                         checkIn = item.checkIn,
                                         checkOut = item.checkOut,
@@ -208,21 +211,21 @@ fun CustomerReservationScreen(
                                 1 -> {
                                     CustomerReservationCard(
                                         reservationId = item.id,
-                                        hotelImg = item.room.images.media[0] ?: "",
-                                        hotelName = item.room.hotelName ?: "",
-                                        destination = item.room.location ?: "",
+                                        hotelImg = item.room.images.media[0],
+                                        hotelName = item.room.hotelName,
+                                        destination = item.room.location,
                                         checkIn = item.checkIn,
                                         type = reservationType,
-                                        price = item.room.bookingPrice.toDouble() ?: 0.0,
+                                        price = item.room.bookingPrice.toDouble(),
                                         navController = navController
                                     )
                                 }
                                 2 -> {
                                     CustomerReservationCard(
                                         reservationId = item.id,
-                                        hotelImg = item.room.images.media[0] ?: "",
-                                        hotelName = item.room.hotelName ?: "",
-                                        destination = item.room.location ?: "",
+                                        hotelImg = item.room.images.media[0],
+                                        hotelName = item.room.hotelName,
+                                        destination = item.room.location,
                                         checkIn = item.checkIn,
                                         type = reservationType,
                                         navController = navController

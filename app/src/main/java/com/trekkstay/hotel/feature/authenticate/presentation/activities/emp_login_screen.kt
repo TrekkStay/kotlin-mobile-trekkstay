@@ -53,7 +53,6 @@ import androidx.navigation.NavHostController
 import com.example.hotel.R
 import com.trekkstay.hotel.config.router.AppRouter
 import com.trekkstay.hotel.core.storage.LocalStore
-import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthState
 import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthState
 import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthViewModel
 import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpLoginAction
