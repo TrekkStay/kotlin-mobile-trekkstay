@@ -98,6 +98,10 @@ fun BookingFormScreen(roomId:String,
 
     when (reservationState){
         is ReservationState.SuccessCreateReservation -> {
+            val reservation =(reservationState as ReservationState.SuccessCreateReservation).reservation
+            navController.navigate("payment_method/${reservation.id}/${reservation.totalPrice}"){
+                launchSingleTop=true
+            }
             println((reservationState as ReservationState.SuccessCreateReservation).reservation)
 
         }

@@ -6,6 +6,7 @@ import com.trekkstay.hotel.core.errors.ApiException
 import com.trekkstay.hotel.core.errors.ApiInvalid
 import com.trekkstay.hotel.core.network.response.Response
 import com.trekkstay.hotel.core.typedef.ResultFuture
+import com.trekkstay.hotel.core.typedef.ResultVoid
 import com.trekkstay.hotel.feature.reservation.data.datasources.ReservationRemoteDataSource
 import com.trekkstay.hotel.feature.reservation.domain.entities.GuestInfo
 import com.trekkstay.hotel.feature.reservation.domain.entities.Reservation
@@ -65,6 +66,31 @@ class ReservationRepoImpl(private val remoteDataSource: ReservationRemoteDataSou
             reservationId
         )) {
             is Response.Success -> response.data!!.right()
+            is Response.Invalid -> ApiInvalid(
+                response.message ?: "Unknown error",
+                response.status ?: "-1"
+            ).left()
+
+            is Response.Failure -> throw ApiException(
+                response.message ?: "Unknown error",
+                response.status ?: "-1"
+            )
+        }
+    }
+
+    override suspend fun createPayment(
+        amount: String,
+        method: String,
+        reservationId: String,
+        status: String
+    ): ResultVoid {
+        return when (val response = remoteDataSource.createPayment(
+            amount,
+            method,
+            reservationId,
+            status
+        )) {
+            is Response.Success -> Unit.right()
             is Response.Invalid -> ApiInvalid(
                 response.message ?: "Unknown error",
                 response.status ?: "-1"

@@ -20,3 +20,9 @@ data class ListReservationAction(
 ) : ReservationAction()
 
 data class ViewDetailReservationAction(val reservationId: String) : ReservationAction()
+data class CreatePaymentAction(
+    val amount: String,
+    val method: String,
+    val reservationId: String,
+    val status: String
+) : ReservationAction()

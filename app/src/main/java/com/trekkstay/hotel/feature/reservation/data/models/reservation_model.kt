@@ -18,6 +18,7 @@ data class ReservationModel(
     @SerializedName("status") val status: String,
     @SerializedName("guess_info") val guestInfo: GuestInfoModel,
     @SerializedName("room") val room: ReservationRoomModel,
+    @SerializedName("payment") val payment: PaymentModel?,
 ) {
     companion object {
 
@@ -44,6 +45,11 @@ data class ReservationModel(
                 status = map["status"] as String,
                 guestInfo = GuestInfoModel.fromJson(map["guest_info"].toString()),
                 room = ReservationRoomModel.fromJson(map["room"].toString()),
+                payment = if (map["payment"] != null) {
+                    PaymentModel.fromJson(map["payment"].toString())
+                } else {
+                    null
+                }
             )
         }
     }
@@ -62,6 +68,7 @@ fun ReservationModel.toEntity(): Reservation {
         checkOut,
         status,
         guestInfo.toEntity(),
-        room.toEntity()
+        room.toEntity(),
+        payment?.toEntity()
     )
 }

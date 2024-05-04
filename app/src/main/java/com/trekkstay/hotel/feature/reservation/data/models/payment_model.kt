@@ -4,21 +4,23 @@ import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 import com.trekkstay.hotel.core.typedef.DataMap
-import com.trekkstay.hotel.feature.reservation.domain.entities.GuestInfo
+import com.trekkstay.hotel.feature.reservation.domain.entities.Payment
 
-data class GuestInfoModel(
-    @SerializedName("full_name") val name: String,
-    @SerializedName("contact") val contact: String,
-    @SerializedName("adults") val adults: Int,
-    @SerializedName("children") val children: Int,
+data class PaymentModel(
+    @SerializedName("reservation_id") val reservationId: String,
+    @SerializedName("amount") val amount: Int,
+    @SerializedName("userId") val userId: String,
+    @SerializedName("method") val method: String,
+    @SerializedName("status") val status: String
 ) {
     companion object {
-        fun empty(): GuestInfoModel {
-            return GuestInfoModel(
-                name = "_empty.name",
-                contact = "_empty.contact",
-                adults = 0,
-                children = 0,
+        fun empty(): PaymentModel {
+            return PaymentModel(
+                reservationId = "",
+                amount = 0,
+                userId = "",
+                method = "",
+                status = ""
             )
         }
 
@@ -50,7 +52,7 @@ data class GuestInfoModel(
             }
         }
 
-        fun fromJson(source: String): GuestInfoModel {
+        fun fromJson(source: String): PaymentModel {
             val type = object : TypeToken<Map<String, Any>>() {}.type
             return try {
                 val map: Map<String, Any> = Gson().fromJson(source, type)
@@ -61,19 +63,19 @@ data class GuestInfoModel(
             }
         }
 
-        fun fromMap(map: DataMap): GuestInfoModel {
+        fun fromMap(map: DataMap): PaymentModel {
 
-            return GuestInfoModel(
-                name = map["full_name"] as String,
-                contact = map["contact"] as String,
-                adults = (map["adults"].toString().toDouble()).toInt(),
-                children = (map["children"].toString().toDouble()).toInt()
-
+            return PaymentModel(
+                reservationId = map["reservation_id"] as String,
+                amount = map["amount"] as Int,
+                userId = map["user_id"] as String,
+                method = map["method"] as String,
+                status = map["status"] as String
             )
         }
     }
 }
 
-fun GuestInfoModel.toEntity(): GuestInfo {
-    return GuestInfo(name, contact, adults, children)
+fun PaymentModel.toEntity(): Payment {
+    return Payment(reservationId = reservationId, amount, userId, method, status)
 }

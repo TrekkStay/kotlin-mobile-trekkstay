@@ -88,6 +88,30 @@ class ReservationViewModel(private val reservationRepo: ReservationRepo) : ViewM
                         }
                     )
                 }
+                is CreatePaymentAction -> {
+                    _state.postValue(ReservationState.CreatePaymentCalling)
+                    val result = reservationRepo.createPayment(
+                        action.amount,
+                        action.method,
+                        action.reservationId,
+                        action.status
+                    )
+                    result.fold(
+                        { failure ->
+                            _state.postValue(
+                                ReservationState.InvalidCreatePayment(
+                                    failure.message
+                                )
+                            )
+                        },
+                        { _ ->
+                            _state.postValue(
+                                ReservationState.SuccessCreatePayment
+                            )
+                        }
+                    )
+                }
+
             }
         }
     }

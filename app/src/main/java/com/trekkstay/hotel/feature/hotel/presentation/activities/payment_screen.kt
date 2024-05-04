@@ -1,5 +1,6 @@
 package com.trekkstay.hotel.feature.hotel.presentation.activities
 
+import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -25,6 +26,7 @@ import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -39,14 +42,37 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
+import com.trekkstay.hotel.feature.authenticate.presentation.states.EmpAuthState
+import com.trekkstay.hotel.feature.reservation.presentation.states.CreatePaymentAction
+import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationState
+import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationViewModel
+import com.trekkstay.hotel.feature.shared.TextDialog
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
+import vn.momo.momo_partner.AppMoMoLib
 
 @Composable
-fun PaymentScreen(navHostController: NavHostController) {
+fun PaymentScreen(reservationId:String,amount:String,reservationViewModel: ReservationViewModel,navController: NavHostController) {
+
+    val context = LocalContext.current
     var paymentSelected by remember { mutableStateOf("") }
     val radioOptions = listOf("Pay Online with Momo","Pay At Hotel")
+    val reservationState by reservationViewModel.state.observeAsState()
+
+        when (reservationState) {
+            is ReservationState.SuccessCreatePayment -> {
+                navController.navigate("customer_reservations"){
+                    launchSingleTop = true
+                }
+            }
+            is ReservationState.InvalidCreatePayment -> {
+                println("failed")
+            }
+            is ReservationState.CreatePaymentCalling -> {}
+            else -> {
+            }
+        }
+
     Box(
         modifier = Modifier.background(Color.White).padding(bottom = 70.dp)
     ) {
@@ -87,10 +113,10 @@ fun PaymentScreen(navHostController: NavHostController) {
                     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            if (paymentSelected == method) {
-                                paymentSelected = ""
+                            paymentSelected = if (paymentSelected == method) {
+                                ""
                             } else {
-                                paymentSelected = method
+                                method
                             }
                         }
                     ) {
@@ -130,7 +156,47 @@ fun PaymentScreen(navHostController: NavHostController) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Button(
-                    onClick = { },
+                    onClick = {
+                        if(paymentSelected == "Pay Online with Momo") {
+                            val environment = 1
+
+                            val appMoMoLib = AppMoMoLib.getInstance()
+
+                            when (environment) {
+                                0 -> appMoMoLib.setEnvironment(AppMoMoLib.ENVIRONMENT.DEBUG)
+                                1 -> appMoMoLib.setEnvironment(AppMoMoLib.ENVIRONMENT.DEVELOPMENT)
+                                2 -> appMoMoLib.setEnvironment(AppMoMoLib.ENVIRONMENT.PRODUCTION)
+                            }
+
+                            appMoMoLib.setAction(AppMoMoLib.ACTION.PAYMENT)
+                            appMoMoLib.setActionType(AppMoMoLib.ACTION_TYPE.GET_TOKEN)
+
+                            val eventValue: MutableMap<String, Any> = HashMap()
+                            eventValue["merchantname"] = "TrekkStay"
+                            eventValue["merchantcode"] = "CGV19072017"
+                            eventValue["amount"] = "${(amount.toDouble() * 24500.0).toInt()}"
+                            eventValue["orderId"] = reservationId
+                            eventValue["orderLabel"] = "Mã đơn hàng"
+                            eventValue["merchantnamelabel"] = "Nhà cung cấp"
+                            eventValue["fee"] = 0
+                            eventValue["description"] = "Thanh toán hóa đơn"
+                            eventValue["requestId"] =
+                                "$reservationId.${(amount.toDouble() * 24500.0).toInt()}"
+                            eventValue["partnerCode"] = "CGV19072017"
+                            eventValue["extra"] = ""
+
+                            appMoMoLib.requestMoMoCallBack(context as Activity, eventValue)
+                        }
+                        else{
+                            val reservationAction = CreatePaymentAction(
+                                amount = (amount.toDouble() * 30000.0).toInt().toString(),
+                                method = "PAY_AT_HOTEL",
+                                reservationId = reservationId,
+                                status = "PENDING",
+                            )
+                            reservationViewModel.processAction(reservationAction)
+                        }
+                    },
                     colors = ButtonDefaults.buttonColors(containerColor = TrekkStayCyan),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -149,10 +215,4 @@ fun PaymentScreen(navHostController: NavHostController) {
             }
         }
     }
-}
-
-@Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
-@Composable
-fun PaymentPreview() {
-    PaymentScreen(rememberNavController())
 }

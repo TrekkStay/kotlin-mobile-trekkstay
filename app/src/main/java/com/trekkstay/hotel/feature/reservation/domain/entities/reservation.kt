@@ -12,4 +12,5 @@ data class Reservation(
     val status: String,
     val guestInfo: GuestInfo,
     val room: ReservationRoom,
+    val payment: Payment?,
 )

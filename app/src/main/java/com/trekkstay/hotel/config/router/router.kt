@@ -39,6 +39,7 @@ import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelEmpListScr
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelHomeScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelRoomManageScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelScreen
+import com.trekkstay.hotel.feature.hotel.presentation.activities.PaymentScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.RoomDetailScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.SearchEngineScreen
 import com.trekkstay.hotel.feature.hotel.presentation.states.attraction.AttractionViewModel
@@ -53,7 +54,7 @@ import com.trekkstay.hotel.feature.qr_scanner.QRScannerScreen
 import com.trekkstay.hotel.feature.reservation.presentation.activities.CustomerReservationScreen
 import com.trekkstay.hotel.feature.reservation.presentation.activities.HotelReservationScreen
 import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationViewModel
-import com.trekkstay.hotel.payment.MoMoPayment
+
 
 object AppRouter {
     private var navController: NavHostController? = null
@@ -212,6 +213,9 @@ fun CustomerRouter(
         composable(route = "customer_notifications") {
             CustomerNotificationScreen()
         }
+        composable(route = "customer_edit_info") {
+            CustomerEditInfoScreen(navController = navController)
+        }
         // Profile
         composable(route = "customer_profile") {
             CustomerProfileScreen(navController = navController)
@@ -221,6 +225,14 @@ fun CustomerRouter(
         }
         composable(route = "customer_edit_info") {
             CustomerEditInfoScreen(navController = navController)
+        }
+        composable(route = "payment_method/{reservationId}/{amount}") { backStackEntry ->
+            val id = backStackEntry.arguments?.getString("reservationId")
+            val amount = backStackEntry.arguments?.getString("amount")
+
+            if (id != null&& amount != null) {
+                PaymentScreen(id,amount,reservationViewModel,navController = navController)
+            }
         }
     }
 }

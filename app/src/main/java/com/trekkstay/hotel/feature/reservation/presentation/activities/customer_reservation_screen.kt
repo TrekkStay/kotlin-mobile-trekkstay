@@ -50,7 +50,6 @@ import com.trekkstay.hotel.feature.reservation.presentation.fragments.Reservatio
 import com.trekkstay.hotel.feature.reservation.presentation.states.ListReservationAction
 import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationState
 import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationViewModel
-import com.trekkstay.hotel.payment.MoMoPayment
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 import kotlinx.coroutines.launch
@@ -79,6 +78,7 @@ fun CustomerReservationScreen(
     val reservationState by reservationViewModel.state.observeAsState()
     when (reservationState) {
         is ReservationState.SuccessListReservation -> {
+
             val reservationHotel = (reservationState as ReservationState.SuccessListReservation).reservation.reservationList
             when ((reservationState as ReservationState.SuccessListReservation).sendState) {
                 "UPCOMING" -> {

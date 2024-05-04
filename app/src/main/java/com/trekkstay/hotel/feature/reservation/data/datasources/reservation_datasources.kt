@@ -34,10 +34,18 @@ interface ReservationRemoteDataSource {
     suspend fun viewDetailReservation(
         reservationId: String
     ): Response<Reservation>
+
+    suspend fun createPayment(
+        amount: String,
+        method: String,
+        reservationId: String,
+        status: String
+    ): Response<Unit>
 }
 
 const val createReservationEndpoint = "reservation/create"
 const val listReservationEndpoint = "reservation/filter"
+const val createPaymentEndpoint = "payment/create"
 
 class ReservationRemoteDataSourceImpl(private val client: Client, private val context: Context) :
     ReservationRemoteDataSource {
@@ -150,6 +158,36 @@ class ReservationRemoteDataSourceImpl(private val client: Client, private val co
         }
     }
 
+
+    override suspend fun createPayment(
+        amount: String,
+        method: String,
+        reservationId: String,
+        status: String
+    ): Response<Unit> {
+        return withContext(Dispatchers.IO) {
+            val requestBodyJson = JSONObject().apply {
+                put("amount", amount.toInt())
+                put("method", method)
+                put("reservation_id", reservationId)
+                put("status", status)
+            }
+
+
+            val jwtKey = LocalStore.getKey(context, "jwtKey", "")
+            val request = RequestQuery(
+                method = RequestMethod.POST,
+                path = "http://175.41.168.200:8888/api/v1/$createPaymentEndpoint",
+                headers = mapOf("Authorization" to "Bearer $jwtKey"),
+                requestBody = requestBodyJson.toString()
+            )
+
+            val response = client.execute<Unit>(
+                request = request,
+            )
+            response
+        }
+    }
     private inline fun <reified T : Any> parseResponse(responseData: Any?): T? {
         return when (responseData) {
             is ReservationModel -> responseData.toEntity() as? T
