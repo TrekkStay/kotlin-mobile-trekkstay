@@ -9,3 +9,8 @@ data class CreateReview(
     val point: Int,
     val summary: String
 ) : ReviewAction()
+
+
+data class ReviewList(
+    val hotelId: String
+) : ReviewAction()

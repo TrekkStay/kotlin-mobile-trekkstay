@@ -33,6 +33,7 @@ import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateEmpScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateHotelScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateRoomScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CustomerReviewScreen
+import com.trekkstay.hotel.feature.hotel.presentation.activities.DetailReviewListScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.EditEmpScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.EditHotelScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.EditRoomScreen
@@ -205,6 +206,13 @@ fun CustomerRouter(
                     reservationViewModel,
                     navController
                 )
+            }
+        }
+        composable(route = "review_list/{hotelId}") { backStackEntry ->
+            val id = backStackEntry.arguments?.getString("hotelId")
+
+            if (id != null) {
+                DetailReviewListScreen(navController, reviewViewModel, id)
             }
         }
         // Reservation

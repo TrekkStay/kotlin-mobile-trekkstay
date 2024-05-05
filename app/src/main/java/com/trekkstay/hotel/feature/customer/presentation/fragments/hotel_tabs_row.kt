@@ -108,6 +108,7 @@ fun HotelTabsRow(hotelViewModel: HotelViewModel, navController: NavHostControlle
         is HotelState.SuccessViewHotelNear -> {
             nearByHotels = (hotelState as HotelState.SuccessViewHotelNear).list
             nearByMsg = "No nearby hotels found"
+            println(nearByHotels)
         }
         is HotelState.InvalidViewHotelNear -> {
             nearByHotels = emptyList()

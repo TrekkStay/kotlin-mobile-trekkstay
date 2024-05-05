@@ -83,7 +83,7 @@ fun HotelCard(
                         contentDescription = null
                     )
                     Text(
-                        "5.0",
+                        hotel.rating.averagePoint.toString(),
                         fontSize = 10.sp,
                         fontFamily = PoppinsFontFamily,
                         fontWeight = FontWeight.Bold

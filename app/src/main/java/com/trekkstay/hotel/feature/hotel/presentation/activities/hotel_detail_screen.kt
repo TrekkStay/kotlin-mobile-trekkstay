@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.view.ViewGroup
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -94,8 +95,8 @@ fun HotelDetailScreen(
     var reviewNum = 1863
     var liked by remember { mutableStateOf(false) }
     val likedTint = (if (liked) TrekkStayCyan else Color(0xFFB8B8B9))
-
     var expandedDesc by remember { mutableStateOf(false) }
+    var commentText: String
 
 
     LaunchedEffect(Unit) {
@@ -107,6 +108,9 @@ fun HotelDetailScreen(
     when (hotelState) {
         is HotelState.SuccessHotelDetail -> {
             val hotel = (hotelState as HotelState.SuccessHotelDetail).hotel
+            star = hotel.rating.averagePoint
+            reviewNum = hotel.rating.totalReview
+
             val cheapRoomPrice = if (hotel.room.isNotEmpty()) {
                 hotel.room.first().originalPrice
             } else {
@@ -386,11 +390,18 @@ fun HotelDetailScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 20.dp)
+                            .clickable {
+                                navController.navigate("review_list/${hotel.id}")
+                            }
                     ) {
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(10.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.padding(horizontal = 25.dp)
+                                .clickable {
+                                    navController.navigate("review_list/${hotel.id}")
+                                }
+
                         ) {
                             Text(
                                 text = "$star",
@@ -420,7 +431,7 @@ fun HotelDetailScreen(
                                         withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
                                             append("$reviewNum")
                                         }
-                                        append(" reviews")
+                                        append("reviews")
                                     },
                                     fontFamily = PoppinsFontFamily,
                                 )

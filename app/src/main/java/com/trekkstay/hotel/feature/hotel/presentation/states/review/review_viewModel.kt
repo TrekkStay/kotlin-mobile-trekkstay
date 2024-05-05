@@ -23,6 +23,17 @@ class ReviewViewModel(private val reviewRepo: ReviewRepo) : ViewModel() {
                         { success->  _state.postValue(ReviewState.SuccessCreateReview) }
                     )
                 }
+
+                is ReviewList -> {
+                    _state.postValue(ReviewState.ReviewListCalling)
+                    val result = reviewRepo.reviewList(action.hotelId)
+                    result.fold(
+                        { failure -> _state.postValue(ReviewState.InvalidReviewList(failure.message)) },
+                        { success->  _state.postValue(ReviewState.SuccessReviewList(success)) }
+                    )
+                }
+
+
             }
         }
     }

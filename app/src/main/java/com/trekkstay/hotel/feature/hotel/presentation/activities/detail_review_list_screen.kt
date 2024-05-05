@@ -25,6 +25,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -43,15 +46,45 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.hotel.R
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.InfoTextField
+import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelDetailAction
+import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelState
+import com.trekkstay.hotel.feature.hotel.presentation.states.review.ReviewList
+import com.trekkstay.hotel.feature.hotel.presentation.states.review.ReviewState
+import com.trekkstay.hotel.feature.hotel.presentation.states.review.ReviewViewModel
 import com.trekkstay.hotel.feature.shared.Utils.labelizeRating
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @Composable
-fun DetailReviewListScreen(navController: NavController) {
+fun DetailReviewListScreen(navController: NavController, reviewViewModel: ReviewViewModel, id: String) {
     val hotelName = "Estabeez Hotel"
     val reviewNum = 1863
     val ratingPoint = 4.8
+
+    LaunchedEffect(Unit) {
+        val action = ReviewList(id)
+        reviewViewModel.processAction(action)
+    }
+
+    val reviewState by reviewViewModel.state.observeAsState()
+    when (reviewState) {
+        is ReviewState.SuccessReviewList ->{
+            val reviewList = (reviewState as ReviewState.SuccessReviewList).reviewList.reviewList
+            println(reviewList)
+        }
+
+        is ReviewState.InvalidReviewList -> {
+
+        }
+
+        is ReviewState.ReviewListCalling -> {
+
+        }
+         else -> {
+             println("calling review list")
+         }
+    }
+
     Column(
         modifier = Modifier
             .padding(bottom = 70.dp)
@@ -231,10 +264,4 @@ fun DetailReviewCard() {
             )
         }
     }
-}
-
-@Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
-@Composable
-fun DetailReviewListPreview() {
-    DetailReviewListScreen(rememberNavController())
 }
