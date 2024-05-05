@@ -26,7 +26,6 @@ data class ReservationListModel(
         }
 
         private fun fromList(source: String): List<ReservationModel> {
-            println(source)
             val jsonArray = JSONArray(source)
             val list: MutableList<Map<String, Any>> = mutableListOf()
             for (i in 0 until jsonArray.length()) {
