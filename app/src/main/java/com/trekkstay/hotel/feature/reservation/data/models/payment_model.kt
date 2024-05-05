@@ -66,7 +66,11 @@ data class PaymentModel(
         fun fromMap(map: DataMap): PaymentModel {
             return PaymentModel(
                 reservationId = map["reservation_id"] as String,
-                amount = (map["amount"] as Double).toInt(),
+                amount = if (map["amount"] is String) {
+                    (map["amount"] as String).toDouble().toInt()
+                } else {
+                    (map["amount"] as Double).toInt()
+                },
                 userId = map["user_id"] as String,
                 method = map["method"] as String,
                 status = map["status"] as String

@@ -50,7 +50,6 @@ data class ReservationRoomModel(
         }
 
         fun fromJson(source: String): ReservationRoomModel {
-            println("Source Room >>>>>>>>>>  $source")
             val type = object : TypeToken<Map<String, Any>>() {}.type
             return try {
                 val map: Map<String, Any> = Gson().fromJson(source, type)
@@ -67,8 +66,16 @@ data class ReservationRoomModel(
                 hotelName = map["hotel_name"] as String,
                 location = map["location"] as String,
                 type = map["type"] as String,
-                originalPrice = (map["original_price"].toString().toDouble()).toInt(),
-                bookingPrice = (map["booking_price"].toString().toDouble()).toInt(),
+                originalPrice = if (map["original_price"] is String) {
+                    (map["original_price"] as String).toDouble().toInt()
+                } else {
+                    (map["original_price"] as Double).toInt()
+                },
+                bookingPrice = if (map["booking_price"] is String) {
+                    (map["booking_price"] as String).toDouble().toInt()
+                } else {
+                    (map["booking_price"] as Double).toInt()
+                },
                 images = MediaModel.fromJson(Gson().toJson(map["images"])),
             )
         }

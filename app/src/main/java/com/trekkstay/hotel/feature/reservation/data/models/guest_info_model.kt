@@ -66,9 +66,17 @@ data class GuestInfoModel(
             return GuestInfoModel(
                 name = map["full_name"] as String,
                 contact = map["contact"] as String,
-                adults = (map["adults"].toString().toDouble()).toInt(),
-                children = (map["children"].toString().toDouble()).toInt()
 
+                adults = if (map["adults"] is String) {
+                    (map["adults"] as String).toDouble().toInt()
+                } else {
+                    (map["adults"] as Double).toInt()
+                },
+                children = if (map["children"] is String) {
+                    (map["children"] as String).toDouble().toInt()
+                } else {
+                    (map["children"] as Double).toInt()
+                },
             )
         }
     }

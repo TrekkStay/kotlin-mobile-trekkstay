@@ -26,6 +26,7 @@ data class ReservationListModel(
         }
 
         private fun fromList(source: String): List<ReservationModel> {
+            println(source)
             val jsonArray = JSONArray(source)
             val list: MutableList<Map<String, Any>> = mutableListOf()
             for (i in 0 until jsonArray.length()) {
@@ -39,7 +40,6 @@ data class ReservationListModel(
         fun fromJson(source: String): ReservationListModel {
             val type = object : TypeToken<Map<String, Any>>() {}.type
             val map: Map<String, Any> = Gson().fromJson(source, type)
-            println(source)
             return fromMap(map)
         }
 

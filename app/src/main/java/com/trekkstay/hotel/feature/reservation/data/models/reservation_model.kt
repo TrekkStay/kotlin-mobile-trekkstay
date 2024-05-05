@@ -23,20 +23,33 @@ data class ReservationModel(
     companion object {
 
         fun fromJson(source: String): ReservationModel {
+            println(source)
             val type = object : TypeToken<Map<String, Any>>() {}.type
             val map: Map<String, Any> = Gson().fromJson(source, type)
             return fromMap(map)
         }
 
         fun fromMap(map: DataMap): ReservationModel {
-            println(map["payment"])
+            println(map["quantity"])
+            println(map["total_price"])
             return ReservationModel(
                 id = map["id"] as String,
                 roomId = map["room_id"] as String,
                 userId = map["user_id"] as String,
                 qrCodeUrl = map["qr_code_url"] as String? ?: "",
-                quantity = (map["quantity"].toString()).toDouble(),
-                totalPrice = (map["total_price"].toString()).toDouble(),
+                quantity = if (map["quantity"] is String) {
+                    println("still ok")
+                    (map["quantity"] as String).toDouble()
+                } else {
+                    println("huh???")
+                    map["quantity"] as Double
+                },
+                totalPrice = if (map["total_price"] is String) {
+
+                    (map["total_price"] as String).toDouble()
+                } else {
+                    map["total_price"] as Double
+                },
                 checkIn = map["check_in_date"] as String,
                 checkOut = map["check_out_date"] as String,
                 status = map["status"] as String,
