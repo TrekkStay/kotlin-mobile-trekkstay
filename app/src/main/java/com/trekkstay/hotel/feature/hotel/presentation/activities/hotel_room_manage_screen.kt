@@ -44,6 +44,8 @@ import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 @Composable
 fun HotelRoomManageScreen(roomViewModel: RoomViewModel, navController: NavHostController) {
+
+    println("in here")
     var roomList: List<Room> = emptyList()
     val roomState by roomViewModel.state.observeAsState()
     val hotelId = LocalStore.getKey(LocalContext.current, "hotelId", "not created")
@@ -57,14 +59,16 @@ fun HotelRoomManageScreen(roomViewModel: RoomViewModel, navController: NavHostCo
             val action = ViewRoomAction(hotelId)
             roomViewModel.processAction(action)
         }
+
         is RoomState.SuccessViewRoom -> {
             roomList = (roomState as RoomState.SuccessViewRoom).roomList.roomList
         }
-        is RoomState.InvalidGetHotelRoom -> { }
-        is RoomState.GetHotelRoomCalling -> { }
-        is RoomState.InvalidViewRoom -> { }
-        is RoomState.ViewRoomCalling -> { }
-        else -> { }
+
+        is RoomState.InvalidGetHotelRoom -> {}
+        is RoomState.GetHotelRoomCalling -> {}
+        is RoomState.InvalidViewRoom -> {}
+        is RoomState.ViewRoomCalling -> {}
+        else -> {}
     }
 
     Scaffold(

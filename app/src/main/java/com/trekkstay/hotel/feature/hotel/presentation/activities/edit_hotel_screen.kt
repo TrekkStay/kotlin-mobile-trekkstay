@@ -204,11 +204,14 @@ fun EditHotelScreen(
     var selectedVideoExtension by remember { mutableStateOf<List<String>>(emptyList()) }
     var selectedImageLinks by remember { mutableStateOf<List<String>>(emptyList()) }
     var selectedVideoLinks by remember { mutableStateOf<List<String>>(emptyList()) }
+    var selectedImageLinksString by remember { mutableStateOf<List<Uri?>>(emptyList()) }
+    var selectedVideoLinksString by remember { mutableStateOf<List<Uri?>>(emptyList()) }
     var imageUrls by remember { mutableStateOf<List<String>>(emptyList()) }
     val photosPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickMultipleVisualMedia()
     ) { uris ->
         selectedImageUris = uris
+        selectedImageLinksString = uris
 
         selectedFile = uris.map { uri ->
             queryFile(context, uri)
@@ -222,6 +225,7 @@ fun EditHotelScreen(
         contract = ActivityResultContracts.GetMultipleContents()
     ) { uris ->
         selectedVideoUris = uris
+        selectedVideoLinksString = uris
 
         selectedVideoFile = uris.map { uri ->
             queryVideo(context, uri)
@@ -636,8 +640,6 @@ fun EditHotelScreen(
                                                         ExoPlayer.Builder(context).build().apply {
                                                             uri?.let { it1 -> MediaItem.fromUri(it1) }
                                                                 ?.let { it2 -> setMediaItem(it2) }
-                                                            repeatMode = ExoPlayer.REPEAT_MODE_ALL
-                                                            playWhenReady = playWhenReady
                                                             prepare()
                                                             play()
                                                         }
@@ -752,9 +754,7 @@ fun EditHotelScreen(
                         }
                         Button(
                             onClick = {
-                                if (checkForHttps(selectedImageUris) && checkForHttps(
-                                        selectedVideoUris
-                                    )
+                                if (selectedImageLinksString.isEmpty() && selectedVideoLinksString.isEmpty()
                                 ) {
                                     val action = UpdateHotelAction(
                                         name = hotelNameString.ifEmpty { hotelName.text },

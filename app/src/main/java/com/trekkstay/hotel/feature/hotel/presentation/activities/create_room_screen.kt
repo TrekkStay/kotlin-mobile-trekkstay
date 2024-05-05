@@ -89,7 +89,12 @@ import java.io.FileOutputStream
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun CreateRoomScreen(hotelViewModel: HotelViewModel, roomViewModel: RoomViewModel, mediaViewModel: MediaViewModel,navController: NavHostController) {
+fun CreateRoomScreen(
+    hotelViewModel: HotelViewModel,
+    roomViewModel: RoomViewModel,
+    mediaViewModel: MediaViewModel,
+    navController: NavHostController
+) {
     val context = LocalContext.current
     val contentResolver = context.contentResolver
     var hotelId by remember { mutableStateOf("") }
@@ -105,26 +110,29 @@ fun CreateRoomScreen(hotelViewModel: HotelViewModel, roomViewModel: RoomViewMode
     var selectedChildNumber by remember { mutableIntStateOf(0) }
     var selectedFacilities by remember { mutableStateOf(listOf<String>()) }
     val facilities = listOf(
-    "Air Condition",
-    "Bath Tub",
-    "Shower",
-    "Balcony",
-    "Hair Dryer",
-    "Kitchen",
-    "Television",
-    "Slippers",
-    "Smoking")
+        "Air Condition",
+        "Bath Tub",
+        "Shower",
+        "Balcony",
+        "Hair Dryer",
+        "Kitchen",
+        "Television",
+        "Slippers",
+        "Smoking"
+    )
     var loadingCreate by remember { mutableStateOf(false) }
     fun getFileName(context: Context, uri: Uri): String? {
         var fileName: String? = null
         val projection = arrayOf(MediaStore.MediaColumns.DISPLAY_NAME)
         context.contentResolver.query(uri, projection, null, null, null)?.use { cursor ->
             if (cursor.moveToFirst()) {
-                fileName = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME))
+                fileName =
+                    cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME))
             }
         }
         return fileName
     }
+
     fun queryFile(context: Context, uri: Uri): File {
         val fileName = getFileName(context, uri) ?: "image_file"
         val inputStream = context.contentResolver.openInputStream(uri)
@@ -136,6 +144,7 @@ fun CreateRoomScreen(hotelViewModel: HotelViewModel, roomViewModel: RoomViewMode
         }
         return outputFile
     }
+
     fun queryVideo(context: Context, uri: Uri): File {
         val fileName = getFileName(context, uri) ?: "video_file"
         val inputStream = context.contentResolver.openInputStream(uri)
@@ -147,6 +156,7 @@ fun CreateRoomScreen(hotelViewModel: HotelViewModel, roomViewModel: RoomViewMode
         }
         return outputFile
     }
+
     fun getFileExtension(uri: Uri, contentResolver: ContentResolver): String {
         val mimeTypeMap = MimeTypeMap.getSingleton()
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri)) ?: ""
@@ -154,21 +164,20 @@ fun CreateRoomScreen(hotelViewModel: HotelViewModel, roomViewModel: RoomViewMode
 
     var selectedImageUris by remember { mutableStateOf<List<Uri?>>(emptyList()) }
     var selectedVideoUris by remember { mutableStateOf<List<Uri?>>(emptyList()) }
-    var selectedFile by remember{ mutableStateOf<List<File>>(emptyList())}
-    var selectedExtension by remember{ mutableStateOf<List<String>>(emptyList())}
-    var selectedVideoFile by remember{ mutableStateOf<List<File>>(emptyList())}
-    var selectedVideoExtension by remember{ mutableStateOf<List<String>>(emptyList())}
-    var imageUrls by remember{ mutableStateOf<List<String>>(emptyList())}
+    var selectedFile by remember { mutableStateOf<List<File>>(emptyList()) }
+    var selectedExtension by remember { mutableStateOf<List<String>>(emptyList()) }
+    var selectedVideoFile by remember { mutableStateOf<List<File>>(emptyList()) }
+    var selectedVideoExtension by remember { mutableStateOf<List<String>>(emptyList()) }
+    var imageUrls by remember { mutableStateOf<List<String>>(emptyList()) }
     val photosPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickMultipleVisualMedia()
     ) { uris ->
         selectedImageUris = uris
 
         selectedFile = uris.map { uri ->
-            queryFile(context,uri)
+            queryFile(context, uri)
         }
-        selectedExtension = uris.map{
-                uri ->
+        selectedExtension = uris.map { uri ->
             getFileExtension(uri, contentResolver)
         }
 
@@ -179,10 +188,9 @@ fun CreateRoomScreen(hotelViewModel: HotelViewModel, roomViewModel: RoomViewMode
         selectedVideoUris = uris
 
         selectedVideoFile = uris.map { uri ->
-            queryVideo(context,uri)
+            queryVideo(context, uri)
         }
-        selectedVideoExtension = uris.map{
-                uri ->
+        selectedVideoExtension = uris.map { uri ->
             getFileExtension(uri, contentResolver)
         }
 
@@ -194,44 +202,47 @@ fun CreateRoomScreen(hotelViewModel: HotelViewModel, roomViewModel: RoomViewMode
     var hasUploadedVideo by remember { mutableStateOf(false) }
 
 
-    when (mediaState){
+    when (mediaState) {
         is MediaState.SuccessUploadVideo -> {
             if (!hasUploadedVideo) {
                 val action = CreateRoomAction(
-                hotelId = hotelId,
-                type = roomType.text,
-                description = description.text,
-                quantities = quantity.text.toIntOrNull() ?: 0,
-                discountRate = discountRate.text.toIntOrNull() ?: 0,
-                originalPrice = price.text.toIntOrNull() ?: 0,
-                images = imageUrls,
-                videos = (mediaState as MediaState.SuccessUploadVideo).media.media,
-                airConditioner = "Air Condition" in selectedFacilities,
-                bathTub = "Bath Tub" in selectedFacilities,
-                shower = "Shower" in selectedFacilities,
-                balcony = "Balcony" in selectedFacilities,
-                hairDryer = "Hair Dryer" in selectedFacilities,
-                kitchen = "Kitchen" in selectedFacilities,
-                television = "Television" in selectedFacilities,
-                slippers = "Slippers" in selectedFacilities,
-                nonSmoking = "Smoking" in selectedFacilities,
-                view = view.text,
-                roomSize = roomSize.text.toIntOrNull() ?: 0,
-                numberOfBed = selectedBedNum,
-                adults = selectedAdultNumber,
-                children = selectedChildNumber
-            )
+                    hotelId = hotelId,
+                    type = roomType.text,
+                    description = description.text,
+                    quantities = quantity.text.toIntOrNull() ?: 0,
+                    discountRate = discountRate.text.toIntOrNull() ?: 0,
+                    originalPrice = price.text.toIntOrNull() ?: 0,
+                    images = imageUrls,
+                    videos = (mediaState as MediaState.SuccessUploadVideo).media.media,
+                    airConditioner = "Air Condition" in selectedFacilities,
+                    bathTub = "Bath Tub" in selectedFacilities,
+                    shower = "Shower" in selectedFacilities,
+                    balcony = "Balcony" in selectedFacilities,
+                    hairDryer = "Hair Dryer" in selectedFacilities,
+                    kitchen = "Kitchen" in selectedFacilities,
+                    television = "Television" in selectedFacilities,
+                    slippers = "Slippers" in selectedFacilities,
+                    nonSmoking = "Smoking" in selectedFacilities,
+                    view = view.text,
+                    roomSize = roomSize.text.toIntOrNull() ?: 0,
+                    numberOfBed = selectedBedNum,
+                    adults = selectedAdultNumber,
+                    children = selectedChildNumber
+                )
                 roomViewModel.processAction(action)
                 hasUploadedVideo = true
             }
         }
+
         is MediaState.InvalidUploadVideo -> {
 
         }
+
         is MediaState.UploadVideoCalling -> {
         }
+
         is MediaState.SuccessUploadMedia -> {
-            imageUrls =  (mediaState as MediaState.SuccessUploadMedia).media.media
+            imageUrls = (mediaState as MediaState.SuccessUploadMedia).media.media
             val mediaAction = UploadVideoAction(
                 selectedVideoFile,
                 selectedVideoExtension,
@@ -239,12 +250,15 @@ fun CreateRoomScreen(hotelViewModel: HotelViewModel, roomViewModel: RoomViewMode
             mediaViewModel.processAction(mediaAction)
 
         }
+
         is MediaState.InvalidUploadMedia -> {
 
         }
+
         is MediaState.UploadMediaCalling -> {
         }
-        else ->{
+
+        else -> {
 
         }
     }
@@ -262,6 +276,7 @@ fun CreateRoomScreen(hotelViewModel: HotelViewModel, roomViewModel: RoomViewMode
                 }
                 navController.navigate("hotel_room_manage")
             }
+
             is RoomState.InvalidCreateRoom -> {
                 loadingCreate = false
                 showDialog = true
@@ -272,9 +287,11 @@ fun CreateRoomScreen(hotelViewModel: HotelViewModel, roomViewModel: RoomViewMode
                     showDialog = false
                 }
             }
+
             is RoomState.CreateRoomCalling -> {
                 loadingCreate = true
             }
+
             else -> {
                 // Handle other states
             }
@@ -296,12 +313,13 @@ fun CreateRoomScreen(hotelViewModel: HotelViewModel, roomViewModel: RoomViewMode
     val hotelState by hotelViewModel.state.observeAsState()
     when (hotelState) {
         is HotelState.SuccessGetHotelId -> {
-             hotelId =
+            hotelId =
                 (hotelState as HotelState.SuccessGetHotelId).id
         }
 
         is HotelState.InvalidGetHotelId -> {
         }
+
         is HotelState.GetHotelIdCalling -> {
         }
 
@@ -311,17 +329,18 @@ fun CreateRoomScreen(hotelViewModel: HotelViewModel, roomViewModel: RoomViewMode
         val action = GetHotelIdAction
         hotelViewModel.processAction(action)
     }
-    
+
 
     Box(
         modifier = Modifier
-            .fillMaxHeight().padding(bottom = 75.dp)
+            .fillMaxHeight()
+            .padding(bottom = 75.dp)
     ) {
         Column(
             modifier = Modifier.verticalScroll(rememberScrollState())
         ) {
             Spacer(modifier = Modifier.height(25.dp))
-            Row (
+            Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -535,8 +554,8 @@ fun CreateRoomScreen(hotelViewModel: HotelViewModel, roomViewModel: RoomViewMode
                         roomSize.text.isEmpty() ||
                         selectedImageUris.isEmpty() ||
                         selectedVideoUris.isEmpty() ||
-                        selectedFacilities.isEmpty())
-                    {
+                        selectedFacilities.isEmpty()
+                    ) {
                         dialogTitle = "Empty Fields"
                         dialogMessage =
                             "Please input all the required information before creating your hotel"
@@ -570,12 +589,14 @@ fun CreateRoomScreen(hotelViewModel: HotelViewModel, roomViewModel: RoomViewMode
                 )
             }
         }
-        if (loadingCreate) {
-            Box(
-                modifier = Modifier.fillMaxSize().background(Color.Black.copy(0.3f))
-            ) {
-                AnimLoader(rawRes = R.raw.loading_anim, modifier = Modifier.align(Alignment.Center))
-            }
-        }
+//        if (loadingCreate) {
+//            Box(
+//                modifier = Modifier
+//                    .fillMaxSize()
+//                    .background(Color.Black.copy(0.3f))
+//            ) {
+//                AnimLoader(rawRes = R.raw.loading_anim, modifier = Modifier.align(Alignment.Center))
+//            }
+//        }
     }
 }
