@@ -29,24 +29,19 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.hotel.R
 import com.trekkstay.hotel.core.storage.LocalStore
-import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
 import com.trekkstay.hotel.ui.theme.NunitoFontFamily
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 @Composable
-fun HotelHomeScreen(hotelViewModel: HotelViewModel,navController: NavHostController) {
-    val ownerName = LocalStore.getKey(LocalContext.current,"name","User")
-    val bookingNum = 125
-    val roomNum = 125
-    val staffNum = 200
+fun HotelHomeScreen(navController: NavHostController) {
+    val ownerName = LocalStore.getKey(LocalContext.current, "name", "User")
+    val hotelId = LocalStore.getKey(LocalContext.current, "hotelId", "not created")
     Column(
         verticalArrangement = Arrangement.spacedBy(15.dp),
         modifier = Modifier
@@ -121,29 +116,44 @@ fun HotelHomeScreen(hotelViewModel: HotelViewModel,navController: NavHostControl
             verticalArrangement = Arrangement.spacedBy(15.dp),
             modifier = Modifier.padding(horizontal = 10.dp)
         ) {
-            HotelHomeCard(
-                title = "Today's Reservations",
-                value = "$bookingNum bookings",
-                color = Color(0x0085FF).copy(alpha = 0.55f),
-                icon = ImageVector.vectorResource(R.drawable.box_ico)
-            ) {
-                navController.navigate("hotel_reservations")
-            }
-            HotelHomeCard(
-                title = "Hotel's Rooms",
-                value = "$roomNum rooms",
-                color = Color(0xFF41B06E).copy(alpha = 0.55f),
-                icon = ImageVector.vectorResource(R.drawable.bed_ico)
-            ) {
-                navController.navigate("hotel_room_manage")
-            }
-            HotelHomeCard(
-                title = "Hotel's Staffs",
-                value = "$staffNum employees",
-                color = Color(0x7365C7).copy(alpha = 0.55f),
-                icon = ImageVector.vectorResource(R.drawable.people_ico)
-            ) {
-                navController.navigate("hotel_emp_list")
+            if (hotelId == "") {
+                HotelHomeCard(
+                    title = "Start creating your hotel",
+                    color = Color(0xFF41B06E).copy(alpha = 0.55f),
+                    icon = ImageVector.vectorResource(R.drawable.add_hotel_ico)
+                ) {
+                    navController.navigate("hotel_create") {
+                        launchSingleTop = true
+                    }
+                }
+            } else {
+                HotelHomeCard(
+                    title = "Upcoming Reservations",
+                    color = Color(0x0085FF).copy(alpha = 0.55f),
+                    icon = ImageVector.vectorResource(R.drawable.box_ico)
+                ) {
+                    navController.navigate("hotel_reservations") {
+                        launchSingleTop = true
+                    }
+                }
+                HotelHomeCard(
+                    title = "Hotel's Rooms",
+                    color = Color(0xFF41B06E).copy(alpha = 0.55f),
+                    icon = ImageVector.vectorResource(R.drawable.bed_ico)
+                ) {
+                    navController.navigate("hotel_room_manage") {
+                        launchSingleTop = true
+                    }
+                }
+                HotelHomeCard(
+                    title = "Hotel's Staffs",
+                    color = Color(0x7365C7).copy(alpha = 0.55f),
+                    icon = ImageVector.vectorResource(R.drawable.people_ico)
+                ) {
+                    navController.navigate("hotel_emp_list") {
+                        launchSingleTop = true
+                    }
+                }
             }
         }
     }
@@ -152,7 +162,6 @@ fun HotelHomeScreen(hotelViewModel: HotelViewModel,navController: NavHostControl
 @Composable
 private fun HotelHomeCard(
     title: String,
-    value: String,
     color: Color,
     icon: ImageVector,
     navigate: () -> Unit = {}
@@ -184,13 +193,7 @@ private fun HotelHomeCard(
                 color = Color.White,
             )
         }
-        Spacer(modifier = Modifier.height(10.dp))
-        Text(
-            value,
-            fontWeight = FontWeight.SemiBold,
-            fontFamily = PoppinsFontFamily,
-            color = Color.Black,
-        )
+        Spacer(modifier = Modifier.height(25.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End,
