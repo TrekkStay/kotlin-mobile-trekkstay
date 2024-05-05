@@ -51,6 +51,8 @@ data class GuestInfoModel(
         }
 
         fun fromJson(source: String): GuestInfoModel {
+            println("GUEST INFO")
+            println(source)
             val type = object : TypeToken<Map<String, Any>>() {}.type
             return try {
                 val map: Map<String, Any> = Gson().fromJson(source, type)

@@ -4,7 +4,6 @@ import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
-import android.util.Log
 import android.view.ViewGroup
 import android.webkit.MimeTypeMap
 import android.widget.FrameLayout
@@ -399,6 +398,7 @@ fun EditHotelScreen(
             } else {
                 1
             }.toString()
+
             val hotelImgList = if (hotel.images.media.isEmpty()) {
                 arrayOf(
                     "https://www.usatoday.com/gcdn/-mm-/05b227ad5b8ad4e9dcb53af4f31d7fbdb7fa901b/c=0-64-2119-1259/local/-/media/USATODAY/USATODAY/2014/08/13/1407953244000-177513283.jpg?width=1320&height=746&fit=crop&format=pjpg&auto=webp",
@@ -475,17 +475,11 @@ fun EditHotelScreen(
 //                        onValueChange = { hotelName = it },
 //                        icon = ImageVector.vectorResource(R.drawable.add_home_ico),
 //                    )
-
-
                     UpdateTextField(
                         label = "Hotel Name",
                         initValue = myName,
                         onValueChange = {
                             myName = it
-                            Log.d(
-                                "TextField",
-                                "New value: $myName"
-                            ) // Add a log statement for debugging
                         },
                         icon = ImageVector.vectorResource(R.drawable.add_home_ico),
 
@@ -545,19 +539,31 @@ fun EditHotelScreen(
                             wardList = emptyList()
                             val action = ViewDistrictAction(it.code)
                             locationViewModel.processAction(action)
-                        })
+                        },
+                            clearSibling = {
+                                // Clear values of District and Ward dropdowns
+                                selectedDistrict = null
+                                selectedWard = null
+                                districtList = emptyList()
+                                wardList = emptyList()
+                            })
                         DropDownMenu(widthSize = 115, title = "District", itemList = districtList, {
                             selectedDistrict = it
                             selectedWard = null
                             wardList = emptyList()
                             val action = ViewWardAction(it.code)
                             locationViewModel.processAction(action)
+                        }, clearSibling = {
+                            selectedWard = null
+                            wardList = emptyList()
                         })
                         DropDownMenu(
                             widthSize = 115,
                             title = "Ward",
                             itemList = wardList,
-                            { selectedWard = it })
+                            { selectedWard = it }, clearSibling = {
+                                
+                            })
                     }
                     InfoTextField(
                         label = "Address Detail",
@@ -570,7 +576,7 @@ fun EditHotelScreen(
                         leadingIcon = ImageVector.vectorResource(R.drawable.camera_ico),
                         clickHandler = {
                             videoPickerLauncher.launch("video/*")
-                        }
+                        },
                     )
                     if (selectedVideoUris.isNotEmpty()) {
                         FlowRow(
@@ -855,6 +861,8 @@ private fun DropDownMenu(
     itemList: List<Location>,
     onItemSelected: (Location) -> Unit,
     leadingIcon: ImageVector? = null,
+    clearSibling: () -> Unit
+
 ) {
     var expanded by remember { mutableStateOf(false) }
     var selectedText by remember { mutableStateOf(title) }
@@ -915,6 +923,7 @@ private fun DropDownMenu(
                     onClick = {
                         selectedText = item.nameVi
                         expanded = false
+                        clearSibling()
                         onItemSelected(item)
                     }
                 )

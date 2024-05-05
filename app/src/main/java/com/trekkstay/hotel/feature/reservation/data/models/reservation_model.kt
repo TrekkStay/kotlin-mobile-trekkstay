@@ -37,15 +37,18 @@ data class ReservationModel(
                 qrCodeUrl = map["qr_code_url"] as String? ?: "",
                 quantity = if (map["quantity"] is String) {
                     println("still ok")
+                    println(map["quantity"])
                     (map["quantity"] as String).toDouble()
                 } else {
                     println("huh???")
+                    println(map["quantity"])
                     map["quantity"] as Double
                 },
                 totalPrice = if (map["total_price"] is String) {
-
+                    println(map["total_price"])
                     (map["total_price"] as String).toDouble()
                 } else {
+                    println(map["total_price"])
                     map["total_price"] as Double
                 },
                 checkIn = map["check_in_date"] as String,

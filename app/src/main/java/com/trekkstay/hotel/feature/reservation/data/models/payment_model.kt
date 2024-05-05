@@ -53,6 +53,8 @@ data class PaymentModel(
         }
 
         fun fromJson(source: String): PaymentModel {
+            println("PAYMENT SOURCE")
+            println(source)
             val type = object : TypeToken<Map<String, Any>>() {}.type
             return try {
                 val map: Map<String, Any> = Gson().fromJson(source, type)
@@ -65,15 +67,15 @@ data class PaymentModel(
 
         fun fromMap(map: DataMap): PaymentModel {
             return PaymentModel(
-                reservationId = map["reservation_id"] as String,
+                reservationId = (map["reservation_id"] as? String) ?: "",
                 amount = if (map["amount"] is String) {
-                    (map["amount"] as String).toDouble().toInt()
+                    ((map["amount"] as? String) ?: "0.0").toDouble().toInt()
                 } else {
-                    (map["amount"] as Double).toInt()
+                    ((map["amount"] as? Double) ?: 0.0).toInt()
                 },
-                userId = map["user_id"] as String,
-                method = map["method"] as String,
-                status = map["status"] as String
+                userId = (map["user_id"] as? String) ?: "",
+                method = (map["method"] as? String) ?: "",
+                status = (map["status"] as? String) ?: "",
             )
         }
     }
