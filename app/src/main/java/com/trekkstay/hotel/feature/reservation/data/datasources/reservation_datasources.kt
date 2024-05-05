@@ -41,11 +41,16 @@ interface ReservationRemoteDataSource {
         reservationId: String,
         status: String
     ): Response<Unit>
+
+    suspend fun cancelReservation(
+        reservationId: String
+    ) : Response<Unit>
 }
 
 const val createReservationEndpoint = "reservation/create"
 const val listReservationEndpoint = "reservation/filter"
 const val createPaymentEndpoint = "payment/create"
+const val cancelReservationEndpoint = "reservation/cancel"
 
 class ReservationRemoteDataSourceImpl(private val client: Client, private val context: Context) :
     ReservationRemoteDataSource {
@@ -182,6 +187,27 @@ class ReservationRemoteDataSourceImpl(private val client: Client, private val co
             val response = client.execute<Unit>(
                 request = request,
             )
+            response
+        }
+    }
+
+    override suspend fun cancelReservation(reservationId: String): Response<Unit> {
+        return withContext(Dispatchers.IO) {
+            val jwtKey = LocalStore.getKey(context, "jwtKey", "")
+            val request = RequestQuery(
+                method = RequestMethod.DELETE,
+                path = "http://175.41.168.200:8888/api/v1/$cancelReservationEndpoint/$reservationId",
+                headers = mapOf("Authorization" to "Bearer $jwtKey"),
+                requestBody = null,
+            )
+
+            val response = client.execute<Unit>(
+                request = request,
+            )
+
+            println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+            println(request)
+            println(response)
             response
         }
     }

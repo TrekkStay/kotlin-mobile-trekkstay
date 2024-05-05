@@ -102,5 +102,20 @@ class ReservationRepoImpl(private val remoteDataSource: ReservationRemoteDataSou
             )
         }
     }
+
+    override suspend fun cancelReservation(reservationId: String): ResultVoid {
+        return when (val response = remoteDataSource.cancelReservation(reservationId)) {
+            is Response.Success -> Unit.right()
+            is Response.Invalid -> ApiInvalid(
+                response.message ?: "Unknown error",
+                response.status ?: "-1"
+            ).left()
+
+            is Response.Failure -> throw ApiException(
+                response.message ?: "Unknown error",
+                response.status ?: "-1"
+            )
+        }
+    }
 }
 

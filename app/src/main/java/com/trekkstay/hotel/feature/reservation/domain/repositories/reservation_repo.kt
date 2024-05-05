@@ -31,4 +31,8 @@ interface ReservationRepo {
          reservationId: String,
          status: String
     ): ResultVoid
+
+    suspend fun cancelReservation(
+        reservationId: String
+    ) : ResultVoid
 }

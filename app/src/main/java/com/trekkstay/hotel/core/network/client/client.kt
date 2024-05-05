@@ -34,6 +34,8 @@ class Client(private val engine: OkHttpClient) {
         return withContext(Dispatchers.IO) {
             try {
                 val response = engine.newCall(buildOkHttpRequest(request)).execute()
+                println("response corre >>>>>>>>>>>>>>>>")
+                println(response)
                 val responseBody = response.body?.string()
                 val jsonResponse = responseBody?.let { JSONObject(it) }
                 jsonResponse?.let { json ->

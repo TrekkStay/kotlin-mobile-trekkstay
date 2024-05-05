@@ -62,7 +62,7 @@ fun CustomerResetPwScreen(navController: NavHostController, authViewModel: AuthV
                     type = "success",
                     onDismiss = {
                         showDialog = false
-                        navController.navigate("customer_profile") {
+                        navController.navigate("customer_reservations") {
                             launchSingleTop = true
                         }
                     }
@@ -73,8 +73,12 @@ fun CustomerResetPwScreen(navController: NavHostController, authViewModel: AuthV
                 TextDialog(
                     title = "Change Password Failed!",
                     msg = (authState as AuthState.InvalidChangePassword).message,
-                    onDismiss = { showDialog = false }
-                )
+                    onDismiss = {
+                        showDialog = false
+                        navController.navigate("customer_reservations") {
+                            launchSingleTop = true
+                        }
+                    }                )
             }
             is AuthState.ChangePasswordCalling -> { }
             else -> {}

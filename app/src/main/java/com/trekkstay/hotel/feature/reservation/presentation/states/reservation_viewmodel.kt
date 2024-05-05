@@ -111,7 +111,24 @@ class ReservationViewModel(private val reservationRepo: ReservationRepo) : ViewM
                         }
                     )
                 }
-
+                is CancelReservationAction -> {
+                    _state.postValue(ReservationState.CancelReservationCalling)
+                    val result = reservationRepo.cancelReservation(action.reservationId)
+                    result.fold(
+                        { failure ->
+                            _state.postValue(
+                                ReservationState.InvalidCancelReservation(
+                                    failure.message
+                                )
+                            )
+                        },
+                        { _ ->
+                            _state.postValue(
+                                ReservationState.SuccessCancelReservation
+                            )
+                        }
+                    )
+                }
             }
         }
     }

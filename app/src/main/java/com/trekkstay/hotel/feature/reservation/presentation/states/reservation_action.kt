@@ -26,3 +26,4 @@ data class CreatePaymentAction(
     val reservationId: String,
     val status: String
 ) : ReservationAction()
+data class CancelReservationAction(val reservationId: String): ReservationAction()

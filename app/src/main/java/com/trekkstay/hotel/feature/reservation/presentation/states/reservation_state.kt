@@ -20,4 +20,8 @@ sealed class ReservationState {
     object CreatePaymentCalling : ReservationState()
     data class InvalidCreatePayment(val message: String) : ReservationState()
     object SuccessCreatePayment : ReservationState()
+
+    object CancelReservationCalling: ReservationState()
+    data class InvalidCancelReservation(val message: String): ReservationState()
+    object SuccessCancelReservation: ReservationState()
 }

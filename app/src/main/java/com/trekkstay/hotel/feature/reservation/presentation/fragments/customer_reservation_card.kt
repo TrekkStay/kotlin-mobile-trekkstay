@@ -30,6 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -45,6 +46,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthState
+import com.trekkstay.hotel.feature.reservation.presentation.states.CancelReservationAction
+import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationState
+import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationViewModel
 import com.trekkstay.hotel.feature.shared.TextDialog
 import com.trekkstay.hotel.feature.shared.Utils.formatPrice
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
@@ -66,7 +71,8 @@ fun CustomerReservationCard(
     price: Double = 0.0,
     checkIn: String = "",
     checkOut: String = "",
-    navController: NavController
+    navController: NavController,
+    reservationViewModel: ReservationViewModel
 ) {
     val formattedPrice = formatPrice(price)
     var isBotSheetVisible by remember { mutableStateOf(false) }
@@ -84,6 +90,42 @@ fun CustomerReservationCard(
             onDismiss = { showDialog = false },
         )
     }
+
+    val reservationState by reservationViewModel.state.observeAsState()
+    when (reservationState) {
+        is ReservationState.SuccessCancelReservation -> {
+            println("success cancel reservation")
+            TextDialog(
+                title = "Cancel Booking",
+                msg = "You cancelled booking successfully!",
+                type = "success",
+                onDismiss = {
+                    showDialog = false
+                    navController.navigate("customer_reservations") {
+                        launchSingleTop = true
+                    }}
+            )
+        }
+        is ReservationState.InvalidCancelReservation -> {
+            println("invalid cancel reservation")
+            val msg = (reservationState as ReservationState.InvalidCancelReservation).message
+            println(msg)
+            TextDialog(
+            title = "Cancel Failed!",
+            msg = (reservationState as ReservationState.InvalidCancelReservation).message,
+            onDismiss = {
+                showDialog = false
+                navController.navigate("customer_reservations") {
+                    launchSingleTop = true
+                }}
+        )
+        }
+        is ReservationState.CancelReservationCalling -> {
+            println("cancel calling")
+        }
+        else -> {}
+    }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween,
@@ -280,7 +322,10 @@ fun CustomerReservationCard(
                                     modifier = Modifier.fillMaxWidth(),
                                 ) {
                                     Button(
-                                        onClick = { /*TODO*/ },
+                                        onClick = {
+                                            val action = CancelReservationAction(reservationId)
+                                            reservationViewModel.processAction(action)
+                                        },
                                         colors = ButtonDefaults.buttonColors(
                                             containerColor = TrekkStayCyan,
                                             contentColor = Color.White

@@ -209,7 +209,8 @@ fun CustomerReservationScreen(
                                         type = reservationType,
                                         checkIn = item.checkIn,
                                         checkOut = item.checkOut,
-                                        navController = navController
+                                        navController = navController,
+                                        reservationViewModel = reservationViewModel
                                     )
                                 }
                                 1 -> {
@@ -221,8 +222,8 @@ fun CustomerReservationScreen(
                                         checkIn = item.checkIn,
                                         type = reservationType,
                                         price = item.room.bookingPrice.toDouble(),
-                                        navController = navController
-                                    )
+                                        navController = navController,
+                                        reservationViewModel = reservationViewModel                                    )
                                 }
                                 2 -> {
                                     CustomerReservationCard(
@@ -232,8 +233,8 @@ fun CustomerReservationScreen(
                                         destination = item.room.location,
                                         checkIn = item.checkIn,
                                         type = reservationType,
-                                        navController = navController
-                                    )
+                                        navController = navController,
+                                        reservationViewModel = reservationViewModel                                    )
                                 }
                             }
                         }
