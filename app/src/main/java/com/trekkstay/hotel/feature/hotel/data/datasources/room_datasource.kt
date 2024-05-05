@@ -45,6 +45,32 @@ interface RoomRemoteDataSource {
         originalPrice: Int
     ): Response<Unit>
 
+    suspend fun updateRoom(
+        id: String,
+        hotelId: String,
+        type: String,
+        description: String,
+        airConditioner: Boolean,
+        balcony: Boolean,
+        bathTub: Boolean,
+        hairDryer: Boolean,
+        kitchen: Boolean,
+        nonSmoking: Boolean,
+        shower: Boolean,
+        slippers: Boolean,
+        television: Boolean,
+        numberOfBed: Int,
+        roomSize: Int,
+        adults: Int,
+        children: Int,
+        view: String,
+        videos: List<String>,
+        images: List<String>,
+        quantities: Int,
+        discountRate: Int,
+        originalPrice: Int
+    ): Response<Unit>
+
     suspend fun viewRoom(
         hotelId: String,
     ): Response<RoomList>
@@ -52,16 +78,18 @@ interface RoomRemoteDataSource {
     suspend fun getHotelRoom(): Response<String>
 
     suspend fun roomDetail(
-        id:String
+        id: String
     ): Response<Room>
 }
 
 const val createRoomEndpoint = "hotel-room/create"
+const val updateRoomEndpoint = "hotel-room/update"
 const val viewRoomEndpoint = "hotel-room/filter"
 const val getHotelRoomEndpoint = "hotel/my-hotel"
 const val roomDetailEndpoint = "hotel-room/"
 
-class RoomRemoteDataSourceImpl(private val client: Client, private val context: Context) : RoomRemoteDataSource {
+class RoomRemoteDataSourceImpl(private val client: Client, private val context: Context) :
+    RoomRemoteDataSource {
 
     override suspend fun createRoom(
         hotelId: String,
@@ -138,8 +166,86 @@ class RoomRemoteDataSourceImpl(private val client: Client, private val context: 
         }
     }
 
+    override suspend fun updateRoom(
+        id: String,
+        hotelId: String,
+        type: String,
+        description: String,
+        airConditioner: Boolean,
+        balcony: Boolean,
+        bathTub: Boolean,
+        hairDryer: Boolean,
+        kitchen: Boolean,
+        nonSmoking: Boolean,
+        shower: Boolean,
+        slippers: Boolean,
+        television: Boolean,
+        numberOfBed: Int,
+        roomSize: Int,
+        adults: Int,
+        children: Int,
+        view: String,
+        videos: List<String>,
+        images: List<String>,
+        quantities: Int,
+        discountRate: Int,
+        originalPrice: Int
+    ): Response<Unit> {
+        return withContext(Dispatchers.IO) {
+            val jwtKey = LocalStore.getKey(context, "jwtKey", "")
+            val requestBody = JSONObject()
+            val facilities = JSONObject()
+            val sleeps = JSONObject()
+            val videosArray = JSONArray(videos)
+            val imagesArray = JSONArray(images)
+
+            requestBody.put("id", id)
+            requestBody.put("hotel_id", hotelId)
+            requestBody.put("type", type)
+            requestBody.put("description", description)
+            requestBody.put("quantity", quantities)
+            requestBody.put("discount_rate", discountRate)
+            requestBody.put("original_price", originalPrice)
+
+            requestBody.put("videos", JSONObject().put("urls", videosArray))
+            requestBody.put("images", JSONObject().put("urls", imagesArray))
+
+            facilities.put("air_conditioner", airConditioner)
+            facilities.put("balcony", balcony)
+            facilities.put("bath_tub", bathTub)
+            facilities.put("hair_dryer", hairDryer)
+            facilities.put("kitchen", kitchen)
+            facilities.put("non_smoking", nonSmoking)
+            facilities.put("number_of_bed", numberOfBed)
+            facilities.put("room_size", roomSize)
+            facilities.put("shower", shower)
+
+            sleeps.put("adults", adults)
+            sleeps.put("children", children)
+
+            facilities.put("sleeps", sleeps)
+
+            facilities.put("slippers", slippers)
+            facilities.put("television", television)
+            facilities.put("view", view)
+
+            requestBody.put("facilities", facilities)
+
+            val request = RequestQuery(
+                method = RequestMethod.PATCH,
+                path = "http://175.41.168.200:8888/api/v1/$updateRoomEndpoint",
+                headers = mapOf("Authorization" to "Bearer $jwtKey"),
+                requestBody = requestBody.toString()
+            )
+
+            val response = client.execute<Unit>(request = request)
+            response
+        }
+    }
+
     override suspend fun viewRoom(
-        hotelId: String): Response<RoomList> {
+        hotelId: String
+    ): Response<RoomList> {
         return withContext(Dispatchers.IO) {
             val request = RequestQuery(
                 method = RequestMethod.POST,
@@ -148,7 +254,7 @@ class RoomRemoteDataSourceImpl(private val client: Client, private val context: 
             )
 
 
-            val response = client.execute<RoomList>(request = request,parser = { responseData ->
+            val response = client.execute<RoomList>(request = request, parser = { responseData ->
                 if (responseData is String) {
 
                     parseResponse(RoomListModel.fromJson(responseData))
@@ -159,6 +265,7 @@ class RoomRemoteDataSourceImpl(private val client: Client, private val context: 
             response
         }
     }
+
     override suspend fun getHotelRoom(): Response<String> {
         return withContext(Dispatchers.IO) {
             val jwtKey = LocalStore.getKey(context, "jwtKey", "")
@@ -186,7 +293,7 @@ class RoomRemoteDataSourceImpl(private val client: Client, private val context: 
 
     }
 
-    override suspend fun roomDetail(id:String): Response<Room> {
+    override suspend fun roomDetail(id: String): Response<Room> {
         return withContext(Dispatchers.IO) {
             val request = RequestQuery(
                 method = RequestMethod.GET,
@@ -209,7 +316,6 @@ class RoomRemoteDataSourceImpl(private val client: Client, private val context: 
         }
 
     }
-
 
 
     private inline fun <reified T : Any> parseResponse(responseData: Any?): T? {

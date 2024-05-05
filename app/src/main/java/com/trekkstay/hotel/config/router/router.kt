@@ -325,8 +325,12 @@ fun HotelRouter(
         composable("hotel_room_create") {
             CreateRoomScreen(hotelViewModel, roomViewModel, mediaViewModel, navController)
         }
-        composable("hotel_room_edit") {
-            EditRoomScreen(hotelViewModel, roomViewModel, mediaViewModel, navController)
+        composable("hotel_room_edit/{roomId}") {backStackEntry ->
+            val id = backStackEntry.arguments?.getString("roomId")
+
+            if (id != null) {
+                EditRoomScreen(id,hotelViewModel, roomViewModel, mediaViewModel, navController)
+            }
         }
         composable(route = "hotel_emp_list") {
             HotelEmpListScreen(empAuthViewModel, navController, activity)

@@ -10,6 +10,10 @@ sealed class RoomState {
     data class InvalidCreateRoom(val message: String) : RoomState()
     object SuccessCreateRoom : RoomState()
 
+    object UpdateRoomCalling : RoomState()
+    data class InvalidUpdateRoom(val message: String) : RoomState()
+    object SuccessUpdateRoom : RoomState()
+
     object ViewRoomCalling : RoomState()
     data class InvalidViewRoom(val message: String) : RoomState()
     data class SuccessViewRoom(val roomList: RoomList) : RoomState()

@@ -42,33 +42,68 @@ class RoomViewModel(private val roomRepo: RoomRepo) : ViewModel() {
                     )
                     result.fold(
                         { failure -> _state.postValue(RoomState.InvalidCreateRoom(failure.message)) },
-                        { _->  _state.postValue(RoomState.SuccessCreateRoom) }
+                        { _ -> _state.postValue(RoomState.SuccessCreateRoom) }
                     )
                 }
-                is ViewRoomAction ->{
+                is UpdateRoomAction -> {
+                    _state.postValue(RoomState.UpdateRoomCalling)
+                    val result = roomRepo.updateRoom(
+                        action.id,
+                        action.hotelId,
+                        action.type,
+                        action.description,
+                        action.airConditioner,
+                        action.balcony,
+                        action.bathTub,
+                        action.hairDryer,
+                        action.kitchen,
+                        action.nonSmoking,
+                        action.shower,
+                        action.slippers,
+                        action.television,
+                        action.numberOfBed,
+                        action.roomSize,
+                        action.adults,
+                        action.children,
+                        action.view,
+                        action.videos,
+                        action.images,
+                        action.quantities,
+                        action.discountRate,
+                        action.originalPrice
+                    )
+                    result.fold(
+                        { failure -> _state.postValue(RoomState.InvalidUpdateRoom(failure.message)) },
+                        { _ -> _state.postValue(RoomState.SuccessUpdateRoom) }
+                    )
+                }
+
+                is ViewRoomAction -> {
                     _state.postValue(RoomState.ViewRoomCalling)
                     val result = roomRepo.viewRoom(
                         action.hotelId,
                     )
                     result.fold(
                         { failure -> _state.postValue(RoomState.InvalidViewRoom(failure.message)) },
-                        { success->  _state.postValue(RoomState.SuccessViewRoom(success)) }
+                        { success -> _state.postValue(RoomState.SuccessViewRoom(success)) }
                     )
                 }
-                is GetHotelRoomAction ->{
+
+                is GetHotelRoomAction -> {
                     _state.postValue(RoomState.GetHotelRoomCalling)
                     val result = roomRepo.getHotelRoom()
                     result.fold(
                         { failure -> _state.postValue(RoomState.InvalidGetHotelRoom(failure.message)) },
-                        { success->  _state.postValue(RoomState.SuccessGetHotelRoom(success)) }
+                        { success -> _state.postValue(RoomState.SuccessGetHotelRoom(success)) }
                     )
                 }
-                is RoomDetailAction ->{
+
+                is RoomDetailAction -> {
                     _state.postValue(RoomState.RoomDetailCalling)
                     val result = roomRepo.roomDetail(action.id)
                     result.fold(
                         { failure -> _state.postValue(RoomState.InvalidRoomDetail(failure.message)) },
-                        { success->  _state.postValue(RoomState.SuccessRoomDetail(success)) }
+                        { success -> _state.postValue(RoomState.SuccessRoomDetail(success)) }
                     )
                 }
             }

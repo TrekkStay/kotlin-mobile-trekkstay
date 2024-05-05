@@ -1,7 +1,8 @@
 package com.trekkstay.hotel.core.network.client
+
 import com.trekkstay.hotel.core.network.method.RequestMethod
-import com.trekkstay.hotel.core.network.request.RequestQuery
 import com.trekkstay.hotel.core.network.request.PreparedRequest
+import com.trekkstay.hotel.core.network.request.RequestQuery
 import com.trekkstay.hotel.core.network.response.Response
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -33,8 +34,10 @@ class Client(private val engine: OkHttpClient) {
     private suspend fun <T> executeRequest(request: PreparedRequest<T>): Response<T> {
         return withContext(Dispatchers.IO) {
             try {
+                println("REQUEST CORE >>>>>>>>>>>>>>>>")
+                println(request.toString())
                 val response = engine.newCall(buildOkHttpRequest(request)).execute()
-                println("response corre >>>>>>>>>>>>>>>>")
+                println("RESPONSE CORE >>>>>>>>>>>>>>>>")
                 println(response)
                 val responseBody = response.body?.string()
                 val jsonResponse = responseBody?.let { JSONObject(it) }
@@ -43,20 +46,19 @@ class Client(private val engine: OkHttpClient) {
                     val status = json.optInt("status_code")
 
                     Response.whenResponse {
-                        if (response.isSuccessful && status in 200..299 ) {
-                            if(data != null) {
+                        if (response.isSuccessful && status in 200..299) {
+                            if (data != null) {
                                 success(
                                     status.toString(),
                                     response.message,
                                     request.parser?.invoke(data.toString())
                                 )
-                            }
-                            else{
-                                success(status.toString(),response.message,null)
+                            } else {
+                                success(status.toString(), response.message, null)
 
                             }
                         } else {
-                            if ( (status in 300..499)) {
+                            if ((status in 300..499)) {
                                 invalid(status.toString(), response.message)
                             } else {
                                 failure(status.toString(), response.message)
