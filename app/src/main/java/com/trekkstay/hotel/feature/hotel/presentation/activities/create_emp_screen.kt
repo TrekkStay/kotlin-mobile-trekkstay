@@ -84,7 +84,7 @@ fun CreateEmpScreen(empAuthViewModel: EmpAuthViewModel, navController: NavHostCo
                 loadingCreate = false
                 showDialog = true
                 TextDialog(
-                    title = "Registration Successful",
+                    title = "Employee Created Successful",
                     msg = "You have successfully registered.",
                     type = "success",
                     onDismiss = { showDialog = false },
@@ -105,6 +105,7 @@ fun CreateEmpScreen(empAuthViewModel: EmpAuthViewModel, navController: NavHostCo
             is EmpAuthState.EmpCreateCalling -> {
                 loadingCreate = true
             }
+
             else -> {}
         }
     }
