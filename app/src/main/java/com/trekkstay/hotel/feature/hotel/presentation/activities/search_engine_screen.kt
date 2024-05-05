@@ -63,12 +63,19 @@ fun SearchEngineScreen(
 ) {
     val context = LocalContext.current
     var selectedDestination by remember { mutableStateOf<Destination?>(null) }
-    var selectedDateRange by remember { mutableStateOf<Pair<Long, Long>?>(Pair(System.currentTimeMillis(), System.currentTimeMillis() + 86400000)) }
+    var selectedDateRange by remember {
+        mutableStateOf<Pair<Long, Long>?>(
+            Pair(
+                System.currentTimeMillis(),
+                System.currentTimeMillis() + 86400000
+            )
+        )
+    }
     var roomNumber by remember { mutableIntStateOf(1) }
     var adultNumber by remember { mutableIntStateOf(2) }
     var childNumber by remember { mutableIntStateOf(1) }
-    var filteredAttraction by remember {mutableStateOf<Attraction?>(null)}
-    var sortPrice by remember {mutableStateOf<String>("asc")}
+    var filteredAttraction by remember { mutableStateOf<Attraction?>(null) }
+    var sortPrice by remember { mutableStateOf("asc") }
     var showResult by remember { mutableStateOf(false) }
 
     var searchedHotel by remember {
@@ -100,8 +107,9 @@ fun SearchEngineScreen(
         is SearchState.InvalidSearchHotel -> {
             println((searchState as SearchState.InvalidSearchHotel).message)
         }
-        is SearchState.SearchHotelCalling -> { }
-        else -> { }
+
+        is SearchState.SearchHotelCalling -> {}
+        else -> {}
     }
 
 
@@ -124,8 +132,7 @@ fun SearchEngineScreen(
                 onBackPress = {
                     showResult = false
                 },
-                onAttractionFilter = {
-                    attraction->
+                onAttractionFilter = { attraction ->
                     filteredAttraction = attraction
                     if (selectedDestination != null) {
                         val action =
@@ -147,8 +154,8 @@ fun SearchEngineScreen(
 
                     }
                 },
-                onSortChange ={
-                        sort-> sortPrice = sort
+                onSortChange = { sort ->
+                    sortPrice = sort
                     if (filteredAttraction != null) {
                         val action =
                             SearchHotelAction(
@@ -167,8 +174,7 @@ fun SearchEngineScreen(
                             )
                         searchViewModel.processAction(action)
 
-                    }
-                    else{
+                    } else {
                         val action =
                             SearchHotelAction(
                                 locationCode = selectedDestination!!.code,
@@ -225,7 +231,11 @@ fun SearchEngineScreen(
                         }
                     )
                     selectedDateRange?.first?.let {
-                        DateRangeSelector(type = "search", startDate = it, endDate = selectedDateRange!!.second)
+                        DateRangeSelector(
+                            type = "search",
+                            startDate = it,
+                            endDate = selectedDateRange!!.second
+                        )
                         { dateRange ->
                             selectedDateRange = dateRange
                         }

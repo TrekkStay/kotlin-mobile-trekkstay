@@ -41,7 +41,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.hotel.R
-import com.google.android.gms.maps.model.LatLng
 import com.trekkstay.hotel.feature.hotel.domain.entities.Attraction
 import com.trekkstay.hotel.feature.hotel.domain.entities.Hotel
 import com.trekkstay.hotel.feature.hotel.domain.entities.MarkerInfo
@@ -67,8 +66,8 @@ fun SearchResultScreen(
     numGuess: Int,
     attractionViewModel: AttractionViewModel,
     onBackPress: () -> Unit,
-    onAttractionFilter: (Attraction)->Unit,
-    onSortChange: (String) ->Unit,
+    onAttractionFilter: (Attraction) -> Unit,
+    onSortChange: (String) -> Unit,
     navController: NavController
 ) {
     var sortCriteria by remember { mutableStateOf("") }
@@ -77,28 +76,21 @@ fun SearchResultScreen(
     val neighborList = mutableListOf<String>()
 
     val attractionState by attractionViewModel.state.observeAsState()
-    var myAttraction = ""
 
     when (attractionState) {
         is AttractionState.SuccessAttractionList -> {
-            attractionList = (attractionState as AttractionState.SuccessAttractionList).attractionList.attractionList
-            myAttraction = attractionList[0].name
-            for (item in attractionList){
+            attractionList =
+                (attractionState as AttractionState.SuccessAttractionList).attractionList.attractionList
+            for (item in attractionList) {
                 neighborList.add(item.name)
             }
         }
 
-        is AttractionState.InvalidAttractionList -> {
+        is AttractionState.InvalidAttractionList -> {}
 
-        }
+        is AttractionState.Idle -> {}
 
-        is AttractionState.Idle -> {
-
-        }
-
-        else -> {
-
-        }
+        else -> {}
     }
 
     LaunchedEffect(Unit) {
@@ -186,10 +178,11 @@ fun SearchResultScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 15.dp)
             ) {
-                CustomerSortHotel(sortCriteria, onSort = { sortCriteria = it
-                    if(it == "Price Increase")
+                CustomerSortHotel(sortCriteria, onSort = {
+                    sortCriteria = it
+                    if (it == "Price Increase")
                         onSortChange("asc")
-                    else{
+                    else {
                         onSortChange("desc")
                     }
                 })
@@ -197,13 +190,14 @@ fun SearchResultScreen(
                     neighborList,
                     filteredNeighborhood,
                     filteredRatings,
-                    filterNeighborhood = { neighbourhood->
+                    filterNeighborhood = { neighbourhood ->
                         filteredNeighborhood = neighbourhood
-                        val filteredAttractions = attractionList.filter { it.name == filteredNeighborhood }
+                        val filteredAttractions =
+                            attractionList.filter { it.name == filteredNeighborhood }
                         if (filteredAttractions.isNotEmpty()) {
                             onAttractionFilter(filteredAttractions[0])
                         }
-                                         },
+                    },
                     filterRatings = { filteredRatings = it }
                 )
                 OutlinedButton(
@@ -229,7 +223,7 @@ fun SearchResultScreen(
                 contentPadding = PaddingValues(15.dp),
             ) {
                 items(hotels.size) {
-                    HotelSearchResultCard(hotels[it],navController)
+                    HotelSearchResultCard(hotels[it], navController)
                 }
             }
         }

@@ -42,7 +42,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hotel.R
@@ -66,8 +65,8 @@ fun CustomerFilterHotel(
         contentPadding = PaddingValues(10.dp),
         border = BorderStroke(2.dp, TrekkStayCyan),
         colors = ButtonDefaults.outlinedButtonColors(
-            containerColor = if (selectedOption == 0) Color.Transparent else TrekkStayCyan,
-            contentColor = if (selectedOption == 0) TrekkStayCyan else Color.White
+            containerColor = if (filteredNeighborhood == "" && filteredRatings.isEmpty()) Color.Transparent else TrekkStayCyan,
+            contentColor = if (filteredNeighborhood == "" && filteredRatings.isEmpty()) TrekkStayCyan else Color.White
         ),
         modifier = Modifier.width(125.dp),
         onClick = {

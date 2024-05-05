@@ -24,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -57,11 +58,13 @@ fun BookingDetailScreen(
     var bookingID by remember { mutableStateOf("") }
     var customerName by remember { mutableStateOf("") }
     var customerContact by remember { mutableStateOf("") }
-    var roomNum by remember { mutableStateOf(0) }
-    var totalPrice by remember { mutableStateOf(1000) }
+    var roomNum by remember { mutableIntStateOf(0) }
+    var totalPrice by remember { mutableIntStateOf(1000) }
     var imgUrl by remember { mutableStateOf("") }
     var checkIn by remember { mutableStateOf("") }
     var checkOut by remember { mutableStateOf("") }
+    var payMethod by remember { mutableStateOf("") }
+    var payStatus by remember { mutableStateOf("") }
 
     var reservationDetail by remember {
         mutableStateOf<Reservation?>(null)
@@ -80,13 +83,24 @@ fun BookingDetailScreen(
             checkIn = reservationDetail!!.checkIn
             checkOut = reservationDetail!!.checkOut
             roomNum = reservationDetail!!.quantity.toInt()
+            payMethod = when (reservationDetail!!.payment!!.method) {
+                "PAY_AT_HOTEL" -> "Pay at Hotel"
+                "MOMO" -> "Pay online with Momo"
+                else -> ""
+            }
+            payStatus = when (reservationDetail!!.payment!!.status) {
+                "PENDING" -> "Pending"
+                "SUCCESS" -> "Successful"
+                "FAILED" -> "Failed"
+                else -> ""
+            }
         }
 
         is ReservationState.InvalidViewDetailReservation -> {
             println((reservationState as ReservationState.InvalidListReservation).message)
         }
 
-        is ReservationState.ViewDetailReservationCalling -> { }
+        is ReservationState.ViewDetailReservationCalling -> {}
 
         else -> {}
     }
@@ -170,8 +184,10 @@ fun BookingDetailScreen(
                     Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null)
                     BookDateCol(label = "Check Out", date = checkOut)
                 }
-                BookingInfoRow("Number of rooms", "$roomNum",150)
-                BookingInfoRow("Total", "$ $totalPrice",150)
+                BookingInfoRow("Number of rooms", "$roomNum", 150)
+                BookingInfoRow("Total Price", "$ $totalPrice", 150)
+                BookingInfoRow("Payment Method", payMethod, 150)
+                BookingInfoRow("Payment Status", payStatus, 150)
             }
             reservationDetail?.let { RoomReservationCard(it) }
         }
