@@ -1,5 +1,7 @@
 package com.trekkstay.hotel.feature.reservation.presentation.fragments
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -36,7 +38,9 @@ import com.example.hotel.R
 import com.trekkstay.hotel.feature.shared.Utils
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
+import java.time.LocalDate
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HotelReservationCard(
     reservationId: String,
@@ -51,6 +55,11 @@ fun HotelReservationCard(
     navController: NavController
 ) {
     val formattedPrice = Utils.formatPrice(price)
+    val currentDate = LocalDate.ofEpochDay(System.currentTimeMillis() / (1000 * 60 * 60 * 24))
+    val checkInDate = LocalDate.parse(checkIn)
+    val isToday = (currentDate.isEqual(checkInDate))
+    val cardColor = if (isToday && type == "Upcoming") Color(0xFF0FA958) else Color.Black.copy(0.2f)
+    val borderWidth = if (isToday && type == "Upcoming") 2.dp else 1.dp
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween,
@@ -58,7 +67,7 @@ fun HotelReservationCard(
             .fillMaxWidth()
             .size(180.dp)
             .background(Color.White, shape = RoundedCornerShape(10.dp))
-            .border(1.dp, Color.Black.copy(0.2f), shape = RoundedCornerShape(10.dp))
+            .border(borderWidth, cardColor, shape = RoundedCornerShape(10.dp))
             .padding(5.dp)
     ) {
         Row(
@@ -115,9 +124,10 @@ fun HotelReservationCard(
                     Icon(
                         ImageVector.vectorResource(R.drawable.filled_circle_ico),
                         contentDescription = "type icon",
-                        tint = TrekkStayBlue
+                        tint = if (isToday && type == "Upcoming") Color(0xFF0FA958) else TrekkStayBlue
                     )
                 }
+
                 "Completed" -> {
                     Icon(
                         Icons.Default.CheckCircle,
@@ -125,6 +135,7 @@ fun HotelReservationCard(
                         tint = TrekkStayBlue
                     )
                 }
+
                 "Cancelled" -> {
                     Icon(
                         Icons.Default.Warning,
@@ -143,7 +154,7 @@ fun HotelReservationCard(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-                if (type == "Upcoming" || type == "Completed") {
+            if (type == "Upcoming" || type == "Completed") {
                 Text(
                     "$$formattedPrice",
                     fontSize = 18.sp,
@@ -153,7 +164,7 @@ fun HotelReservationCard(
                 )
                 Button(
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = TrekkStayBlue,
+                        containerColor = if (isToday && type == "Upcoming") Color(0xFF0FA958) else TrekkStayBlue,
                         contentColor = Color.White
                     ),
                     onClick = {
