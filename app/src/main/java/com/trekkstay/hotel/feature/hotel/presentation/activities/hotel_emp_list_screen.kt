@@ -121,7 +121,7 @@ fun HotelEmpListScreen(
                                 .verticalScroll(rememberScrollState())
                         ) {
                             (empAuthState as EmpAuthState.SuccessViewEmp).res.empList.forEach { emp ->
-                                HotelEmpCard(emp)
+                                HotelEmpCard(emp = emp,navController = navController)
                             }
                         }
                     }

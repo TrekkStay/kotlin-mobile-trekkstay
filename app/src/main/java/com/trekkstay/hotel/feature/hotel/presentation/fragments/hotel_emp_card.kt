@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.hotel.R
 import com.trekkstay.hotel.feature.authenticate.domain.entities.HotelEmp
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
@@ -33,6 +34,7 @@ import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 
 @Composable
 fun HotelEmpCard(
+    navController: NavHostController,
     emp: HotelEmp
 ) {
     Column(
@@ -43,7 +45,9 @@ fun HotelEmpCard(
             .border(2.dp, TrekkStayBlue, shape = RoundedCornerShape(10.dp))
             .padding(15.dp)
             .clickable {
-                //Navigate to edit emp
+                navController.navigate("hotel_emp_edit") {
+                    launchSingleTop = true
+                }
             }
     ) {
         Text(
