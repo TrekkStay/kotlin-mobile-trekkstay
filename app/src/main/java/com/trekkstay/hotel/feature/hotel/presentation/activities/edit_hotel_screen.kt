@@ -13,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -20,6 +21,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -27,17 +29,16 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Place
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -47,8 +48,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MenuItemColors
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -65,7 +64,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -97,9 +95,10 @@ import com.trekkstay.hotel.feature.hotel.presentation.states.media.MediaState
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.MediaViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.UploadMediaAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.UploadVideoAction
+import com.trekkstay.hotel.feature.shared.AnimLoader
+import com.trekkstay.hotel.feature.shared.TextDialog
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayBlue
-import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 import java.io.File
 import java.io.FileOutputStream
 
@@ -111,6 +110,8 @@ fun EditHotelScreen(
     mediaViewModel: MediaViewModel,
     navController: NavHostController
 ) {
+    var loadingUpdate by remember { mutableStateOf(false) }
+
     val context = LocalContext.current
     val contentResolver = context.contentResolver
     var hotelName by remember { mutableStateOf(TextFieldValue()) }
@@ -135,9 +136,6 @@ fun EditHotelScreen(
         "Spa",
         "Pool"
     )
-
-    var myName by remember { mutableStateOf("") }
-
 
     fun getFileName(context: Context, uri: Uri): String? {
         var fileName: String? = null
@@ -356,33 +354,28 @@ fun EditHotelScreen(
     if (showDialog) {
         when (hotelState) {
             is HotelState.SuccessUpdateHotel -> {
+                loadingUpdate = false
                 showDialog = true
-                AlertDialog(
-                    onDismissRequest = { showDialog = false },
-                    title = { Text("Update hotel success") },
-                    text = { Text("Update hotel $hotelName successful") },
-                    confirmButton = {},
-                    dismissButton = {
-                        Button(onClick = { showDialog = false }) {
-                            Text("OK")
-                        }
-                    }
-                )
+                TextDialog(
+                    title = "Successfully Updated",
+                    msg = "Updated your hotel successful",
+                    type = "success"
+                ) {
+                    showDialog = false
+                }
+                navController.navigate("hotel_profile") {
+                    launchSingleTop = true
+                }
             }
 
             is HotelState.InvalidUpdateHotel -> {
                 showDialog = true
-                AlertDialog(
-                    onDismissRequest = { showDialog = false },
-                    title = { Text("Update hotel fail") },
-                    text = { Text((hotelState as HotelState.InvalidUpdateHotel).message) },
-                    confirmButton = {},
-                    dismissButton = {
-                        Button(onClick = { showDialog = false }) {
-                            Text("OK")
-                        }
-                    }
-                )
+                TextDialog(
+                    title = "Updated Failed",
+                    msg = "Something went wrong!!! Please try again later",
+                ) {
+                    showDialog = false
+                }
             }
 
             is HotelState.UpdateHotelCalling -> {
@@ -404,9 +397,9 @@ fun EditHotelScreen(
 
     when (hotelState) {
         is HotelState.SuccessHotelDetail -> {
+            loadingUpdate = false
             val hotel = (hotelState as HotelState.SuccessHotelDetail).hotel
             hotelName = TextFieldValue(hotel.name)
-            myName = hotel.name
             hotelEmail = TextFieldValue(hotel.email)
             hotelPhone = TextFieldValue(hotel.phone)
             hotelDescription = TextFieldValue(hotel.description)
@@ -457,12 +450,7 @@ fun EditHotelScreen(
                 hotel.images.media.toTypedArray()
             }
             val hotelVideoList = hotel.videos.media.toTypedArray()
-
-
-
-
-            Column(
-                verticalArrangement = Arrangement.SpaceBetween,
+            Box(
                 modifier = Modifier
                     .fillMaxHeight()
                     .padding(bottom = 75.dp)
@@ -476,9 +464,7 @@ fun EditHotelScreen(
                     )
                 } else {
                     Column(
-                        modifier = Modifier
-                            .weight(1f)
-                            .verticalScroll(rememberScrollState())
+                        modifier = Modifier.verticalScroll(rememberScrollState())
                     ) {
                         Spacer(modifier = Modifier.height(25.dp))
                         Row(
@@ -506,21 +492,12 @@ fun EditHotelScreen(
                             verticalArrangement = Arrangement.spacedBy(10.dp),
                             modifier = Modifier.padding(horizontal = 25.dp, vertical = 20.dp)
                         ) {
-//                    InfoTextField(
-//                        label = "Hotel Name",
-//                        text = TextFieldValue(hotelName.text),
-//                        onValueChange = { hotelName = it },
-//                        icon = ImageVector.vectorResource(R.drawable.add_home_ico),
-//                    )
-                            UpdateTextField(
+                            InfoTextField(
                                 label = "Hotel Name",
-                                initValue = myName,
-                                onValueChange = {
-                                    myName = it
-                                },
-                                icon = ImageVector.vectorResource(R.drawable.add_home_ico),
-
-                                )
+                                text = hotelName,
+                                onValueChange = { hotelName = it },
+                                icon = Icons.Default.Edit,
+                            )
                             InfoTextField(
                                 label = "Hotel Email",
                                 text = hotelEmail,
@@ -584,7 +561,8 @@ fun EditHotelScreen(
                                     },
                                     initialLocation = selectedProvince
                                 )
-                                DropDownMenu(widthSize = 115,
+                                DropDownMenu(
+                                    widthSize = 115,
                                     title = "District",
                                     itemList = districtList,
                                     {
@@ -785,6 +763,7 @@ fun EditHotelScreen(
                                     hotelViewModel.processAction(action)
                                     hasUploadedVideo = true
                                 } else {
+                                    loadingUpdate = true
                                     showDialog = true
                                     hasUploadedVideo = false
                                     val mediaAction = UploadMediaAction(
@@ -812,7 +791,20 @@ fun EditHotelScreen(
                             )
                         }
                     }
+                    if (loadingUpdate) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(Color.Black.copy(0.3f))
+                        ) {
+                            AnimLoader(
+                                rawRes = R.raw.loading_anim,
+                                modifier = Modifier.align(Alignment.Center)
+                            )
+                        }
+                    }
                 }
+
             }
         }
 
@@ -831,55 +823,6 @@ fun EditHotelScreen(
 
 
 }
-
-@Composable
-fun UpdateTextField(
-    label: String,
-    initValue: String,
-    onValueChange: (String) -> Unit,
-    view: String = "hotel",
-    icon: ImageVector
-) {
-    var textFieldValue by remember { mutableStateOf(TextFieldValue(initValue)) }
-    var boxColor =
-        (if (view == "hotel") TrekkStayBlue else if (view == "customer") TrekkStayCyan else Color.White)
-
-    OutlinedTextField(
-        value = textFieldValue,
-        onValueChange = {
-            textFieldValue = it
-            onValueChange(it.text)
-        },
-        label = {
-            Text(
-                label,
-                fontFamily = PoppinsFontFamily,
-                fontWeight = FontWeight.Medium,
-                color = Color.Black.copy(0.6f)
-            )
-        },
-        modifier = Modifier.fillMaxWidth(),
-        leadingIcon = {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = Color.Black
-            )
-        },
-        textStyle = TextStyle(
-            fontFamily = PoppinsFontFamily,
-            fontSize = 14.sp
-        ),
-        shape = RoundedCornerShape(12.dp),
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = boxColor,
-            unfocusedBorderColor = boxColor,
-            cursorColor = boxColor,
-        ),
-        keyboardOptions = KeyboardOptions.Default.copy(autoCorrectEnabled = false)
-    )
-}
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

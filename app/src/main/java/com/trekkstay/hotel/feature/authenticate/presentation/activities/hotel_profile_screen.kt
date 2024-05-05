@@ -79,7 +79,6 @@ fun HotelProfileScreen(navController: NavHostController) {
                     type = "hotel",
                     onClick = {
                         navController.navigate("hotel_edit") {
-                            popUpTo(navController.graph.findStartDestination().id)
                             launchSingleTop = true
                         }
                     })
@@ -89,15 +88,18 @@ fun HotelProfileScreen(navController: NavHostController) {
                     type = "hotel",
                     onClick = {
                         navController.navigate("hotel_room_manage") {
-                            popUpTo(navController.graph.findStartDestination().id)
                             launchSingleTop = true
                         }
                     })
-                ProfileNavButton("Staff Management", Icons.Default.AccountBox, type = "hotel", onClick = {
-                    navController.navigate("hotel_emp_list") {
-                        popUpTo(navController.graph.findStartDestination().id)
-                    }
-                })
+                ProfileNavButton(
+                    "Staff Management",
+                    Icons.Default.AccountBox,
+                    type = "hotel",
+                    onClick = {
+                        navController.navigate("hotel_emp_list") {
+                            launchSingleTop = true
+                        }
+                    })
                 ProfileNavButton(
                     "Statistic Report",
                     ImageVector.vectorResource(R.drawable.bar_chart_ico), type = "hotel"
@@ -107,13 +109,21 @@ fun HotelProfileScreen(navController: NavHostController) {
                     ImageVector.vectorResource(R.drawable.discount_ico), type = "hotel"
                 )
             }
-            ProfileNavButton("Change Password", ImageVector.vectorResource(R.drawable.key_ico), type = "hotel") {
+            ProfileNavButton(
+                "Change Password",
+                ImageVector.vectorResource(R.drawable.key_ico),
+                type = "hotel"
+            ) {
                 navController.navigate("hotel_reset_pw")
             }
-            ProfileNavButton("Sign out", Icons.AutoMirrored.Filled.ExitToApp, type = "hotel", onClick = {
-                LocalStore.removeAllKeys(context)
-                AppRouter.navigateTo("start-up")
-            })
+            ProfileNavButton(
+                "Sign out",
+                Icons.AutoMirrored.Filled.ExitToApp,
+                type = "hotel",
+                onClick = {
+                    LocalStore.removeAllKeys(context)
+                    AppRouter.navigateTo("start-up")
+                })
         }
     }
 }
