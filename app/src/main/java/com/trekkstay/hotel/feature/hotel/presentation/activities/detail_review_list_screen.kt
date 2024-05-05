@@ -1,9 +1,12 @@
 package com.trekkstay.hotel.feature.hotel.presentation.activities
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,12 +17,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.Create
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -28,38 +29,42 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.hotel.R
-import com.trekkstay.hotel.feature.hotel.presentation.fragments.InfoTextField
-import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelDetailAction
-import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelState
+import com.trekkstay.hotel.feature.hotel.domain.entities.Review
 import com.trekkstay.hotel.feature.hotel.presentation.states.review.ReviewList
 import com.trekkstay.hotel.feature.hotel.presentation.states.review.ReviewState
 import com.trekkstay.hotel.feature.hotel.presentation.states.review.ReviewViewModel
 import com.trekkstay.hotel.feature.shared.Utils.labelizeRating
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun DetailReviewListScreen(navController: NavController, reviewViewModel: ReviewViewModel, id: String) {
-    val hotelName = "Estabeez Hotel"
-    val reviewNum = 1863
-    val ratingPoint = 4.8
+fun DetailReviewListScreen(
+    navController: NavController,
+    reviewViewModel: ReviewViewModel,
+    id: String,
+    hotelName: String,
+    reviewNum: Int,
+    ratingPoint: Double
+) {
+    var reviewList by remember { mutableStateOf(listOf<Review>()) }
 
     LaunchedEffect(Unit) {
         val action = ReviewList(id)
@@ -68,21 +73,15 @@ fun DetailReviewListScreen(navController: NavController, reviewViewModel: Review
 
     val reviewState by reviewViewModel.state.observeAsState()
     when (reviewState) {
-        is ReviewState.SuccessReviewList ->{
-            val reviewList = (reviewState as ReviewState.SuccessReviewList).reviewList.reviewList
-            println(reviewList)
+        is ReviewState.SuccessReviewList -> {
+            reviewList = (reviewState as ReviewState.SuccessReviewList).reviewList.reviewList
         }
 
-        is ReviewState.InvalidReviewList -> {
+        is ReviewState.InvalidReviewList -> {}
 
-        }
+        is ReviewState.ReviewListCalling -> {}
 
-        is ReviewState.ReviewListCalling -> {
-
-        }
-         else -> {
-             println("calling review list")
-         }
+        else -> {}
     }
 
     Column(
@@ -95,7 +94,7 @@ fun DetailReviewListScreen(navController: NavController, reviewViewModel: Review
             modifier = Modifier.padding(vertical = 10.dp)
         ) {
             IconButton(onClick = {
-                navController.navigate("hotel_profile")
+                navController.popBackStack()
             }) {
                 Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = null)
             }
@@ -108,29 +107,27 @@ fun DetailReviewListScreen(navController: NavController, reviewViewModel: Review
         }
         HorizontalDivider(color = Color(0xFFE4E4E4), thickness = 3.dp)
         Spacer(modifier = Modifier.height(10.dp))
-        Text(
-            buildAnnotatedString {
-                withStyle(
-                    style = SpanStyle(
-                        color = Color.Gray,
-                        fontWeight = FontWeight.Medium
-                    )
-                ) {
-                    append("Let's see what other people have to say about ")
-                }
-                withStyle(
-                    style = SpanStyle(
-                        color = TrekkStayCyan,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                ) {
-                    append("$hotelName")
-                }
-            },
-            textAlign = TextAlign.Center,
-            fontFamily = PoppinsFontFamily,
-            fontSize = 15.sp
-        )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                "Let's see what other people have to say about",
+                textAlign = TextAlign.Center,
+                fontFamily = PoppinsFontFamily,
+                fontSize = 15.sp,
+                color = Color.Gray,
+                fontWeight = FontWeight.Medium
+            )
+            Text(
+                hotelName,
+                textAlign = TextAlign.Center,
+                fontFamily = PoppinsFontFamily,
+                fontSize = 18.sp,
+                color = TrekkStayCyan,
+                fontWeight = FontWeight.SemiBold
+            )
+        }
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
@@ -146,7 +143,7 @@ fun DetailReviewListScreen(navController: NavController, reviewViewModel: Review
                     modifier = Modifier.size(60.dp)
                 )
                 Text(
-                    text = "$ratingPoint",
+                    "$ratingPoint",
                     color = Color.White,
                     fontFamily = PoppinsFontFamily,
                     fontWeight = FontWeight.SemiBold,
@@ -159,7 +156,7 @@ fun DetailReviewListScreen(navController: NavController, reviewViewModel: Review
             Spacer(modifier = Modifier.width(10.dp))
             Column {
                 Text(
-                    text = "Excellent",
+                    text = "${labelizeRating(ratingPoint)}",
                     fontFamily = PoppinsFontFamily,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 20.sp
@@ -173,33 +170,26 @@ fun DetailReviewListScreen(navController: NavController, reviewViewModel: Review
                 )
             }
         }
-        Column(
+        LazyColumn(
+            contentPadding = PaddingValues(10.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
             modifier = Modifier
                 .background(Color(0xFFE4E4E4))
                 .fillMaxSize()
-                .padding(horizontal = 10.dp)
-                .verticalScroll(rememberScrollState())
         ) {
-            Spacer(modifier = Modifier.height(5.dp))
-            DetailReviewCard()
-            DetailReviewCard()
-            DetailReviewCard()
-            DetailReviewCard()
-            DetailReviewCard()
-            Spacer(modifier = Modifier.height(5.dp))
+            items(reviewList) { review ->
+                DetailReviewCard(review = review)
+            }
         }
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun DetailReviewCard() {
-    val reviewTitle = "Very satisfied with the service experience at the hotel"
-    val reviewDate = "20 Feb 2023"
-    val ratingPoint = 4
-    val reviewContent = "I had a great experience with the staff. The hotel was very clean and comfortable. I would recommend it to others. We rented this hotel for a combined vacation and wedding photo shoot"
-    val reviewerName = "Bao Pham"
-    val reviewerTravelerType = "Solo Traveler"
+fun DetailReviewCard(review: Review) {
+    val originalDateTime =
+        LocalDateTime.parse(review.createdAt, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+    val formattedDate = originalDateTime.format(DateTimeFormatter.ofPattern("dd, MMM, yyyy"))
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         modifier = Modifier
@@ -209,7 +199,7 @@ fun DetailReviewCard() {
             .padding(15.dp)
     ) {
         Text(
-            reviewTitle,
+            review.title,
             fontFamily = PoppinsFontFamily,
             fontWeight = FontWeight.SemiBold,
             color = TrekkStayCyan,
@@ -221,14 +211,14 @@ fun DetailReviewCard() {
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                reviewDate,
+                formattedDate,
                 color = Color.Gray,
                 fontFamily = PoppinsFontFamily,
                 fontWeight = FontWeight.Medium,
                 fontSize = 13.sp
             )
             Text(
-                "${labelizeRating(ratingPoint)} $ratingPoint",
+                "${labelizeRating(review.point)} ${review.point}",
                 color = TrekkStayCyan,
                 fontFamily = PoppinsFontFamily,
                 fontWeight = FontWeight.Medium,
@@ -237,7 +227,7 @@ fun DetailReviewCard() {
         }
         HorizontalDivider(color = Color(0xFFE4E4E4), thickness = 1.5.dp)
         Text(
-            reviewContent,
+            review.summary,
             textAlign = TextAlign.Justify,
             fontFamily = PoppinsFontFamily,
             fontWeight = FontWeight.Medium,
@@ -249,14 +239,14 @@ fun DetailReviewCard() {
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                reviewerName,
+                review.user.fullName,
                 fontFamily = PoppinsFontFamily,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 15.sp,
                 color = Color.Gray
             )
             Text(
-                reviewerTravelerType,
+                review.typeOfTraveler,
                 fontFamily = PoppinsFontFamily,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 15.sp,

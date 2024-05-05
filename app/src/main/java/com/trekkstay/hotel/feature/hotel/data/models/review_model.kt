@@ -5,19 +5,18 @@ import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 import com.trekkstay.hotel.core.typedef.DataMap
 import com.trekkstay.hotel.feature.hotel.domain.entities.Review
-import com.trekkstay.hotel.feature.hotel.domain.entities.UserReview
 
 
 data class ReviewModel(
     @SerializedName("id") val id: String,
     @SerializedName("user_id") val userId: String,
     @SerializedName("hotel_id") val hotelId: String,
-    @SerializedName("title") val title :String,
-    @SerializedName("type_of_traveler") val typeOfTraveler :String,
-    @SerializedName("title") val point :Int,
-    @SerializedName("title") val summary :String,
-    @SerializedName("title") val user : ReviewUserModel,
-
+    @SerializedName("title") val title: String,
+    @SerializedName("type_of_traveler") val typeOfTraveler: String,
+    @SerializedName("title") val point: Int,
+    @SerializedName("title") val summary: String,
+    @SerializedName("title") val user: ReviewUserModel,
+    @SerializedName("created_at") val createdAt: String,
 ) {
     companion object {
         fun fromJson(source: String): ReviewModel {
@@ -35,12 +34,23 @@ data class ReviewModel(
                 typeOfTraveler = map["type_of_traveler"] as String,
                 point = (map["point"] as String).toInt(),
                 summary = map["summary"] as String,
-                user = ReviewUserModel.fromJson(map["user"].toString())
-                )
+                user = ReviewUserModel.fromJson(map["user"].toString()),
+                createdAt = map["created_at"] as String
+            )
         }
     }
 }
 
 fun ReviewModel.toEntity(): Review {
-    return Review(id, userId, hotelId, title, typeOfTraveler, point, summary, user.toEntity())
+    return Review(
+        id,
+        userId,
+        hotelId,
+        title,
+        typeOfTraveler,
+        point,
+        summary,
+        user.toEntity(),
+        createdAt
+    )
 }

@@ -129,8 +129,14 @@ object AppRouter {
             }
             composable("customer_main") {
                 CustomerMainScreen(
-                    hotelViewModel, roomViewModel, searchViewModel,
-                    reservationViewModel, attractionViewModel, authViewModel, activity, reviewViewModel
+                    hotelViewModel,
+                    roomViewModel,
+                    searchViewModel,
+                    reservationViewModel,
+                    attractionViewModel,
+                    authViewModel,
+                    activity,
+                    reviewViewModel
                 )
             }
             composable("hotel_main") {
@@ -194,7 +200,12 @@ fun CustomerRouter(
             val id = backStackEntry.arguments?.getString("hotelId")
             val hotelName = backStackEntry.arguments?.getString("hotelName")
             if (id != null && hotelName != null) {
-                CustomerReviewScreen(hotelId = id, hotelName = hotelName, navController = navController, reviewViewModel = reviewViewModel)
+                CustomerReviewScreen(
+                    hotelId = id,
+                    hotelName = hotelName,
+                    navController = navController,
+                    reviewViewModel = reviewViewModel
+                )
             }
         }
         composable(route = "booking_form/{roomId}") { backStackEntry ->
@@ -208,11 +219,20 @@ fun CustomerRouter(
                 )
             }
         }
-        composable(route = "review_list/{hotelId}") { backStackEntry ->
+        composable(route = "review_list/{hotelId}/{hotelName}/{reviewNum}/{ratingPoint}") { backStackEntry ->
             val id = backStackEntry.arguments?.getString("hotelId")
-
-            if (id != null) {
-                DetailReviewListScreen(navController, reviewViewModel, id)
+            val name = backStackEntry.arguments?.getString("hotelName")
+            val reviewNum = backStackEntry.arguments?.getString("reviewNum")?.toInt()
+            val ratingPoint = backStackEntry.arguments?.getString("ratingPoint")?.toDouble()
+            if (id != null && name != null && reviewNum != null && ratingPoint != null) {
+                DetailReviewListScreen(
+                    navController,
+                    reviewViewModel,
+                    id,
+                    name,
+                    reviewNum,
+                    ratingPoint
+                )
             }
         }
         // Reservation
@@ -333,11 +353,11 @@ fun HotelRouter(
         composable("hotel_room_create") {
             CreateRoomScreen(hotelViewModel, roomViewModel, mediaViewModel, navController)
         }
-        composable("hotel_room_edit/{roomId}") {backStackEntry ->
+        composable("hotel_room_edit/{roomId}") { backStackEntry ->
             val id = backStackEntry.arguments?.getString("roomId")
 
             if (id != null) {
-                EditRoomScreen(id,hotelViewModel, roomViewModel, mediaViewModel, navController)
+                EditRoomScreen(id, hotelViewModel, roomViewModel, mediaViewModel, navController)
             }
         }
         composable(route = "hotel_emp_list") {

@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -21,7 +20,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -43,6 +41,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -80,6 +80,7 @@ import com.trekkstay.hotel.feature.hotel.presentation.fragments.FacilityBullet
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelDetailAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelState
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
+import com.trekkstay.hotel.feature.shared.Utils.labelizeRating
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
@@ -91,12 +92,11 @@ fun HotelDetailScreen(
     id: String
 ) {
     val context = LocalContext.current
-    var star = 4.5
-    var reviewNum = 1863
+    var star by remember { mutableDoubleStateOf(0.0) }
+    var reviewNum by remember { mutableIntStateOf(0) }
     var liked by remember { mutableStateOf(false) }
     val likedTint = (if (liked) TrekkStayCyan else Color(0xFFB8B8B9))
     var expandedDesc by remember { mutableStateOf(false) }
-    var commentText: String
 
 
     LaunchedEffect(Unit) {
@@ -285,7 +285,6 @@ fun HotelDetailScreen(
                                 fontSize = 16.sp
                             )
                         }
-
                         FlowRow(
                             verticalArrangement = Arrangement.spacedBy(15.dp),
                             horizontalArrangement = Arrangement.Absolute.SpaceAround,
@@ -367,21 +366,6 @@ fun HotelDetailScreen(
                                 label = "Check-out until",
                                 value = hotel.checkOutTime
                             )
-                            FactRow(
-                                icon = ImageVector.vectorResource(R.drawable.airplane_ticket_ico),
-                                label = "Airport transfer fee",
-                                value = "$15.99"
-                            )
-                            FactRow(
-                                icon = ImageVector.vectorResource(R.drawable.city_ico),
-                                label = "Distance from city center",
-                                value = "2 km"
-                            )
-                            FactRow(
-                                icon = ImageVector.vectorResource(R.drawable.time_ico),
-                                label = "Travel time to airport",
-                                value = "20 minutes"
-                            )
                         }
                     }
                     HorizontalDivider(color = Color(0xFFB8B8B9), thickness = 2.dp)
@@ -391,17 +375,15 @@ fun HotelDetailScreen(
                             .fillMaxWidth()
                             .padding(vertical = 20.dp)
                             .clickable {
-                                navController.navigate("review_list/${hotel.id}")
+                                navController.navigate("review_list/${hotel.id}/${hotel.name}/${reviewNum}/${star}") {
+                                    launchSingleTop = true
+                                }
                             }
                     ) {
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(10.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.padding(horizontal = 25.dp)
-                                .clickable {
-                                    navController.navigate("review_list/${hotel.id}")
-                                }
-
                         ) {
                             Text(
                                 text = "$star",
@@ -420,7 +402,7 @@ fun HotelDetailScreen(
                                 modifier = Modifier.fillMaxHeight()
                             ) {
                                 Text(
-                                    "Very Good",
+                                    "${labelizeRating(star)}",
                                     fontFamily = PoppinsFontFamily,
                                     fontWeight = FontWeight.Bold,
                                     color = TrekkStayCyan,
@@ -431,20 +413,9 @@ fun HotelDetailScreen(
                                         withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold)) {
                                             append("$reviewNum")
                                         }
-                                        append("reviews")
+                                        append(" reviews")
                                     },
                                     fontFamily = PoppinsFontFamily,
-                                )
-                            }
-                        }
-                        LazyRow(
-                            horizontalArrangement = Arrangement.spacedBy(10.dp),
-                            contentPadding = PaddingValues(10.dp)
-                        ) {
-                            items(3) {
-                                ReviewCard(
-                                    reviewerName = "Bao Pham",
-                                    reviewContent = "Spacious Suite city view has excellent view & natural light."
                                 )
                             }
                         }
@@ -540,48 +511,6 @@ fun FactRow(
             fontFamily = PoppinsFontFamily,
             fontSize = 16.sp,
         )
-    }
-}
-
-@Composable
-fun ReviewCard(
-    reviewerName: String,
-    reviewContent: String
-) {
-    Row(
-        modifier = Modifier
-            .size(220.dp, 100.dp)
-            .shadow(2.dp, shape = RoundedCornerShape(10.dp))
-            .background(Color.White, shape = RoundedCornerShape(10.dp))
-            .padding(10.dp),
-    ) {
-        Column(
-            verticalArrangement = Arrangement.SpaceAround,
-            modifier = Modifier
-                .padding(5.dp)
-                .fillMaxHeight()
-        ) {
-            Text(
-                "“$reviewContent”",
-                textAlign = TextAlign.Justify,
-                fontSize = 12.sp,
-                fontFamily = PoppinsFontFamily,
-                fontWeight = FontWeight.Medium,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-                color = Color(0xFF303030).copy(alpha = 0.55f),
-                modifier = Modifier.fillMaxWidth()
-            )
-            Text(
-                reviewerName,
-                textAlign = TextAlign.Right,
-                fontWeight = FontWeight.Medium,
-                fontFamily = PoppinsFontFamily,
-                fontSize = 12.sp,
-                color = Color.Black,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
     }
 }
 
