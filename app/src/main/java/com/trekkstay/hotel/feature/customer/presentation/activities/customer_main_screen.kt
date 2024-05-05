@@ -11,6 +11,7 @@ import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthViewMode
 import com.trekkstay.hotel.feature.customer.presentation.fragments.CustomerBotNav
 import com.trekkstay.hotel.feature.hotel.presentation.states.attraction.AttractionViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
+import com.trekkstay.hotel.feature.hotel.presentation.states.review.ReviewViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.room.RoomViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.search.SearchViewModel
 import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationViewModel
@@ -24,7 +25,8 @@ fun CustomerMainScreen(
     reservationViewModel: ReservationViewModel,
     attractionViewModel: AttractionViewModel,
     authViewModel: AuthViewModel,
-    activity: ComponentActivity
+    activity: ComponentActivity,
+    reviewViewModel: ReviewViewModel
 ) {
     val navController = rememberNavController()
     Scaffold(
@@ -38,7 +40,8 @@ fun CustomerMainScreen(
             navController,
             attractionViewModel,
             authViewModel,
-            activity
+            activity,
+            reviewViewModel
         )
     }
 }

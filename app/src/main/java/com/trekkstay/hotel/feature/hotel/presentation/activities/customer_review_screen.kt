@@ -31,6 +31,7 @@ import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -55,17 +56,58 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.hotel.R
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.InfoTextField
+import com.trekkstay.hotel.feature.hotel.presentation.states.review.CreateReview
+import com.trekkstay.hotel.feature.hotel.presentation.states.review.ReviewState
+import com.trekkstay.hotel.feature.hotel.presentation.states.review.ReviewViewModel
+import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationState
+import com.trekkstay.hotel.feature.shared.TextDialog
 import com.trekkstay.hotel.feature.shared.Utils.labelizeRating
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @Composable
-fun CustomerReviewScreen(navController: NavController) {
+fun CustomerReviewScreen(hotelId: String, hotelName: String, navController: NavController, reviewViewModel: ReviewViewModel) {
     var ratingPoint by remember { mutableIntStateOf(0) }
-    val hotelName = "Estabeez Hotel"
     var travellerType by remember { mutableStateOf("") }
     var reviewTitle by remember { mutableStateOf(TextFieldValue("")) }
     var reviewContent by remember { mutableStateOf(TextFieldValue("")) }
+    var showDialog by remember { mutableStateOf(false) }
+    var isReview by remember { mutableStateOf(false)}
+
+    val reviewState by reviewViewModel.state.observeAsState()
+    when (reviewState) {
+        is ReviewState.SuccessCreateReview -> {
+            if (isReview) {
+                TextDialog(
+                    title = "Review Successfully",
+                    msg = "You review booking successfully!",
+                    type = "success",
+                    onDismiss = {
+                        showDialog = false
+                        navController.navigate("customer_reservations") {
+                            launchSingleTop = true
+                        }
+                    }
+                )
+            }
+        }
+        is ReviewState.InvalidCreateReview -> {
+            TextDialog(
+                title = "Review Failed!",
+                msg = (reviewState as ReviewState.InvalidCreateReview).message,
+                onDismiss = {
+                    showDialog = false
+                    navController.navigate("customer_reservations") {
+                        launchSingleTop = true
+                    }}
+            )
+        }
+        is ReviewState.CreateReviewCalling -> {
+            println("review is calling")
+        }
+        else -> {}
+    }
+
     Column(
         modifier = Modifier
             .padding(bottom = 80.dp)
@@ -178,7 +220,11 @@ fun CustomerReviewScreen(navController: NavController) {
             }
         }
         Button(
-            onClick = {},
+            onClick = {
+                isReview = true
+                val action = CreateReview(hotelId, title = reviewTitle.text, typeOfTraveller = travellerType, point = ratingPoint, summary = reviewContent.text)
+                reviewViewModel.processAction(action)
+            },
             colors = ButtonDefaults.buttonColors(
                 containerColor = TrekkStayCyan,
                 contentColor = Color.White
@@ -361,7 +407,9 @@ private fun RatingRow(
         } else {
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 25.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 25.dp)
             ) {
                 Text(
                     "Terrible",
@@ -380,10 +428,4 @@ private fun RatingRow(
             }
         }
     }
-}
-
-@Preview(showBackground = true, showSystemUi = true, device = "spec:width=411dp,height=891dp")
-@Composable
-fun ReviewRatingPreview() {
-    CustomerReviewScreen(rememberNavController())
 }

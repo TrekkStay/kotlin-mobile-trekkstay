@@ -1,6 +1,7 @@
 package com.trekkstay.hotel.core.network.request
 
 import com.trekkstay.hotel.core.network.method.RequestMethod
+import org.json.JSONObject
 
 data class RequestQuery(
     val method: RequestMethod,

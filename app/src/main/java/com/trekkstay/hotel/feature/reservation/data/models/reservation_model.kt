@@ -19,6 +19,7 @@ data class ReservationModel(
     @SerializedName("guess_info") val guestInfo: GuestInfoModel,
     @SerializedName("room") val room: ReservationRoomModel,
     @SerializedName("payment") val payment: PaymentModel?,
+    @SerializedName("is_rated") val isRated: Boolean
 ) {
     companion object {
 
@@ -60,7 +61,8 @@ data class ReservationModel(
                     PaymentModel.fromJson(map["payment"].toString())
                 } else {
                     null
-                }
+                },
+                isRated = (map["is_rated"] as String).toBoolean()
             )
         }
     }
@@ -80,6 +82,7 @@ fun ReservationModel.toEntity(): Reservation {
         status,
         guestInfo.toEntity(),
         room.toEntity(),
-        payment?.toEntity()
+        payment?.toEntity(),
+        isRated
     )
 }

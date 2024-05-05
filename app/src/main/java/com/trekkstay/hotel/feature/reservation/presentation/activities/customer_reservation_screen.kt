@@ -80,6 +80,7 @@ fun CustomerReservationScreen(
         is ReservationState.SuccessListReservation -> {
 
             val reservationHotel = (reservationState as ReservationState.SuccessListReservation).reservation.reservationList
+            println(reservationHotel)
             when ((reservationState as ReservationState.SuccessListReservation).sendState) {
                 "UPCOMING" -> {
                     reservationHotel1 = reservationHotel
@@ -204,11 +205,14 @@ fun CustomerReservationScreen(
                                     CustomerReservationCard(
                                         reservationId = item.id,
                                         hotelImg = item.room.images.media[0],
+                                        hotelId = item.room.hotelId,
                                         hotelName = item.room.hotelName,
                                         destination = item.room.location,
                                         type = reservationType,
                                         checkIn = item.checkIn,
+                                        price = item.totalPrice,
                                         checkOut = item.checkOut,
+                                        isRated = item.isRated,
                                         navController = navController,
                                         reservationViewModel = reservationViewModel
                                     )
@@ -217,24 +221,33 @@ fun CustomerReservationScreen(
                                     CustomerReservationCard(
                                         reservationId = item.id,
                                         hotelImg = item.room.images.media[0],
+                                        hotelId = item.room.hotelId,
                                         hotelName = item.room.hotelName,
                                         destination = item.room.location,
-                                        checkIn = item.checkIn,
                                         type = reservationType,
-                                        price = item.room.bookingPrice.toDouble(),
+                                        checkIn = item.checkIn,
+                                        price = item.totalPrice,
+                                        checkOut = item.checkOut,
+                                        isRated = item.isRated,
                                         navController = navController,
-                                        reservationViewModel = reservationViewModel                                    )
+                                        reservationViewModel = reservationViewModel
+                                    )
                                 }
                                 2 -> {
                                     CustomerReservationCard(
                                         reservationId = item.id,
                                         hotelImg = item.room.images.media[0],
+                                        hotelId = item.room.hotelId,
                                         hotelName = item.room.hotelName,
                                         destination = item.room.location,
-                                        checkIn = item.checkIn,
                                         type = reservationType,
+                                        checkIn = item.checkIn,
+                                        price = item.totalPrice,
+                                        checkOut = item.checkOut,
+                                        isRated = item.isRated,
                                         navController = navController,
-                                        reservationViewModel = reservationViewModel                                    )
+                                        reservationViewModel = reservationViewModel
+                                    )
                                 }
                             }
                         }

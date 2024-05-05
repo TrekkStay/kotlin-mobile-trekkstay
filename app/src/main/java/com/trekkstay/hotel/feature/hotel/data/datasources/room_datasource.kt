@@ -9,11 +9,9 @@ import com.trekkstay.hotel.core.network.method.RequestMethod
 import com.trekkstay.hotel.core.network.request.RequestQuery
 import com.trekkstay.hotel.core.network.response.Response
 import com.trekkstay.hotel.core.storage.LocalStore
-import com.trekkstay.hotel.feature.hotel.data.models.HotelModel
 import com.trekkstay.hotel.feature.hotel.data.models.RoomListModel
 import com.trekkstay.hotel.feature.hotel.data.models.RoomModel
 import com.trekkstay.hotel.feature.hotel.data.models.toEntity
-import com.trekkstay.hotel.feature.hotel.domain.entities.Hotel
 import com.trekkstay.hotel.feature.hotel.domain.entities.Room
 import com.trekkstay.hotel.feature.hotel.domain.entities.RoomList
 import kotlinx.coroutines.Dispatchers

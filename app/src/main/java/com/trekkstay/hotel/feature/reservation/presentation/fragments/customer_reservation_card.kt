@@ -65,12 +65,14 @@ import java.util.Locale
 fun CustomerReservationCard(
     reservationId: String,
     hotelImg: String,
+    hotelId: String,
     hotelName: String,
     destination: String,
     type: String,
     price: Double = 0.0,
     checkIn: String = "",
     checkOut: String = "",
+    isRated: Boolean,
     navController: NavController,
     reservationViewModel: ReservationViewModel
 ) {
@@ -351,15 +353,26 @@ fun CustomerReservationCard(
 
                 "Completed" -> {
                     Spacer(modifier = Modifier.weight(1f))
-                    Button(
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = TrekkStayCyan.copy(0.4f),
-                            contentColor = Color(0xFF068E9D)
-                        ),
-                        onClick = { }
-                    ) {
+                    if (!isRated) {
+                        Button(
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = TrekkStayCyan.copy(0.4f),
+                                contentColor = Color(0xFF068E9D)
+                            ),
+                            onClick = {
+                                navController.navigate("customer_review/$hotelId/$hotelName")
+                            }
+                        ) {
+                            Text(
+                                "Review & Rating",
+                                fontFamily = PoppinsFontFamily,
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 13.sp
+                            )
+                        }
+                    } else {
                         Text(
-                            "Review & Rating",
+                            "Reviewed and Rated!",
                             fontFamily = PoppinsFontFamily,
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 13.sp

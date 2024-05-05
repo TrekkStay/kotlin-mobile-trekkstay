@@ -15,6 +15,7 @@ import com.trekkstay.hotel.feature.hotel.presentation.states.attraction.Attracti
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.location.LocationViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.MediaViewModel
+import com.trekkstay.hotel.feature.hotel.presentation.states.review.ReviewViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.room.RoomViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.search.SearchViewModel
 import com.trekkstay.hotel.feature.reservation.presentation.states.CreatePaymentAction
@@ -33,6 +34,7 @@ class MainActivity : ComponentActivity() {
     private val searchViewModel: SearchViewModel by inject()
     private val attractionViewModel: AttractionViewModel by inject()
     private val reservationViewModel: ReservationViewModel by inject()
+    private val reviewViewModel: ReviewViewModel by inject()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +55,7 @@ class MainActivity : ComponentActivity() {
                 this,
                 attractionViewModel,
                 navController,
+                reviewViewModel
             )
             AppRouter.Navigation()
         }

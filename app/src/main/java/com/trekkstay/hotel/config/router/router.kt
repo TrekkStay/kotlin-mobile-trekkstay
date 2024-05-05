@@ -32,6 +32,7 @@ import com.trekkstay.hotel.feature.hotel.presentation.activities.BookingFormScre
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateEmpScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateHotelScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateRoomScreen
+import com.trekkstay.hotel.feature.hotel.presentation.activities.CustomerReviewScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.EditEmpScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.EditHotelScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.EditRoomScreen
@@ -48,6 +49,7 @@ import com.trekkstay.hotel.feature.hotel.presentation.states.attraction.Attracti
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.location.LocationViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.MediaViewModel
+import com.trekkstay.hotel.feature.hotel.presentation.states.review.ReviewViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.room.RoomViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.search.SearchViewModel
 import com.trekkstay.hotel.feature.notification.presentation.activities.CustomerNotificationScreen
@@ -70,6 +72,8 @@ object AppRouter {
     private lateinit var reservationViewModel: ReservationViewModel
     private lateinit var activity: ComponentActivity
     private lateinit var attractionViewModel: AttractionViewModel
+    private lateinit var reviewViewModel: ReviewViewModel
+
 
     fun initialize(
         authViewModel: AuthViewModel,
@@ -82,7 +86,8 @@ object AppRouter {
         reservationViewModel: ReservationViewModel,
         activity: ComponentActivity,
         attractionViewModel: AttractionViewModel,
-        navController: NavHostController
+        navController: NavHostController,
+        reviewViewModel: ReviewViewModel
     ) {
         this.authViewModel = authViewModel
         this.empAuthViewModel = empAuthViewModel
@@ -95,6 +100,7 @@ object AppRouter {
         this.attractionViewModel = attractionViewModel
         this.activity = activity
         this.navController = navController
+        this.reviewViewModel = reviewViewModel
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -123,7 +129,7 @@ object AppRouter {
             composable("customer_main") {
                 CustomerMainScreen(
                     hotelViewModel, roomViewModel, searchViewModel,
-                    reservationViewModel, attractionViewModel, authViewModel, activity
+                    reservationViewModel, attractionViewModel, authViewModel, activity, reviewViewModel
                 )
             }
             composable("hotel_main") {
@@ -153,7 +159,8 @@ fun CustomerRouter(
     navController: NavHostController,
     attractionViewModel: AttractionViewModel,
     authViewModel: AuthViewModel,
-    activity: ComponentActivity
+    activity: ComponentActivity,
+    reviewViewModel: ReviewViewModel
 ) {
     NavHost(
         navController = navController,
@@ -180,6 +187,13 @@ fun CustomerRouter(
             val hotelName = backStackEntry.arguments?.getString("hotelName")
             if (id != null && hotelName != null) {
                 RoomDetailScreen(navController, roomViewModel, id, hotelName)
+            }
+        }
+        composable(route = "customer_review/{hotelId}/{hotelName}") { backStackEntry ->
+            val id = backStackEntry.arguments?.getString("hotelId")
+            val hotelName = backStackEntry.arguments?.getString("hotelName")
+            if (id != null && hotelName != null) {
+                CustomerReviewScreen(hotelId = id, hotelName = hotelName, navController = navController, reviewViewModel = reviewViewModel)
             }
         }
         composable(route = "booking_form/{roomId}") { backStackEntry ->

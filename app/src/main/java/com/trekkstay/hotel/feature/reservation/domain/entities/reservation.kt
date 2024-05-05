@@ -13,4 +13,5 @@ data class Reservation(
     val guestInfo: GuestInfo,
     val room: ReservationRoom,
     val payment: Payment?,
+    val isRated: Boolean,
 )
