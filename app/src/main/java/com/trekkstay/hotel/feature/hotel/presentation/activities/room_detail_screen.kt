@@ -41,9 +41,9 @@ import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 fun RoomDetailScreen(
     navController: NavHostController,
     roomViewModel: RoomViewModel,
-    id: String
+    id: String,
+    hotelName: String = ""
 ) {
-    val hotelName = "Ruby Saigon Hotel - Ben Thanh"
     LaunchedEffect(Unit) {
         val action = ViewRoomAction(id)
         roomViewModel.processAction(action)
@@ -91,7 +91,7 @@ fun RoomDetailScreen(
                 ) {
                     Spacer(modifier = Modifier.height(10.dp))
                     (roomState as RoomState.SuccessViewRoom).roomList.roomList.forEach { room ->
-                        RoomDetailCard(room,navController)
+                        RoomDetailCard(room, navController)
                     }
                     Spacer(modifier = Modifier.height(10.dp))
                 }

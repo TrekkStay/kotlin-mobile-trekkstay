@@ -47,6 +47,9 @@ fun HotelRoomCard(
             .border(2.dp, TrekkStayBlue, shape = RoundedCornerShape(10.dp))
             .padding(15.dp)
             .clickable {
+                navController.navigate("hotel_room_edit") {
+                    launchSingleTop = true
+                }
             }
     ) {
         Box(
