@@ -116,9 +116,6 @@ class ReservationRemoteDataSourceImpl(private val client: Client, private val co
                 headers = mapOf("Authorization" to "Bearer $jwtKey"),
                 requestBody = null
             )
-
-            println(request)
-
             val response = client.execute<ReservationList>(
                 request = request,
                 parser = { responseData ->
@@ -188,6 +185,7 @@ class ReservationRemoteDataSourceImpl(private val client: Client, private val co
             response
         }
     }
+
     private inline fun <reified T : Any> parseResponse(responseData: Any?): T? {
         return when (responseData) {
             is ReservationModel -> responseData.toEntity() as? T

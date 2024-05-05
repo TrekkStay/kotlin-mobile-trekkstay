@@ -170,9 +170,9 @@ fun CreateHotelScreen(
     var selectedProvince by remember { mutableStateOf<Location?>(null) }
     var selectedDistrict by remember { mutableStateOf<Location?>(null) }
     var selectedWard by remember { mutableStateOf<Location?>(null) }
-    var provinceList: List<Location> = emptyList()
-    var districtList: List<Location> = emptyList()
-    var wardList: List<Location> = emptyList()
+    var provinceList by remember { mutableStateOf<List<Location>>(emptyList()) }
+    var districtList by remember { mutableStateOf<List<Location>>(emptyList()) }
+    var wardList by remember { mutableStateOf<List<Location>>(emptyList()) }
     var selectedImageUris by remember { mutableStateOf<List<Uri?>>(emptyList()) }
     var selectedVideoUris by remember { mutableStateOf<List<Uri?>>(emptyList()) }
     var selectedFile by remember { mutableStateOf<List<File>>(emptyList()) }

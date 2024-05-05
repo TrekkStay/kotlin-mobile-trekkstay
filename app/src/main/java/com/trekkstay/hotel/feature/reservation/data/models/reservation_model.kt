@@ -23,16 +23,13 @@ data class ReservationModel(
     companion object {
 
         fun fromJson(source: String): ReservationModel {
-            println("Source Reservation: >>>>>>")
-            println(source)
             val type = object : TypeToken<Map<String, Any>>() {}.type
             val map: Map<String, Any> = Gson().fromJson(source, type)
-            println("Map Reservation")
-            println(map)
             return fromMap(map)
         }
 
         fun fromMap(map: DataMap): ReservationModel {
+            println(map["payment"])
             return ReservationModel(
                 id = map["id"] as String,
                 roomId = map["room_id"] as String,

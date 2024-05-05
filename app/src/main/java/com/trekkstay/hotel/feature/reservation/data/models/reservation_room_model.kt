@@ -34,7 +34,7 @@ data class ReservationRoomModel(
             return map
         }
 
-        fun parseValue(value: String): Any {
+        private fun parseValue(value: String): Any {
             return when {
                 value.startsWith("{") && value.endsWith("}") -> parseInputString(
                     value.drop(1).dropLast(1)
@@ -50,14 +50,14 @@ data class ReservationRoomModel(
         }
 
         fun fromJson(source: String): ReservationRoomModel {
-            println("Source Room >>>>>>>>>>")
+            println("Source Room >>>>>>>>>>  $source")
             val type = object : TypeToken<Map<String, Any>>() {}.type
-            try {
+            return try {
                 val map: Map<String, Any> = Gson().fromJson(source, type)
-                return fromMap(map)
+                fromMap(map)
             } catch (e: Exception) {
                 val map: Map<String, Any> = parseInputString(source)
-                return fromMap(map)
+                fromMap(map)
             }
         }
 

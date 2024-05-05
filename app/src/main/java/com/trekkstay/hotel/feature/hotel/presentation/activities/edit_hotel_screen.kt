@@ -13,37 +13,26 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
-import com.trekkstay.hotel.ui.theme.TrekkStayBlue
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Menu
@@ -56,17 +45,32 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MenuItemColors
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
@@ -74,7 +78,6 @@ import com.example.hotel.R
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.ui.PlayerView
-import java.io.File
 import com.google.android.gms.maps.model.LatLng
 import com.trekkstay.hotel.core.storage.LocalStore
 import com.trekkstay.hotel.feature.gg_map.GGMap
@@ -88,19 +91,27 @@ import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.HotelViewMode
 import com.trekkstay.hotel.feature.hotel.presentation.states.hotel.UpdateHotelAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.location.LocationState
 import com.trekkstay.hotel.feature.hotel.presentation.states.location.LocationViewModel
-import com.trekkstay.hotel.feature.hotel.presentation.states.location.ViewProvinceAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.location.ViewDistrictAction
+import com.trekkstay.hotel.feature.hotel.presentation.states.location.ViewProvinceAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.location.ViewWardAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.MediaState
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.MediaViewModel
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.UploadMediaAction
 import com.trekkstay.hotel.feature.hotel.presentation.states.media.UploadVideoAction
+import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
+import com.trekkstay.hotel.ui.theme.TrekkStayBlue
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
+import java.io.File
 import java.io.FileOutputStream
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun EditHotelScreen(hotelViewModel: HotelViewModel, locationViewModel: LocationViewModel, mediaViewModel: MediaViewModel, navController: NavHostController) {
+fun EditHotelScreen(
+    hotelViewModel: HotelViewModel,
+    locationViewModel: LocationViewModel,
+    mediaViewModel: MediaViewModel,
+    navController: NavHostController
+) {
     val context = LocalContext.current
     val contentResolver = context.contentResolver
     var hotelName by remember { mutableStateOf(TextFieldValue()) }
@@ -110,10 +121,11 @@ fun EditHotelScreen(hotelViewModel: HotelViewModel, locationViewModel: LocationV
     var hotelDescription by remember { mutableStateOf(TextFieldValue()) }
     var checkInTime by remember { mutableStateOf("") }
     var checkOutTime by remember { mutableStateOf("") }
-    var selectedLatLng by remember { mutableStateOf(LatLng(0.0,0.0)) }
+    var selectedLatLng by remember { mutableStateOf(LatLng(0.0, 0.0)) }
     val timeList = arrayOf("12:00", "12:30", "13:00", "13:30", "14:00")
     var selectedFacilities by remember { mutableStateOf(listOf<String>()) }
-    val facilities = listOf("Airport Transfer",
+    val facilities = listOf(
+        "Airport Transfer",
         "Conference Room",
         "Fitness Center",
         "Food",
@@ -122,7 +134,8 @@ fun EditHotelScreen(hotelViewModel: HotelViewModel, locationViewModel: LocationV
         "Motorbike Rental",
         "Parking Area",
         "Spa",
-        "Pool")
+        "Pool"
+    )
 
     var myName by remember { mutableStateOf("") }
 
@@ -132,11 +145,13 @@ fun EditHotelScreen(hotelViewModel: HotelViewModel, locationViewModel: LocationV
         val projection = arrayOf(MediaStore.MediaColumns.DISPLAY_NAME)
         context.contentResolver.query(uri, projection, null, null, null)?.use { cursor ->
             if (cursor.moveToFirst()) {
-                fileName = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME))
+                fileName =
+                    cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME))
             }
         }
         return fileName
     }
+
     fun queryFile(context: Context, uri: Uri): File {
         val fileName = getFileName(context, uri) ?: "image_file"
         val inputStream = context.contentResolver.openInputStream(uri)
@@ -148,6 +163,7 @@ fun EditHotelScreen(hotelViewModel: HotelViewModel, locationViewModel: LocationV
         }
         return outputFile
     }
+
     fun queryVideo(context: Context, uri: Uri): File {
         val fileName = getFileName(context, uri) ?: "video_file"
         val inputStream = context.contentResolver.openInputStream(uri)
@@ -159,36 +175,35 @@ fun EditHotelScreen(hotelViewModel: HotelViewModel, locationViewModel: LocationV
         }
         return outputFile
     }
+
     fun getFileExtension(uri: Uri, contentResolver: ContentResolver): String {
         val mimeTypeMap = MimeTypeMap.getSingleton()
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri)) ?: ""
     }
 
 
-
     var selectedProvince by remember { mutableStateOf<Location?>(null) }
     var selectedDistrict by remember { mutableStateOf<Location?>(null) }
     var selectedWard by remember { mutableStateOf<Location?>(null) }
-    var provinceList : List<Location> = emptyList()
-    var districtList : List<Location> = emptyList()
-    var wardList : List<Location> = emptyList()
+    var provinceList by remember { mutableStateOf<List<Location>>(emptyList()) }
+    var districtList by remember { mutableStateOf<List<Location>>(emptyList()) }
+    var wardList by remember { mutableStateOf<List<Location>>(emptyList()) }
     var selectedImageUris by remember { mutableStateOf<List<Uri?>>(emptyList()) }
     var selectedVideoUris by remember { mutableStateOf<List<Uri?>>(emptyList()) }
-    var selectedFile by remember{ mutableStateOf<List<File>>(emptyList())}
-    var selectedExtension by remember{ mutableStateOf<List<String>>(emptyList())}
-    var selectedVideoFile by remember{ mutableStateOf<List<File>>(emptyList())}
-    var selectedVideoExtension by remember{ mutableStateOf<List<String>>(emptyList())}
-    var imageUrls by remember{ mutableStateOf<List<String>>(emptyList())}
+    var selectedFile by remember { mutableStateOf<List<File>>(emptyList()) }
+    var selectedExtension by remember { mutableStateOf<List<String>>(emptyList()) }
+    var selectedVideoFile by remember { mutableStateOf<List<File>>(emptyList()) }
+    var selectedVideoExtension by remember { mutableStateOf<List<String>>(emptyList()) }
+    var imageUrls by remember { mutableStateOf<List<String>>(emptyList()) }
     val photosPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickMultipleVisualMedia()
     ) { uris ->
         selectedImageUris = uris
 
         selectedFile = uris.map { uri ->
-            queryFile(context,uri)
+            queryFile(context, uri)
         }
-        selectedExtension = uris.map{
-                uri ->
+        selectedExtension = uris.map { uri ->
             getFileExtension(uri, contentResolver)
         }
 
@@ -199,10 +214,9 @@ fun EditHotelScreen(hotelViewModel: HotelViewModel, locationViewModel: LocationV
         selectedVideoUris = uris
 
         selectedVideoFile = uris.map { uri ->
-            queryVideo(context,uri)
+            queryVideo(context, uri)
         }
-        selectedVideoExtension = uris.map{
-                uri ->
+        selectedVideoExtension = uris.map { uri ->
             getFileExtension(uri, contentResolver)
         }
 
@@ -213,12 +227,12 @@ fun EditHotelScreen(hotelViewModel: HotelViewModel, locationViewModel: LocationV
     val locationState by locationViewModel.state.observeAsState()
     val mediaState by mediaViewModel.state.observeAsState()
     var showDialog by remember { mutableStateOf(true) }
-    var showMap by remember {mutableStateOf(false)}
+    var showMap by remember { mutableStateOf(false) }
     var hasUploadedVideo by remember { mutableStateOf(false) }
 
-    when (mediaState){
+    when (mediaState) {
         is MediaState.SuccessUploadVideo -> {
-            if(!hasUploadedVideo) {
+            if (!hasUploadedVideo) {
                 val action = UpdateHotelAction(
                     name = hotelName.text,
                     description = hotelDescription.text,
@@ -246,16 +260,19 @@ fun EditHotelScreen(hotelViewModel: HotelViewModel, locationViewModel: LocationV
                 )
 
                 hotelViewModel.processAction(action)
-                hasUploadedVideo=true
+                hasUploadedVideo = true
             }
         }
+
         is MediaState.InvalidUploadVideo -> {
 
         }
+
         is MediaState.UploadVideoCalling -> {
         }
+
         is MediaState.SuccessUploadMedia -> {
-            imageUrls =  (mediaState as MediaState.SuccessUploadMedia).media.media
+            imageUrls = (mediaState as MediaState.SuccessUploadMedia).media.media
             val mediaAction = UploadVideoAction(
                 selectedVideoFile,
                 selectedVideoExtension,
@@ -263,41 +280,55 @@ fun EditHotelScreen(hotelViewModel: HotelViewModel, locationViewModel: LocationV
             mediaViewModel.processAction(mediaAction)
 
         }
+
         is MediaState.InvalidUploadMedia -> {
 
         }
+
         is MediaState.UploadMediaCalling -> {
         }
-        else ->{
+
+        else -> {
 
         }
     }
     when (locationState) {
         is LocationState.SuccessViewProvince -> {
-            provinceList = (locationState as LocationState.SuccessViewProvince).locationList.locationList
+            provinceList =
+                (locationState as LocationState.SuccessViewProvince).locationList.locationList
         }
+
         is LocationState.InvalidViewProvince -> {
 
         }
+
         is LocationState.ViewProvinceCalling -> {
         }
+
         is LocationState.SuccessViewDistrict -> {
-            districtList = (locationState as LocationState.SuccessViewDistrict).locationList.locationList
+            districtList =
+                (locationState as LocationState.SuccessViewDistrict).locationList.locationList
 
         }
+
         is LocationState.InvalidViewDistrict -> {
 
         }
+
         is LocationState.ViewDistrictCalling -> {
         }
+
         is LocationState.SuccessViewWard -> {
             wardList = (locationState as LocationState.SuccessViewWard).locationList.locationList
         }
+
         is LocationState.InvalidViewWard -> {
 
         }
+
         is LocationState.ViewWardCalling -> {
         }
+
         else -> {
             // Handle other states
         }
@@ -320,6 +351,7 @@ fun EditHotelScreen(hotelViewModel: HotelViewModel, locationViewModel: LocationV
                     }
                 )
             }
+
             is HotelState.InvalidUpdateHotel -> {
                 showDialog = true
                 AlertDialog(
@@ -334,9 +366,11 @@ fun EditHotelScreen(hotelViewModel: HotelViewModel, locationViewModel: LocationV
                     }
                 )
             }
+
             is HotelState.UpdateHotelCalling -> {
                 // You can show a progress dialog or a loading indicator here
             }
+
             else -> {
                 // Handle other states
             }
@@ -376,12 +410,15 @@ fun EditHotelScreen(hotelViewModel: HotelViewModel, locationViewModel: LocationV
             val hotelVideoList = hotel.videos.media.toTypedArray()
 
         }
+
         is HotelState.InvalidHotelDetail -> {
 
         }
+
         is HotelState.HotelDetailCalling -> {
 
         }
+
         else -> {
 
         }
@@ -396,12 +433,14 @@ fun EditHotelScreen(hotelViewModel: HotelViewModel, locationViewModel: LocationV
             .fillMaxHeight()
             .padding(bottom = 75.dp)
     ) {
-        if(showMap) {
-            GGMap(onMapClicked = {latLng ->
-                selectedLatLng= latLng
-                showMap =false
-            },)
-        }else{
+        if (showMap) {
+            GGMap(
+                onMapClicked = { latLng ->
+                    selectedLatLng = latLng
+                    showMap = false
+                },
+            )
+        } else {
             Column(
                 modifier = Modifier
                     .weight(1f)
@@ -441,21 +480,16 @@ fun EditHotelScreen(hotelViewModel: HotelViewModel, locationViewModel: LocationV
                     UpdateTextField(
                         label = "Hotel Name",
                         initValue = myName,
-                        onValueChange = { myName = it
-                            Log.d("TextField", "New value: $myName") // Add a log statement for debugging
+                        onValueChange = {
+                            myName = it
+                            Log.d(
+                                "TextField",
+                                "New value: $myName"
+                            ) // Add a log statement for debugging
                         },
                         icon = ImageVector.vectorResource(R.drawable.add_home_ico),
 
-                    )
-
-                    OutlinedTextField(
-                        value = hotelName,
-                        onValueChange = { newValue ->
-                            hotelName = newValue
-//                            Log.d("TextField", "New value: $newValue") // Add a log statement for debugging
-                        }
-                    )
-
+                        )
                     InfoTextField(
                         label = "Hotel Email",
                         text = hotelEmail,
@@ -488,7 +522,11 @@ fun EditHotelScreen(hotelViewModel: HotelViewModel, locationViewModel: LocationV
                         )
                     }
                     HotelActionRow(
-                        label = if (selectedLatLng == LatLng(0.0, 0.0)) "Hotel Location" else "${selectedLatLng.latitude}:${selectedLatLng.longitude}",
+                        label = if (selectedLatLng == LatLng(
+                                0.0,
+                                0.0
+                            )
+                        ) "Hotel Location" else "${selectedLatLng.latitude}:${selectedLatLng.longitude}",
                         leadingIcon = Icons.Default.Place,
                         trailingIcon = ImageVector.vectorResource(R.drawable.map_ico),
                         clickHandler = {
@@ -512,7 +550,7 @@ fun EditHotelScreen(hotelViewModel: HotelViewModel, locationViewModel: LocationV
                             selectedDistrict = it
                             selectedWard = null
                             wardList = emptyList()
-                            val action = ViewWardAction( it.code)
+                            val action = ViewWardAction(it.code)
                             locationViewModel.processAction(action)
                         })
                         DropDownMenu(
@@ -665,7 +703,7 @@ fun EditHotelScreen(hotelViewModel: HotelViewModel, locationViewModel: LocationV
                 Button(
                     onClick = {
                         showDialog = true
-                        hasUploadedVideo=false
+                        hasUploadedVideo = false
                         val mediaAction = UploadMediaAction(
                             selectedFile,
                             selectedExtension,
@@ -703,7 +741,8 @@ fun UpdateTextField(
     icon: ImageVector
 ) {
     var textFieldValue by remember { mutableStateOf(TextFieldValue(initValue)) }
-    var boxColor = (if (view == "hotel") TrekkStayBlue else if (view == "customer") TrekkStayCyan else Color.White)
+    var boxColor =
+        (if (view == "hotel") TrekkStayBlue else if (view == "customer") TrekkStayCyan else Color.White)
 
     OutlinedTextField(
         value = textFieldValue,
@@ -815,7 +854,7 @@ private fun DropDownMenu(
     title: String,
     itemList: List<Location>,
     onItemSelected: (Location) -> Unit,
-    leadingIcon: ImageVector? = null
+    leadingIcon: ImageVector? = null,
 ) {
     var expanded by remember { mutableStateOf(false) }
     var selectedText by remember { mutableStateOf(title) }
@@ -858,7 +897,9 @@ private fun DropDownMenu(
         ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = Modifier.width(180.dp).background(Color.White)
+            modifier = Modifier
+                .width(180.dp)
+                .background(Color.White)
         ) {
             itemList.forEach { item ->
                 DropdownMenuItem(

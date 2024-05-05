@@ -39,6 +39,7 @@ data class ReservationListModel(
         fun fromJson(source: String): ReservationListModel {
             val type = object : TypeToken<Map<String, Any>>() {}.type
             val map: Map<String, Any> = Gson().fromJson(source, type)
+            println(source)
             return fromMap(map)
         }
 
