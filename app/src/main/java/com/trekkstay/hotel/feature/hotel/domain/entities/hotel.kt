@@ -23,4 +23,5 @@ data class Hotel(
     val videos: Media,
     val images: Media,
     val neighbourhood: Neighbourhood? = null,
+    val rating: Rating
     )

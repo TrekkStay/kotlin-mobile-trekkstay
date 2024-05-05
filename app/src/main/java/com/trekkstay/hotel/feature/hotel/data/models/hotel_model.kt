@@ -29,6 +29,7 @@ data class HotelModel(
     @SerializedName("videos") val videos: MediaModel,
     @SerializedName("images") val images: MediaModel,
     @SerializedName("neighbourhood") val neighbourhood: NeighbourhoodModel?,
+    @SerializedName("rating") val rating: RatingModel,
 ) {
     companion object {
 
@@ -86,7 +87,9 @@ data class HotelModel(
                 videos = MediaModel.fromJson(map["videos"].toString()),
                 images = MediaModel.fromJson(map["images"].toString()),
                 neighbourhood = if(map["attraction"]!= null) {NeighbourhoodModel.fromJson(map["attraction"].toString())}else{ null},
+                rating = RatingModel.fromJson(map["rating"].toString()),
                 )
+
         }
     }
 }
@@ -113,5 +116,6 @@ fun HotelModel.toEntity(): Hotel {
         videos = videos.toEntity(),
         images = images.toEntity(),
         neighbourhood = neighbourhood?.toEntity(),
+        rating = rating.toEntity()
     )
 }
