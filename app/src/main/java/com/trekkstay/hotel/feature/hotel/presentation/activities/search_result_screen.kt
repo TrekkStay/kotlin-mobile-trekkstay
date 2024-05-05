@@ -9,10 +9,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -125,7 +123,7 @@ fun SearchResultScreen(
     } else {
         Column(
             modifier = Modifier
-                .padding(top = 15.dp, bottom = 70.dp)
+                .padding(top = 5.dp, bottom = 70.dp)
                 .fillMaxSize()
         ) {
             Row(
@@ -140,15 +138,14 @@ fun SearchResultScreen(
                         onBackPress()
                     }
                     .padding(10.dp),
-
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Icon(
                     Icons.Default.Search,
                     contentDescription = null,
                     tint = TrekkStayCyan
                 )
-
                 Column(
                     verticalArrangement = Arrangement.SpaceAround,
                 ) {
@@ -171,7 +168,6 @@ fun SearchResultScreen(
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(0.dp))
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier

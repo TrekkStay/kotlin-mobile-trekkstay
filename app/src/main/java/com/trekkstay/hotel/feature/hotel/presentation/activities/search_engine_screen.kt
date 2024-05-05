@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -49,6 +50,7 @@ import com.trekkstay.hotel.feature.hotel.presentation.states.search.SearchHotelA
 import com.trekkstay.hotel.feature.hotel.presentation.states.search.SearchState
 import com.trekkstay.hotel.feature.hotel.presentation.states.search.SearchViewModel
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
+import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -114,7 +116,7 @@ fun SearchEngineScreen(
 
 
     Scaffold(
-    ) { innerPadding ->
+    ) { _ ->
         if (showResult && searchedHotel.isNotEmpty()) {
             val (formattedCheckInDate, formattedCheckOutDate) = formatDateRange(
                 selectedDateRange?.first ?: 1716422400000,
@@ -194,28 +196,31 @@ fun SearchEngineScreen(
         } else {
             Column(
                 modifier = Modifier
-                    .padding(innerPadding)
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
             ) {
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(vertical = 5.dp)
                 ) {
                     IconButton(onClick = {
                         navController.popBackStack()
                     }) {
                         Icon(
                             Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                            contentDescription = "backFromSearch"
+                            contentDescription = "backFromSearch",
+                            tint = TrekkStayCyan
                         )
                     }
                     Text(
                         text = "Search Hotel",
+                        fontSize = 20.sp,
+                        color = TrekkStayCyan,
                         fontFamily = PoppinsFontFamily,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp
+                        fontWeight = FontWeight.SemiBold,
                     )
                 }
+                HorizontalDivider(color = Color(0xFFE4E4E4), thickness = 2.dp)
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(20.dp),
