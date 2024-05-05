@@ -32,6 +32,7 @@ import com.trekkstay.hotel.feature.hotel.presentation.activities.BookingFormScre
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateEmpScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateHotelScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.CreateRoomScreen
+import com.trekkstay.hotel.feature.hotel.presentation.activities.EditEmpScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.EditHotelScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.EditRoomScreen
 import com.trekkstay.hotel.feature.hotel.presentation.activities.HotelBookingDetailScreen
@@ -318,6 +319,9 @@ fun HotelRouter(
         }
         composable("hotel_emp_create") {
             CreateEmpScreen(empAuthViewModel, navController)
+        }
+        composable("hotel_emp_edit") {
+            EditEmpScreen(empAuthViewModel, navController)
         }
         composable("hotel_reset_pw") {
             HotelResetPwScreen(navController)
