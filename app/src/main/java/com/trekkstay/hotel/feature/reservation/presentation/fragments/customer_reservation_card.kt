@@ -46,7 +46,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.trekkstay.hotel.feature.authenticate.presentation.states.AuthState
 import com.trekkstay.hotel.feature.reservation.presentation.states.CancelReservationAction
 import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationState
 import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationViewModel
@@ -105,26 +104,31 @@ fun CustomerReservationCard(
                     showDialog = false
                     navController.navigate("customer_reservations") {
                         launchSingleTop = true
-                    }}
+                    }
+                }
             )
         }
+
         is ReservationState.InvalidCancelReservation -> {
             println("invalid cancel reservation")
             val msg = (reservationState as ReservationState.InvalidCancelReservation).message
             println(msg)
             TextDialog(
-            title = "Cancel Failed!",
-            msg = (reservationState as ReservationState.InvalidCancelReservation).message,
-            onDismiss = {
-                showDialog = false
-                navController.navigate("customer_reservations") {
-                    launchSingleTop = true
-                }}
-        )
+                title = "Cancel Failed!",
+                msg = (reservationState as ReservationState.InvalidCancelReservation).message,
+                onDismiss = {
+                    showDialog = false
+                    navController.navigate("customer_reservations") {
+                        launchSingleTop = true
+                    }
+                }
+            )
         }
+
         is ReservationState.CancelReservationCalling -> {
             println("cancel calling")
         }
+
         else -> {}
     }
 
@@ -151,7 +155,7 @@ fun CustomerReservationCard(
                 contentDescription = "Reservation's hotel image",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(165.dp, 90.dp)
+                    .size(150.dp, 90.dp)
                     .clip(RoundedCornerShape(12.dp))
                     .border(1.dp, Color.LightGray, shape = RoundedCornerShape(12.dp))
             )
@@ -165,13 +169,13 @@ fun CustomerReservationCard(
                     hotelName,
                     fontFamily = PoppinsFontFamily,
                     fontWeight = FontWeight.Medium,
-                    fontSize = 17.sp
+                    fontSize = 15.sp
                 )
                 Text(
                     destination,
                     fontFamily = PoppinsFontFamily,
                     fontWeight = FontWeight.Medium,
-                    fontSize = 13.sp,
+                    fontSize = 11.sp,
                     color = Color(0xFF303030).copy(0.65f)
                 )
                 when (type) {
@@ -184,6 +188,7 @@ fun CustomerReservationCard(
                             color = TrekkStayCyan
                         )
                     }
+
                     "Completed" -> {
                         Text(
                             text = "$$formattedPrice",
@@ -192,6 +197,7 @@ fun CustomerReservationCard(
                             fontWeight = FontWeight.Medium
                         )
                     }
+
                     "Cancelled" -> {
                         Text(
                             "Cancelled & refunded",
@@ -213,6 +219,7 @@ fun CustomerReservationCard(
                         tint = Color(0xFF0FA958)
                     )
                 }
+
                 "Cancelled" -> {
                     Icon(
                         Icons.Default.Warning,

@@ -62,7 +62,7 @@ data class ReservationModel(
                 } else {
                     null
                 },
-                isRated = (map["is_rated"] as String).toBoolean()
+                isRated = (map["is_rated"].toString()).toBoolean()
             )
         }
     }
