@@ -270,7 +270,7 @@ fun HotelRouter(
         startDestination = "hotel_home"
     ) {
         composable(route = "hotel_home") {
-            HotelHomeScreen(hotelViewModel = hotelViewModel, navController = navController)
+            HotelHomeScreen(navController = navController)
         }
         composable(route = "hotel_reservation_detail/{reservationId}") { backStackEntry ->
             val id = backStackEntry.arguments?.getString("reservationId")

@@ -20,67 +20,87 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 interface HotelRemoteDataSource {
-    suspend fun createHotel(name: String,
-                            description: String,
-                            airportTransfer: Boolean,
-                            conferenceRoom: Boolean,
-                            fitnessCenter: Boolean,
-                            foodService: Boolean,
-                            freeWifi: Boolean,
-                            laundryService: Boolean,
-                            motorBikeRental: Boolean,
-                            parkingArea: Boolean,
-                            spaService: Boolean,
-                            swimmingPool: Boolean,
-                            coordinates: LatLng,
-                            videos: List<String>,
-                            images: List<String>,
-                            email: String,
-                            phone: String,
-                            checkInTime: String,
-                            checkOutTime: String,
-                            provinceCode: String,
-                            districtCode: String,
-                            wardCode: String,
-                            addressDetail: String,
-                            ): Response<String>
+    suspend fun createHotel(
+        name: String,
+        description: String,
+        airportTransfer: Boolean,
+        conferenceRoom: Boolean,
+        fitnessCenter: Boolean,
+        foodService: Boolean,
+        freeWifi: Boolean,
+        laundryService: Boolean,
+        motorBikeRental: Boolean,
+        parkingArea: Boolean,
+        spaService: Boolean,
+        swimmingPool: Boolean,
+        coordinates: LatLng,
+        videos: List<String>,
+        images: List<String>,
+        email: String,
+        phone: String,
+        checkInTime: String,
+        checkOutTime: String,
+        provinceCode: String,
+        districtCode: String,
+        wardCode: String,
+        addressDetail: String,
+    ): Response<String>
 
-    suspend fun updateHotel(name: String,
-                            description: String,
-                            airportTransfer: Boolean,
-                            conferenceRoom: Boolean,
-                            fitnessCenter: Boolean,
-                            foodService: Boolean,
-                            freeWifi: Boolean,
-                            laundryService: Boolean,
-                            motorBikeRental: Boolean,
-                            parkingArea: Boolean,
-                            spaService: Boolean,
-                            swimmingPool: Boolean,
-                            coordinates: LatLng,
-                            videos: List<String>,
-                            images: List<String>,
-                            email: String,
-                            phone: String,
-                            checkInTime: String,
-                            checkOutTime: String,
-                            provinceCode: String,
-                            districtCode: String,
-                            wardCode: String,
-                            addressDetail: String,
+    suspend fun updateHotel(
+        name: String,
+        description: String,
+        airportTransfer: Boolean,
+        conferenceRoom: Boolean,
+        fitnessCenter: Boolean,
+        foodService: Boolean,
+        freeWifi: Boolean,
+        laundryService: Boolean,
+        motorBikeRental: Boolean,
+        parkingArea: Boolean,
+        spaService: Boolean,
+        swimmingPool: Boolean,
+        coordinates: LatLng,
+        videos: List<String>,
+        images: List<String>,
+        email: String,
+        phone: String,
+        checkInTime: String,
+        checkOutTime: String,
+        provinceCode: String,
+        districtCode: String,
+        wardCode: String,
+        addressDetail: String,
     ): Response<Unit>
 
     suspend fun getHotelId(): Response<String>
     suspend fun viewHotel(
-         name: String?, provinceCode: String?, districtCode: String?, wardCode: String?,  priceOrder: String?
+        name: String?,
+        provinceCode: String?,
+        districtCode: String?,
+        wardCode: String?,
+        priceOrder: String?
     ): Response<HotelList>
+
     suspend fun searchHotel(
-        locationCode: String?, attractionLat: Double?, attractionLng: Double?, attractionName: String?, priceOrder: String?, checkInDate: String?, checkOutDate: String?, adults: Int?, children: Int?, numOfRoom: Int?, limit: Int?, page: Int?
+        locationCode: String?,
+        attractionLat: Double?,
+        attractionLng: Double?,
+        attractionName: String?,
+        priceOrder: String?,
+        checkInDate: String?,
+        checkOutDate: String?,
+        adults: Int?,
+        children: Int?,
+        numOfRoom: Int?,
+        limit: Int?,
+        page: Int?
     ): Response<HotelList>
+
     suspend fun hotelDetail(
-        id:String
+        id: String
     ): Response<Hotel>
-    suspend fun viewHotelNear( coordinate: LatLng,  maxRange: Double): Response<List<Hotel>>
+
+    suspend fun viewHotelNear(coordinate: LatLng, maxRange: Double): Response<List<Hotel>>
 
 }
 
@@ -93,33 +113,34 @@ const val hotelDetailEndpoint = "hotel/"
 const val viewHotelNearEndpoint = "hotel/filter/near-me"
 
 
+class HotelRemoteDataSourceImpl(private val client: Client, private val context: Context) :
+    HotelRemoteDataSource {
 
-class HotelRemoteDataSourceImpl(private val client: Client, private val context: Context) : HotelRemoteDataSource {
-
-    override suspend fun createHotel(name: String,
-                                     description: String,
-                                     airportTransfer: Boolean,
-                                     conferenceRoom: Boolean,
-                                     fitnessCenter: Boolean,
-                                     foodService: Boolean,
-                                     freeWifi: Boolean,
-                                     laundryService: Boolean,
-                                     motorBikeRental: Boolean,
-                                     parkingArea: Boolean,
-                                     spaService: Boolean,
-                                     swimmingPool: Boolean,
-                                     coordinates: LatLng,
-                                     videos: List<String>,
-                                     images: List<String>,
-                                     email: String,
-                                     phone: String,
-                                     checkInTime: String,
-                                     checkOutTime: String,
-                                     provinceCode: String,
-                                     districtCode: String,
-                                     wardCode: String,
-                                     addressDetail: String,
-                                     ): Response<String> {
+    override suspend fun createHotel(
+        name: String,
+        description: String,
+        airportTransfer: Boolean,
+        conferenceRoom: Boolean,
+        fitnessCenter: Boolean,
+        foodService: Boolean,
+        freeWifi: Boolean,
+        laundryService: Boolean,
+        motorBikeRental: Boolean,
+        parkingArea: Boolean,
+        spaService: Boolean,
+        swimmingPool: Boolean,
+        coordinates: LatLng,
+        videos: List<String>,
+        images: List<String>,
+        email: String,
+        phone: String,
+        checkInTime: String,
+        checkOutTime: String,
+        provinceCode: String,
+        districtCode: String,
+        wardCode: String,
+        addressDetail: String,
+    ): Response<String> {
         return withContext(Dispatchers.IO) {
             val facilitiesJson = JSONObject().apply {
                 put("airport_transfer", airportTransfer)
@@ -187,29 +208,30 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
     }
 
 
-    override suspend fun updateHotel(name: String,
-                                     description: String,
-                                     airportTransfer: Boolean,
-                                     conferenceRoom: Boolean,
-                                     fitnessCenter: Boolean,
-                                     foodService: Boolean,
-                                     freeWifi: Boolean,
-                                     laundryService: Boolean,
-                                     motorBikeRental: Boolean,
-                                     parkingArea: Boolean,
-                                     spaService: Boolean,
-                                     swimmingPool: Boolean,
-                                     coordinates: LatLng,
-                                     videos: List<String>,
-                                     images: List<String>,
-                                     email: String,
-                                     phone: String,
-                                     checkInTime: String,
-                                     checkOutTime: String,
-                                     provinceCode: String,
-                                     districtCode: String,
-                                     wardCode: String,
-                                     addressDetail: String,
+    override suspend fun updateHotel(
+        name: String,
+        description: String,
+        airportTransfer: Boolean,
+        conferenceRoom: Boolean,
+        fitnessCenter: Boolean,
+        foodService: Boolean,
+        freeWifi: Boolean,
+        laundryService: Boolean,
+        motorBikeRental: Boolean,
+        parkingArea: Boolean,
+        spaService: Boolean,
+        swimmingPool: Boolean,
+        coordinates: LatLng,
+        videos: List<String>,
+        images: List<String>,
+        email: String,
+        phone: String,
+        checkInTime: String,
+        checkOutTime: String,
+        provinceCode: String,
+        districtCode: String,
+        wardCode: String,
+        addressDetail: String,
     ): Response<Unit> {
         return withContext(Dispatchers.IO) {
             val facilitiesJson = JSONObject().apply {
@@ -239,7 +261,7 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
             }
 
             val requestBodyJson = JSONObject().apply {
-                put("id",LocalStore.getKey(context, "hotelId", ""))
+                put("id", LocalStore.getKey(context, "hotelId", ""))
                 put("name", name)
                 put("description", description)
                 put("facilities", facilitiesJson)
@@ -258,12 +280,12 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
 
             val jwtKey = LocalStore.getKey(context, "jwtKey", "")
             val request = RequestQuery(
-                method = RequestMethod.POST,
+                method = RequestMethod.PATCH,
                 path = "http://175.41.168.200:8888/api/v1/${updateHotelEndpoint}",
                 headers = mapOf("Authorization" to "Bearer $jwtKey"),
                 requestBody = requestBodyJson.toString()
             )
-
+            println(request.toString())
             val response = client.execute<Unit>(
                 request = request,
             )
@@ -299,7 +321,13 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
 
     }
 
-    override suspend fun viewHotel( name: String?, provinceCode: String?, districtCode: String?, wardCode: String?,  priceOrder: String?): Response<HotelList> {
+    override suspend fun viewHotel(
+        name: String?,
+        provinceCode: String?,
+        districtCode: String?,
+        wardCode: String?,
+        priceOrder: String?
+    ): Response<HotelList> {
         return withContext(Dispatchers.IO) {
 
             val queryParams = buildString {
@@ -344,7 +372,19 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
 
 
     override suspend fun searchHotel(
-        locationCode: String?, attractionLat: Double?, attractionLng: Double?, attractionName: String?, priceOrder: String?, checkInDate: String?, checkOutDate: String?, adults: Int?, children: Int?, numOfRoom: Int?, limit: Int?, page: Int?): Response<HotelList> {
+        locationCode: String?,
+        attractionLat: Double?,
+        attractionLng: Double?,
+        attractionName: String?,
+        priceOrder: String?,
+        checkInDate: String?,
+        checkOutDate: String?,
+        adults: Int?,
+        children: Int?,
+        numOfRoom: Int?,
+        limit: Int?,
+        page: Int?
+    ): Response<HotelList> {
         return withContext(Dispatchers.IO) {
 
             val queryParams = buildString {
@@ -410,7 +450,8 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
 
 
     override suspend fun viewHotelNear(
-        coordinate: LatLng, maxRange: Double): Response<List<Hotel>> {
+        coordinate: LatLng, maxRange: Double
+    ): Response<List<Hotel>> {
         return withContext(Dispatchers.IO) {
 
             val request = RequestQuery(
@@ -433,12 +474,13 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
         }
 
     }
+
     private fun containsQueryParams(queryParams: String): Boolean {
         return queryParams.contains("?")
     }
 
 
-    override suspend fun hotelDetail(id:String): Response<Hotel> {
+    override suspend fun hotelDetail(id: String): Response<Hotel> {
         return withContext(Dispatchers.IO) {
             val request = RequestQuery(
                 method = RequestMethod.GET,
@@ -473,6 +515,7 @@ class HotelRemoteDataSourceImpl(private val client: Client, private val context:
                     else -> null
                 }
             } as? T
+
             else -> null
         }
     }
