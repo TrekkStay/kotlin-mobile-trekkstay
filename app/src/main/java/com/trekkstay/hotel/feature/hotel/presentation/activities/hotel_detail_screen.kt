@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -134,36 +135,52 @@ fun HotelDetailScreen(
                             .fillMaxWidth()
                             .size(200.dp)
                     ) {
-
                         HorizontalPager(state = rememberPagerState(pageCount = { hotelVideoList.size + hotelImgList.size })) {
-                            if (hotel.videos.media.isNotEmpty() && it < hotelVideoList.size) {
-                                AndroidView(
-                                    factory = { context ->
-                                        PlayerView(context).apply {
-                                            player = ExoPlayer.Builder(context).build().apply {
-                                                setMediaItem(MediaItem.fromUri(Uri.parse(hotel.videos.media[it])))
-                                                repeatMode = ExoPlayer.REPEAT_MODE_ALL
-                                                playWhenReady = playWhenReady
-                                                prepare()
-                                                play()
+                            Box() {
+                                if (hotel.videos.media.isNotEmpty() && it < hotelVideoList.size) {
+                                    AndroidView(
+                                        factory = { context ->
+                                            PlayerView(context).apply {
+                                                player = ExoPlayer.Builder(context).build().apply {
+                                                    setMediaItem(MediaItem.fromUri(Uri.parse(hotel.videos.media[it])))
+                                                    repeatMode = ExoPlayer.REPEAT_MODE_ALL
+                                                    playWhenReady = playWhenReady
+                                                    prepare()
+                                                    play()
+                                                }
+                                                useController = true
+                                                layoutParams = ViewGroup.LayoutParams(
+                                                    ViewGroup.LayoutParams.MATCH_PARENT,
+                                                    ViewGroup.LayoutParams.MATCH_PARENT
+                                                )
                                             }
-                                            useController = true
-                                            layoutParams = ViewGroup.LayoutParams(
-                                                ViewGroup.LayoutParams.MATCH_PARENT,
-                                                ViewGroup.LayoutParams.MATCH_PARENT
-                                            )
-                                        }
-                                    },
-                                    modifier = Modifier.fillMaxSize()
-                                )
-                            } else {
-                                AsyncImage(
-                                    model = hotelImgList[it - hotelVideoList.size],
-                                    contentDescription = null,
-                                    contentScale = ContentScale.Crop,
+                                        },
+                                        modifier = Modifier.fillMaxSize()
+                                    )
+                                } else {
+                                    AsyncImage(
+                                        model = hotelImgList[it - hotelVideoList.size],
+                                        contentDescription = null,
+                                        contentScale = ContentScale.Crop,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .size(200.dp)
+                                    )
+                                }
+                                Text(
+                                    "${it + 1}/${hotelImgList.size + hotelVideoList.size}",
+                                    fontSize = 14.sp,
+                                    fontFamily = PoppinsFontFamily,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = Color.White,
                                     modifier = Modifier
-                                        .fillMaxWidth()
-                                        .size(200.dp)
+                                        .offset(x = -5.dp, y = -5.dp)
+                                        .background(
+                                            Color.Black.copy(alpha = 0.4f),
+                                            RoundedCornerShape(15.dp)
+                                        )
+                                        .padding(vertical = 5.dp, horizontal = 10.dp)
+                                        .align(Alignment.BottomEnd)
                                 )
                             }
                         }

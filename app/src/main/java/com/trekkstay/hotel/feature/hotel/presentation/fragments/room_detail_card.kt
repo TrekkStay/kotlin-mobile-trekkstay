@@ -10,9 +10,12 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Button
@@ -57,12 +60,11 @@ fun RoomDetailCard(
     room: Room,
     navController: NavController
 ) {
-    val roomImgList = if(room.image.media.isEmpty()) {
+    val roomImgList = if (room.image.media.isEmpty()) {
         arrayOf(
             "https://www.usatoday.com/gcdn/-mm-/05b227ad5b8ad4e9dcb53af4f31d7fbdb7fa901b/c=0-64-2119-1259/local/-/media/USATODAY/USATODAY/2014/08/13/1407953244000-177513283.jpg?width=1320&height=746&fit=crop&format=pjpg&auto=webp",
         )
-    }
-    else{
+    } else {
         room.image.media.toTypedArray()
     }
     var expandedDesc by remember { mutableStateOf(false) }
@@ -79,15 +81,32 @@ fun RoomDetailCard(
                 .fillMaxWidth()
                 .size(135.dp)
                 .clip(RoundedCornerShape(10.dp))
+                .border(1.dp, Color.Gray, shape = RoundedCornerShape(10.dp))
         ) {
-            AsyncImage(
-                model = roomImgList.first(),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .size(135.dp)
-            )
+            HorizontalPager(state = rememberPagerState(pageCount = { roomImgList.size })) {
+                Box() {
+                    AsyncImage(
+                        model = roomImgList[it],
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .size(135.dp)
+                    )
+                    Text(
+                        "${it + 1}/${roomImgList.size}",
+                        fontSize = 14.sp,
+                        fontFamily = PoppinsFontFamily,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.White,
+                        modifier = Modifier
+                            .offset(x = -5.dp, y = -5.dp)
+                            .background(TrekkStayCyan, RoundedCornerShape(15.dp))
+                            .padding(vertical = 5.dp, horizontal = 10.dp)
+                            .align(Alignment.BottomEnd)
+                    )
+                }
+            }
         }
         Text(
             text = room.type,
@@ -191,15 +210,33 @@ fun RoomDetailCard(
                     .fillMaxWidth()
                     .padding(vertical = 10.dp)
             ) {
-                if(room.facilities.airConditioner){FacilityBullet(label = "Air Condition")}
-                if(room.facilities.kitchen){FacilityBullet(label = "Kitchen")}
-                if(room.facilities.television){FacilityBullet(label = "Television")}
-                if(room.facilities.balcony){FacilityBullet(label = "Balcony")}
-                if(room.facilities.bathTub){FacilityBullet(label = "Bathtub")}
-                if(room.facilities.hairDryer){FacilityBullet(label = "Hairdryer")}
-                if(room.facilities.shower){FacilityBullet(label = "Shower")}
-                if(room.facilities.nonSmoking) {FacilityBullet(label = "Non Smoking")}
-                if(room.facilities.slippers) {FacilityBullet(label = "Slippers")}
+                if (room.facilities.airConditioner) {
+                    FacilityBullet(label = "Air Condition")
+                }
+                if (room.facilities.kitchen) {
+                    FacilityBullet(label = "Kitchen")
+                }
+                if (room.facilities.television) {
+                    FacilityBullet(label = "Television")
+                }
+                if (room.facilities.balcony) {
+                    FacilityBullet(label = "Balcony")
+                }
+                if (room.facilities.bathTub) {
+                    FacilityBullet(label = "Bathtub")
+                }
+                if (room.facilities.hairDryer) {
+                    FacilityBullet(label = "Hairdryer")
+                }
+                if (room.facilities.shower) {
+                    FacilityBullet(label = "Shower")
+                }
+                if (room.facilities.nonSmoking) {
+                    FacilityBullet(label = "Non Smoking")
+                }
+                if (room.facilities.slippers) {
+                    FacilityBullet(label = "Slippers")
+                }
             }
         }
         HorizontalDivider(color = TrekkStayCyan, thickness = 2.dp)
