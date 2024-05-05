@@ -116,6 +116,16 @@ fun EditRoomScreen(
     var selectedBedNum by remember { mutableIntStateOf(1) }
     var selectedAdultNumber by remember { mutableIntStateOf(1) }
     var selectedChildNumber by remember { mutableIntStateOf(0) }
+    var roomTypeString by remember { mutableStateOf("") }
+    var descriptionString by remember { mutableStateOf("") }
+    var quantityString by remember { mutableStateOf("") }
+    var discountRateString by remember { mutableStateOf("") }
+    var priceString by remember { mutableStateOf("") }
+    var viewString by remember { mutableStateOf("") }
+    var roomSizeString by remember { mutableStateOf("") }
+    var selectedBedNumString by remember { mutableIntStateOf(-1) }
+    var selectedAdultNumberString by remember { mutableIntStateOf(-1) }
+    var selectedChildNumberString by remember { mutableIntStateOf(-1) }
     var selectedFacilities by remember { mutableStateOf(listOf<String>()) }
     val facilities = listOf(
         "Air Condition",
@@ -236,13 +246,14 @@ fun EditRoomScreen(
                 val action = UpdateRoomAction(
                     id = roomId,
                     hotelId = hotelId,
-                    type = roomType.text,
-                    description = description.text,
-                    quantities = quantity.text.toIntOrNull() ?: 0,
-                    discountRate = discountRate.text.toIntOrNull() ?: 0,
-                    originalPrice = price.text.toIntOrNull() ?: 0,
-                    images = imageUrls,
+                    type = roomTypeString.ifEmpty { roomType.text },
+                    description = descriptionString.ifEmpty { description.text },
+                    quantities = quantityString.ifEmpty { quantity.text }.toIntOrNull() ?: 0,
+                    discountRate = discountRateString.ifEmpty { discountRate.text }.toIntOrNull()
+                        ?: 0,
+                    originalPrice = priceString.ifEmpty { price.text }.toIntOrNull() ?: 0,
                     videos = (mediaState as MediaState.SuccessUploadVideo).media.media,
+                    images = imageUrls,
                     airConditioner = "Air Condition" in selectedFacilities,
                     bathTub = "Bath Tub" in selectedFacilities,
                     shower = "Shower" in selectedFacilities,
@@ -252,11 +263,11 @@ fun EditRoomScreen(
                     television = "Television" in selectedFacilities,
                     slippers = "Slippers" in selectedFacilities,
                     nonSmoking = "Smoking" in selectedFacilities,
-                    view = view.text,
-                    roomSize = roomSize.text.toIntOrNull() ?: 0,
-                    numberOfBed = selectedBedNum,
-                    adults = selectedAdultNumber,
-                    children = selectedChildNumber
+                    view = viewString.ifEmpty { view.text },
+                    roomSize = roomSizeString.ifEmpty { roomSize.text }.toIntOrNull() ?: 0,
+                    numberOfBed = if (selectedBedNumString == -1) selectedBedNum else selectedBedNumString,
+                    adults = if (selectedAdultNumberString == -1) selectedAdultNumber else selectedAdultNumberString,
+                    children = if (selectedChildNumberString == -1) selectedChildNumber else selectedChildNumberString,
                 )
                 roomViewModel.processAction(action)
                 hasUploadedVideo = true
@@ -434,19 +445,28 @@ fun EditRoomScreen(
                         InfoTextField(
                             label = "Room type",
                             text = roomType,
-                            onValueChange = { roomType = it },
+                            onValueChange = {
+                                roomType = it
+                                roomTypeString = it.text
+                            },
                             icon = ImageVector.vectorResource(R.drawable.bed_ico),
                         )
                         InfoTextField(
                             label = "Description",
                             text = description,
-                            onValueChange = { description = it },
+                            onValueChange = {
+                                description = it
+                                descriptionString = it.text
+                            },
                             icon = Icons.Default.Info,
                         )
                         InfoTextField(
                             label = "Quantity",
                             text = quantity,
-                            onValueChange = { quantity = it },
+                            onValueChange = {
+                                quantity = it
+                                quantityString = it.text
+                            },
                             icon = ImageVector.vectorResource(R.drawable.box_ico),
                             type = "number"
                         )
@@ -460,7 +480,10 @@ fun EditRoomScreen(
                         InfoTextField(
                             label = "Original Price",
                             text = price,
-                            onValueChange = { price = it },
+                            onValueChange = {
+                                price = it
+                                priceString = it.text
+                            },
                             icon = ImageVector.vectorResource(R.drawable.money_circle_ico),
                             type = "number"
                         )
@@ -590,13 +613,19 @@ fun EditRoomScreen(
                             InfoTextField(
                                 label = "View",
                                 text = view,
-                                onValueChange = { view = it },
+                                onValueChange = {
+                                    view = it
+                                    viewString = it.text
+                                },
                                 icon = ImageVector.vectorResource(R.drawable.eye_ico),
                             )
                             InfoTextField(
                                 label = "Room Size",
                                 text = roomSize,
-                                onValueChange = { roomSize = it },
+                                onValueChange = {
+                                    roomSize = it
+                                    roomSizeString = it.text
+                                },
                                 icon = ImageVector.vectorResource(R.drawable.size_ico),
                                 type = "number"
                             )
@@ -607,12 +636,15 @@ fun EditRoomScreen(
                                 initialChildNumber = selectedChildNumber,
                                 onBedNumChange = { bedNum ->
                                     selectedBedNum = bedNum
+                                    selectedBedNumString = bedNum
                                 },
                                 onAdultNumberChange = { adultNumber ->
                                     selectedAdultNumber = adultNumber
+                                    selectedAdultNumberString = adultNumber
                                 },
                                 onChildNumberChange = { childNumber ->
                                     selectedChildNumber = childNumber
+                                    selectedChildNumberString = childNumber
                                 }
                             )
                         }
@@ -642,13 +674,16 @@ fun EditRoomScreen(
                                     val action = UpdateRoomAction(
                                         id = roomId,
                                         hotelId = hotelId,
-                                        type = roomType.text,
-                                        description = description.text,
-                                        quantities = quantity.text.toIntOrNull() ?: 0,
-                                        discountRate = discountRate.text.toIntOrNull() ?: 0,
-                                        originalPrice = price.text.toIntOrNull() ?: 0,
-                                        images = selectedVideoLinks,
-                                        videos = selectedImageLinks,
+                                        type = roomTypeString.ifEmpty { roomType.text },
+                                        description = descriptionString.ifEmpty { description.text },
+                                        quantities = quantityString.ifEmpty { quantity.text }
+                                            .toIntOrNull() ?: 0,
+                                        discountRate = discountRateString.ifEmpty { discountRate.text }
+                                            .toIntOrNull() ?: 0,
+                                        originalPrice = priceString.ifEmpty { price.text }
+                                            .toIntOrNull() ?: 0,
+                                        images = selectedImageLinks,
+                                        videos = selectedVideoLinks,
                                         airConditioner = "Air Condition" in selectedFacilities,
                                         bathTub = "Bath Tub" in selectedFacilities,
                                         shower = "Shower" in selectedFacilities,
@@ -658,11 +693,12 @@ fun EditRoomScreen(
                                         television = "Television" in selectedFacilities,
                                         slippers = "Slippers" in selectedFacilities,
                                         nonSmoking = "Smoking" in selectedFacilities,
-                                        view = view.text,
-                                        roomSize = roomSize.text.toIntOrNull() ?: 0,
-                                        numberOfBed = selectedBedNum,
-                                        adults = selectedAdultNumber,
-                                        children = selectedChildNumber
+                                        view = viewString.ifEmpty { view.text },
+                                        roomSize = roomSizeString.ifEmpty { roomSize.text }
+                                            .toIntOrNull() ?: 0,
+                                        numberOfBed = if (selectedBedNumString == -1) selectedBedNum else selectedBedNumString,
+                                        adults = if (selectedAdultNumberString == -1) selectedAdultNumber else selectedAdultNumberString,
+                                        children = if (selectedChildNumberString == -1) selectedChildNumber else selectedChildNumberString,
                                     )
                                     roomViewModel.processAction(action)
                                     hasUploadedVideo = true

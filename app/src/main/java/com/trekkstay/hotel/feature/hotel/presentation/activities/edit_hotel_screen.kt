@@ -122,6 +122,14 @@ fun EditHotelScreen(
     var checkInTime by remember { mutableStateOf("") }
     var checkOutTime by remember { mutableStateOf("") }
     var selectedLatLng by remember { mutableStateOf(LatLng(0.0, 0.0)) }
+    var hotelNameString by remember { mutableStateOf("") }
+    var hotelEmailString by remember { mutableStateOf("") }
+    var hotelPhoneString by remember { mutableStateOf("") }
+    var addressDetailString by remember { mutableStateOf("") }
+    var hotelDescriptionString by remember { mutableStateOf("") }
+    var checkInTimeString by remember { mutableStateOf("") }
+    var checkOutTimeString by remember { mutableStateOf("") }
+    var selectedLatLngString by remember { mutableStateOf(LatLng(0.0, 0.0)) }
     val timeList = arrayOf("12:00", "12:30", "13:00", "13:30", "14:00")
     var selectedFacilities by remember { mutableStateOf(listOf<String>()) }
     val facilities = listOf(
@@ -182,6 +190,9 @@ fun EditHotelScreen(
     var selectedProvince by remember { mutableStateOf<Location?>(null) }
     var selectedDistrict by remember { mutableStateOf<Location?>(null) }
     var selectedWard by remember { mutableStateOf<Location?>(null) }
+    var selectedProvinceString by remember { mutableStateOf<Location?>(null) }
+    var selectedDistrictString by remember { mutableStateOf<Location?>(null) }
+    var selectedWardString by remember { mutableStateOf<Location?>(null) }
     var provinceList by remember { mutableStateOf<List<Location>>(emptyList()) }
     var districtList by remember { mutableStateOf<List<Location>>(emptyList()) }
     var wardList by remember { mutableStateOf<List<Location>>(emptyList()) }
@@ -250,8 +261,8 @@ fun EditHotelScreen(
         is MediaState.SuccessUploadVideo -> {
             if (!hasUploadedVideo) {
                 val action = UpdateHotelAction(
-                    name = hotelName.text,
-                    description = hotelDescription.text,
+                    name = hotelNameString.ifEmpty { hotelName.text },
+                    description = hotelDescriptionString.ifEmpty { hotelDescription.text },
                     airportTransfer = "Airport Transfer" in selectedFacilities,
                     conferenceRoom = "Conference Room" in selectedFacilities,
                     fitnessCenter = "Fitness Center" in selectedFacilities,
@@ -262,14 +273,17 @@ fun EditHotelScreen(
                     parkingArea = "Parking Area" in selectedFacilities,
                     spaService = "Spa" in selectedFacilities,
                     swimmingPool = " Pool" in selectedFacilities,
-                    addressDetail = addressDetail.text,
-                    checkInTime = checkInTime,
-                    checkOutTime = checkOutTime,
-                    provinceCode = selectedProvince?.code ?: "",
-                    districtCode = selectedDistrict?.code ?: "",
-                    wardCode = selectedWard?.code ?: "",
-                    email = hotelEmail.text,
-                    phone = hotelPhone.text,
+                    addressDetail = addressDetailString.ifEmpty { addressDetail.text },
+                    checkInTime = checkInTimeString.ifEmpty { checkInTime },
+                    checkOutTime = checkOutTimeString.ifEmpty { checkOutTime },
+                    provinceCode = if (selectedProvinceString == null) selectedProvince?.code
+                        ?: "" else selectedProvinceString?.code ?: "",
+                    districtCode = if (selectedDistrictString == null) selectedDistrict?.code
+                        ?: "" else selectedDistrictString?.code ?: "",
+                    wardCode = if (selectedWardString == null) selectedWard?.code
+                        ?: "" else selectedWardString?.code ?: "",
+                    email = hotelEmailString.ifEmpty { hotelEmail.text },
+                    phone = hotelPhoneString.ifEmpty { hotelPhone.text },
                     videos = (mediaState as MediaState.SuccessUploadVideo).media.media,
                     images = imageUrls,
                     coordinates = selectedLatLng,
@@ -435,21 +449,6 @@ fun EditHotelScreen(
                 }
             }
 
-            val cheapRoomPrice = if (hotel.room.isNotEmpty()) {
-                hotel.room.first().originalPrice
-            } else {
-                1
-            }.toString()
-
-            val hotelImgList = if (hotel.images.media.isEmpty()) {
-                arrayOf(
-                    "https://www.usatoday.com/gcdn/-mm-/05b227ad5b8ad4e9dcb53af4f31d7fbdb7fa901b/c=0-64-2119-1259/local/-/media/USATODAY/USATODAY/2014/08/13/1407953244000-177513283.jpg?width=1320&height=746&fit=crop&format=pjpg&auto=webp",
-                )
-
-            } else {
-                hotel.images.media.toTypedArray()
-            }
-            val hotelVideoList = hotel.videos.media.toTypedArray()
             Box(
                 modifier = Modifier
                     .fillMaxHeight()
@@ -495,19 +494,28 @@ fun EditHotelScreen(
                             InfoTextField(
                                 label = "Hotel Name",
                                 text = hotelName,
-                                onValueChange = { hotelName = it },
+                                onValueChange = {
+                                    hotelName = it
+                                    hotelNameString = it.text
+                                },
                                 icon = Icons.Default.Edit,
                             )
                             InfoTextField(
                                 label = "Hotel Email",
                                 text = hotelEmail,
-                                onValueChange = { hotelEmail = it },
+                                onValueChange = {
+                                    hotelEmail = it
+                                    hotelEmailString = it.text
+                                },
                                 icon = Icons.Default.Email,
                             )
                             InfoTextField(
                                 label = "Hotel Phone",
                                 text = hotelPhone,
-                                onValueChange = { hotelPhone = it },
+                                onValueChange = {
+                                    hotelPhone = it
+                                    hotelPhoneString = it.text
+                                },
                                 icon = Icons.Default.Phone,
                             )
                             Row(
@@ -519,7 +527,10 @@ fun EditHotelScreen(
                                     title = "Check In",
                                     itemList = timeList,
                                     leadingIcon = ImageVector.vectorResource(R.drawable.time_ico),
-                                    onItemSelected = { checkInTime = it },
+                                    onItemSelected = {
+                                        checkInTime = it
+                                        checkInTimeString = it
+                                    },
                                     initialTime = checkInTime
                                 )
                                 TimeDropDownMenuUpdate(
@@ -527,7 +538,10 @@ fun EditHotelScreen(
                                     title = "Check Out",
                                     itemList = timeList,
                                     leadingIcon = ImageVector.vectorResource(R.drawable.time_ico),
-                                    onItemSelected = { checkOutTime = it },
+                                    onItemSelected = {
+                                        checkOutTime = it
+                                        checkOutTimeString = it
+                                    },
                                     initialTime = checkOutTime
                                 )
                             }
@@ -550,6 +564,7 @@ fun EditHotelScreen(
                                 DropDownMenu(
                                     widthSize = 115, title = "Province", itemList = provinceList, {
                                         selectedProvince = it
+                                        selectedProvinceString = it
                                     },
                                     clearSibling = {
                                         val action = ViewDistrictAction(it.code)
@@ -567,6 +582,7 @@ fun EditHotelScreen(
                                     itemList = districtList,
                                     {
                                         selectedDistrict = it
+                                        selectedDistrictString = it
                                     },
                                     clearSibling = {
                                         val action = ViewWardAction(it.code)
@@ -580,7 +596,10 @@ fun EditHotelScreen(
                                     widthSize = 115,
                                     title = "Ward",
                                     itemList = wardList,
-                                    { selectedWard = it }, clearSibling = {
+                                    {
+                                        selectedWard = it
+                                        selectedWardString = it
+                                    }, clearSibling = {
 
                                     },
                                     initialLocation = selectedWard
@@ -675,7 +694,10 @@ fun EditHotelScreen(
                             InfoTextField(
                                 label = "Description",
                                 text = hotelDescription,
-                                onValueChange = { hotelDescription = it },
+                                onValueChange = {
+                                    hotelDescription = it
+                                    hotelDescriptionString = it.text
+                                },
                                 icon = Icons.Default.Info,
                                 maxLine = 6
                             )
@@ -735,8 +757,8 @@ fun EditHotelScreen(
                                     )
                                 ) {
                                     val action = UpdateHotelAction(
-                                        name = hotelName.text,
-                                        description = hotelDescription.text,
+                                        name = hotelNameString.ifEmpty { hotelName.text },
+                                        description = hotelDescriptionString.ifEmpty { hotelDescription.text },
                                         airportTransfer = "Airport Transfer" in selectedFacilities,
                                         conferenceRoom = "Conference Room" in selectedFacilities,
                                         fitnessCenter = "Fitness Center" in selectedFacilities,
@@ -747,14 +769,17 @@ fun EditHotelScreen(
                                         parkingArea = "Parking Area" in selectedFacilities,
                                         spaService = "Spa" in selectedFacilities,
                                         swimmingPool = " Pool" in selectedFacilities,
-                                        addressDetail = addressDetail.text,
-                                        checkInTime = checkInTime,
-                                        checkOutTime = checkOutTime,
-                                        provinceCode = selectedProvince?.code ?: "",
-                                        districtCode = selectedDistrict?.code ?: "",
-                                        wardCode = selectedWard?.code ?: "",
-                                        email = hotelEmail.text,
-                                        phone = hotelPhone.text,
+                                        addressDetail = addressDetailString.ifEmpty { addressDetail.text },
+                                        checkInTime = checkInTimeString.ifEmpty { checkInTime },
+                                        checkOutTime = checkOutTimeString.ifEmpty { checkOutTime },
+                                        provinceCode = if (selectedProvinceString == null) selectedProvince?.code
+                                            ?: "" else selectedProvinceString?.code ?: "",
+                                        districtCode = if (selectedDistrictString == null) selectedDistrict?.code
+                                            ?: "" else selectedDistrictString?.code ?: "",
+                                        wardCode = if (selectedWardString == null) selectedWard?.code
+                                            ?: "" else selectedWardString?.code ?: "",
+                                        email = hotelEmailString.ifEmpty { hotelEmail.text },
+                                        phone = hotelPhoneString.ifEmpty { hotelPhone.text },
                                         videos = selectedVideoLinks,
                                         images = selectedImageLinks,
                                         coordinates = selectedLatLng,
