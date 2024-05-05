@@ -98,7 +98,7 @@ fun CustomerBotNav(navController: NavHostController) {
                         modifier = Modifier.size(30.dp)
                     )
                     Text(
-                        text = "18",
+                        text = "10",
                         fontSize = 10.sp,
                         color = Color.White,
                         modifier = Modifier

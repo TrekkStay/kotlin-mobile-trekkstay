@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -44,7 +45,10 @@ fun HotelCard(
                 .background(Color.White, shape = RoundedCornerShape(10.dp))
                 .padding(10.dp)
                 .clickable {
-                    navController.navigate("hotel_detail/${hotel.id}")
+                    navController.navigate("hotel_detail/${hotel.id}") {
+                        launchSingleTop = true
+                        restoreState = true
+                    }
                 }
         ) {
             AsyncImage(
@@ -54,6 +58,7 @@ fun HotelCard(
                     hotel.images.media.first()
                 },
                 contentDescription = "This is an example image",
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(180.dp, 100.dp)
                     .clip(RoundedCornerShape(12.dp))

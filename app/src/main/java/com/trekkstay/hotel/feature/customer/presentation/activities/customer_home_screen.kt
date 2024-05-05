@@ -198,11 +198,29 @@ fun CustomerHomeScreen(hotelViewModel: HotelViewModel, navController: NavHostCon
             contentPadding = PaddingValues(10.dp)
         ) {
             items(3) {
-                DestinationCard(
-                    name = "Da Lat",
-                    hotelNum = 186,
-                    imgUrl = "https://www.usatoday.com/gcdn/-mm-/05b227ad5b8ad4e9dcb53af4f31d7fbdb7fa901b/c=0-64-2119-1259/local/-/media/USATODAY/USATODAY/2014/08/13/1407953244000-177513283.jpg?width=1320&height=746&fit=crop&format=pjpg&auto=webp"
-                )
+                when (it) {
+                    0 -> {
+                        DestinationCard(
+                            name = "Ho Chi Minh",
+                            hotelNum = 5,
+                            imgUrl = "https://t3.ftcdn.net/jpg/00/29/13/38/360_F_29133877_bfA2n7cWV53fto2BomyZ6pyRujJTBwjd.jpg"
+                        )
+                    }
+                    1 -> {
+                        DestinationCard(
+                            name = "Da Lat",
+                            hotelNum = 6,
+                            imgUrl = "https://www.usatoday.com/gcdn/-mm-/05b227ad5b8ad4e9dcb53af4f31d7fbdb7fa901b/c=0-64-2119-1259/local/-/media/USATODAY/USATODAY/2014/08/13/1407953244000-177513283.jpg?width=1320&height=746&fit=crop&format=pjpg&auto=webp"
+                        )
+                    }
+                    2 -> {
+                        DestinationCard(
+                            name = "Nha Trang",
+                            hotelNum = 4,
+                            imgUrl = "https://images.unsplash.com/photo-1625244724120-1fd1d34d00f6?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aG90ZWxzfGVufDB8fDB8fHww"
+                        )
+                    }
+                }
             }
         }
         Text(

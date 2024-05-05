@@ -31,7 +31,7 @@ fun DestinationCard(
 ) {
     Row(
         modifier = Modifier
-            .size(160.dp, 130.dp)
+            .size(180.dp, 130.dp)
             .shadow(2.dp, shape = RoundedCornerShape(10.dp))
             .background(Color.White, shape = RoundedCornerShape(10.dp))
             .padding(10.dp),
