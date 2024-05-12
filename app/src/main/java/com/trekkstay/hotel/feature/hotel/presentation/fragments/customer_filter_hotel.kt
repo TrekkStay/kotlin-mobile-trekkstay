@@ -169,7 +169,7 @@ fun CustomerFilterHotel(
                             .padding(horizontal = 10.dp)
                     ) {
                         Text(
-                            text = "Review Rating",
+                            text = "Review & Rating",
                             fontFamily = PoppinsFontFamily,
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 20.sp

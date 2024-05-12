@@ -40,12 +40,13 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.trekkstay.hotel.feature.hotel.domain.entities.Hotel
 import com.trekkstay.hotel.feature.shared.Utils.formatPrice
+import com.trekkstay.hotel.feature.shared.Utils.labelizeRating
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @Composable
 fun HotelSearchResultCard(hotel: Hotel, navController: NavController) {
-    val hotelRating = "7.2"
+    val hotelRating = hotel.rating.averagePoint
     val originalPrice = if(hotel.room.isNotEmpty())hotel.room.first().originalPrice else 0
     val discountRate = if(hotel.room.isNotEmpty())hotel.room.first().discountRate else 0
     var liked by remember { mutableStateOf(false) }
@@ -134,7 +135,7 @@ fun HotelSearchResultCard(hotel: Hotel, navController: NavController) {
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 15.dp)
             ) {
                 Text(
-                    hotelRating,
+                    "$hotelRating",
                     fontSize = 12.sp,
                     fontFamily = PoppinsFontFamily,
                     fontWeight = FontWeight.SemiBold,
@@ -147,7 +148,7 @@ fun HotelSearchResultCard(hotel: Hotel, navController: NavController) {
                         .padding(8.dp)
                 )
                 Text(
-                    "Very good",
+                    "${labelizeRating(hotelRating)}",
                     fontSize = 12.sp,
                     fontFamily = PoppinsFontFamily,
                     fontWeight = FontWeight.SemiBold,
