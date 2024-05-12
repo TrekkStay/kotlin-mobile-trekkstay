@@ -49,63 +49,72 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.hotel.R
 import com.trekkstay.hotel.feature.hotel.presentation.fragments.InfoTextField
 import com.trekkstay.hotel.feature.hotel.presentation.states.review.CreateReview
 import com.trekkstay.hotel.feature.hotel.presentation.states.review.ReviewState
 import com.trekkstay.hotel.feature.hotel.presentation.states.review.ReviewViewModel
-import com.trekkstay.hotel.feature.reservation.presentation.states.ReservationState
 import com.trekkstay.hotel.feature.shared.TextDialog
 import com.trekkstay.hotel.feature.shared.Utils.labelizeRating
 import com.trekkstay.hotel.ui.theme.PoppinsFontFamily
 import com.trekkstay.hotel.ui.theme.TrekkStayCyan
 
 @Composable
-fun CustomerReviewScreen(hotelId: String, hotelName: String, navController: NavController, reviewViewModel: ReviewViewModel) {
+fun CustomerReviewScreen(
+    hotelId: String,
+    hotelName: String,
+    navController: NavController,
+    reviewViewModel: ReviewViewModel
+) {
     var ratingPoint by remember { mutableIntStateOf(0) }
     var travellerType by remember { mutableStateOf("") }
     var reviewTitle by remember { mutableStateOf(TextFieldValue("")) }
     var reviewContent by remember { mutableStateOf(TextFieldValue("")) }
     var showDialog by remember { mutableStateOf(false) }
-    var isReview by remember { mutableStateOf(false)}
+    var dialogTitle by remember { mutableStateOf("") }
+    var dialogMessage by remember { mutableStateOf("") }
+    var dialogType by remember { mutableStateOf("warning") }
+    var isReview by remember { mutableStateOf(false) }
 
     val reviewState by reviewViewModel.state.observeAsState()
     when (reviewState) {
         is ReviewState.SuccessCreateReview -> {
             if (isReview) {
-                TextDialog(
-                    title = "Review Successfully",
-                    msg = "You review booking successfully!",
-                    type = "success",
-                    onDismiss = {
-                        showDialog = false
-                        navController.navigate("customer_reservations") {
-                            launchSingleTop = true
-                        }
-                    }
-                )
+                dialogTitle = "Review Successfully"
+                dialogMessage = "You review booking successfully!"
+                dialogType = "success"
+                showDialog = true
             }
         }
+
         is ReviewState.InvalidCreateReview -> {
-            TextDialog(
-                title = "Review Failed!",
-                msg = (reviewState as ReviewState.InvalidCreateReview).message,
-                onDismiss = {
-                    showDialog = false
+            dialogTitle = "Review Failed"
+            dialogMessage = "Something went wrong. Please try again."
+            dialogType = "warning"
+            showDialog = true
+        }
+
+        is ReviewState.CreateReviewCalling -> {}
+        else -> {}
+    }
+
+    if (showDialog) {
+        TextDialog(
+            title = dialogTitle,
+            msg = dialogMessage,
+            type = dialogType,
+            onDismiss = {
+                showDialog = false
+                if (dialogType == "success") {
                     navController.navigate("customer_reservations") {
                         launchSingleTop = true
-                    }}
-            )
-        }
-        is ReviewState.CreateReviewCalling -> {
-            println("review is calling")
-        }
-        else -> {}
+                    }
+                }
+            },
+        )
     }
 
     Column(
@@ -118,7 +127,9 @@ fun CustomerReviewScreen(hotelId: String, hotelName: String, navController: NavC
             modifier = Modifier.padding(vertical = 10.dp)
         ) {
             IconButton(onClick = {
-                navController.navigate("hotel_profile")
+                navController.navigate("customer_reservations") {
+                    launchSingleTop = true
+                }
             }) {
                 Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = null)
             }
@@ -221,9 +232,22 @@ fun CustomerReviewScreen(hotelId: String, hotelName: String, navController: NavC
         }
         Button(
             onClick = {
-                isReview = true
-                val action = CreateReview(hotelId, title = reviewTitle.text, typeOfTraveller = travellerType, point = ratingPoint, summary = reviewContent.text)
-                reviewViewModel.processAction(action)
+                if (ratingPoint == 0 || travellerType.isEmpty() || reviewTitle.text.isEmpty() || reviewContent.text.isEmpty()) {
+                    dialogTitle = "Missing Fields"
+                    dialogMessage = "Please fill all fields to submit review."
+                    dialogType = "warning"
+                    showDialog = true
+                } else {
+                    isReview = true
+                    val action = CreateReview(
+                        hotelId,
+                        title = reviewTitle.text,
+                        typeOfTraveller = travellerType,
+                        point = ratingPoint,
+                        summary = reviewContent.text
+                    )
+                    reviewViewModel.processAction(action)
+                }
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = TrekkStayCyan,
@@ -370,7 +394,7 @@ private fun RatingRow(
     onStarSelected: (Int) -> Unit
 ) {
     var ratingText by remember { mutableStateOf("") }
-    Column (
+    Column(
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
